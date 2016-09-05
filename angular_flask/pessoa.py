@@ -40,10 +40,10 @@ def get(pessoa_id=None):
 		return jsonify(success=True,result=list,message="Nenhuma pessoa cadastrada")
 	for info in data:
 		list.append(Pessoa(info))
-		if len(data) == 1 :
-			return jsonify(success=True,result=list[0].toJSON(),message="")
-		else :
-			return jsonify(success=True,result=[p.toJSON() for p in list],message="")
+	if len(data) == 1 :
+		return jsonify(success=True,result=list[0].toJSON(),message="")
+	else :
+		return jsonify(success=True,result=[p.toJSON() for p in list],message="")
 
 @app.route('/pessoa')
 @app.route('/pessoa/<pessoa_id>', methods=['POST'])
