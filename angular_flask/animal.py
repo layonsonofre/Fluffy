@@ -23,9 +23,10 @@ class Animal(FluffyModel):
 	def fromJSON():
 		print("")
 
-@app.route('/animal')
-@app.route('/animal/<pessoa_id>', methods=['GET'])
+@app.route('/animal', methods=['GET'])
 def get_animal(pessoa_id=None):
+
+	pessoa_id = request.args.get('pessoa')
 
 	data = Util.getData('getAnimal', [pessoa_id])
 	list = []

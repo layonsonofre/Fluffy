@@ -31,9 +31,11 @@ class Pessoa(FluffyModel):
 		print("")
 
 
-@app.route('/pessoa')
-@app.route('/pessoa/<pessoa_id>', methods=['GET'])
+@app.route('/pessoa', methods=['GET'])
 def get(pessoa_id=None):
+
+	pessoa_id = request.args.get('pessoa')
+
 	data = Util.getData('getPessoa', [pessoa_id])
 	list = []
 	if len(data) == 0 :
