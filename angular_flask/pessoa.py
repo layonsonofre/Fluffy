@@ -31,19 +31,21 @@ class Pessoa(FluffyModel):
 		print("")
 
 
-@app.route('/pessoa')
-@app.route('/pessoa/<pessoa_id>', methods=['GET'])
+@app.route('/pessoa', methods=['GET'])
 def get(pessoa_id=None):
+
+	pessoa_id = request.args.get('pessoa')
+
 	data = Util.getData('getPessoa', [pessoa_id])
 	list = []
 	if len(data) == 0 :
 		return jsonify(success=True,result=list,message="Nenhuma pessoa cadastrada")
 	for info in data:
 		list.append(Pessoa(info))
-		if len(data) == 1 :
-			return jsonify(success=True,result=list[0].toJSON(),message="")
-		else :
-			return jsonify(success=True,result=[p.toJSON() for p in list],message="")
+	if len(data) == 1 :
+		return jsonify(success=True,result=list[0].toJSON(),message="")
+	else :
+		return jsonify(success=True,result=[p.toJSON() for p in list],message="")
 
 @app.route('/pessoa')
 @app.route('/pessoa/<pessoa_id>', methods=['POST'])

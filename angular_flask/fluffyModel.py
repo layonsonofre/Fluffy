@@ -14,9 +14,8 @@ class FluffyModel:
 		self.atributos = atributos
 		self.data = data
 
-		if len(data) == 1 :
-			for atributo in atributos :
-				json[atributo] = data[atributos.index(atributo)]
+		for atributo in atributos :
+			self.json[atributo] = data[atributos.index(atributo)]
 
 	def toJSON(self):
 		return self.json
