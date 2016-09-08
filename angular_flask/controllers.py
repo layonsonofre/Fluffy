@@ -22,9 +22,9 @@ def basic_pages(**kwargs):
 def get_modelo(modelo=None):
 
 	args = Util.requestArgs(modelo)
-	data = Util.getData("get"+modelo.capitalize(), args)
+	data = Util.getData("get"+modelo[0].upper()+modelo[1:], args)
 
-	class_name = globals()[modelo.capitalize()]
+	class_name = globals()[modelo[0].upper()+modelo[1:]]
 
 	list = []
 	if len(data) == 0 :

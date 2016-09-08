@@ -18,5 +18,7 @@ class Util:
     	args["animal"] = ["pessoa_id"]
     	args["pessoa"] = ["pessoa_id"]
     	args["servico"] = ["servico_id", "porte_id"]
+    	args["servicoContratado"] = ["id"]
+    	args["servicoAgendado"] = ["id", "servico_contratado_id", "data_inicio","data_fim"]
 
     	return [request.args.get(arg) for arg in args[modelo]]
