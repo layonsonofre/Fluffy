@@ -7,6 +7,7 @@ from flask import send_file, make_response, abort
 from angular_flask import app
 
 # routing for API endpoints, generated from the models designated as API_MODELS
+from util import *
 from angular_flask.core import mysql
 from angular_flask.models import *
 
@@ -17,33 +18,27 @@ from angular_flask.models import *
 def basic_pages(**kwargs):
     return make_response(open('angular_flask/templates/index.html').read())
 
-@app.route('/animal')
-@app.route('/animal/<pessoa_id>', methods=['GET'])
-def get_animal(pessoa_id=None):
+@app.route('/<modelo>')
+def get_modelo(modelo=None):
 
-	conn = mysql.connect()
-	cursor = conn.cursor()
+	argNames = Util.requestArgs(modelo)
+	args = []
+	for arg in argNames:
+		args.append(request.args.get(arg))
 
-	cursor.callproc('getAnimal', [pessoa_id])
+	data = Util.getData("get"+modelo.capitalize(), args)
 
-	data = cursor.fetchall()
+	class_name = globals()[modelo.capitalize()]
+
 	list = []
-
 	if len(data) == 0 :
-		return jsonify(success=True,result=list,message="Nenhuma animal cadastrado")
-	
-	print(data)
-
+		return jsonify(success=True,result=list,message="Nenhum registro cadastrado")
 	for info in data:
-		list.append(Animal(info))
-
+		list.append(class_name(info))
 	if len(data) == 1 :
 		return jsonify(success=True,result=list[0].toJSON(),message="")
 	else :
 		return jsonify(success=True,result=[p.toJSON() for p in list],message="")
-	
-
-	
 
 
 # special file handlers and error handlers

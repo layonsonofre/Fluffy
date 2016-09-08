@@ -4,14 +4,11 @@ from flask import send_file, make_response, abort
 
 from angular_flask import app
 
-from fluffyModel import FluffyModel
-from util import *
 # routing for API endpoints, generated from the models designated as API_MODELS
 
-class Pessoa(FluffyModel):
+class Pessoa():
 
 	def __init__(self, data):
-		FluffyModel.__init__(self, ["id","nome","data_hora_cadastro","email","registro","logradouro","numero", "complemento", "cep", "ponto_de_referencia", "cidade_id"], data)
 		self.id = data[0]
 		self.nome = data[1]
 		self.data_hora_cadastro = data[2]
@@ -25,30 +22,20 @@ class Pessoa(FluffyModel):
 		self.cidade_id = data[10]
 
 	def toJSON(self):
-		return FluffyModel.toJSON(self)
+		return {
+			"id": 					self.id,
+			"nome": 				self.nome,
+			"data_hora_cadastro":	self.data_hora_cadastro,
+			"email":				self.email,
+			"registro":				self.registro,
+			"logradouro":			self.logradouro,
+			"numero":				self.numero,
+			"complemento":			self.complemento,
+			"cep":					self.cep,
+			"ponto_de_referencia":	self.ponto_de_referencia,
+			"cidade_id":			self.cidade_id
+		}
 
 	def fromJSON():
 		print("")
-
-
-@app.route('/pessoa', methods=['GET'])
-def get(pessoa_id=None):
-
-	pessoa_id = request.args.get('pessoa')
-
-	data = Util.getData('getPessoa', [pessoa_id])
-	list = []
-	if len(data) == 0 :
-		return jsonify(success=True,result=list,message="Nenhuma pessoa cadastrada")
-	for info in data:
-		list.append(Pessoa(info))
-	if len(data) == 1 :
-		return jsonify(success=True,result=list[0].toJSON(),message="")
-	else :
-		return jsonify(success=True,result=[p.toJSON() for p in list],message="")
-
-@app.route('/pessoa')
-@app.route('/pessoa/<pessoa_id>', methods=['POST'])
-def post(pessoa_id=None):
-	print("")
 	
