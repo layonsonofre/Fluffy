@@ -21,11 +21,7 @@ def basic_pages(**kwargs):
 @app.route('/<modelo>')
 def get_modelo(modelo=None):
 
-	argNames = Util.requestArgs(modelo)
-	args = []
-	for arg in argNames:
-		args.append(request.args.get(arg))
-
+	args = Util.requestArgs(modelo)
 	data = Util.getData("get"+modelo.capitalize(), args)
 
 	class_name = globals()[modelo.capitalize()]
