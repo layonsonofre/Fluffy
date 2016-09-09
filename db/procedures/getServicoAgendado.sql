@@ -21,86 +21,15 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `getServicoAgendado`(
 )
 BEGIN
 
-	CREATE TABLE temp1(
-		id INT,
-		servico_nome VARCHAR(200),
-		data_hora DATETIME,
-        preco Decimal(10,2),
-        animal_nome VARCHAR(50),
-        servico_contratado_id INT,
-        recorrente BOOLEAN,
-        executado BOOLEAN,
-        pago BOOLEAN,
-        observacao VARCHAR(200),
-        data_hora_executado DATETIME);
-        
-	CREATE TABLE temp2(
-		id INT,
-		servico_nome VARCHAR(200),
-		data_hora DATETIME,
-        preco Decimal(10,2),
-        animal_nome VARCHAR(50),
-        servico_contratado_id INT,
-        recorrente BOOLEAN,
-        executado BOOLEAN,
-        pago BOOLEAN,
-        observacao VARCHAR(200),
-        data_hora_executado DATETIME);
-        
-	INSERT INTO temp1
 	SELECT 	sa.id, s.nome, sa.data_hora, sp.preco, a.nome, sa.servico_contratado_id,
 			sa.recorrente, sa.executado, sa.pago, sa.observacao, sa.data_hora_executado
-			FROM servico_agendado sa
-			INNER JOIN servico_tem_porte sp, servico s, animal a
-			WHERE sa.servico_tem_porte_id = sp.id
-            AND sp.servico_id = s.id 
-            AND sa.animal_id = a.id;
+		FROM servico_agendado sa
+		INNER JOIN servico_tem_porte sp, servico s, animal a
+		WHERE sa.servico_tem_porte_id = sp.id
+		AND sp.servico_id = s.id 
+		AND sa.animal_id = a.id
+        AND ((id IS NULL) or(sa.id = id))
+        AND ((servico_contratado_id IS NULL) or(sa.servico_contratado_id = servico_contratado_id))
+        AND ((data_inicio IS NULL AND data_fim IS NULL) or(sa.data_hora BETWEEN data_inicio AND data_fim));
 
-	SET SQL_SAFE_UPDATES = 0;
-
-	IF id IS NOT NULL THEN
-		INSERT INTO temp2
-		SELECT * FROM temp1
-		WHERE temp1.id = id;
-        
-        DELETE FROM temp1;
-        
-        INSERT INTO temp1
-        SELECT * FROM temp2;
-        
-        DELETE FROM temp2;
-	END IF;
-            
-	IF servico_contratado_id IS NOT NULL THEN
-		INSERT INTO temp2
-		SELECT * FROM temp1
-		WHERE temp1.servico_contratado_id = servico_contratado_id;
-        
-        DELETE FROM temp1;
-        
-        INSERT INTO temp1
-        SELECT * FROM temp2;
-        
-        DELETE FROM temp2;
-	END IF;
-        
-	IF data_inicio IS NOT NULL AND data_fim IS NOT NULL THEN
-		INSERT INTO temp2
-		SELECT * FROM temp1
-		WHERE temp1.data_hora between data_inicio AND data_fim;
-        
-        DELETE FROM temp1;
-        
-        INSERT INTO temp1
-        SELECT * FROM temp2;
-        
-        DELETE FROM temp2;
-	END IF;
-
-	SET SQL_SAFE_UPDATES = 1;
-	
-	SELECT * FROM temp1;
-
-	DROP TABLE temp1;
-    DROP TABLE temp2;
 END

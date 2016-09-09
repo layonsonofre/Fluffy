@@ -15,9 +15,9 @@ class Util:
     @staticmethod
     def requestArgs(modelo):
     	args = {}
-    	args["animal"] = ["pessoa_id"]
-    	args["pessoa"] = ["pessoa_id"]
-    	args["servico"] = ["servico_id", "porte_id"]
+    	args["animal"] = ["id","nome","pessoa_id","raca_id","porte_id"]
+    	args["pessoa"] = ["id","nome","registro"]
+    	args["servico"] = ["id","servico_id","porte_id"]
     	args["servicoContratado"] = ["id"]
     	args["servicoAgendado"] = ["id", "servico_contratado_id", "data_inicio","data_fim"]
 

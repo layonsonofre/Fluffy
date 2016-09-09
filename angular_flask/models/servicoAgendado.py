@@ -1,10 +1,10 @@
-from angular_flask import app
+
 from datetime import datetime
 
 class ServicoAgendado():
 	def __init__(self, data):
 		self.id = data[0]
-		self.nome_servico = data[1]
+		self.servico = data[1]
 		self.data_hora = data[2]
 		self.preco = float(data[3])
 		self.nome_animal = data[4]
@@ -18,7 +18,7 @@ class ServicoAgendado():
 	def toJSON(self):
 		return {
 			"id":self.id,
-			"servico":self.nome_servico,
+			"servico":self.servico,
 			"data_hora":self.data_hora,
 			"preco":self.preco,
 			"animal":self.nome_animal,
