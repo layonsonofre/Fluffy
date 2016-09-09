@@ -24,8 +24,10 @@ class Util:
     	args["pessoa"] = ["id","nome","registro"]
         args["porte"] = ["id"]
         args["raca"] = ["id","nome","especie_id","porte_id"]
+        args["redeSocial"] = ["id","nome"]
     	args["servico"] = ["id","servico_id","porte_id"]
     	args["servicoContratado"] = ["id"]
     	args["servicoAgendado"] = ["id", "servico_contratado_id", "data_inicio","data_fim"]
+        args["transacao"] = ["id","tipo","data_inicio","data_fim"]
 
     	return [request.args.get(arg) for arg in args[modelo]]

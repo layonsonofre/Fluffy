@@ -10,6 +10,8 @@ from pais import Pais
 from pessoa import Pessoa
 from porte import Porte
 from raca import Raca
+from redeSocial import RedeSocial
 from servico import Servico
 from servicoAgendado import ServicoAgendado
 from servicoContratado import ServicoContratado
+from transacao import Transacao
