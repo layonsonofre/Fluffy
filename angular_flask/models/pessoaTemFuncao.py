@@ -1,16 +1,15 @@
 
-
-from datetime import datetime
-
-class Servico():
+class PessoaTemFuncao():
 	def __init__(self, data):
 		self.id = data[0]
-		self.nome = data[1]
+		self.pessoa = data[1]
+		self.funcao = data[2]
 
 	def toJSON(self):
 		return {
 			"id":self.id,
-			"nome":self.nome
+			"pessoa":self.pessoa,
+			"funcao":self.funcao
 		}
 
 	def fromJSON():
