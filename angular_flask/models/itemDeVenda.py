@@ -2,9 +2,9 @@
 class ItemDeVenda():
 	def __init__(self, data):
 		self.id = data[0]
-		self.preco = float(data[2])
-		self.quantidade = data[3]
-		self.item = data[4]
+		self.preco = float(data[1])
+		self.quantidade = data[2]
+		self.item = data[3]
 
 	def toJSON(self):
 		return {

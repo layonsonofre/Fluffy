@@ -4,7 +4,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `getPorte`(
 )
 BEGIN
 	
-    SELECT p.id, p.nome, p.tamanho_minimo, p.tamanho_maximo, p.pedo_minimo, p.peso_maximo
+    SELECT p.id, p.nome, p.tamanho_minimo, p.tamanho_maximo, p.peso_minimo, p.peso_maximo
 	FROM porte p
     WHERE 1 = 1
     AND ((id IS NULL) or (p.id = id));

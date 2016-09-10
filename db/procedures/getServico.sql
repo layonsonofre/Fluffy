@@ -1,5 +1,5 @@
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getServicoTemPorte`(
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getServico`(
     IN id INT,
     IN nome VARCHAR(50)
 )

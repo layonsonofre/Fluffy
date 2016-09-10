@@ -6,7 +6,7 @@ class Lote():
 		self.id = data[0]
 		self.numero = data[1]
 		self.vencimento = data[2].strftime("%B %d, %Y")
-		self.preco = data[3]
+		self.preco = float(data[3])
 
 	def toJSON(self):
 		return {
