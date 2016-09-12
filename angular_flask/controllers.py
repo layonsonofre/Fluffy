@@ -18,10 +18,12 @@ from angular_flask.models import *
 def basic_pages(**kwargs):
     return make_response(open('angular_flask/templates/index.html').read())
 
-@app.route('/<modelo>')
+@app.route('/<modelo>', methods=['GET'])
 def get_modelo(modelo=None):
+	
+	args = []
+	args = Util.requestGetArgs(modelo) 
 
-	args =Util.requestArgs(modelo) 
 	try:
 		data = Util.getData("get"+modelo[0].upper()+modelo[1:], args)
 	except Exception as e:
@@ -48,6 +50,7 @@ def get_modelo(modelo=None):
 @app.route('/<modelo>/delete', methods=['DELETE'])
 def insert_modelo(modelo = None):
 	
+	args = []
 	args = Util.requestArgs(modelo)
 
 	proc = ""
