@@ -6,11 +6,21 @@ class Util:
 
     @staticmethod
     def getData(proc, args):
-    	conn = mysql.connect()
-    	cursor = conn.cursor()
-    	cursor.callproc(proc, args)
-    	data = cursor.fetchall()
-    	return data
+        try:
+    	   conn = mysql.connect()
+    	   cursor = conn.cursor()
+    	   cursor.callproc(proc, args)
+    	   data = cursor.fetchall()
+           conn.commit()
+        except:
+    	    raise
+
+    @staticmethod
+    def requestInsertArgs(modelo):
+        args = {}
+        args["pessoa"] = ["id","nome","email","registro","logradouro","numero","complemento","cep","ponto_de_referencia","cidade_id"]
+        args["animal"] = ["nome","sexo","data_nascimento","pessoa_id","raca_id","porte_id"]
+        return [request.form.get(arg) for arg in args[modelo]]
 
     @staticmethod
     def requestArgs(modelo):

@@ -21,8 +21,11 @@ def basic_pages(**kwargs):
 @app.route('/<modelo>')
 def get_modelo(modelo=None):
 
-	args = Util.requestArgs(modelo)
-	data = Util.getData("get"+modelo[0].upper()+modelo[1:], args)
+	args =Util.requestArgs(modelo) 
+	try:
+		data = Util.getData("get"+modelo[0].upper()+modelo[1:], args)
+	except Exception as e:
+		return jsonify(success=False, result=[], message=e.__str__())
 
 	class_name = globals()[modelo[0].upper()+modelo[1:]]
 
@@ -31,10 +34,40 @@ def get_modelo(modelo=None):
 		return jsonify(success=True,result=list,message="Nenhum registro cadastrado")
 	for info in data:
 		list.append(class_name(info))
+
+	if full_list is True:
+		get_list(modelo, list)
+
 	if len(data) == 1 :
 		return jsonify(success=True,result=list[0].toJSON(),message="")
 	else :
 		return jsonify(success=True,result=[p.toJSON() for p in list],message="")
+
+@app.route('/<modelo>/insert', methods=['POST'])
+def insert_modelo(modelo = None):
+	
+	args =Util.requestInsertArgs(modelo)
+	args.pop(0) 
+	args.append(None)
+
+	try:
+		data = Util.getData("ins"+modelo[0].upper()+modelo[1:], args)
+		print(data)
+		print(args)
+		return jsonify(success=True, result=[], message="")
+	except Exception as e:
+		return jsonify(success=False, result=[], message=e.__str__())
+
+@app.route('/<modelo>/update')
+def update_modelo(modelo = None):
+	
+	args =Util.requestInsertArgs(modelo)
+
+	try:
+		data = Util.getData("teste_insert", args)
+	except Exception as e:
+		return jsonify(success=False, result=[], message=e.__str__())
+
 
 
 # special file handlers and error handlers

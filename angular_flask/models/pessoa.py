@@ -1,4 +1,4 @@
-
+from flask import Flask, request, Response, jsonify
 class Pessoa():
 
 	def __init__(self, data):
