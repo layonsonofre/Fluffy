@@ -44,31 +44,29 @@ def get_modelo(modelo=None):
 		return jsonify(success=True,result=[p.toJSON() for p in list],message="")
 
 @app.route('/<modelo>/insert', methods=['POST'])
+@app.route('/<modelo>/update', methods=['PUT'])
+@app.route('/<modelo>/delete', methods=['DELETE'])
 def insert_modelo(modelo = None):
 	
-	args =Util.requestInsertArgs(modelo)
-	args.pop(0) 
-	args.append(None)
+	args = Util.requestArgs(modelo)
 
-	try:
-		data = Util.getData("ins"+modelo[0].upper()+modelo[1:], args)
-		print(data)
-		print(args)
-		return jsonify(success=True, result=[], message="")
-	except Exception as e:
-		return jsonify(success=False, result=[], message=e.__str__())
+	proc = ""
 
-@app.route('/<modelo>/update')
-def update_modelo(modelo = None):
+	if request.method == 'POST':
+		args.pop(0)
+		proc = "ins"+modelo[0].upper()+modelo[1:]
+		return jsonify(success=True, result={"request":"POST"}, message="")
+	elif request.method == 'PUT':
+		proc = "alt"+modelo[0].upper()+modelo[1:]
+	elif request.method == 'DELETE':
+		proc = "del"+modelo[0].upper()+modelo[1:]
+		args = [args.pop(0)]
 	
-	args =Util.requestInsertArgs(modelo)
-
 	try:
-		data = Util.getData("teste_insert", args)
+		data = Util.getData(proc, args)
+		return jsonify(success=True, result={"id":data[0]}, message="")
 	except Exception as e:
-		return jsonify(success=False, result=[], message=e.__str__())
-
-
+		return jsonify(success=False, result={}, message=e.__str__())
 
 # special file handlers and error handlers
 @app.route('/favicon.ico')
