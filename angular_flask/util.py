@@ -11,12 +11,25 @@ class Util:
     	   cursor = conn.cursor()
     	   cursor.callproc(proc, args)
     	   data = cursor.fetchall()
-           conn.commit()
+           return data
         except:
     	    raise
 
     @staticmethod
-    def requestArgs(modelo):
+    def postData(proc, args):
+        try:
+           conn = mysql.connect()
+           cursor = conn.cursor()
+           cursor.callproc(proc, args)
+           data = cursor.fetchone()
+           cursor.close() 
+           conn.commit()
+           return data
+        except:
+            raise
+
+    @staticmethod
+    def requestFormArgs(modelo):
         args = {}
         args["anamnese"] = ["id","peso","tamanho","temperatura","servico_agendado"]
         args["animal"] = ["id","nome","sexo","data_nascimento","pessoa_id","raca_id","porte_id"]
@@ -30,7 +43,7 @@ class Util:
         args["grupoDeItem"] = ["id","nome"]
         args["item"] = ["id","nome","preco","quantidade","grupo_de_item_id"]
         args["itemDeVenda"] = ["id","preco","quantidade","item_id","pedido_id"]
-        args["lembrete"] = ["id","descricao","data_hora","executado"]
+        args["lembrete"] = ["id","descricao","data_hora","executado","pessoa_id"]
         args["lote"] = ["id","numero","vencimento","preco"]
         args["pais"] = ["id","nome"]
         args["pedido"] = ["id","valor","desconto","transacao","cliente_id","funcionario_id"]
@@ -52,7 +65,7 @@ class Util:
         args["telefone"] = ["id","pessoa_id"]
         args["transacao"] = ["id","tipo","data_inicio","data_fim"]
         args["vacina"] = ["id"]
-        return [request.form.get(arg) for arg in args[modelo]]
+        return [(request.form.get(arg) if (request.form.get(arg) != ("true" or "false")) else (True if request.form.get(arg) == "true" else False))  for arg in args[modelo]]
 
     @staticmethod
     def requestGetArgs(modelo):
