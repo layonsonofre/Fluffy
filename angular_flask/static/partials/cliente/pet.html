@@ -1,0 +1,394 @@
+<div ng-controller="ClienteController as cliente">
+  <div class="row">
+    <div class="col-md-12">
+      <h1 class="page-head-line">Novo Pet</h1>
+      <h1 class="page-subhead-line">Selecione o cliente e cadastre novos pets</h1>
+      <!-- <p class="text-muted">Os campos marcados com * são obrigatórios</p> -->
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          Clientes
+        </div>
+        <div class="panel-body">
+          <div class="row">
+            <div class="col-md-10">
+              <div class="form-group">
+                <label>Insira os parâmetros da busca</label>
+                <input class="form-control" type="text" ng-model="buscar">
+                <p class="help-block">Você pode pesquisar por qualquer dado do cliente ou animal</p>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="form-group">
+                <label><span class="fa fa-search"></span> Buscar</label>
+                <button class="form-control btn btn-primary" ng-click="buscar_cliente()" data-toggle="tooltip" data-placement="top" title="Pesquise pelos parâmetros inseridos"><span class="fa fa-search"></span></button>
+                <!-- <p class="help-block"></p> -->
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <table class="table table-striped table-hover">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Nome</th>
+                    <th>Email</th>
+                    <th>Telefone</th>
+                    <th>Endereço</th>
+                    <th>Ações</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr ng-repeat="item in Cliente.clientes | filter:buscar">
+                    <th><input type="checkbox"></th>
+                    <td>{{item.nome}}</td>
+                    <td>{{item.email}}</td>
+                    <td>{{item.telefone}}</td>
+                    <td>{{item.endereco}}</td>
+                    <td>
+                      <button class="btn btn-info" ng-click="detalhes_cliente()" data-toggle="tooltip" data-placement="top" title="Ver informações detalhadas"><span class="fa fa-plus"></span></button>
+                      <button class="btn btn-primary" ng-click="editar_cliente()" data-toggle="tooltip" data-placement="top" title="Editar estas informações"><span class="fa fa-pencil"></span></button>
+                      <button class="btn btn-danger" ng-click="excluir_cliente()" data-toggle="tooltip" data-placement="top" title="Excluir este registro"><span class="fa fa-trash"></span></button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <div class="row">
+                <div class="col-lg-12 text-center">
+                  <ul class="pagination">
+                    <li class="disabled"><a href="#">&laquo;</a></li>
+                    <li class="active"><a href="#">1</a></li>
+                    <li><a href="#">2</a></li>
+                    <li><a href="#">3</a></li>
+                    <li><a href="#">4</a></li>
+                    <li><a href="#">5</a></li>
+                    <li><a href="#">&raquo;</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          Animais
+        </div>
+        <div class="panel-body">
+          <form role="form" method="post">
+            <div class="row">
+              <div class="col-lg-6 col-md-6">
+                <div class="form-group">
+                  <label>Nome *</label>
+                  <input class="form-control" type="text" data-ng-model="cliente.nome_animal">
+                  <p class="help-block"></p>
+                </div>
+              </div>
+              <div class="col-lg-3 col-md-3">
+                <div class="form-group">
+                  <label>Sexo *</label>
+                  <select class="form-control" data-ng-model="cliente.sexo_animal">
+                    <option value="femea">Fêmea</option>
+                    <option value="macho">Macho</option>
+                  </select>
+                  <p class="help-block"></p>
+                </div>
+              </div>
+              <div class="col-lg-3 col-md-3">
+                <div class="form-group">
+                  <label>Nascimento *</label>
+                  <input class="form-control data" type="text" data-ng-model="cliente.dataNascimento_animal" placeholder="DD/MM/AAAA">
+                  <p class="help-block"></p>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-3 col-sm-10">
+                <div class="form-group">
+                  <label>Espécie *</label>
+                  <select class="form-control" data-ng-model="cliente.especie_animal">
+                    <option value="especie1">Cachorro</option>
+                    <option value="especie2">Gato</option>
+                  </select>
+                  <p class="help-block"></p>
+                </div>
+              </div>
+              <div class="col-lg-1 col-sm-2">
+                <div class="form-group">
+                  <label>Nova</label>
+                  <button class="form-control btn btn-primary" data-toggle="modal" data-target="#adicionarEspecie" data-toggle="tooltip" data-placement="top" title="Cadastrar espécie"><b><i class="fa fa-plus"></i></b></button>
+                </div>
+              </div>
+              <div class="col-lg-4 col-sm-10">
+                <div class="form-group">
+                  <label>Raça *</label>
+                  <select class="form-control" name="raca">
+                    <option value="raca1">Doberman</option>
+                    <option value="raca2">Pastor Alemão</option>
+                  </select>
+                  <p class="help-block"></p>
+                </div>
+              </div>
+              <div class="col-lg-1 col-sm-2">
+                <div class="form-group">
+                  <label>Nova</label>
+                  <button class="form-control btn btn-primary" data-toggle="modal" data-target="#adicionarRaca" data-toggle="tooltip" data-placement="top" title="Adicionar uma nova raça"><b><i class="fa fa-plus"></i></b></button>
+                </div>
+              </div>
+              <div class="col-lg-3 col-sm-10">
+                <div class="form-group">
+                  <label>Porte *</label>
+                  <select class="form-control" name="porte">
+                    <option value="porte1">Mini</option>
+                    <option value="porte2">Grande</option>
+                  </select>
+                  <p class="help-block"></p>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-9">
+                <div class="form-group">
+                  <label>Restrições</label>
+                  <select class="form-control" name="excecoes[]">
+                    <option value="alergia1">Alergia1</option>
+                    <option value="alergia2">Alergia1</option>
+                  </select>
+                  <p class="help-block"></p>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label>Nova Restrição</label>
+                  <button class="form-control btn btn-primary" data-toggle="modal" data-target="#adicionarRestricao" data-toggle="tooltip" data-placement="top" title="Criar uma nova restrição"><b>Criar Restrição</b></button>
+                </div>
+              </div>
+            </div>
+          </form>
+          <div class="row">
+            <div class="col-md-12">
+              <button class="btn btn-success" ng-click="cliente.showAdicionarAnimal()" data-toggle="tooltip" data-placement="top" title="Adicionar um animal do cliente"><span class="fa fa-plus"></span>&nbsp;<span class="fa fa-bug"></span>&nbsp; <b>Adicionar Pet</b></button>
+            </div>
+            <br>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <hr>
+              <h2>Pets cadastrados</h2>
+              <table class="table table-striped table-hover">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th class="hidden">ID</th>
+                    <th>Nome</th>
+                    <th>Sexo</th>
+                    <th>Nasc.</th>
+                    <th>Raça</th>
+                    <th>Ações</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th><input type="checkbox"></th>
+                    <td class="hidden">1</td>
+                    <td>Fluffy</td>
+                    <td><i class="fa fa-mars"></i></td>
+                    <td>15/08/2008</td>
+                    <td>Pastor Alemão</td>
+                    <td>
+                      <button class="btn btn-info" ng-click="detalhes_animal()" data-toggle="tooltip" data-placement="top" title="Ver informações detalhadas"><span class="fa fa-plus"></span></button>
+                      <button class="btn btn-primary" ng-click="editar_animal()" data-toggle="tooltip" data-placement="top" title="Editar estas informações"><span class="fa fa-pencil"></span></button>
+                      <button class="btn btn-danger" ng-click="excluir_animal()" data-toggle="tooltip" data-placement="top" title="Excluir este registro"><span class="fa fa-trash"></span></button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th><input type="checkbox"></th>
+                    <td class="hidden">1</td>
+                    <td>Buma</td>
+                    <td><i class="fa fa-venus"></i></td>
+                    <td>28/11/2013</td>
+                    <td>Beagle</td>
+                    <td>
+                      <button class="btn btn-info" ng-click="detalhes_animal()" data-toggle="tooltip" data-placement="top" title="Ver informações detalhadas"><span class="fa fa-plus"></span></button>
+                      <button class="btn btn-primary" ng-click="editar_animal()" data-toggle="tooltip" data-placement="top" title="Editar estas informações"><span class="fa fa-pencil"></span></button>
+                      <button class="btn btn-danger" ng-click="excluir_animal()" data-toggle="tooltip" data-placement="top" title="Excluir este registro"><span class="fa fa-trash"></span></button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" tabindex="-1" id="adicionarRestricao">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <form role="form" method="post">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title">Adicionar Restrição</h4>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="form-group">
+                  <label>Nome *</label>
+                  <input class="form-control" type="text" name="nome_restricao">
+                  <p class="help-block"></p>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="form-group">
+                  <label>Descrição *</label>
+                  <textarea class="form-control" rows="3" name="descricao_restricao"></textarea>
+                  <p class="help-block"></p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+            <button type="submit" class="btn btn-primary">Salvar Restrição</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" tabindex="-1" id="adicionarEspecie">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <form role="form" method="post">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title">Adicionar Espécie</h4>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="form-group">
+                  <label>Nome *</label>
+                  <input class="form-control" type="text" name="nome_especie">
+                  <p class="help-block"></p>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <h2>Porte</h2>
+                <div class="table-wrapper">
+                  <table class="table table-striped table-hover">
+                    <thead>
+                      <tr>
+                        <th>#</th>
+                        <th class="hidden">ID</th>
+                        <th>Porte</th>
+                        <th>Tam. Mínimo</th>
+                        <th>Tam. Máximo</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <th>
+                          <input type="checkbox">
+                        </th>
+                        <td class="hidden">1</td>
+                        <td>Mini</td>
+                        <td>5 cm</td>
+                        <td>15 cm</td>
+                      </tr>
+                      <tr>
+                        <th>
+                          <input type="checkbox">
+                        </th>
+                        <td class="hidden">1</td>
+                        <td>Grande</td>
+                        <td>50 cm</td>
+                        <td>100 cm</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+            <button type="submit" class="btn btn-primary">Salvar Espécie</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" tabindex="-1" id="adicionarRaca">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <form role="form" method="post">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title">Adicionar Raça</h4>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="form-group">
+                  <label>Nome *</label>
+                  <input class="form-control" type="text" name="nome_raca">
+                  <p class="help-block"></p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+            <button type="submit" class="btn btn-primary">Salvar Raças e Espécies</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" tabindex="-1" id="adicionarRedeSocial">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <form role="form" method="post">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title">Adicionar Rede Social</h4>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="form-group">
+                  <label>Nome *</label>
+                  <input class="form-control" type="text" name="nome_rede_social">
+                  <p class="help-block"></p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+            <button type="submit" class="btn btn-primary">Salvar Rede Social</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

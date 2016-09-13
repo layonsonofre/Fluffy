@@ -1,35 +1,16 @@
 'use strict';
 
-angular.module('AngularFlask', ['angularFlaskServices'])
-	.config(['$routeProvider', '$locationProvider',
-		function($routeProvider, $locationProvider) {
-		$routeProvider
-		.when('/', {
-			templateUrl: 'static/partials/landing.html',
-			controller: IndexController
-		})
-		.when('/about', {
-			templateUrl: 'static/partials/about.html',
-			controller: AboutController
-		})
-		.when('/post', {
-			templateUrl: 'static/partials/post-list.html',
-			controller: PostListController
-		})
-		.when('/post/:postId', {
-			templateUrl: '/static/partials/post-detail.html',
-			controller: PostDetailController
-		})
-		/* Create a "/blog" route that takes the user to the same place as "/post" */
-		.when('/blog', {
-			templateUrl: 'static/partials/post-list.html',
-			controller: PostListController
-		})
-		.otherwise({
-			redirectTo: '/'
-		})
-		;
-
-		$locationProvider.html5Mode(true);
-	}])
-;
+angular
+	.module('AngularFlask', ['ngRoute', 'ngResource', 'Index', 'Cliente', 'Funcao', 'Permissao', 'RedeSocial', 'GrupoItem', 'Servico', 'Consulta', 'Lembrete', 'Estoque', 'Venda', 'ngDragDrop'])
+	.config(['$routeProvider', '$locationProvider','$httpProvider',
+		function($routeProvider, $locationProvider, $httpProvider) {
+			$httpProvider.defaults.headers.common["X-Requested-With"] = undefined;
+			$locationProvider.html5Mode(true);
+			$routeProvider
+				.when('/', {
+					templateUrl: '../static/partials/overview.html',
+					controller: 'IndexController',
+					controllerAs: 'Index'
+				})
+				.otherwise({redirectTo: '/'});
+	}]);

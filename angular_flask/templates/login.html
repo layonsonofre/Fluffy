@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" ng-app="AngularFlask">
+
+<head>
+  <meta charset="utf-8" />
+  <base href="/">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CHARME E FOFURA</title>
+
+  <link href="static/css_v2/bootstrap.css" rel="stylesheet" />
+  <link href="static/css_v2/cards.css" rel="stylesheet" />
+  <link href="static/css_v2/font-awesome.min.css" rel="stylesheet" />
+  <link href="static/css_v2/datetimepicker.css" rel="stylesheet" />
+
+  <script src="../static/lib/jquery/jquery.min.js"></script>
+  <script src="../static/lib/jquery/jquery-ui.min.js"></script>
+  <!-- // <script src="../static/stylejs/mask.min.js"></script> -->
+  <script src="../static/lib/angular/angular.min.js"></script>
+  <script src="../static/lib/angular/angular-route.min.js"></script>
+  <script src="../static/lib/angular/angular-resource.min.js"></script>
+  <script src="../static/js/angular-dragdrop.js"></script>
+  <script src="../static/js/app.js"></script>
+  <script src="../static/js/controllers/index.js"></script>
+  <script src="../static/js/controllers/redeSocial.js"></script>
+  <script src="../static/js/controllers/cliente.js"></script>
+  <script src="../static/js/controllers/funcao.js"></script>
+  <script src="../static/js/controllers/permissao.js"></script>
+  <script src="../static/js/controllers/grupoItem.js"></script>
+  <script src="../static/js/controllers/servico.js"></script>
+  <script src="../static/js/controllers/lembrete.js"></script>
+  <script src="../static/js/controllers/estoque.js"></script>
+  <script src="../static/js/controllers/consulta.js"></script>
+  <script src="../static/js/controllers/venda.js"></script>
+</head>
+
+<body>
+  <section>
+    <div class="container">
+      <div id="content">
+        <form role="form">
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="form-group">
+                <label>Nome de usuário</label>
+                <input class="form-control" type="text" data-ng-model="cliente.nome_cliente" name="nome_cliente">
+                <!-- <p class="help-block">Quantidade de parcelas</p> -->
+              </div>
+            </div>
+            <div class="col-sm-12">
+              <div class="form-group">
+                <label>Senha</label>
+                <input class="form-control" type="text" data-ng-model="cliente.nome_cliente" name="nome_cliente">
+                <!-- <p class="help-block">Quantidade de parcelas</p> -->
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-12">
+              <a href="/index2" class="btn btn-success"><b>Login</b></a>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+  <footer>
+    <div class="container">
+      <div class="text-center">
+        Made with <i class="fa fa-heart"></i> by André Cadamuro Garcia e Layon de Souza Onofre
+      </div>
+    </div>
+  </footer>
+  <!-- // <script src="static/stylejs/jquery-1.10.2.js"></script> -->
+  <script src="static/stylejs/bootstrap.js"></script>
+  <script src="static/stylejs/jquery.metisMenu.js"></script>
+  <script src="static/stylejs/custom.js"></script>
+  <script src="static/stylejs/bootstrap-select.js"></script>
+  <script src="static/stylejs/bootstrap-select-pt_BR.js"></script>
+  <script src="static/stylejs/moment-with-locales.min.js"></script>
+  <script src="static/stylejs/datetimepicker.js"></script>
+</body>
+
+</html>
