@@ -23,22 +23,21 @@ def get_modelo(modelo=None):
 	
 	args = []
 	args = Util.requestGetArgs(modelo) 
-
+	print("get"+modelo[0].upper()+modelo[1:])
+	print(args)
 	try:
 		data = Util.getData("get"+modelo[0].upper()+modelo[1:], args)
+		print(data)
 	except Exception as e:
 		return jsonify(success=False, result=[], message=e.__str__())
 
 	class_name = globals()[modelo[0].upper()+modelo[1:]]
 
 	list = []
-	if len(data) == 0 :
+	if data is None or len(data) == 0 :
 		return jsonify(success=True,result=list,message="Nenhum registro cadastrado")
 	for info in data:
 		list.append(class_name(info))
-
-	if full_list is True:
-		get_list(modelo, list)
 
 	if len(data) == 1 :
 		return jsonify(success=True,result=list[0].toJSON(),message="")
@@ -48,17 +47,16 @@ def get_modelo(modelo=None):
 @app.route('/<modelo>/insert', methods=['POST'])
 @app.route('/<modelo>/update', methods=['PUT'])
 @app.route('/<modelo>/delete', methods=['DELETE'])
-def insert_modelo(modelo = None):
+def form_modelo(modelo = None):
 	
 	args = []
-	args = Util.requestArgs(modelo)
+	args = Util.requestFormArgs(modelo)
 
 	proc = ""
 
 	if request.method == 'POST':
 		args.pop(0)
 		proc = "ins"+modelo[0].upper()+modelo[1:]
-		return jsonify(success=True, result={"request":"POST"}, message="")
 	elif request.method == 'PUT':
 		proc = "alt"+modelo[0].upper()+modelo[1:]
 	elif request.method == 'DELETE':
@@ -66,7 +64,7 @@ def insert_modelo(modelo = None):
 		args = [args.pop(0)]
 	
 	try:
-		data = Util.getData(proc, args)
+		data = Util.postData(proc, args)
 		return jsonify(success=True, result={"id":data[0]}, message="")
 	except Exception as e:
 		return jsonify(success=False, result={}, message=e.__str__())
