@@ -1,0 +1,98 @@
+<div ng-controller="ServicoController">
+  <div class="row">
+    <div class="col-md-12">
+      <h1 class="page-head-line">Agenda</h1>
+      <h1 class="page-subhead-line">Veja uma lista dos serviços marcados e agende novos</h1>
+      <!-- <p class="text-muted">Os campos marcados com * são obrigatórios</p> -->
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        Agenda
+      </div>
+      <div class="panel-body">
+        <div class="row">
+          <div class="col-lg-3 col-md-3 col-sm-12">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="form-group">
+                  <label>Insira os parâmetros da busca</label>
+                  <input class="form-control" type="text" name="busca">
+                  <p class="help-block">Você pode pesquisar por qualquer dado do cliente ou animal</p>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <label>Animais</label>
+                <div class="list-group" ng-repeat="item in animais">
+                  <a href="#" class="list-group-item" ng-show="item.nome" data-drag="true" data-jqyoui-options="{revert: 'invalid', helper: 'clone'}" ng-model="animais" jqyoui-draggable="{index: {{$index}}, placeholder:'keep'}">
+                    <h4 class="list-group-item-heading">{{item.nome}}</h4>
+                    <p class="list-group-item-text"><i ng-class="item.sexo == 'm' ? 'fa fa-mars' : 'fa fa-venus'"></i> - {{item.data}} - {{item.raca}}</p>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-7 col-md-7 col-sm-12">
+            <label>Agendamento</label>
+            <div class="wrapper-agenda">
+              <div class="dates">
+                <div class="date"><a href="#" class="btn btn-link">01/02/2016</a></div>
+                <div class="change-date"><a href="#" class="btn btn-link"><i class="fa fa-chevron-right"></i></a></div>
+                <div class="change-date"><a href="#" class="btn btn-link"><i class="fa fa-chevron-left"></i></a></div>
+              </div>
+              <div class="card card-block">
+                <div class="card-date"><a href="#" class="btn btn-link">09h - 10h</a></div>
+                <div class="drop-here-wrapper form-group">
+                  <label>Agendar</label>
+                  <div class="drop-here animals" data-drop="true" ng-model="animalAgendado" jqyoui-droppable="{multiple:false, animate:true}">
+                    <div ng-hide="animalAgendado.nome == ''">
+                      <h4 class="animais" data-drag="true" data-jqyoui-options="{revert: 'invalid', helper: 'clone'}" ng-model="animalAgendado" jqyoui-draggable="{animate:true}">{{animalAgendado.nome}}</h4>
+                      <h6><i ng-class="animalAgendado.sexo == 'm' ? 'fa fa-mars' : 'fa fa-venus'"></i> - {{animalAgendado.data}} - {{animalAgendado.raca}}<a href="#" ng-click="removeAnimalAgendado()"><i class="fa fa-close"></i></a></h6>
+                    </div>
+                  </div>
+                  <div class="drop-here services" data-drop="true" ng-model="servicosAgendados" jqyoui-droppable="{multiple:true, animate:true}">
+                    <div>
+                      <div ng-repeat="item in servicosAgendados track by $index">
+                        <div class="servicos" ng-show="item.nome_servico" data-drag="true" data-jqyoui-options="{revert: 'invalid', helper: 'clone'}" ng-model="servicosAgendados" jqyoui-draggable="{index: {{$index}}, animate:true}">{{item.nome_servico}}<a href="#" ng-click="removeServicosAgendados($index)"><i class="fa fa-close"></i></a></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group observacoes">
+                  <label>Observações</label>
+                  <input class="form-control" type="text">
+                </div>
+                <div class="card-footer">
+                  <div class="card-options">
+                    <a href="#" class="btn btn-primary"><i class="fa fa-info"></i></a>
+                    <a href="#" class="btn btn-warning"><i class="fa fa-clock-o"></i></a>
+                    <a href="#" class="btn btn-success"><i class="fa fa-check"></i> <i class="fa fa-usd"></i></a>
+                    <a href="#" class="btn btn-default"><i class="fa fa-star-half-o"></i></a>
+                    <a href="#" class="btn btn-info"><i class="fa fa-star"></i></a>
+                    <a href="#" class="btn btn-danger"><i class="fa fa-trash"></i></a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-2 col-md-2 col-sm-12">
+            <div class="row">
+              <div class="col-md-12">
+                <label>Serviços</label>
+                <div class="list-group" ng-repeat="item in servicos">
+                  <a href="#" class="list-group-item" ng-show="item.nome_servico" data-drag="true" data-jqyoui-options="{revert: 'invalid', helper: 'clone'}" ng-model="servicos" jqyoui-draggable="{index: {{$index}}, placeholder:'keep'}">
+                    <h4 class="list-group-item-heading">{{item.nome_servico}}</h4>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -13,16 +13,15 @@ from angular_flask.models import *
 
 # routing for basic pages (pass routing onto the Angular app)
 @app.route('/')
-@app.route('/about')
-@app.route('/blog')
+@app.route('/index')
 def basic_pages(**kwargs):
     return make_response(open('angular_flask/templates/index.html').read())
 
 @app.route('/<modelo>', methods=['GET'])
 def get_modelo(modelo=None):
-	
+
 	args = []
-	args = Util.requestGetArgs(modelo) 
+	args = Util.requestGetArgs(modelo)
 	print("get"+modelo[0].upper()+modelo[1:])
 	print(args)
 	try:
@@ -48,7 +47,6 @@ def get_modelo(modelo=None):
 @app.route('/<modelo>/update', methods=['PUT'])
 @app.route('/<modelo>/delete', methods=['DELETE'])
 def form_modelo(modelo = None):
-	
 	args = []
 	args = Util.requestFormArgs(modelo)
 
@@ -62,7 +60,7 @@ def form_modelo(modelo = None):
 	elif request.method == 'DELETE':
 		proc = "del"+modelo[0].upper()+modelo[1:]
 		args = [args.pop(0)]
-	
+
 	try:
 		data = Util.postData(proc, args)
 		return jsonify(success=True, result={"id":data[0]}, message="")

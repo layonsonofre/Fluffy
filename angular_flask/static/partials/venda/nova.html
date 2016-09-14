@@ -1,0 +1,157 @@
+<div ng-controller="VendaController">
+  <div class="row">
+    <div class="col-md-12">
+      <h1 class="page-head-line">Venda</h1>
+      <h1 class="page-subhead-line">Vender os produtos desejados pelo cliente</h1>
+      <!-- <p class="text-muted">Os campos marcados com * são obrigatórios</p> -->
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          Cliente
+        </div>
+        <div class="panel-body">
+          <div ng-controller="ClienteController as Cliente">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="form-group">
+                  <label>Insira os parâmetros da busca</label>
+                  <input class="form-control" type="text" ng-model="buscar">
+                  <p class="help-block">Busque por qualquer dado do cliente</p>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <label>Clientes</label>
+                <div class="table-wrapper">
+                  <table class="table table-striped table-hover">
+                    <thead>
+                      <tr>
+                        <th>#</th>
+                        <th>Nome</th>
+                        <th>Email</th>
+                        <th>Telefone</th>
+                        <th>Endereço</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr ng-repeat="item in Cliente.clientes | filter:buscar">
+                        <th>
+                          <input type="checkbox">
+                        </th>
+                        <td>{{item.nome}}</td>
+                        <td>{{item.email}}</td>
+                        <td>{{item.telefone}}</td>
+                        <td>{{item.endereco}}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          Ítens
+        </div>
+        <div class="panel-body">
+          <div ng-controller="ProdutoController">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="form-group">
+                  <label>Insira os parâmetros da busca</label>
+                  <input class="form-control" type="text" ng-model="buscar">
+                  <p class="help-block">Busque o produto pelos seus dados</p>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <label>Produtos</label>
+                <div class="table-wrapper">
+                  <table class="table table-striped table-hover">
+                    <thead>
+                      <tr>
+                        <th>Nome</th>
+                        <th>Preço</th>
+                        <th>#</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr ng-repeat="item in produtos | filter:buscar">
+                        <td>{{item.nome}}</td>
+                        <td>R$ {{item.valor}}</td>
+                        <td><a href="#" ng-click="adicionar(item)" class="btn btn-success"><i class="fa fa-check"></i></a>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          Carrinho de Compras
+        </div>
+        <div class="panel-body">
+          <div class="table-wrapper">
+            <table class="table table-striped table-hover">
+              <thead>
+                <tr>
+                  <th>Nome</th>
+                  <th>Valor Unitário</th>
+                  <th>Quantidade</th>
+                  <th>Valor Total</th>
+                  <th>Quantidade</th>
+                  <th>Excluir</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-repeat="item in carrinho">
+                  <td>{{item.nome}}</td>
+                  <td>R$ {{item.valor}}</td>
+                  <td>{{item.quantidade}}</td>
+                  <td>R$ {{item.valor_total}}</td>
+                  <td>
+                    <a href="#" ng-click="increase($index)" class="btn btn-success"><i class="fa fa-plus"></i></a>
+                    <a href="#" ng-click="decrease($index)" ng-hide="item.quantidade == 1" class="btn btn-warning"><i class="fa fa-minus"></i></a>
+                  </td>
+                  <td><a href="#" ng-click="removeProduto($index)" class="btn btn-danger"><i class="fa fa-trash"></i></a></td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td>Total</td>
+                  <td><strong>R$ 127,00</strong></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12 text-right">
+      <a href="/venda/nova/pagamento" class="btn btn-success"><span class="fa fa-plus"></span>&nbsp;<span class="fa fa-shopping-cart"></span>&nbsp; <b>Confirmar e ir para Pagamento</b></a>
+    </div>
+  </div>
+</div>

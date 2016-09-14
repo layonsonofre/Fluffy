@@ -1,53 +1,117 @@
-<!doctype html>
-<html lang="en" ng-app="AngularFlask">
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" ng-app="Fluffy">
+
 <head>
-	<meta charset="utf-8">
-	<title>AngularFlask</title>
+  <meta charset="utf-8" />
+  <base href="/">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CHARME E FOFURA</title>
 
-	<link rel="stylesheet" href="/static/css/bootstrap.css">
-	<link rel="stylesheet" href="/static/css/main.css">
+  <link href="static/css/bootstrap.css" rel="stylesheet" />
+  <link href="static/css/cards.css" rel="stylesheet" />
+  <link href="static/css/font-awesome.min.css" rel="stylesheet" />
+  <link href="static/css/datetimepicker.css" rel="stylesheet" />
 
-	<script src="/static/lib/angular/angular.js"></script>
-	<script src="/static/lib/angular/angular-resource.js"></script>
-
-	<script src="/static/js/app.js"></script>
-	<script src="/static/js/controllers.js"></script>
- 	<script src="/static/js/services.js"></script>
-
-	<script src="/static/lib/jquery/jquery.min.js"></script>
-	<script src="/static/lib/bootstrap/bootstrap.min.js"></script>
+  <script src="../static/lib/jquery/jquery.min.js"></script>
+  <script src="../static/lib/jquery/jquery-ui.min.js"></script>
+  <script src="../static/lib/angular/angular.min.js"></script>
+  <script src="../static/lib/angular/angular-route.min.js"></script>
+  <script src="../static/lib/angular/angular-resource.min.js"></script>
+  <script src="../static/js/angular-dragdrop.js"></script>
+  <script src="../static/js/app.js"></script>
+  <script src="../static/js/app.provider.js"></script>
+  <script src="../static/js/controllers/index.js"></script>
+  <script src="../static/js/controllers/redeSocial.js"></script>
+  <script src="../static/js/controllers/cliente.js"></script>
+  <script src="../static/js/controllers/cliente.provider.js"></script>
+  <script src="../static/js/controllers/funcao.js"></script>
+  <script src="../static/js/controllers/permissao.js"></script>
+  <script src="../static/js/controllers/grupoItem.js"></script>
+  <script src="../static/js/controllers/servico.js"></script>
+  <script src="../static/js/controllers/lembrete.js"></script>
+  <script src="../static/js/controllers/estoque.js"></script>
+  <script src="../static/js/controllers/consulta.js"></script>
+  <script src="../static/js/controllers/venda.js"></script>
 </head>
-<body>
-	<div id="header" class="header navbar navbar-static-top">
-		<div class="navbar-inner">
-			<div class="container">
-				<button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-				</button>
-				<a class="brand" href="/">AngularFlask</a>
-				<div class="nav-collapse collapse">
-					<ul class="nav pull-right">
-						<li class="">
-							<a href="/">Home</a>
-						</li>
-					</ul>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="container page">
-		<div id="content" class="container main" ng-view>
-		</div>
 
-		<hr>
-		<footer id="footer" class="footer">
-			<div class="footer-left">
-				<a href="/about">About</a> |
-				<a href="/">Home</a>
-			</div>
-			<div class="footer-right">
-				<span>&copy; 2013 AngularFlask</span>
-			</div>
-		</footer>
-	</div>
+<body>
+  <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header page-scroll">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand page-scroll" href="index2"><img src="static/img/logo.jpg">&nbsp;&nbsp;Charme e Fofura Pet Boutique</a>
+      </div>
+      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav navbar-right">
+          <li class="hidden">
+            <a href="#page-top"></a>
+          </li>
+          <li class="dropdown">
+            <a style="" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Cliente <span class="caret"></span></a>
+            <ul class="dropdown-menu" role="menu">
+              <li><a href="/cliente/cadastro">Novo Cliente</a></li>
+              <li><a href="/cliente/pet">Novo Pet</a></li>
+              <li><a href="/cliente/busca">Buscar</a></li>
+            </ul>
+          </li>
+          <li class="dropdown">
+            <a style="" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Serviço <span class="caret"></span></a>
+            <ul class="dropdown-menu" role="menu">
+              <li><a href="/servico/agendar">Agendar</a></li>
+              <li><a href="/servico/cadastro">Cadastrar</a></li>
+            </ul>
+          </li>
+          <li class="dropdown">
+            <a style="" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Produto <span class="caret"></span></a>
+            <ul class="dropdown-menu" role="menu">
+              <li><a href="/estoque/cadastro">Novo</a></li>
+              <li><a href="/estoque/busca">Buscar</a></li>
+              <li><a href="/estoque/grupoItem">Grupo de Ítens</a></li>
+            </ul>
+          </li>
+          <li class="dropdown">
+            <a style="" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Venda <span class="caret"></span></a>
+            <ul class="dropdown-menu" role="menu">
+              <li><a href="/venda/nova">Nova</a></li>
+            </ul>
+          </li>
+          <li class="dropdown">
+            <a style="" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Avançado <span class="caret"></span></a>
+            <ul class="dropdown-menu" role="menu">
+              <li><a href="/funcao">Funções</a></li>
+              <li><a href="/permissao">Permissões</a></li>
+              <li><a href="/redeSocial">Redes Sociais</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <section>
+    <div class="container">
+      <div id="content" ng-view></div>
+    </div>
+  </section>
+  <footer>
+    <div class="container">
+      <div class="text-center">
+        Made with <i class="fa fa-heart"></i> by André Cadamuro Garcia e Layon de Souza Onofre
+      </div>
+    </div>
+  </footer>
+  <!-- // <script src="static/stylejs/jquery-1.10.2.js"></script> -->
+  <script src="static/stylejs/bootstrap.js"></script>
+  <script src="static/stylejs/jquery.metisMenu.js"></script>
+  <script src="static/stylejs/custom.js"></script>
+  <script src="static/stylejs/bootstrap-select.js"></script>
+  <script src="static/stylejs/bootstrap-select-pt_BR.js"></script>
+  <script src="static/stylejs/moment-with-locales.min.js"></script>
+  <script src="static/stylejs/datetimepicker.js"></script>
 </body>
+
 </html>
