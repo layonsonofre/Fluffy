@@ -71,7 +71,6 @@ def form_modelo(modelo = None):
 
 	try:
 		data = Util.postData(proc, args)
-		data = []
 		return jsonify(success=True, result={"id":data[0]}, message="")
 	except Exception as e:
 		return jsonify(success=False, result={}, message=e.__str__())
