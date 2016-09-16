@@ -41,7 +41,7 @@ function LembreteController($scope, $http, LembreteFactory) {
   }
 
   function del(id) {
-    console.log(JSON.stringify(data));
+    console.log(JSON.stringify(id));
     LembreteFactory.del(id).then(function(response) {
       console.log(response);
     }, function(response) {
@@ -63,7 +63,9 @@ function LembreteFactory($http, Fluffy) {
   return LembreteFactory;
 
   function get() {
-    return $http.get(_url + '/lembrete')
+    return $http.get(
+        _url + '/lembrete'
+      )
       .then(success)
       .catch(failed);
 
@@ -79,14 +81,10 @@ function LembreteFactory($http, Fluffy) {
 
   function add(data) {
     console.log('SAVING: ' + JSON.stringify(data));
-    return $http({
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        url: _url + '/lembrete',
-        method: 'POST',
-        data: $data
-      })
+    return $http.post(
+        _url + '/lembrete',
+        data
+      )
       .then(success)
       .catch(failed);
 
@@ -102,12 +100,9 @@ function LembreteFactory($http, Fluffy) {
 
   function alt(data) {
     console.log('UPDATING: ' + JSON.stringify(data));
-
     return $http.put(
         _url + '/lembrete',
-        data, {
-          'Content-Type': 'application/json'
-        }
+        data
       )
       .then(success)
       .catch(failed);
@@ -126,9 +121,7 @@ function LembreteFactory($http, Fluffy) {
     console.log('DELETING ID: ' + id);
     return $http.delete(
         _url + '/lembrete',
-        JSON.stringify(data), {
-          'Content-Type': 'application/json'
-        }
+        id
       )
       .then(success)
       .catch(failed);

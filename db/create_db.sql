@@ -51,7 +51,7 @@ BEGIN
 		DECLARE servico VARCHAR(50);
         DECLARE invalid INT;
         DECLARE error_message VARCHAR(100);
-        
+
         SET invalid = 0;
 		SET error_message = "[tabela:anamnese] - ";
 
@@ -63,7 +63,7 @@ BEGIN
 				SET error_message = CONCAT(error_message, "peso");
             END IF;
 		END IF;
-        
+
         IF (NEW.tamanho <= 0) THEN
 			SET invalid = invalid + 1;
             IF (invalid > 1) THEN
@@ -72,7 +72,7 @@ BEGIN
 				SET error_message = CONCAT(error_message, "tamanho");
             END IF;
 		END IF;
-		
+
 		IF (NEW.temperatura <= 0) THEN
 			SET invalid = invalid + 1;
             IF (invalid > 1) THEN
@@ -81,7 +81,7 @@ BEGIN
 				SET error_message = CONCAT(error_message, "temperatura");
             END IF;
 		END IF;
-        
+
         SELECT nome INTO servico FROM tipo_servico WHERE id = NEW.servico_agendado_id;
 		IF(servico <> 'consulta') THEN
 			SET invalid = invalid + 1;
@@ -91,7 +91,7 @@ BEGIN
 				SET error_message = CONCAT(error_message, "servico");
 			END IF;
 		END IF;
-        
+
         IF (invalid > 0) THEN
 			IF (invalid > 1) THEN
 				SET error_message = CONCAT(error_message, " inválidos!");
@@ -123,7 +123,7 @@ BEGIN
 DECLARE servico VARCHAR(50);
         DECLARE invalid INT;
         DECLARE error_message VARCHAR(100);
-        
+
         SET invalid = 0;
 		SET error_message = "[tabela:anamnese] - ";
 
@@ -135,7 +135,7 @@ DECLARE servico VARCHAR(50);
 				SET error_message = CONCAT(error_message, "peso");
             END IF;
 		END IF;
-        
+
         IF (NEW.tamanho <= 0) THEN
 			SET invalid = invalid + 1;
             IF (invalid > 1) THEN
@@ -144,7 +144,7 @@ DECLARE servico VARCHAR(50);
 				SET error_message = CONCAT(error_message, "tamanho");
             END IF;
 		END IF;
-		
+
 		IF (NEW.temperatura <= 0) THEN
 			SET invalid = invalid + 1;
             IF (invalid > 1) THEN
@@ -153,7 +153,7 @@ DECLARE servico VARCHAR(50);
 				SET error_message = CONCAT(error_message, "temperatura");
             END IF;
 		END IF;
-        
+
         SELECT nome INTO servico FROM tipo_servico WHERE id = NEW.servico_agendado_id;
 		IF(servico <> 'consulta') THEN
 			SET invalid = invalid + 1;
@@ -163,7 +163,7 @@ DECLARE servico VARCHAR(50);
 				SET error_message = CONCAT(error_message, "servico");
 			END IF;
 		END IF;
-        
+
         IF (invalid > 0) THEN
 			IF (invalid > 1) THEN
 				SET error_message = CONCAT(error_message, " inválidos!");
@@ -222,10 +222,10 @@ BEGIN
 	DECLARE invalid INT;
 	DECLARE error_message VARCHAR(100);
 	DECLARE tipo_pessoa VARCHAR(50);
-        
+
 	SET invalid = 0;
 	SET error_message = "[tabela:animal] - ";
-    
+
 	IF NOT nome_valido(NEW.nome) THEN
 		SET invalid = invalid + 1;
 		IF (invalid > 1) THEN
@@ -234,8 +234,8 @@ BEGIN
 			SET error_message = CONCAT(error_message, "nome");
 		END IF;
     END IF;
-    
-    
+
+
     IF(NEW.sexo <> 'M' && NEW.sexo <> 'F') THEN
 		SET invalid = invalid + 1;
 		IF (invalid > 1) THEN
@@ -244,7 +244,7 @@ BEGIN
 			SET error_message = CONCAT(error_message, "sexo");
 		END IF;
     END IF;
-    
+
     IF(NEW.data_hora_cadastro <> NOW()) THEN
 		SET invalid = invalid + 1;
 		IF (invalid > 1) THEN
@@ -253,7 +253,7 @@ BEGIN
 			SET error_message = CONCAT(error_message, "data_hora_cadastro");
 		END IF;
     END IF;
-    
+
     IF(NEW.data_nascimento > NOW()) THEN
 		SET invalid = invalid + 1;
 		IF (invalid > 1) THEN
@@ -262,7 +262,7 @@ BEGIN
 			SET error_message = CONCAT(error_message, "data_nascimento");
 		END IF;
     END IF;
-    
+
     SELECT nome INTO tipo_pessoa FROM tipo_funcao WHERE id = NEW.pessoa_tem_funcao_id;
     IF(tipo_pessoa <> 'cliente' AND tipo_pessoa <> 'cliente_especial') THEN
 		SET invalid = invalid + 1;
@@ -272,7 +272,7 @@ BEGIN
 			SET error_message = CONCAT(error_message, "pessoa");
 		END IF;
     END IF;
-    
+
     IF (invalid > 0) THEN
 			IF (invalid > 1) THEN
 				SET error_message = CONCAT(error_message, " inválidos!");
@@ -304,10 +304,10 @@ BEGIN
 	DECLARE invalid INT;
 	DECLARE error_message VARCHAR(100);
 	DECLARE tipo_pessoa VARCHAR(50);
-        
+
 	SET invalid = 0;
 	SET error_message = "[tabela:animal] - ";
-    
+
 	IF NOT nome_valido(NEW.nome) THEN
 		SET invalid = invalid + 1;
 		IF (invalid > 1) THEN
@@ -316,7 +316,7 @@ BEGIN
 			SET error_message = CONCAT(error_message, "nome");
 		END IF;
     END IF;
-    
+
     IF(NEW.sexo <> 'M' OR NEW.sexo <> 'F') THEN
 		SET invalid = invalid + 1;
 		IF (invalid > 1) THEN
@@ -325,7 +325,7 @@ BEGIN
 			SET error_message = CONCAT(error_message, "sexo");
 		END IF;
     END IF;
-    
+
     IF(NEW.data_hora_cadastro <> NOW()) THEN
 		SET invalid = invalid + 1;
 		IF (invalid > 1) THEN
@@ -334,7 +334,7 @@ BEGIN
 			SET error_message = CONCAT(error_message, "data_hora_cadastro");
 		END IF;
     END IF;
-    
+
     IF(NEW.data_nascimento > NOW()) THEN
 		SET invalid = invalid + 1;
 		IF (invalid > 1) THEN
@@ -343,7 +343,7 @@ BEGIN
 			SET error_message = CONCAT(error_message, "data_nascimento");
 		END IF;
     END IF;
-    
+
     SELECT nome INTO tipo_pessoa FROM tipo_funcao WHERE pessoa_tem_funcao_id = NEW.pessoa_tem_funcao_id;
     IF(nome <> 'cliente' OR nome <> 'cliente_especial') THEN
 		SET invalid = invalid + 1;
@@ -353,7 +353,7 @@ BEGIN
 			SET error_message = CONCAT(error_message, "pessoa");
 		END IF;
     END IF;
-    
+
     IF (invalid > 0) THEN
 		IF (invalid > 1) THEN
 			SET error_message = CONCAT(error_message, " inválidos!");
@@ -427,10 +427,10 @@ BEGIN
 		DECLARE servico VARCHAR(50);
         DECLARE invalid INT;
         DECLARE error_message VARCHAR(100);
-        
+
         SET invalid = 0;
 		SET error_message = "[tabela:aplicacao] - ";
-        
+
         SELECT nome INTO servico FROM tipo_servico WHERE id = NEW.servico_agendado_id;
 		IF(servico <> 'consulta') THEN
 			SET invalid = invalid + 1;
@@ -440,7 +440,7 @@ BEGIN
 				SET error_message = CONCAT(error_message, "servico");
 			END IF;
 		END IF;
-        
+
         SELECT vencimento INTO vencimento_data FROM vacina WHERE NEW.vacina_id = vacina.id;
         IF (vencimento_data < NOW()) THEN
 			SET invalid = invalid + 1;
@@ -450,8 +450,8 @@ BEGIN
 				SET error_message = CONCAT(error_message, "validade");
 			END IF;
         END IF;
-        
-        
+
+
         IF (invalid > 0) THEN
 			IF (invalid > 1) THEN
 				SET error_message = CONCAT(error_message, " inválidos!");
@@ -484,10 +484,10 @@ DECLARE vencimento_data DATE;
 		DECLARE servico VARCHAR(50);
         DECLARE invalid INT;
         DECLARE error_message VARCHAR(100);
-        
+
         SET invalid = 0;
 		SET error_message = "[tabela:aplicacao] - ";
-        
+
         SELECT nome INTO servico FROM tipo_servico WHERE id = NEW.servico_agendado_id;
 		IF(servico <> 'consulta') THEN
 			SET invalid = invalid + 1;
@@ -497,7 +497,7 @@ DECLARE vencimento_data DATE;
 				SET error_message = CONCAT(error_message, "servico");
 			END IF;
 		END IF;
-        
+
         SELECT vencimento INTO vencimento_data FROM vacina WHERE NEW.vacina_id = vacina.id;
         IF (vencimento_data < NOW()) THEN
 			SET invalid = invalid + 1;
@@ -507,8 +507,8 @@ DECLARE vencimento_data DATE;
 				SET error_message = CONCAT(error_message, "validade");
 			END IF;
         END IF;
-        
-        
+
+
         IF (invalid > 0) THEN
 			IF (invalid > 1) THEN
 				SET error_message = CONCAT(error_message, " inválidos!");
@@ -557,10 +557,10 @@ BEGIN
 
 	DECLARE invalid INT;
 	DECLARE error_message VARCHAR(100);
-        
+
 	SET invalid = 0;
 	SET error_message = "[tabela:cidade] - ";
-    
+
 	IF NOT nome_valido(NEW.nome) THEN
 		SET invalid = invalid + 1;
 		IF (invalid > 1) THEN
@@ -569,7 +569,7 @@ BEGIN
 			SET error_message = CONCAT(error_message, "nome");
 		END IF;
     END IF;
-    
+
     IF (invalid > 0) THEN
 			IF (invalid > 1) THEN
 				SET error_message = CONCAT(error_message, " inválidos!");
@@ -600,10 +600,10 @@ FOR EACH ROW
 BEGIN
 DECLARE invalid INT;
 	DECLARE error_message VARCHAR(100);
-        
+
 	SET invalid = 0;
 	SET error_message = "[tabela:cidade] - ";
-    
+
 	IF NOT nome_valido(NEW.nome) THEN
 		SET invalid = invalid + 1;
 		IF (invalid > 1) THEN
@@ -612,7 +612,7 @@ DECLARE invalid INT;
 			SET error_message = CONCAT(error_message, "nome");
 		END IF;
     END IF;
-    
+
     IF (invalid > 0) THEN
 			IF (invalid > 1) THEN
 				SET error_message = CONCAT(error_message, " inválidos!");
@@ -656,7 +656,7 @@ FOR EACH ROW
 BEGIN
 DECLARE invalid INT;
         DECLARE error_message VARCHAR(100);
-        
+
         SET invalid = 0;
 		SET error_message = "[tabela:configuracao] - ";
 
@@ -668,7 +668,7 @@ DECLARE invalid INT;
 				SET error_message = CONCAT(error_message, "quantidade_animais");
             END IF;
 		END IF;
-		
+
 		IF (NEW.periodos_dia < 0) THEN
 			SET invalid = invalid + 1;
             IF (invalid > 1) THEN
@@ -677,7 +677,7 @@ DECLARE invalid INT;
 				SET error_message = CONCAT(error_message, "periodos_dia");
             END IF;
 		END IF;
-        
+
         IF (invalid > 0) THEN
 			IF (invalid > 1) THEN
 				SET error_message = CONCAT(error_message, " inválidos!");
@@ -708,7 +708,7 @@ FOR EACH ROW
 BEGIN
 DECLARE invalid INT;
         DECLARE error_message VARCHAR(100);
-        
+
         SET invalid = 0;
 		SET error_message = "[tabela:configuracao] - ";
 
@@ -720,7 +720,7 @@ DECLARE invalid INT;
 				SET error_message = CONCAT(error_message, "quantidade_animais");
             END IF;
 		END IF;
-		
+
 		IF (NEW.periodos_dia < 0) THEN
 			SET invalid = invalid + 1;
             IF (invalid > 1) THEN
@@ -729,7 +729,7 @@ DECLARE invalid INT;
 				SET error_message = CONCAT(error_message, "periodos_dia");
             END IF;
 		END IF;
-        
+
         IF (invalid > 0) THEN
 			IF (invalid > 1) THEN
 				SET error_message = CONCAT(error_message, " inválidos!");
@@ -792,10 +792,10 @@ FOR EACH ROW
 BEGIN
 	DECLARE invalid INT;
 	DECLARE error_message VARCHAR(100);
-        
+
 	SET invalid = 0;
 	SET error_message = "[tabela:estado] - ";
-    
+
 	IF NOT nome_valido(NEW.nome) THEN
 		SET invalid = invalid + 1;
 		IF (invalid > 1) THEN
@@ -804,7 +804,7 @@ BEGIN
 			SET error_message = CONCAT(error_message, "nome");
 		END IF;
     END IF;
-    
+
     IF (invalid > 0) THEN
 			IF (invalid > 1) THEN
 				SET error_message = CONCAT(error_message, " inválidos!");
@@ -835,10 +835,10 @@ FOR EACH ROW
 BEGIN
 DECLARE invalid INT;
 	DECLARE error_message VARCHAR(100);
-        
+
 	SET invalid = 0;
 	SET error_message = "[tabela:estado] - ";
-    
+
 	IF NOT nome_valido(NEW.nome) THEN
 		SET invalid = invalid + 1;
 		IF (invalid > 1) THEN
@@ -847,7 +847,7 @@ DECLARE invalid INT;
 			SET error_message = CONCAT(error_message, "nome");
 		END IF;
     END IF;
-    
+
     IF (invalid > 0) THEN
 			IF (invalid > 1) THEN
 				SET error_message = CONCAT(error_message, " inválidos!");
@@ -892,7 +892,7 @@ FOR EACH ROW
 BEGIN
 	DECLARE invalid INT;
 	DECLARE error_message VARCHAR(100);
-        
+
 	SET invalid = 0;
 	SET error_message = "[tabela:funcao] - ";
 
@@ -904,7 +904,7 @@ BEGIN
 			SET error_message = CONCAT(error_message, "nome");
 		END IF;
 	END IF;
-	
+
 	IF (invalid > 0) THEN
 		IF (invalid > 1) THEN
 			SET error_message = CONCAT(error_message, " inválidos!");
@@ -935,7 +935,7 @@ FOR EACH ROW
 BEGIN
 	DECLARE invalid INT;
 	DECLARE error_message VARCHAR(100);
-	
+
     SET invalid = 0;
 	SET error_message = "[tabela:funcao] - ";
 
@@ -947,7 +947,7 @@ BEGIN
 			SET error_message = CONCAT(error_message, "nome");
 		END IF;
 	END IF;
-	
+
 	IF (invalid > 0) THEN
 		IF (invalid > 1) THEN
 			SET error_message = CONCAT(error_message, " inválidos!");
@@ -1013,7 +1013,7 @@ BEGIN
 
         DECLARE invalid INT;
         DECLARE error_message VARCHAR(100);
-        
+
         SET invalid = 0;
 		SET error_message = "[tabela:item] - ";
 
@@ -1025,7 +1025,7 @@ BEGIN
 				SET error_message = CONCAT(error_message, "preco");
             END IF;
 		END IF;
-        
+
         IF (NEW.data_hora_cadastro <> NOW()) THEN
 			SET invalid = invalid + 1;
             IF (invalid > 1) THEN
@@ -1034,7 +1034,7 @@ BEGIN
 				SET error_message = CONCAT(error_message, "data_hora_cadastro");
             END IF;
 		END IF;
-		
+
         IF (NEW.quantidade < 0) THEN
 			SET invalid = invalid + 1;
             IF (invalid > 1) THEN
@@ -1043,7 +1043,7 @@ BEGIN
 				SET error_message = CONCAT(error_message, "quantidade");
             END IF;
 		END IF;
-        
+
         IF (invalid > 0) THEN
 			IF (invalid > 1) THEN
 				SET error_message = CONCAT(error_message, " inválidos!");
@@ -1074,7 +1074,7 @@ FOR EACH ROW
 BEGIN
 DECLARE invalid INT;
         DECLARE error_message VARCHAR(100);
-        
+
         SET invalid = 0;
 		SET error_message = "[tabela:item] - ";
 
@@ -1086,7 +1086,7 @@ DECLARE invalid INT;
 				SET error_message = CONCAT(error_message, "preco");
             END IF;
 		END IF;
-        
+
         IF (NEW.data_hora_cadastro <> NOW()) THEN
 			SET invalid = invalid + 1;
             IF (invalid > 1) THEN
@@ -1095,7 +1095,7 @@ DECLARE invalid INT;
 				SET error_message = CONCAT(error_message, "data_hora_cadastro");
             END IF;
 		END IF;
-		
+
         IF (NEW.quantidade < 0) THEN
 			SET invalid = invalid + 1;
             IF (invalid > 1) THEN
@@ -1104,7 +1104,7 @@ DECLARE invalid INT;
 				SET error_message = CONCAT(error_message, "quantidade");
             END IF;
 		END IF;
-        
+
         IF (invalid > 0) THEN
 			IF (invalid > 1) THEN
 				SET error_message = CONCAT(error_message, " inválidos!");
@@ -1156,7 +1156,7 @@ FOR EACH ROW
 BEGIN
 DECLARE invalid INT;
         DECLARE error_message VARCHAR(100);
-        
+
         SET invalid = 0;
 		SET error_message = "[tabela:item_de_venda] - ";
 
@@ -1168,7 +1168,7 @@ DECLARE invalid INT;
 				SET error_message = CONCAT(error_message, "preco");
             END IF;
 		END IF;
-        
+
         IF (NEW.quantidade < 0) THEN
 			SET invalid = invalid + 1;
             IF (invalid > 1) THEN
@@ -1177,7 +1177,7 @@ DECLARE invalid INT;
 				SET error_message = CONCAT(error_message, "quantidade");
             END IF;
 		END IF;
-        
+
         IF (invalid > 0) THEN
 			IF (invalid > 1) THEN
 				SET error_message = CONCAT(error_message, " inválidos!");
@@ -1208,7 +1208,7 @@ FOR EACH ROW
 BEGIN
 DECLARE invalid INT;
         DECLARE error_message VARCHAR(100);
-        
+
         SET invalid = 0;
 		SET error_message = "[tabela:item_de_venda] - ";
 
@@ -1220,7 +1220,7 @@ DECLARE invalid INT;
 				SET error_message = CONCAT(error_message, "preco");
             END IF;
 		END IF;
-        
+
         IF (NEW.quantidade < 0) THEN
 			SET invalid = invalid + 1;
             IF (invalid > 1) THEN
@@ -1229,7 +1229,7 @@ DECLARE invalid INT;
 				SET error_message = CONCAT(error_message, "quantidade");
             END IF;
 		END IF;
-        
+
         IF (invalid > 0) THEN
 			IF (invalid > 1) THEN
 				SET error_message = CONCAT(error_message, " inválidos!");
@@ -1257,7 +1257,7 @@ CREATE TABLE `lembrete` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Código de identificação com autoincremento',
   `descricao` varchar(200) NOT NULL COMMENT 'Descrição do lembrete',
   `data_hora` datetime NOT NULL,
-  `visualizado` varchar(45) NOT NULL,
+  `executado` varchar(45) NOT NULL,
   `pessoa_id` int(9) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_lembrete_pessoa1_idx` (`pessoa_id`),
@@ -1309,10 +1309,10 @@ FOR EACH ROW
 BEGIN
 	DECLARE invalid INT;
 	DECLARE error_message VARCHAR(100);
-        
+
 	SET invalid = 0;
 	SET error_message = "[tabela:pais] - ";
-    
+
 	IF NOT nome_valido(NEW.nome) THEN
 		SET invalid = invalid + 1;
 		IF (invalid > 1) THEN
@@ -1321,7 +1321,7 @@ BEGIN
 			SET error_message = CONCAT(error_message, "nome");
 		END IF;
     END IF;
-    
+
     IF (invalid > 0) THEN
 			IF (invalid > 1) THEN
 				SET error_message = CONCAT(error_message, " inválidos!");
@@ -1352,10 +1352,10 @@ FOR EACH ROW
 BEGIN
 	DECLARE invalid INT;
 	DECLARE error_message VARCHAR(100);
-        
+
 	SET invalid = 0;
 	SET error_message = "[tabela:pais] - ";
-    
+
 	IF NOT nome_valido(NEW.nome) THEN
 		SET invalid = invalid + 1;
 		IF (invalid > 1) THEN
@@ -1364,7 +1364,7 @@ BEGIN
 			SET error_message = CONCAT(error_message, "nome");
 		END IF;
     END IF;
-    
+
     IF (invalid > 0) THEN
 			IF (invalid > 1) THEN
 				SET error_message = CONCAT(error_message, " inválidos!");
@@ -1421,7 +1421,7 @@ BEGIN
         DECLARE pessoa_funcionario VARCHAR(50);
 		DECLARE invalid INT;
         DECLARE error_message VARCHAR(100);
-        
+
         SET invalid = 0;
 		SET error_message = "[tabela:pedido] - ";
 
@@ -1433,7 +1433,7 @@ BEGIN
 				SET error_message = CONCAT(error_message, "valor");
             END IF;
 		END IF;
-        
+
         IF (NEW.desconto < 0) THEN
 			SET invalid = invalid + 1;
             IF (invalid > 1) THEN
@@ -1442,7 +1442,7 @@ BEGIN
 				SET error_message = CONCAT(error_message, "desconto");
             END IF;
 		END IF;
-        
+
         SELECT nome INTO pessoa_funcionario FROM tipo_funcao WHERE id = NEW.funcionario_id;
 		IF(pessoa_funcionario <> 'funcionario' AND pessoa_funcionario <> 'fornecedor') THEN
 			SET invalid = invalid + 1;
@@ -1452,7 +1452,7 @@ BEGIN
 				SET error_message = CONCAT(error_message, "funcionario");
 			END IF;
 		END IF;
-        
+
         SELECT nome INTO pessoa_cliente FROM tipo_funcao WHERE id = NEW.cliente_id;
 		IF(pessoa_cliente <> 'cliente' AND pessoa_cliente <> 'cliente_especial') THEN
 			SET invalid = invalid + 1;
@@ -1462,7 +1462,7 @@ BEGIN
 				SET error_message = CONCAT(error_message, "cliente");
 			END IF;
 		END IF;
-        
+
         IF (invalid > 0) THEN
 			IF (invalid > 1) THEN
 				SET error_message = CONCAT(error_message, " inválidos!");
@@ -1495,7 +1495,7 @@ BEGIN
         DECLARE pessoa_funcionario VARCHAR(50);
 		DECLARE invalid INT;
         DECLARE error_message VARCHAR(100);
-        
+
         SET invalid = 0;
 		SET error_message = "[tabela:pedido] - ";
 
@@ -1507,7 +1507,7 @@ BEGIN
 				SET error_message = CONCAT(error_message, "valor");
             END IF;
 		END IF;
-        
+
         IF (NEW.desconto < 0) THEN
 			SET invalid = invalid + 1;
             IF (invalid > 1) THEN
@@ -1516,7 +1516,7 @@ BEGIN
 				SET error_message = CONCAT(error_message, "desconto");
             END IF;
 		END IF;
-        
+
         SELECT nome INTO pessoa_funcionario FROM tipo_funcao WHERE id = NEW.funcionario_id;
 		IF(pessoa_funcionario <> 'funcionario' AND pessoa_funcionario <> 'fornecedor') THEN
 			SET invalid = invalid + 1;
@@ -1526,7 +1526,7 @@ BEGIN
 				SET error_message = CONCAT(error_message, "funcionario");
 			END IF;
 		END IF;
-        
+
         SELECT nome INTO pessoa_cliente FROM tipo_funcao WHERE id = NEW.cliente_id;
 		IF(pessoa_cliente <> 'cliente' AND pessoa_cliente <> 'cliente_especial') THEN
 			SET invalid = invalid + 1;
@@ -1536,7 +1536,7 @@ BEGIN
 				SET error_message = CONCAT(error_message, "cliente");
 			END IF;
 		END IF;
-        
+
         IF (invalid > 0) THEN
 			IF (invalid > 1) THEN
 				SET error_message = CONCAT(error_message, " inválidos!");
@@ -1607,10 +1607,10 @@ DELIMITER ;;
 BEFORE INSERT ON `pet_shop`.`pessoa`
 FOR EACH ROW
 BEGIN
-		
+
         DECLARE invalid INT;
         DECLARE error_message VARCHAR(100);
-        
+
         SET invalid = 0;
 		SET error_message = "[tabela:pessoa] - ";
 
@@ -1622,7 +1622,7 @@ BEGIN
 				SET error_message = CONCAT(error_message, "nome");
             END IF;
 		END IF;
-        
+
         IF (NEW.data_hora_cadastro <> NOW()) THEN
 			SET invalid = invalid + 1;
             IF (invalid > 1) THEN
@@ -1631,7 +1631,7 @@ BEGIN
 				SET error_message = CONCAT(error_message, "data_hora_cadastro");
             END IF;
 		END IF;
-		
+
 		IF NOT email_valido(NEW.email) THEN
 			SET invalid = invalid + 1;
             IF (invalid > 1) THEN
@@ -1640,7 +1640,7 @@ BEGIN
 				SET error_message = CONCAT(error_message, "email");
             END IF;
 		END IF;
-        
+
         IF NOT (cpf_valido(NEW.registro) OR cnpj_valido(NEW.registro)) THEN
 			SET invalid = invalid + 1;
             IF (invalid > 1) THEN
@@ -1649,7 +1649,7 @@ BEGIN
 				SET error_message = CONCAT(error_message, "registro");
             END IF;
 		END IF;
-        
+
         IF (invalid > 0) THEN
 			IF (invalid > 1) THEN
 				SET error_message = CONCAT(error_message, " inválidos!");
@@ -1659,7 +1659,7 @@ BEGIN
             SIGNAL SQLSTATE VALUE '45000'
 			SET MESSAGE_TEXT = error_message;
 		END IF;
-        
+
 	END */;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -1679,10 +1679,10 @@ DELIMITER ;;
 BEFORE UPDATE ON `pet_shop`.`pessoa`
 FOR EACH ROW
 BEGIN
-	
+
         DECLARE invalid INT;
         DECLARE error_message VARCHAR(100);
-        
+
         SET invalid = 0;
 		SET error_message = "[tabela:pessoa] - ";
 
@@ -1694,7 +1694,7 @@ BEGIN
 				SET error_message = CONCAT(error_message, "nome");
             END IF;
 		END IF;
-        
+
         IF (NEW.data_hora_cadastro <> NOW()) THEN
 			SET invalid = invalid + 1;
             IF (invalid > 1) THEN
@@ -1703,7 +1703,7 @@ BEGIN
 				SET error_message = CONCAT(error_message, "data_hora_cadastro");
             END IF;
 		END IF;
-		
+
 		IF NOT email_valido(NEW.email) THEN
 			SET invalid = invalid + 1;
             IF (invalid > 1) THEN
@@ -1712,7 +1712,7 @@ BEGIN
 				SET error_message = CONCAT(error_message, "email");
             END IF;
 		END IF;
-        
+
         IF NOT (cpf_valido(NEW.registro) OR cnpj_valido(NEW.registro)) THEN
 			SET invalid = invalid + 1;
             IF (invalid > 1) THEN
@@ -1721,7 +1721,7 @@ BEGIN
 				SET error_message = CONCAT(error_message, "registro");
             END IF;
 		END IF;
-        
+
         IF (invalid > 0) THEN
 			IF (invalid > 1) THEN
 				SET error_message = CONCAT(error_message, " inválidos!");
@@ -1783,7 +1783,7 @@ BEGIN
     SELECT registro INTO pessoa_registro
 		FROM pessoa
 		WHERE id = NEW.pessoa_id;
-    
+
 	CASE funcao_nome
 		WHEN "cliente" THEN SELECT "cpf" INTO verifica;
         WHEN "cliente_especial" THEN SELECT "cpf" INTO verifica;
@@ -1792,16 +1792,16 @@ BEGIN
         WHEN "terceiro" THEN SELECT "cnpj" INTO verifica;
         ELSE SELECT "erro" INTO verifica;
 	END CASE;
-    
+
     IF(verifica = "cpf") THEN
 		IF NOT cpf_valido(pessoa_registro) THEN
-			SET error_message = CONCAT(error_message, "cpf inválido!"); 
+			SET error_message = CONCAT(error_message, "cpf inválido!");
             SIGNAL SQLSTATE VALUE '45000'
             SET MESSAGE_TEXT = error_message;
         END IF;
     ELSEIF(verifica = "cnpj") THEN
 		IF NOT cnpj_valido(pessoa_registro) THEN
-			SET error_message = CONCAT(error_message, "cnpj inválido!"); 
+			SET error_message = CONCAT(error_message, "cnpj inválido!");
 			SIGNAL SQLSTATE VALUE '45000'
 			SET MESSAGE_TEXT = error_message;
         END IF;
@@ -1842,7 +1842,7 @@ BEGIN
         INNER JOIN pessoa
         WHERE pessoa.id = NEW.pessoa_id
         AND funcao.id = NEW.funcao_id;
-        
+
 	CASE funcao_nome
 		WHEN "cliente" THEN SELECT "cpf" INTO verifica;
         WHEN "cliente_especial" THEN SELECT "cpf" INTO verifica;
@@ -1850,16 +1850,16 @@ BEGIN
         WHEN "fornecedor" THEN SELECT "cnpj" INTO verifica;
         WHEN "terceiro" THEN SELECT "cnpj" INTO verifica;
 	END CASE;
-    
+
     IF(verifica = "cpf") THEN
 		IF NOT cpf_valido(registro) THEN
-			SET error_message = CONCAT(error_message, "cpf inválido!"); 
+			SET error_message = CONCAT(error_message, "cpf inválido!");
             SIGNAL SQLSTATE VALUE '45000'
             SET MESSAGE_TEXT = error_message;
         END IF;
     ELSEIF(verifica = "cnpj") THEN
 		IF NOT cnpj_valido(registro) THEN
-			SET error_message = CONCAT(error_message, "cnpj inválido!"); 
+			SET error_message = CONCAT(error_message, "cnpj inválido!");
 			SIGNAL SQLSTATE VALUE '45000'
 			SET MESSAGE_TEXT = error_message;
         END IF;
@@ -1908,10 +1908,10 @@ BEGIN
 	DECLARE invalid INT;
 	DECLARE error_message VARCHAR(100);
 	DECLARE tipo_pessoa VARCHAR(50);
-        
+
 	SET invalid = 0;
 	SET error_message = "[tabela:pessoa_tem_permissoes] - ";
-    
+
     SELECT nome INTO tipo_pessoa FROM tipo_funcao WHERE id = NEW.pessoa_tem_funcao_id;
     IF(tipo_pessoa <> 'funcionario' AND tipo_pessoa <> 'administrador') THEN
 		SET invalid = invalid + 1;
@@ -1921,7 +1921,7 @@ BEGIN
 			SET error_message = CONCAT(error_message, "pessoa");
 		END IF;
     END IF;
-    
+
     IF (invalid > 0) THEN
 			IF (invalid > 1) THEN
 				SET error_message = CONCAT(error_message, " inválidos!");
@@ -1952,10 +1952,10 @@ BEGIN
 DECLARE invalid INT;
 	DECLARE error_message VARCHAR(100);
 	DECLARE tipo_pessoa VARCHAR(50);
-        
+
 	SET invalid = 0;
 	SET error_message = "[tabela:pessoa_tem_permissoes] - ";
-    
+
     SELECT nome INTO tipo_pessoa FROM tipo_funcao WHERE id = NEW.pessoa_tem_funcao_id;
     IF(tipo_pessoa <> 'funcionario' AND tipo_pessoa <> 'administrador') THEN
 		SET invalid = invalid + 1;
@@ -1965,7 +1965,7 @@ DECLARE invalid INT;
 			SET error_message = CONCAT(error_message, "pessoa");
 		END IF;
     END IF;
-    
+
     IF (invalid > 0) THEN
 			IF (invalid > 1) THEN
 				SET error_message = CONCAT(error_message, " inválidos!");
@@ -2034,10 +2034,10 @@ FOR EACH ROW
 BEGIN
 	DECLARE invalid INT;
 	DECLARE error_message VARCHAR(100);
-        
+
 	SET invalid = 0;
 	SET error_message = "[tabela:porte] - ";
-    
+
     IF(NEW.tamanho_minimo <= 0) THEN
 		SET invalid = invalid + 1;
 		IF (invalid > 1) THEN
@@ -2046,7 +2046,7 @@ BEGIN
 			SET error_message = CONCAT(error_message, "tamanho_minimo");
 		END IF;
     END IF;
-    
+
     IF(NEW.tamanho_maximo <= NEW.tamanho_minimo) THEN
 		SET invalid = invalid + 1;
 		IF (invalid > 1) THEN
@@ -2055,7 +2055,7 @@ BEGIN
 			SET error_message = CONCAT(error_message, "tamanho_maximo");
 		END IF;
     END IF;
-    
+
     IF (invalid > 0) THEN
 			IF (invalid > 1) THEN
 				SET error_message = CONCAT(error_message, " inválidos!");
@@ -2086,10 +2086,10 @@ FOR EACH ROW
 BEGIN
 DECLARE invalid INT;
 	DECLARE error_message VARCHAR(100);
-        
+
 	SET invalid = 0;
 	SET error_message = "[tabela:porte] - ";
-    
+
     IF(NEW.tamanho_minimo <= 0) THEN
 		SET invalid = invalid + 1;
 		IF (invalid > 1) THEN
@@ -2098,7 +2098,7 @@ DECLARE invalid INT;
 			SET error_message = CONCAT(error_message, "tamanho_minimo");
 		END IF;
     END IF;
-    
+
     IF(NEW.tamanho_maximo <= NEW.tamanho_minimo) THEN
 		SET invalid = invalid + 1;
 		IF (invalid > 1) THEN
@@ -2107,7 +2107,7 @@ DECLARE invalid INT;
 			SET error_message = CONCAT(error_message, "tamanho_maximo");
 		END IF;
     END IF;
-    
+
     IF (invalid > 0) THEN
 			IF (invalid > 1) THEN
 				SET error_message = CONCAT(error_message, " inválidos!");
@@ -2201,10 +2201,10 @@ FOR EACH ROW
 BEGIN
 	DECLARE invalid INT;
 	DECLARE error_message VARCHAR(100);
-        
+
 	SET invalid = 0;
 	SET error_message = "[tabela:servico] - ";
-    
+
     IF (invalid > 0) THEN
 			IF (invalid > 1) THEN
 				SET error_message = CONCAT(error_message, " inválidos!");
@@ -2235,10 +2235,10 @@ FOR EACH ROW
 BEGIN
 DECLARE invalid INT;
 	DECLARE error_message VARCHAR(100);
-        
+
 	SET invalid = 0;
 	SET error_message = "[tabela:servico] - ";
-    
+
     IF (invalid > 0) THEN
 			IF (invalid > 1) THEN
 				SET error_message = CONCAT(error_message, " inválidos!");
@@ -2303,7 +2303,7 @@ BEGIN
         DECLARE tipo_pessoa VARCHAR(50);
         DECLARE invalid INT;
         DECLARE error_message VARCHAR(100);
-        
+
         SET invalid = 0;
 		SET error_message = "[tabela:servico_agendado] - ";
 
@@ -2315,7 +2315,7 @@ BEGIN
 				SET error_message = CONCAT(error_message, "preco");
             END IF;
 		END IF;
-		
+
         SELECT nome INTO tipo_pessoa FROM tipo_funcao WHERE id = NEW.funcionario_executa_id;
 		IF(tipo_pessoa <> 'funcionario') THEN
 			SET invalid = invalid + 1;
@@ -2325,7 +2325,7 @@ BEGIN
 				SET error_message = CONCAT(error_message, "pessoa");
 			END IF;
 		END IF;
-        
+
         SELECT COUNT(*) INTO numero_animais FROM animais_dia WHERE data_hora = NEW.data_hora;
 		IF(numero_animais <= (SELECT quantidade_animais FROM configuracao)) THEN
 			SET invalid = invalid + 1;
@@ -2335,7 +2335,7 @@ BEGIN
 				SET error_message = CONCAT(error_message, "data_hora");
 			END IF;
 		END IF;
-        
+
         IF (invalid > 0) THEN
 			IF (invalid > 1) THEN
 				SET error_message = CONCAT(error_message, " inválidos!");
@@ -2368,7 +2368,7 @@ DECLARE numero_animais INT;
         DECLARE tipo_pessoa VARCHAR(50);
         DECLARE invalid INT;
         DECLARE error_message VARCHAR(100);
-        
+
         SET invalid = 0;
 		SET error_message = "[tabela:servico_agendado] - ";
 
@@ -2380,7 +2380,7 @@ DECLARE numero_animais INT;
 				SET error_message = CONCAT(error_message, "preco");
             END IF;
 		END IF;
-		
+
         SELECT nome INTO tipo_pessoa FROM tipo_funcao WHERE id = NEW.funcionario_executa_id;
 		IF(tipo_pessoa <> 'funcionario') THEN
 			SET invalid = invalid + 1;
@@ -2390,7 +2390,7 @@ DECLARE numero_animais INT;
 				SET error_message = CONCAT(error_message, "pessoa");
 			END IF;
 		END IF;
-        
+
         SELECT COUNT(*) INTO numero_animais FROM animais_dia WHERE data_hora = NEW.data_hora;
 		IF(numero_animais <= (SELECT quantidade_animais FROM configuracao)) THEN
 			SET invalid = invalid + 1;
@@ -2400,7 +2400,7 @@ DECLARE numero_animais INT;
 				SET error_message = CONCAT(error_message, "data_hora");
 			END IF;
 		END IF;
-        
+
         IF (invalid > 0) THEN
 			IF (invalid > 1) THEN
 				SET error_message = CONCAT(error_message, " inválidos!");
@@ -2453,7 +2453,7 @@ BEGIN
 		DECLARE tipo_pessoa VARCHAR(50);
         DECLARE invalid INT;
         DECLARE error_message VARCHAR(100);
-        
+
         SET invalid = 0;
 		SET error_message = "[tabela:servico_contratado] - ";
 
@@ -2465,7 +2465,7 @@ BEGIN
 				SET error_message = CONCAT(error_message, "preco");
             END IF;
 		END IF;
-        
+
         IF (NEW.data_hora <> NOW()) THEN
 			SET invalid = invalid + 1;
             IF (invalid > 1) THEN
@@ -2474,7 +2474,7 @@ BEGIN
 				SET error_message = CONCAT(error_message, "data_hora");
             END IF;
 		END IF;
-		
+
         SELECT nome INTO tipo_pessoa FROM tipo_funcao WHERE id = NEW.pessoa_tem_funcao_id_funcionario;
 		IF(tipo_pessoa <> 'funcionario') THEN
 			SET invalid = invalid + 1;
@@ -2484,7 +2484,7 @@ BEGIN
 				SET error_message = CONCAT(error_message, "pessoa");
 			END IF;
 		END IF;
-        
+
         IF (invalid > 0) THEN
 			IF (invalid > 1) THEN
 				SET error_message = CONCAT(error_message, " inválidos!");
@@ -2516,7 +2516,7 @@ BEGIN
 DECLARE tipo_pessoa VARCHAR(50);
         DECLARE invalid INT;
         DECLARE error_message VARCHAR(100);
-        
+
         SET invalid = 0;
 		SET error_message = "[tabela:servico_contratado] - ";
 
@@ -2528,7 +2528,7 @@ DECLARE tipo_pessoa VARCHAR(50);
 				SET error_message = CONCAT(error_message, "preco");
             END IF;
 		END IF;
-        
+
         IF (NEW.data_hora <> NOW()) THEN
 			SET invalid = invalid + 1;
             IF (invalid > 1) THEN
@@ -2537,7 +2537,7 @@ DECLARE tipo_pessoa VARCHAR(50);
 				SET error_message = CONCAT(error_message, "data_hora");
             END IF;
 		END IF;
-		
+
         SELECT nome INTO tipo_pessoa FROM tipo_funcao WHERE id = NEW.pessoa_tem_funcao_id_funcionario;
 		IF(tipo_pessoa <> 'funcionario') THEN
 			SET invalid = invalid + 1;
@@ -2547,7 +2547,7 @@ DECLARE tipo_pessoa VARCHAR(50);
 				SET error_message = CONCAT(error_message, "pessoa");
 			END IF;
 		END IF;
-        
+
         IF (invalid > 0) THEN
 			IF (invalid > 1) THEN
 				SET error_message = CONCAT(error_message, " inválidos!");
@@ -2633,10 +2633,10 @@ FOR EACH ROW
 BEGIN
 	DECLARE invalid INT;
 	DECLARE error_message VARCHAR(100);
-        
+
 	SET invalid = 0;
 	SET error_message = "[tabela:transacao] - ";
-    
+
     IF(NEW.tipo <> 'C' AND NEW.tipo <> 'D') THEN
 		SET invalid = invalid + 1;
 		IF (invalid > 1) THEN
@@ -2645,7 +2645,7 @@ BEGIN
 			SET error_message = CONCAT(error_message, "tipo");
 		END IF;
     END IF;
-    
+
     IF(NEW.valor <> 0) THEN
 		SET invalid = invalid + 1;
 		IF (invalid > 1) THEN
@@ -2654,7 +2654,7 @@ BEGIN
 			SET error_message = CONCAT(error_message, "valor");
 		END IF;
     END IF;
-    
+
     IF(NEW.data_hora <> NOW()) THEN
 		SET invalid = invalid + 1;
 		IF (invalid > 1) THEN
@@ -2663,7 +2663,7 @@ BEGIN
 			SET error_message = CONCAT(error_message, "data_hora");
 		END IF;
     END IF;
-    
+
     IF (invalid > 0) THEN
 			IF (invalid > 1) THEN
 				SET error_message = CONCAT(error_message, " inválidos!");
@@ -2694,10 +2694,10 @@ FOR EACH ROW
 BEGIN
 DECLARE invalid INT;
 	DECLARE error_message VARCHAR(100);
-        
+
 	SET invalid = 0;
 	SET error_message = "[tabela:vacina] - ";
-    
+
     IF(NEW.tipo <> 'C' OR NEW.tipo <> 'D') THEN
 		SET invalid = invalid + 1;
 		IF (invalid > 1) THEN
@@ -2706,7 +2706,7 @@ DECLARE invalid INT;
 			SET error_message = CONCAT(error_message, "tipo");
 		END IF;
     END IF;
-    
+
     IF(NEW.valor <> 0) THEN
 		SET invalid = invalid + 1;
 		IF (invalid > 1) THEN
@@ -2715,7 +2715,7 @@ DECLARE invalid INT;
 			SET error_message = CONCAT(error_message, "valor");
 		END IF;
     END IF;
-    
+
     IF(NEW.data_hora <> NOW()) THEN
 		SET invalid = invalid + 1;
 		IF (invalid > 1) THEN
@@ -2724,7 +2724,7 @@ DECLARE invalid INT;
 			SET error_message = CONCAT(error_message, "data_hora");
 		END IF;
     END IF;
-    
+
     IF (invalid > 0) THEN
 			IF (invalid > 1) THEN
 				SET error_message = CONCAT(error_message, " inválidos!");
@@ -2774,10 +2774,10 @@ FOR EACH ROW
 BEGIN
 	DECLARE invalid INT;
 	DECLARE error_message VARCHAR(100);
-        
+
 	SET invalid = 0;
 	SET error_message = "[tabela:vacina] - ";
-    
+
     IF (invalid > 0) THEN
 			IF (invalid > 1) THEN
 				SET error_message = CONCAT(error_message, " inválidos!");
