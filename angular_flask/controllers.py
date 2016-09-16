@@ -24,8 +24,10 @@ def get_modelo(modelo=None):
 
 	args = []
 	args = Util.requestGetArgs(modelo)
+	
 	print("get"+modelo[0].upper()+modelo[1:])
 	print(args)
+	
 	try:
 		data = Util.getData("get"+modelo[0].upper()+modelo[1:], args)
 		print(data)
@@ -63,6 +65,9 @@ def form_modelo(modelo = None):
 	elif request.method == 'DELETE':
 		proc = "del"+modelo[0].upper()+modelo[1:]
 		args = [args.pop(0)]
+
+	print(proc)
+	print(args)
 
 	try:
 		data = Util.postData(proc, args)
