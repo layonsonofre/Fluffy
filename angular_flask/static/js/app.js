@@ -2,7 +2,7 @@
   'use strict';
 
   angular
-    .module('Fluffy', ['ngRoute', 'ngResource', 'Index', 'Cliente', 'Funcao', 'Permissao', 'RedeSocial', 'GrupoItem', 'Servico', 'Consulta', 'Lembrete', 'Estoque', 'Venda', 'ngDragDrop'])
+    .module('Fluffy', ['ngRoute', 'ngResource', 'xeditable', 'ui.bootstrap', 'Index', 'Cliente', 'Funcao', 'Permissao', 'RedeSocial', 'GrupoItem', 'Servico', 'Consulta', 'Lembrete', 'Estoque', 'Venda', 'ngDragDrop'])
     .config(['$routeProvider', '$locationProvider', '$httpProvider',
       function($routeProvider, $locationProvider, $httpProvider) {
         $httpProvider.defaults.headers.common["X-Requested-With"] = undefined;
@@ -18,8 +18,7 @@
           });
       }
     ])
-    .config(function(FluffyProvider) {
-      FluffyProvider.setUrl('asd');
+    .run(function(editableOptions) {
+      editableOptions.theme = 'bs3';
     });
-
 })()

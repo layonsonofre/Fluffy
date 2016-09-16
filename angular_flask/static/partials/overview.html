@@ -11,122 +11,160 @@
         Lembretes
       </div>
       <div class="panel-body" ng-controller="LembreteController as Lembrete">
-        <form role="form" method="post">
-          <div class="row">
-            <div class="col-lg-7">
-              <div class="form-group">
-                <!-- <label>Descrição *</label> -->
-                <input class="form-control" type="text" data-ng-model="lembrete">
-                <p class="help-block">Insira o que deseja lembrar</p>
-              </div>
-            </div>
-            <div class="col-lg-1">
-              <button type="submit" class="btn btn-success" data-ng-click="salvar()" data-toggle="tooltip" data-placement="top" title="Salvar cadastro"><span class="fa fa-check"></span></button>
-            </div>
-          </div>
-        </form>
+        <button type="button" class="btn btn-default pull-right" ng-click="Lembrete.novo()" data-toggle="tooltip" data-placement="top" title="Excluir">
+          <span class="fa fa-plus"></span>
+        </button>
         <table class="table table-striped table-hover">
           <thead>
             <tr>
-              <th class="hidden">ID</th>
               <th>Lembrete</th>
+              <th>Data</th>
+              <th>Executado</th>
               <th>Ações</th>
             </tr>
           </thead>
           <tbody>
-            <tr data-ng-repeat="entry in Lembrete.fields">
-              <td class="hidden">{{entry.id}}</td>
+            <tr ng-repeat="entry in Lembrete.lembretes">
               <td>
-                <span data-ng-hide="editMode">{{entry.lembrete}}</span>
-                <input type="text" data-ng-show="editMode" data-ng-model="entry.lembrete" data-ng-required >
-              </td>
-              <td>
-                <button type="submit" class="btn btn-primary" data-ng-hide="editMode" data-ng-click="editMode = true; editar(entry)" data-toggle="tooltip" data-placement="top" title="Alterar dados cadastrados"><span class="fa fa-pencil"></span></button>
-                <button type="submit" class="btn btn-success" data-ng-show="editMode" data-ng-click="editMode = false; salvar(entry)" data-toggle="tooltip" data-placement="top" title="Salvar alterações"><span class="fa fa-check"></span></button>
-                <button type="submit" class="btn btn-warning" data-ng-show="editMode" data-ng-click="editMode = false; cancelar()" data-toggle="tooltip" data-placement="top" title="Cancelar alterações"><span class="fa fa-close"></span></button>
-                <button type="submit" class="btn btn-danger pull-right" ng-click="excluir(entry)" data-toggle="tooltip" data-placement="top" title="Excluir cadastro"><span class="fa fa-trash"></span></button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+                <span editable-text="entry.descricao" e-name="descricao" e-form="form" onbeforesave="Lembrete.valida(entry)" e-required>
+                  {{ entry.descricao || '' }}
+                </td>
+                <td>
+                  <a href="#" editable-bsdate="entry.data_hora" e-datepicker-popup="dd-MMMM-yyyy hh:mm:ss">
+                    {{ entry.data_hora | date: "dd/MMMM/yyyy hh:mm:ss" || 'Não informada'}}
+                  </a>
+                </td>
+                <td>
+                  <a href="#" editable-checkbox="entry.executado" e-title="Executado?">
+                    {{ entry.executado && "Executado" || "Não executado" }}
+                  </a>
+                </td>
+                <td>
+                  <form editable-form name="form" onbeforesave="Lembrete.alt(entry)" ng-show="form.$visible" class="form-buttons form-inline" shown="inserted == entry">
+                    <button type="submit" class="btn btn-success" ng-disabled="form.$waiting" data-toggle="tooltip" data-placement="top" title="Salvar">
+                      <span class="fa fa-check"></span>
+                    </button>
+                    <button type="button" class="btn btn-default" ng-disabled="form.$waiting" ng-click="form.$cancel()" data-toggle="tooltip" data-placement="top" title="Cancelar">
+                      <span class="fa fa-close"></span>
+                    </button>
+                  </form>
+                  <div class="buttons" ng-show="!form.$visible">
+                    <button type="button" class="btn btn-primary" ng-click="form.$show()" data-toggle="tooltip" data-placement="top" title="Editar">
+                      <span class="fa fa-pencil"></span>
+                    </button>
+                    <button type="button" class="btn btn-danger" ng-click="del(entry.id)" data-toggle="tooltip" data-placement="top" title="Excluir">
+                      <span class="fa fa-trash"></span>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          Serviços de hoje
+        </div>
+        <div class="panel-body" ng-controller="ServicoController as Servico">
+          <div class="row">
+            <div class="col-md-12">
+              <button class="btn btn-primary pull-right">
+                <span class="fa fa-plus"></span>
+              </button>
+            </div>
+          </div>
+          <table class="table table-striped table-hover">
+            <thead>
+              <tr>
+                <th>Animal</th>
+                <th>Serviço</th>
+                <th>Horário</th>
+                <th>Observação</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr data-ng-repeat="entry in Servico.agendados">
+                <td>
+                  <span>{{ entry.nome_animal }}</span>
+                </td>
+                <td>
+                  <span>{{ entry.nome_servico }}</span>
+                </td>
+                <td>
+                  <span>{{ entry.data_hora }}</span>
+                </td>
+                <td>
+                  <span>{{ entry.observacao }}</span>
+                </td>
+                <td>
+                  <a class="btn btn-info" ng-click="get(entry.id)" data-toggle="tooltip" data-placement="top" title="Detalhes">
+                    <span class="fa fa-check"></span>
+                  </a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="panel panel-info">
+        <div class="panel-heading">
+          Próximos retornos
+        </div>
+        <div class="panel-body">
+          <div class="row">
+            <div class="col-md-12">
+              <button class="btn btn-success pull-right" ng-click="adicionar = !adicionar">
+                <span class="fa fa-plus"></span>
+              </button>
+            </div>
+          </div>
+          <table class="table table-striped table-hover">
+            <thead>
+              <tr>
+                <th>Descrição</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr data-ng-repeat="entry in fields">
+                <td>
+                  <span>{{entry.nome}}</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
-
-    <div class="panel panel-primary">
-      <div class="panel-heading">
-        Serviços de hoje
+    <div class="col-lg-4">
+      <div class="alert alert-default">
+        <h4 style="color: #aaa;">Estatísticas</h4>
       </div>
-      <div class="panel-body">
-        <div class="row">
-          <div class="col-md-12">
-            <button class="btn btn-primary pull-right" ng-click="adicionar = !adicionar"><span class="fa fa-plus"></span></button>
-          </div>
-        </div>
-        <table class="table table-striped table-hover">
-          <thead>
-            <tr>
-              <th>Descrição</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr data-ng-repeat="entry in fields">
-              <td>
-                <span>{{entry.nome}}</span>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+      <div class="alert alert-primary">
+        Serviços no mês<br>
+        <h4>87</h4>
       </div>
-    </div>
-
-    <div class="panel panel-info">
-      <div class="panel-heading">
-        Próximos retornos
+      <div class="alert alert-info">
+        Vendas no mês<br>
+        <h4>120</h4>
       </div>
-      <div class="panel-body">
-        <div class="row">
-          <div class="col-md-12">
-            <button class="btn btn-success pull-right" ng-click="adicionar = !adicionar"><span class="fa fa-plus"></span></button>
-          </div>
-        </div>
-        <table class="table table-striped table-hover">
-          <thead>
-            <tr>
-              <th>Descrição</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr data-ng-repeat="entry in fields">
-              <td>
-                <span>{{entry.nome}}</span>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+      <div class="alert alert-default">
+        <h4 style="color: #aaa;">Financeiro</h4>
+      </div>
+      <div class="alert alert-warning">
+        Saldo Atual<br>
+        <h4>R$ 1.596,00</h4>
+      </div>
+      <div class="alert alert-danger">
+        Despesas<br>
+        <h4>R$ 400,00</h4>
+      </div>
+      <div class="alert alert-success">
+        Receitas<br>
+        <h4>R$ 809,00</h4>
       </div>
     </div>
   </div>
-  <div class="col-lg-4">
-    <div class="alert alert-default">
-      <h4 style="color: #aaa;">Estatísticas</h4>
-    </div>
-    <div class="alert alert-primary">
-      Serviços no mês<br><h4>87</h4>
-    </div>
-    <div class="alert alert-info">
-      Vendas no mês<br><h4>120</h4>
-    </div>
-    <div class="alert alert-default">
-      <h4 style="color: #aaa;">Financeiro</h4>
-    </div>
-    <div class="alert alert-warning">
-      Saldo Atual<br><h4>R$ 1.596,00</h4>
-    </div>
-    <div class="alert alert-danger">
-      Despesas<br><h4>R$ 400,00</h4>
-    </div>
-    <div class="alert alert-success">
-      Receitas<br><h4>R$ 809,00</h4>
-    </div>
-  </div>
-</div>

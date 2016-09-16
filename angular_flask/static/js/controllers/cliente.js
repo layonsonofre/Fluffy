@@ -21,15 +21,12 @@
           controllerAs: 'Cliente'
         })
     }])
-    .config(function(ClienteProvider) {
-      ClienteProvider.setUrl('asd');
-    })
     .controller('ClienteController', ClienteController)
     .factory('ClienteFactory', ClienteFactory);
 
-  ClienteController.$inject = ['$scope', '$http', 'ClienteFactory', 'Cliente'];
+  ClienteController.$inject = ['$scope', '$http', 'ClienteFactory'];
 
-  function ClienteController($scope, $http, ClienteFactory, Cliente) {
+  function ClienteController($scope, $http, ClienteFactory) {
     var vm = this;
 
     vm.telefones = [{
@@ -66,7 +63,7 @@
 
     ClienteFactory.getTelefones()
       .then(function(response) {
-        vm.telefonee = response.data;
+        vm.telefones = response.data;
       }, function(response) {
         vm.status = 'Failed to load telefones: ' + error.message;
       });
@@ -120,10 +117,10 @@
     }
   }
 
-  ClienteFactory.$inject = ['$http', 'Cliente'];
+  ClienteFactory.$inject = ['$http', 'Fluffy'];
 
-  function ClienteFactory($http, Cliente) {
-    var _url = Cliente.urlBase;
+  function ClienteFactory($http, Fluffy) {
+    var _url = Fluffy.urlBase;
     var urlBase = _url + '/cliente/cadastro';
     var ClienteFactory = {
       getRedesSociais: getRedesSociais,
