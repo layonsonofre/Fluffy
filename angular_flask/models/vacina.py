@@ -16,9 +16,9 @@ class Vacina():
 			"total_doses":self.total_doses,
 			"intervalo":self.intervalo,
 			"lote": {
-				"id":self.lote[1],
-				"id":self.lote[2],
-				"vencimento":self.lote[3]
+				"id":self.lote[0],
+				"numero":self.lote[1],
+				"vencimento":self.lote[2]
 			}
 		}
 

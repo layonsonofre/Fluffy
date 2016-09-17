@@ -10,8 +10,8 @@ class ServicoTemPorte():
 		return {
 			"id":self.id,
 			"servico": {
-				"id":self.nome[0],
-				"nome":self.nome[1]
+				"id":self.servico[0],
+				"nome":self.servico[1]
 			},
 			"porte": {
 				"id":self.porte[0],

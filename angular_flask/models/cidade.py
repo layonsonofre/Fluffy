@@ -13,7 +13,7 @@ class Cidade():
 			"estado": {
 				"id":self.estado[0],
 				"nome":self.estado[1],
-				"iuf":self.estado[2]
+				"uf":self.estado[2]
 			},
 			"pais": {
 				"id":self.pais[0],
