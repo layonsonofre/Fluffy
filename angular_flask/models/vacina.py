@@ -7,8 +7,7 @@ class Vacina():
 		self.nome = data[1]
 		self.total_doses = data[2]
 		self.intervalo = data[3]
-		self.lote = data[4]
-		self.vencimento = data[5].strftime("%B %d, %Y")
+		self.lote = [data[4], data[5], data[6].strftime("%B %d, %Y")]
 
 	def toJSON(self):
 		return {
@@ -16,8 +15,11 @@ class Vacina():
 			"nome":self.nome,
 			"total_doses":self.total_doses,
 			"intervalo":self.intervalo,
-			"lote":self.lote,
-			"vencimento":self.vencimento
+			"lote": {
+				"id":self.lote[1],
+				"id":self.lote[2],
+				"vencimento":self.lote[3]
+			}
 		}
 
 	def fromJSON():
