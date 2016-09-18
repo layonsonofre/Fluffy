@@ -1,186 +1,191 @@
 (function() {
-  'use strict';
+   'use strict';
 
-  angular
-    .module('Servico', [])
-    .config(['$routeProvider', function($routeProvider) {
-      $routeProvider
-        .when('/servico/cadastro', {
-          templateUrl: '../static/partials/servico/cadastro.html',
-          controller: 'ServicoController',
-          controllerAs: 'Servico'
-        })
-        .when('/servico/agendar', {
-          templateUrl: '../static/partials/servico/agendar.html',
-          controller: 'ServicoController',
-          controllerAs: 'Servico'
-        })
-    }])
-    .controller('ServicoController', ServicoController)
-    .factory('ServicoFactory', ServicoFactory);
+   angular
+      .module('Servico', [])
+      .config(['$routeProvider', function($routeProvider) {
+         $routeProvider
+            .when('/servico/cadastro', {
+               templateUrl: '../static/partials/servico/cadastro.html',
+               controller: 'ServicoController',
+               controllerAs: 'Servico'
+            })
+            .when('/servico/agendar', {
+               templateUrl: '../static/partials/servico/agendar.html',
+               controller: 'ServicoController',
+               controllerAs: 'Servico'
+            })
+      }])
+      .controller('ServicoController', ServicoController)
+      .factory('ServicoFactory', ServicoFactory);
 
-  ServicoController.$inject = ['$scope', 'ngDragDrop', 'ServicoFactory'];
+   ServicoController.$inject = ['$scope', 'ngDragDrop', 'ServicoFactory'];
 
-  function ServicoController($scope, ngDragDrop, ServicoFactory) {
-    var vm = this;
+   function ServicoController($scope, ngDragDrop, ServicoFactory) {
+      var vm = this;
 
-    vm.add = add;
-    vm.alt = alt;
-    vm.del = del;
+      vm.add = add;
+      vm.alt = alt;
+      vm.del = del;
 
-	 vm.servicos = {'id': 1, 'nome': 'teste123'};
-
-    console.log('aoooooba');
-
-    ServicoFactory.get()
-      .then(function(response) {
-        alert(response);
-        vm.servicos = response.data.result;
-        console.log(response.data.result);
-      }, function(response) {
-        console.error(response);
-      });
-
-    function add(data) {
-      ServicoFactory.add(data).then(function(response) {
-        console.log(response);
-      }, function(response) {
-        console.error(response)
-      });
-    }
-
-    function alt(data, id) {
-      ServicoFactory.alt(data, id)
-        .then(function(response) {
-          console.log(response.data.result);
-        }, function(response) {
-          console.error(response)
-        });
-    }
-
-    function del(id) {
-      console.log(JSON.stringify(id));
-      ServicoFactory.del(id)
-        .then(function(response) {
-          console.log(response);
-        }, function(response) {
-          console.error(response)
-        });
-    }
-
-    $scope.animais = [{
-      'nome': 'Fluffy',
-      'sexo': 'm',
-      'data': '15/08/1992',
-      'raca': 'Pastor Alemão'
-    }, {
-      'nome': 'Bumma',
-      'sexo': 'f',
-      'data': '28/11/2013',
-      'raca': 'Beagle'
-    }];
-    $scope.servicosAgendados = [];
-    $scope.removeServicosAgendados = function(index) {
-      $scope.servicosAgendados.splice(index, 1);
-    }
-    $scope.animalAgendado = {
-      'nome': ''
-    };
-    $scope.removeAnimalAgendado = function() {
-      $scope.animalAgendado = {
-        'nome': ''
+      vm.servicos = {
+         'id': 1,
+         'nome': 'teste123',
+         'preco': '123'
       };
-    }
-  }
 
-  ServicoFactory.$inject = ['$http', 'Fluffy'];
+      console.log('aoooooba');
 
-  function ServicoFactory($http, Fluffy) {
-    var _url = Fluffy.urlBase;
-    alert(_url);
-    var ServicoFactory = {
-      get: get,
-      add: add,
-      alt: alt,
-      del: del
-    };
-    return ServicoFactory;
+      ServicoFactory.get()
+         .then(function(response) {
+            alert(response);
+            vm.servicos = response.data.result;
+            console.log(response.data.result);
+         }, function(response) {
+            console.error(response);
+         });
 
-    function get() {
-		 alert('get');
-      return $http.get(
-          _url + '/servico'
-        )
-        .then(success)
-        .catch(failed);
-
-      function success(response) {
-        console.log(response);
-        return response;
+      function add(data) {
+         ServicoFactory.add(data).then(function(response) {
+            console.log(response);
+         }, function(response) {
+            console.error(response)
+         });
       }
 
-      function failed(response) {
-        console.error('Failed: ' + JSON.stringify(response));
-      }
-    }
-
-    function add(data) {
-      console.log('SAVING: ' + JSON.stringify(data));
-      return $http.post(
-          _url + '/servico',
-          data
-        )
-        .then(success)
-        .catch(failed);
-
-      function success(response) {
-        return response;
+      function alt(data, id) {
+         ServicoFactory.alt(data, id)
+            .then(function(response) {
+               console.log(response.data.result);
+            }, function(response) {
+               console.error(response)
+            });
       }
 
-      function failed(response) {
-        console.error('Failed: ' + JSON.stringify(response));
-      }
-    }
-
-    function alt(data, id) {
-      console.log('UPDATING: ' + JSON.stringify({
-        id: id
-      }));
-      return $http({
-          url: _url + '/servico',
-          data: {
-            id: id
-          },
-          method: 'PUT'
-        })
-        .then(success)
-        .catch(failed);
-
-      function success(response) {
-        return response;
+      function del(id) {
+         console.log(JSON.stringify(id));
+         ServicoFactory.del(id)
+            .then(function(response) {
+               console.log(response);
+            }, function(response) {
+               console.error(response)
+            });
       }
 
-      function failed(response) {
-        console.error('Failed: ' + JSON.stringify(response));
+      $scope.animais = [{
+         'nome': 'Fluffy',
+         'sexo': 'm',
+         'data': '15/08/1992',
+         'raca': 'Pastor Alemão'
+      }, {
+         'nome': 'Bumma',
+         'sexo': 'f',
+         'data': '28/11/2013',
+         'raca': 'Beagle'
+      }];
+      $scope.servicosAgendados = [];
+      $scope.removeServicosAgendados = function(index) {
+         $scope.servicosAgendados.splice(index, 1);
       }
-    }
+      $scope.animalAgendado = {
+         'nome': ''
+      };
+      $scope.removeAnimalAgendado = function() {
+         $scope.animalAgendado = {
+            'nome': ''
+         };
+      }
+   }
 
-    function del(id) {
-      return $http.delete(
-          _url + '/servico',
-          id
-        )
-        .then(success)
-        .catch(failed);
+   ServicoFactory.$inject = ['$http', 'Fluffy'];
 
-      function success(response) {
-        return response;
+   function ServicoFactory($http, Fluffy) {
+      var _url = Fluffy.urlBase;
+      alert(_url);
+      var ServicoFactory = {
+         get: get,
+         add: add,
+         alt: alt,
+         del: del
+      };
+      return ServicoFactory;
+
+      function get() {
+         alert('get');
+         return $http.get(
+               _url + '/servico'
+            )
+            .then(success)
+            .catch(failed);
+
+         function success(response) {
+            console.log(response);
+            return response;
+         }
+
+         function failed(response) {
+            console.error('Failed: ' + JSON.stringify(response));
+         }
       }
 
-      function failed(response) {
-        console.error('Failed: ' + JSON.stringify(response));
+      function add(data) {
+         console.log('SAVING: ' + JSON.stringify(data));
+         return $http.post(
+               _url + '/servico',
+               data
+            )
+            .then(success)
+            .catch(failed);
+
+         function success(response) {
+            return response;
+         }
+
+         function failed(response) {
+            console.error('Failed: ' + JSON.stringify(response));
+         }
       }
-    }
-  }
+
+      function alt(data, id) {
+         console.log('UPDATING: ' + JSON.stringify({
+            id: id,
+            data: data
+         }));
+         return $http({
+               url: _url + '/servico',
+               data: {
+                  id: id
+               },
+               method: 'PUT'
+            })
+            .then(success)
+            .catch(failed);
+
+         function success(response) {
+            return response;
+         }
+
+         function failed(response) {
+            console.error('Failed: ' + JSON.stringify(response));
+         }
+      }
+
+      function del(id) {
+         return $http.delete(
+               _url + '/servico',
+               id
+            )
+            .then(success)
+            .catch(failed);
+
+         function success(response) {
+            return response;
+         }
+
+         function failed(response) {
+            console.error('Failed: ' + JSON.stringify(response));
+         }
+      }
+   }
 
 })()

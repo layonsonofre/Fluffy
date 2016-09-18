@@ -1,40 +1,52 @@
 'use strict';
 
 angular
-	.module('RedeSocial', [])
-	.config(['$routeProvider', function($routeProvider) {
-		$routeProvider
-			.when('/redeSocial', {
-				templateUrl: '../static/partials/avancado/redeSocial.html',
-				controller: 'RedeSocialController',
-				controllerAs: 'RedeSocial'
-			})
-	}])
-	.controller('RedeSocialController', RedeSocialController);
+   .module('RedeSocial', [])
+   .config(['$routeProvider', function($routeProvider) {
+      $routeProvider
+         .when('/redesSociais', {
+            templateUrl: '../static/partials/avancado/redeSocial.html',
+            controller: 'RedeSocialController',
+            controllerAs: 'RedeSocial'
+         })
+   }])
+   .controller('RedeSocialController', RedeSocialController)
+   .factory('RedeSocialFactory', RedeSocialFactory);
 
-	RedeSocialController.$inject = ['$scope', '$http'];
-  function RedeSocialController($scope) {
-		$scope.newField = {};
-		$scope.editing = false;
-		$scope.fields = [
-			{ "id": "1", "nome": "Facebook" },
-			{ "id": "2", "nome": "Instagram" },
-			{ "id": "3", "nome": "Whatsapp" }
-		];
-		$scope.editar = function(field) {
-			$scope.editing = $scope.fields.indexOf(field);
-			$scope.newField = angular.copy(field);
-		}
-		$scope.salvar = function(field) {
-			//TODO CODE
-		}
-		$scope.cancelar = function(index) {
-			if($scope.editing !== false) {
-				$scope.fields[$scope.editing] = $scope.newField;
-				$scope.editing = false;
-			}
-		}
-		$scope.excluir = function(field) {
-			//TODO CODE
-		}
-	}
+RedeSocialController.$inject = ['$scope', 'RedeSocialFactory'];
+
+function RedeSocialController($scope, RedeSocialFactory) {
+   var vm = this;
+
+   RedeSocialFactory.get().then(function(response) {
+      console.log('RedeSocial: ' + response);
+      vm.redesSociais = response;
+   }, function(response) {
+      vm.status = 'Failed to load socials networks: ' + error.message;
+   })
+}
+
+RedeSocialFactory.$inject = ['$http', 'Fluffy'];
+
+function RedeSocialFactory($http, Fluffy) {
+   var _url = Fluffy.urlBase;
+   var RedeSocialFactory = {
+      get: get
+   };
+   return RedeSocialFactory;
+
+   function get() {
+      return $http.get(_url + '/redeSocial')
+         .then(success)
+         .catch(failed);
+
+      function success(response) {
+         console.log(response.data);
+         return response.data.result;
+      }
+
+      function failed(error) {
+         console.error('Failed getRedesSociais: ' + error.data);
+      }
+   }
+}

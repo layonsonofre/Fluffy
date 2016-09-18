@@ -1,40 +1,52 @@
 'use strict';
 
 angular
-	.module('Permissao', [])
-	.config(['$routeProvider', function($routeProvider) {
-		$routeProvider
-			.when('/permissao', {
-				templateUrl: '../static/partials/avancado/permissao.html',
-				controller: 'PermissaoController',
-				controllerAs: 'Permissao'
-			})
-	}])
-	.controller('PermissaoController', PermissaoController);
+   .module('Permissao', [])
+   .config(['$routeProvider', function($routeProvider) {
+      $routeProvider
+         .when('/permissao', {
+            templateUrl: '../static/partials/avancado/permissao.html',
+            controller: 'PermissaoController',
+            controllerAs: 'Permissao'
+         })
+   }])
+   .controller('PermissaoController', PermissaoController)
+   .factory('PermissaoFactory', PermissaoFactory);
 
-	PermissaoController.$inject = ['$scope'];
-  function PermissaoController($scope) {
-		$scope.newField = {};
-		$scope.editing = false;
-		$scope.fields = [
-			{ "id": "1", "nome": "Transportar" },
-			{ "id": "2", "nome": "Consultar" },
-			{ "id": "3", "nome": "Vender" }
-		];
-		$scope.editar = function(field) {
-			$scope.editing = $scope.fields.indexOf(field);
-			$scope.newField = angular.copy(field);
-		}
-		$scope.salvar = function(field) {
-			//TODO CODE
-		}
-		$scope.cancelar = function(index) {
-			if($scope.editing !== false) {
-				$scope.fields[$scope.editing] = $scope.newField;
-				$scope.editing = false;
-			}
-		}
-		$scope.excluir = function(field) {
-			//TODO CODE
-		}
-	}
+PermissaoController.$inject = ['$scope', 'PermissaoFactory'];
+
+function PermissaoController($scope, PermissaoFactory) {
+   var vm = this;
+
+   PermissaoFactory.get().then(function(response) {
+      console.log(response);
+      vm.permissoes = response;
+   }, function(response) {
+      console.log('Failed to load permissao');
+   });
+
+}
+
+PermissaoFactory.$inject = ['$http', 'Fluffy'];
+
+function PermissaoFactory($http, Fluffy) {
+   var _url = Fluffy.urlBase;
+   var PermissaoFactory = {
+      get: get
+   };
+   return PermissaoFactory;
+
+   function get() {
+      return $http.get(_url + '/permissao')
+         .then(success)
+         .catch(failed);
+
+      function success(response) {
+         return response.data.result;
+      }
+
+      function failed(error) {
+         console.error('Failed permissao: ' + error.data);
+      }
+   }
+}
