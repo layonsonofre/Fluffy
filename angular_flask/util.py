@@ -87,7 +87,7 @@ class Util:
         args["pedido"] = ["id", "pessoa_tem_funcao_cliente_id", "cliente_id", "pessoa_tem_funcao_funcionario_id", "funcionario_id"]
         args["permissao"] = ["id", "modulo"]
     	args["pessoa"] = ["id", "nome", "registro", "email", "cidade_id", "estado_id", "pais_id"]
-        args["pessoaTemFuncao"] = ["id", "pessoa_id", "funcao_id"]
+        args["pessoaTemFuncao"] = ["id", "pessoa_id", "funcao_id", "pessoa_registro", "pessoa_email", "password", "oauth_id", "oauth_token"]
         args["pessoaTemPermissao"] = ["id", "pessoa_id", "permissao_id"]
         args["pessoaTemRedeSocial"] = ["id", "perfil", "pessoa_id", "rede_social_id"]
         args["porte"] = ["id", "nome"]
@@ -100,6 +100,6 @@ class Util:
         args["servicoTemPorte"] = ["id","servico_id","porte_id"]
         args["telefone"] = ["id", "pessoa_id", "codigo_pais", "codigo_area"]
         args["transacao"] = ["id","tipo","data_inicio","data_fim"]
-        args["vacina"] = ["id", "nome", "lote_id", "vencimento_inicio", "vencimento_fim"]
+        args["vacina"] = ["id", "nome"]
 
     	return [request.args.get(arg) for arg in args[modelo]]
