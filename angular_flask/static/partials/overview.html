@@ -26,12 +26,12 @@
           <tbody>
             <tr ng-repeat="entry in Lembrete.lembretes">
               <td>
-                <span editable-text="entry.descricao" e-name="descricao" e-form="form" onbeforesave="Lembrete.valida(entry)" e-required>
+                <span editable-text="entry.descricao" e-name="descricao" e-form="form" e-required>
                   {{ entry.descricao || '' }}
                 </td>
                 <td>
                   <a href="#" editable-bsdate="entry.data_hora" e-datepicker-popup="dd-MMMM-yyyy hh:mm:ss">
-                    {{ entry.data_hora | date: "dd/MMMM/yyyy hh:mm:ss" || 'Não informada'}}
+                    {{ entry.data_hora | date: "dd/MM/yyyy" || 'Não informada'}}
                   </a>
                 </td>
                 <td>
@@ -40,7 +40,7 @@
                   </a>
                 </td>
                 <td>
-                  <form editable-form name="form" onbeforesave="Lembrete.alt(entry)" ng-show="form.$visible" class="form-buttons form-inline" shown="inserted == entry">
+                  <form editable-form name="form" ng-show="form.$visible" onbeforesave="Lembrete.alt($data, entry.id, entry.pessoa)" class="form-buttons form-inline" shown="inserted == entry">
                     <button type="submit" class="btn btn-success" ng-disabled="form.$waiting" data-toggle="tooltip" data-placement="top" title="Salvar">
                       <span class="fa fa-check"></span>
                     </button>

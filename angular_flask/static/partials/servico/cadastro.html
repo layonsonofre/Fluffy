@@ -1,4 +1,4 @@
-<div ng-controller="ServicoController">
+<div ng-controller="ServicoController as Servico">
   <div class="row">
     <div class="col-md-12">
       <h1 class="page-head-line">Serviços</h1>
@@ -54,15 +54,14 @@
               </tr>
             </thead>
             <tbody>
-              <tr data-ng-repeat="entry in fields">
-                <td class="hidden">{{entry.id}}</td>
+              <tr data-ng-repeat="entry in Servico.servicos">
                 <td>
                   <span data-ng-hide="editMode">{{entry.nome}}</span>
-                  <input type="text" data-ng-show="editMode" data-ng-model="entry.nome" data-ng-required >
+                  <!-- <input type="text" data-ng-show="editMode" data-ng-model="entry.nome" data-ng-required > -->
                 </td>
                 <td>
                   <span data-ng-hide="editMode">{{entry.preco}}</span>
-                  <input type="text" data-ng-show="editMode" data-ng-model="entry.preco" data-ng-required >
+                  <!-- <input type="text" data-ng-show="editMode" data-ng-model="entry.preco" data-ng-required > -->
                 </td>
                 <td>
                   <button type="submit" class="btn btn-primary" data-ng-hide="editMode" data-ng-click="editMode = true; editar(entry)" data-toggle="tooltip" data-placement="top" title="Alterar dados cadastrados"><span class="fa fa-pencil"></span></button>
