@@ -3,6 +3,7 @@ import os
 from flask import Flask, request, Response, jsonify
 from flask import render_template, url_for, redirect, send_from_directory
 from flask import send_file, make_response, abort
+from flask_cors import cross_origin
 
 from angular_flask import app
 
@@ -14,6 +15,7 @@ from angular_flask.models import *
 # routing for basic pages (pass routing onto the Angular app)
 @app.route('/')
 @app.route('/index')
+@cross_origin()
 def basic_pages(**kwargs):
     return make_response(open('angular_flask/templates/index.html').read())
 
@@ -22,8 +24,10 @@ def get_modelo(modelo=None):
 
 	args = []
 	args = Util.requestGetArgs(modelo)
+	
 	print("get"+modelo[0].upper()+modelo[1:])
 	print(args)
+	
 	try:
 		data = Util.getData("get"+modelo[0].upper()+modelo[1:], args)
 		print(data)
@@ -43,14 +47,15 @@ def get_modelo(modelo=None):
 	else :
 		return jsonify(success=True,result=[p.toJSON() for p in list],message="")
 
-@app.route('/<modelo>/insert', methods=['POST'])
-@app.route('/<modelo>/update', methods=['PUT'])
-@app.route('/<modelo>/delete', methods=['DELETE'])
+
+@app.route('/<modelo>/', methods=['POST','PUT','DELETE'])
 def form_modelo(modelo = None):
 	args = []
-	args = Util.requestFormArgs(modelo)
-
+	
+	args = Util.requestFormArgs(modelo, request.json)
 	proc = ""
+
+	print(args)
 
 	if request.method == 'POST':
 		args.pop(0)
@@ -60,6 +65,9 @@ def form_modelo(modelo = None):
 	elif request.method == 'DELETE':
 		proc = "del"+modelo[0].upper()+modelo[1:]
 		args = [args.pop(0)]
+
+	print(proc)
+	print(args)
 
 	try:
 		data = Util.postData(proc, args)

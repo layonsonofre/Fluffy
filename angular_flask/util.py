@@ -29,7 +29,7 @@ class Util:
             raise
 
     @staticmethod
-    def requestFormArgs(modelo):
+    def requestFormArgs(modelo, json):
         args = {}
         args["anamnese"] = ["id","peso","tamanho","temperatura","servico_agendado"]
         args["animal"] = ["id","nome","sexo","data_nascimento","pessoa_tem_funcao_cliente_id","raca_id","porte_id"]
@@ -64,7 +64,7 @@ class Util:
         args["transacao"] = ["id","tipo","valor"]
         args["vacina"] = ["id", "nome", "dose", "intervalo", "lote_id"]
 
-        return [(request.form.get(arg) if (request.form.get(arg) != ("true" or "false")) else (True if request.form.get(arg) == "true" else False))  for arg in args[modelo]]
+        return [(json[arg] if arg in json else None) for arg in args[modelo]]
 
     @staticmethod
     def requestGetArgs(modelo):

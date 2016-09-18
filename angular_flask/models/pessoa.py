@@ -12,9 +12,9 @@ class Pessoa():
 		self.complemento = data[7]
 		self.cep = data[8]
 		self.ponto_de_referencia = data[9]
-		self.cidade = data[10]
-		self.estado = data[11]
-		self.pais = data[12]
+		self.cidade = [data[10], data[11]]
+		self.estado = [data[12], data[13]]
+		self.pais = [data[14], data[15]]
 
 	def toJSON(self):
 		return {
@@ -28,9 +28,18 @@ class Pessoa():
 			"complemento":self.complemento,
 			"cep":self.cep,
 			"ponto_de_referencia":self.ponto_de_referencia,
-			"cidade":self.cidade,
-			"estado":self.estado,
-			"pais":self.pais
+			"cidade": {
+				"id":self.cidade[0],
+				"nome":self.cidade[1]
+			},
+			"estado": {
+				"id":self.estado[0],
+				"nome":self.estado[1]
+			},
+			"pais": {
+				"id":self.pais[0],
+				"nome":self.pais[1]
+			}
 		}
 
 	def fromJSON():

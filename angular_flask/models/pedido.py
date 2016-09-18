@@ -4,16 +4,24 @@ class Pedido():
 		self.id = data[0]
 		self.valor = float(data[1])
 		self.desconto = float(data[2])
-		self.cliente = data[3]
-		self.funcionario = data[4]
+		self.cliente = [data[3], data[4], data[5]]
+		self.funcionario = [data[6], data[7], data[8]]
 
 	def toJSON(self):
 		return {
 			"id":self.id,
 			"valor":self.valor,
 			"desconto":self.desconto,
-			"cliente":self.cliente,
-			"funcionario":self.funcionario
+			"cliente": {
+				"pessoa_tem_funcao":self.cliente[0],
+				"pessoa_id":self.cliente[1],
+				"nome":self.cliente[2]
+			},
+			"funcionario": {
+				"pessoa_tem_funcao":self.funcionario[0],
+				"pessoa_id":self.funcionario[1],
+				"nome":self.funcionario[2]
+			}
 		}
 
 	def fromJSON():
