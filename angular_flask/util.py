@@ -45,6 +45,7 @@ class Util:
         args["itemDeVenda"] = ["id","preco","quantidade","item_id","pedido_id"]
         args["lembrete"] = ["id","descricao","data_hora","executado","pessoa_id"]
         args["lote"] = ["id","numero","vencimento","preco"]
+        args["oAuth"] = ["id", "token", "refresh_token", "valido"]
         args["pais"] = ["id","nome"]
         args["pedido"] = ["id","valor","desconto","transacao_id","pessoa_tem_funcao_cliente_id","pessoa_tem_funcao_funcionario_id"]
         args["permissao"] = ["id","modulo"]
@@ -63,6 +64,7 @@ class Util:
         args["telefone"] = ["id","codigo_pais","codigo_area","numero","pessoa_id"]
         args["transacao"] = ["id","tipo","valor"]
         args["vacina"] = ["id", "nome", "dose", "intervalo", "lote_id"]
+        args["vacinaTemLote"] = ["id", "vacina_id", "lote_id"]
 
         return [(json[arg] if arg in json else None) for arg in args[modelo]]
 
@@ -83,6 +85,7 @@ class Util:
         args["itemDeVenda"] = ["id", "item_id"]
         args["lembrete"] = ["id", "data_hora_inicio", "data_hora_fim", "executado", "pessoa_id"]
         args["lote"] = ["id", "numero", "vencimento_inicio", "vencimento_fim"]
+        args["oAuth"] = ["id", "token", "refresh_token", "valido"]
         args["pais"] = ["id","nome"]
         args["pedido"] = ["id", "pessoa_tem_funcao_cliente_id", "cliente_id", "pessoa_tem_funcao_funcionario_id", "funcionario_id"]
         args["permissao"] = ["id", "modulo"]
