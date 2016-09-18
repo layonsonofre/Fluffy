@@ -101,5 +101,6 @@ class Util:
         args["telefone"] = ["id", "pessoa_id", "codigo_pais", "codigo_area"]
         args["transacao"] = ["id","tipo","data_inicio","data_fim"]
         args["vacina"] = ["id", "nome"]
+        args["vacinaTemLote"] = ["id", "vacina_id", "vacina_nome", "lote_id", "lote_numero", "lote_vencimento_inicio", "lote_vencimento_fim"]
 
     	return [request.args.get(arg) for arg in args[modelo]]

@@ -33,3 +33,4 @@ from servicoTemPorte import ServicoTemPorte
 from telefone import Telefone
 from transacao import Transacao
 from vacina import Vacina
+from vacinaTemLote import VacinaTemLote
