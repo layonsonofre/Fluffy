@@ -15,6 +15,7 @@ from item import Item
 from itemDeVenda import ItemDeVenda
 from lembrete import Lembrete
 from lote import Lote
+from oAuth import OAuth
 from pais import Pais
 from pedido import Pedido
 from permissao import Permissao
@@ -33,3 +34,4 @@ from servicoTemPorte import ServicoTemPorte
 from telefone import Telefone
 from transacao import Transacao
 from vacina import Vacina
+from vacinaTemLote import VacinaTemLote

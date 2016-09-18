@@ -13,7 +13,7 @@ class ServicoAgendado():
 		self.pago = False if data[13] == 0 else True
 		self.observacao = data[14]
 		self.data_hora_executado = data[15]
-		self.pessoa_tem_funcao_funcionario = data[16]
+		self.pessoa_tem_funcao_funcionario = [data[16], data[17], data[18]]
 
 	def toJSON(self):
 		return {
@@ -41,7 +41,11 @@ class ServicoAgendado():
 			"pago":self.pago,
 			"observacao":self.observacao,
 			"data_hora_executado":self.data_hora_executado,
-			"pessoa_tem_funcao_funcionario_id":self.pessoa_tem_funcao_funcionario
+			"pessoa_tem_funcao_funcionario_id": {
+				"id":self.pessoa_tem_funcao_funcionario[0],
+				"pessoa_id":self.pessoa_tem_funcao_funcionario[1],
+				"pessoa_nome":self.pessoa_tem_funcao_funcionario[2]
+			}
 		}
 
 	def fromJSON():
