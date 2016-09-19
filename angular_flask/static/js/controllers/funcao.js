@@ -1,41 +1,49 @@
 'use strict';
 
 angular
-	.module('Funcao', [])
-	.config(['$routeProvider', function($routeProvider) {
-		$routeProvider
-			.when('/funcao', {
-				templateUrl: '../static/partials/avancado/funcao.html',
-				controller: 'FuncaoController',
-				controllerAs: 'Funcao'
-			})
-	}])
-	.controller('FuncaoController', FuncaoController);
+   .module('Funcao', [])
+   .config(['$routeProvider', function($routeProvider) {
+      $routeProvider
+         .when('/funcao', {
+            templateUrl: '../static/partials/avancado/funcao.html',
+            controller: 'FuncaoController',
+            controllerAs: 'Funcao'
+         })
+   }])
+   .controller('FuncaoController', FuncaoController)
+   .factory('FuncaoFactory', FuncaoFactory);
 
-	FuncaoController.$inject = ['$scope', '$http'];
-  function FuncaoController($scope) {
-		$scope.newField = {};
-		$scope.editing = false;
-		$scope.fields = [
-			{ "id": "1", "nome": "Cliente" },
-			{ "id": "2", "nome": "Cliente Especial" },
-			{ "id": "3", "nome": "Funcionário" },
-			{ "id": "4", "nome": "Caixa" }
-		];
-		$scope.editar = function(field) {
-			$scope.editing = $scope.fields.indexOf(field);
-			$scope.newField = angular.copy(field);
-		}
-		$scope.salvar = function(field) {
-			//TODO CODE
-		}
-		$scope.cancelar = function(index) {
-			if($scope.editing !== false) {
-				$scope.fields[$scope.editing] = $scope.newField;
-				$scope.editing = false;
-			}
-		}
-		$scope.excluir = function(field) {
-			//TODO CODE
-		}
-	}
+FuncaoController.$inject = ['$scope', 'FuncaoFactory'];
+
+function FuncaoController($scope, FuncaoFactory) {
+   var vm = this;
+   FuncaoFactory.get().then(function(response) {
+      vm.funcoes = response;
+   }, function(response) {
+      console.log('Failed to load funcao' + response);
+   })
+}
+
+FuncaoFactory.$inject = ['$http', 'Fluffy'];
+
+function FuncaoFactory($http, Fluffy) {
+   var _url = Fluffy.urlBase;
+   var FuncaoFactory = {
+      get: get
+   };
+   return FuncaoFactory;
+
+   function get() {
+      return $http.get(_url + '/funcao')
+         .then(success)
+         .catch(failed);
+
+      function success(response) {
+         return response.data.result;
+      }
+
+      function failed(error) {
+         console.error('Failed funcoes: ' + error.data);
+      }
+   }
+}

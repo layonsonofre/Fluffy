@@ -22,7 +22,7 @@ class Util:
            cursor = conn.cursor()
            cursor.callproc(proc, args)
            data = cursor.fetchone()
-           cursor.close() 
+           cursor.close()
            conn.commit()
            return data
         except:
