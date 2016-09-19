@@ -1,21 +1,15 @@
-# AngularJS + Flask Boilerplate App
+# Fluffy
 
-A template for building apps with an Angular frontend and a Flask / python backend.
+Um sistema de controle de agendamentos e de estoque para Pet Shop
 
-### How to Get Started
+### Como instalar
 
-1. clone this repo
+1. Copie os arquivos para um pasta em seu sistema Linux
 
-2. install all the necessary packages (best done inside of a virtual environment)
-> pip install -r requirements.txt
+2. Execute o arquivo installFluffy.sh
 
-3. run the app
-> python runserver.py
+3. Seu sistema esta pronto para usar
 
-4. create and seed the db (the server must still be running, so open a new terminal window first)
-> python manage.py create_db && python manage.py seed_db --seedfile 'data/db_items.json'
+### Como usar
 
-5. check out your blog
-> http://localhost:5000/blog
-
-6. if you like this project, give it a star :)
+1. Acesse http://localhost:5000/index
