@@ -1,3787 +1,4 @@
 
-DROP TABLE IF EXISTS `anamnese`;
-CREATE TABLE `anamnese` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Código de identificação com autoincremento',
-  `peso` int(11) DEFAULT NULL COMMENT 'Peso do animal em gramas, maior que 0',
-  `tamanho` int(11) DEFAULT NULL COMMENT 'Tamanho do animal em centímetros, maior que 0',
-  `temperatura` int(11) DEFAULT NULL COMMENT 'Temperatura do animal em graus, maior que 0',
-  `servico_agendado_id` int(11) NOT NULL COMMENT 'Serviço (consulta) no qual a anamnese foi feita',
-  PRIMARY KEY (`id`),
-  KEY `fk_anamnese_servico_agendado1_idx` (`servico_agendado_id`),
-  CONSTRAINT `fk_anamnese_servico_agendado1` FOREIGN KEY (`servico_agendado_id`) REFERENCES `servico_agendado` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
-DELIMITER ;;
-BEFORE INSERT ON `anamnese`
-FOR EACH ROW
-BEGIN
-		DECLARE servico VARCHAR(50);
-        DECLARE invalid INT;
-        DECLARE error_message VARCHAR(100);
-        
-        SET invalid = 0;
-		SET error_message = "";
-
-		IF (NEW.peso <= 0) THEN
-			SET invalid = invalid + 1;
-            IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, ", peso");
-            ELSE
-				SET error_message = CONCAT(error_message, "peso");
-            END IF;
-		END IF;
-        
-        IF (NEW.tamanho <= 0) THEN
-			SET invalid = invalid + 1;
-            IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, ", tamanho");
-            ELSE
-				SET error_message = CONCAT(error_message, "tamanho");
-            END IF;
-		END IF;
-		
-		IF (NEW.temperatura <= 0) THEN
-			SET invalid = invalid + 1;
-            IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, ", temperatura");
-            ELSE
-				SET error_message = CONCAT(error_message, "temperatura");
-            END IF;
-		END IF;
-        
-        SELECT nome INTO servico FROM tipo_servico WHERE id = NEW.servico_agendado_id;
-		IF(servico <> 'consulta') THEN
-			SET invalid = invalid + 1;
-			IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, ", servico");
-			ELSE
-				SET error_message = CONCAT(error_message, "servico");
-			END IF;
-		END IF;
-        
-        IF (invalid > 0) THEN
-			IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, " inválidos!");
-			ELSE
-				SET error_message = CONCAT(error_message, " inválido!");
-			END IF;
-            SIGNAL SQLSTATE VALUE '45000'
-			SET MESSAGE_TEXT = error_message;
-		END IF;
-END */;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `anamnese_BEFORE_UPDATE`
-BEFORE UPDATE ON `anamnese`
-FOR EACH ROW
-BEGIN
-DECLARE servico VARCHAR(50);
-        DECLARE invalid INT;
-        DECLARE error_message VARCHAR(100);
-        
-        SET invalid = 0;
-		SET error_message = "";
-
-		IF (NEW.peso <= 0) THEN
-			SET invalid = invalid + 1;
-            IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, ", peso");
-            ELSE
-				SET error_message = CONCAT(error_message, "peso");
-            END IF;
-		END IF;
-        
-        IF (NEW.tamanho <= 0) THEN
-			SET invalid = invalid + 1;
-            IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, ", tamanho");
-            ELSE
-				SET error_message = CONCAT(error_message, "tamanho");
-            END IF;
-		END IF;
-		
-		IF (NEW.temperatura <= 0) THEN
-			SET invalid = invalid + 1;
-            IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, ", temperatura");
-            ELSE
-				SET error_message = CONCAT(error_message, "temperatura");
-            END IF;
-		END IF;
-        
-        SELECT nome INTO servico FROM tipo_servico WHERE id = NEW.servico_agendado_id;
-		IF(servico <> 'consulta') THEN
-			SET invalid = invalid + 1;
-			IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, ", servico");
-			ELSE
-				SET error_message = CONCAT(error_message, "servico");
-			END IF;
-		END IF;
-        
-        IF (invalid > 0) THEN
-			IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, " inválidos!");
-			ELSE
-				SET error_message = CONCAT(error_message, " inválido!");
-			END IF;
-            SIGNAL SQLSTATE VALUE '45000'
-			SET MESSAGE_TEXT = error_message;
-		END IF;
-END */;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-
---
--- Temporary view structure for view `animais_dia`
---
-
-DROP TABLE IF EXISTS `animais_dia`;
-/*!50001 DROP VIEW IF EXISTS `animais_dia`*/;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
-/*!50001 CREATE VIEW `animais_dia` AS SELECT 
- 1 AS `nome`,
- 1 AS `data_hora`*/;
-SET character_set_client = @saved_cs_client;
-
---
--- Table structure for table `animal`
---
-
-DROP TABLE IF EXISTS `animal`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `animal` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Código de identificação com autoincremento',
-  `nome` varchar(50) NOT NULL COMMENT 'Nome do animal',
-  `sexo` char(1) NOT NULL COMMENT 'Sexo do Animal (''M'' ou ''F'')',
-  `data_hora_cadastro` datetime NOT NULL COMMENT 'Controla o momento em que o animal foi cadastrado',
-  `data_nascimento` datetime DEFAULT NULL COMMENT 'Data de nascimento do animal',
-  `pessoa_tem_funcao_id` int(11) NOT NULL COMMENT 'Pessoa a qual este animal pertence',
-  `raca_id` int(11) NOT NULL COMMENT 'Código de identificação da raça do animal',
-  `porte_id` int(11) NOT NULL COMMENT 'Código de identificação do porte atula do animal',
-  PRIMARY KEY (`id`),
-  KEY `fk_animal_pessoa_tem_funcao1_idx` (`pessoa_tem_funcao_id`),
-  KEY `fk_animal_raca1_idx` (`raca_id`),
-  KEY `fk_animal_porte1_idx` (`porte_id`),
-  CONSTRAINT `fk_animal_pessoa_tem_funcao1` FOREIGN KEY (`pessoa_tem_funcao_id`) REFERENCES `pessoa_tem_funcao` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_animal_porte1` FOREIGN KEY (`porte_id`) REFERENCES `porte` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_animal_raca1` FOREIGN KEY (`raca_id`) REFERENCES `raca` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `animal_BEFORE_INSERT`
-BEFORE INSERT ON `animal`
-FOR EACH ROW
-BEGIN
-
-	DECLARE invalid INT;
-	DECLARE error_message VARCHAR(100);
-	DECLARE tipo_pessoa VARCHAR(50);
-        
-	SET invalid = 0;
-	SET error_message = "";
-    
-	IF NOT nome_valido(NEW.nome) THEN
-		SET invalid = invalid + 1;
-		IF (invalid > 1) THEN
-			SET error_message = CONCAT(error_message, ", nome");
-		ELSE
-			SET error_message = CONCAT(error_message, "nome");
-		END IF;
-    END IF;
-    
-    
-    IF(NEW.sexo <> 'M' AND NEW.sexo <> 'F') THEN
-		SET invalid = invalid + 1;
-		IF (invalid > 1) THEN
-			SET error_message = CONCAT(error_message, ", sexo");
-		ELSE
-			SET error_message = CONCAT(error_message, "sexo");
-		END IF;
-    END IF;
-    
-    IF(NEW.data_hora_cadastro <> NOW()) THEN
-		SET invalid = invalid + 1;
-		IF (invalid > 1) THEN
-			SET error_message = CONCAT(error_message, ", data hora cadastro");
-		ELSE
-			SET error_message = CONCAT(error_message, "data hora cadastro");
-		END IF;
-    END IF;
-    
-    IF(NEW.data_nascimento > NOW()) THEN
-		SET invalid = invalid + 1;
-		IF (invalid > 1) THEN
-			SET error_message = CONCAT(error_message, ", data nascimento");
-		ELSE
-			SET error_message = CONCAT(error_message, "data nascimento");
-		END IF;
-    END IF;
-    
-    SELECT nome INTO tipo_pessoa FROM tipo_funcao WHERE id = NEW.pessoa_tem_funcao_id;
-    IF(tipo_pessoa <> 'cliente' AND tipo_pessoa <> 'cliente-especial') THEN
-		SET invalid = invalid + 1;
-		IF (invalid > 1) THEN
-			SET error_message = CONCAT(error_message, ", pessoa");
-		ELSE
-			SET error_message = CONCAT(error_message, "pessoa");
-		END IF;
-    END IF;
-    
-    IF (invalid > 0) THEN
-			IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, " inválidos!");
-			ELSE
-				SET error_message = CONCAT(error_message, " inválido!");
-			END IF;
-            SIGNAL SQLSTATE VALUE '45000'
-			SET MESSAGE_TEXT = error_message;
-		END IF;
-END */;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `animal_BEFORE_UPDATE`
-BEFORE UPDATE ON `animal`
-FOR EACH ROW
-BEGIN
-	DECLARE invalid INT;
-	DECLARE error_message VARCHAR(100);
-	DECLARE tipo_pessoa VARCHAR(50);
-        
-	SET invalid = 0;
-	SET error_message = "";
-    
-	IF NOT nome_valido(NEW.nome) THEN
-		SET invalid = invalid + 1;
-		IF (invalid > 1) THEN
-			SET error_message = CONCAT(error_message, ", nome");
-		ELSE
-			SET error_message = CONCAT(error_message, "nome");
-		END IF;
-    END IF;
-    
-    IF(NEW.sexo <> 'M' AND NEW.sexo <> 'F') THEN
-		SET invalid = invalid + 1;
-		IF (invalid > 1) THEN
-			SET error_message = CONCAT(error_message, ", sexo");
-		ELSE
-			SET error_message = CONCAT(error_message, "sexo");
-		END IF;
-    END IF;
-    
-    IF(NEW.data_nascimento > NOW()) THEN
-		SET invalid = invalid + 1;
-		IF (invalid > 1) THEN
-			SET error_message = CONCAT(error_message, ", data nascimento");
-		ELSE
-			SET error_message = CONCAT(error_message, "data nascimento");
-		END IF;
-    END IF;
-    
-    SELECT nome INTO tipo_pessoa FROM tipo_funcao WHERE id = NEW.pessoa_tem_funcao_id;
-    IF(tipo_pessoa <> 'cliente' AND tipo_pessoa <> 'cliente-especial') THEN
-		SET invalid = invalid + 1;
-		IF (invalid > 1) THEN
-			SET error_message = CONCAT(error_message, ", pessoa");
-		ELSE
-			SET error_message = CONCAT(error_message, "pessoa");
-		END IF;
-    END IF;
-    
-    IF (invalid > 0) THEN
-		IF (invalid > 1) THEN
-			SET error_message = CONCAT(error_message, " inválidos!");
-		ELSE
-			SET error_message = CONCAT(error_message, " inválido!");
-		END IF;
-		SIGNAL SQLSTATE VALUE '45000'
-		SET MESSAGE_TEXT = error_message;
-	END IF;
-END */;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-
---
--- Table structure for table `animal_tem_restricao`
---
-
-DROP TABLE IF EXISTS `animal_tem_restricao`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `animal_tem_restricao` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Código de identificação com autoincremento',
-  `restricao_id` int(11) NOT NULL COMMENT 'Relaciona o animal com a restrição cadastrada',
-  `animal_id` int(11) NOT NULL COMMENT 'Código de identificação do animal',
-  PRIMARY KEY (`id`),
-  KEY `fk_animal_tem_restricao_restricao1_idx` (`restricao_id`),
-  KEY `fk_animal_tem_restricao_animal1_idx` (`animal_id`),
-  CONSTRAINT `fk_animal_tem_restricao_animal1` FOREIGN KEY (`animal_id`) REFERENCES `animal` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_animal_tem_restricao_restricao1` FOREIGN KEY (`restricao_id`) REFERENCES `restricao` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `aplicacao`
---
-
-DROP TABLE IF EXISTS `aplicacao`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `aplicacao` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Código de identificação com autoincremento',
-  `data_hora` datetime NOT NULL COMMENT 'Dia e horário da aplicação',
-  `aplicado` tinyint(1) NOT NULL COMMENT 'Controle se já foi aplicada ou não',
-  `dose` int(11) NOT NULL COMMENT 'Dose aplicada',
-  `vacina_id` int(11) NOT NULL COMMENT 'Código de identificação da vacina aplicada',
-  `servico_agendado_id` int(11) NOT NULL COMMENT 'Serviço associado (consulta)',
-  PRIMARY KEY (`id`),
-  KEY `fk_aplicacao_vacina1_idx` (`vacina_id`),
-  KEY `fk_aplicacao_servico_agendado1_idx` (`servico_agendado_id`),
-  CONSTRAINT `fk_aplicacao_vacina1` FOREIGN KEY (`vacina_id`) REFERENCES `vacina` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_aplicacao_servico_agendado1` FOREIGN KEY (`servico_agendado_id`) REFERENCES `servico_agendado` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `aplicacao_BEFORE_INSERT`
-BEFORE INSERT ON `aplicacao`
-FOR EACH ROW
-BEGIN
-		DECLARE vencimento_data DATE;
-		DECLARE servico VARCHAR(50);
-        DECLARE invalid INT;
-        DECLARE error_message VARCHAR(100);
-        
-        SET invalid = 0;
-		SET error_message = "";
-        
-        SELECT nome INTO servico FROM tipo_servico WHERE id = NEW.servico_agendado_id;
-		IF(servico <> 'consulta') THEN
-			SET invalid = invalid + 1;
-			IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, ", servico");
-			ELSE
-				SET error_message = CONCAT(error_message, "servico");
-			END IF;
-		END IF;
-        
-        SELECT vencimento INTO vencimento_data FROM vacina INNER JOIN lote WHERE vacina.lote_id = lote.id AND NEW.vacina_id = vacina.id;
-        IF (vencimento_data < NOW()) THEN
-			SET invalid = invalid + 1;
-			IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, ", validade");
-			ELSE
-				SET error_message = CONCAT(error_message, "validade");
-			END IF;
-        END IF;
-        
-        
-        IF (invalid > 0) THEN
-			IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, " inválidos!");
-			ELSE
-				SET error_message = CONCAT(error_message, " inválido!");
-			END IF;
-            SIGNAL SQLSTATE VALUE '45000'
-			SET MESSAGE_TEXT = error_message;
-		END IF;
-END */;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `aplicacao_BEFORE_UPDATE`
-BEFORE UPDATE ON `aplicacao`
-FOR EACH ROW
-BEGIN
-DECLARE vencimento_data DATE;
-		DECLARE servico VARCHAR(50);
-        DECLARE invalid INT;
-        DECLARE error_message VARCHAR(100);
-        
-        SET invalid = 0;
-		SET error_message = "";
-        
-        SELECT nome INTO servico FROM tipo_servico WHERE id = NEW.servico_agendado_id;
-		IF(servico <> 'consulta') THEN
-			SET invalid = invalid + 1;
-			IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, ", servico");
-			ELSE
-				SET error_message = CONCAT(error_message, "servico");
-			END IF;
-		END IF;
-        
-        SELECT vencimento INTO vencimento_data FROM vacina WHERE NEW.vacina_id = vacina.id;
-        IF (vencimento_data < NOW()) THEN
-			SET invalid = invalid + 1;
-			IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, ", validade");
-			ELSE
-				SET error_message = CONCAT(error_message, "validade");
-			END IF;
-        END IF;
-        
-        
-        IF (invalid > 0) THEN
-			IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, " inválidos!");
-			ELSE
-				SET error_message = CONCAT(error_message, " inválido!");
-			END IF;
-            SIGNAL SQLSTATE VALUE '45000'
-			SET MESSAGE_TEXT = error_message;
-		END IF;
-END */;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-
---
--- Table structure for table `cidade`
---
-
-DROP TABLE IF EXISTS `cidade`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `cidade` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Código de identificação com autoincremento',
-  `nome` varchar(100) NOT NULL COMMENT 'Nome da cidade',
-  `estado_id` int(11) NOT NULL COMMENT 'Estado à qual pertence',
-  PRIMARY KEY (`id`),
-  KEY `fk_cidade_estado1_idx` (`estado_id`),
-  CONSTRAINT `fk_cidade_estado1` FOREIGN KEY (`estado_id`) REFERENCES `estado` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=5565 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `cidade_BEFORE_INSERT`
-BEFORE INSERT ON `cidade`
-FOR EACH ROW
-BEGIN
-
-	DECLARE invalid INT;
-	DECLARE error_message VARCHAR(100);
-        
-	SET invalid = 0;
-	SET error_message = "";
-    
-	IF NOT nome_valido(NEW.nome) THEN
-		SET invalid = invalid + 1;
-		IF (invalid > 1) THEN
-			SET error_message = CONCAT(error_message, ", nome");
-		ELSE
-			SET error_message = CONCAT(error_message, "nome");
-		END IF;
-    END IF;
-    
-    IF (invalid > 0) THEN
-			IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, " inválidos!");
-			ELSE
-				SET error_message = CONCAT(error_message, " inválido!");
-			END IF;
-            SIGNAL SQLSTATE VALUE '45000'
-			SET MESSAGE_TEXT = error_message;
-		END IF;
-END */;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `cidade_BEFORE_UPDATE`
-BEFORE UPDATE ON `cidade`
-FOR EACH ROW
-BEGIN
-DECLARE invalid INT;
-	DECLARE error_message VARCHAR(100);
-        
-	SET invalid = 0;
-	SET error_message = "";
-    
-	IF NOT nome_valido(NEW.nome) THEN
-		SET invalid = invalid + 1;
-		IF (invalid > 1) THEN
-			SET error_message = CONCAT(error_message, ", nome");
-		ELSE
-			SET error_message = CONCAT(error_message, "nome");
-		END IF;
-    END IF;
-    
-    IF (invalid > 0) THEN
-			IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, " inválidos!");
-			ELSE
-				SET error_message = CONCAT(error_message, " inválido!");
-			END IF;
-            SIGNAL SQLSTATE VALUE '45000'
-			SET MESSAGE_TEXT = error_message;
-		END IF;
-END */;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-
---
--- Table structure for table `configuracao`
---
-
-DROP TABLE IF EXISTS `configuracao`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `configuracao` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Código de identificação com autoincremento',
-  `quantidade_animais` int(11) NOT NULL DEFAULT '0' COMMENT 'Quantidade em unidades máxima de animais por período, a partir deste número todo agendamento será avisado para o usuário como ''overbooking''',
-  `periodos_dia` int(11) NOT NULL DEFAULT '0' COMMENT 'Quantidade em unidades de períodos em um dia',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `configuracao_BEFORE_INSERT`
-BEFORE INSERT ON `configuracao`
-FOR EACH ROW
-BEGIN
-DECLARE invalid INT;
-        DECLARE error_message VARCHAR(100);
-        
-        SET invalid = 0;
-		SET error_message = "";
-
-		IF (NEW.quantidade_animais < 0) THEN
-			SET invalid = invalid + 1;
-            IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, ", quantidade_animais");
-            ELSE
-				SET error_message = CONCAT(error_message, "quantidade_animais");
-            END IF;
-		END IF;
-		
-		IF (NEW.periodos_dia < 0) THEN
-			SET invalid = invalid + 1;
-            IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, ", periodos_dia");
-            ELSE
-				SET error_message = CONCAT(error_message, "periodos_dia");
-            END IF;
-		END IF;
-        
-        IF (invalid > 0) THEN
-			IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, " inválidos!");
-			ELSE
-				SET error_message = CONCAT(error_message, " inválido!");
-			END IF;
-            SIGNAL SQLSTATE VALUE '45000'
-			SET MESSAGE_TEXT = error_message;
-		END IF;
-END */;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `configuracao_BEFORE_UPDATE`
-BEFORE UPDATE ON `configuracao`
-FOR EACH ROW
-BEGIN
-DECLARE invalid INT;
-        DECLARE error_message VARCHAR(100);
-        
-        SET invalid = 0;
-		SET error_message = "";
-
-		IF (NEW.quantidade_animais < 0) THEN
-			SET invalid = invalid + 1;
-            IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, ", quantidade_animais");
-            ELSE
-				SET error_message = CONCAT(error_message, "quantidade_animais");
-            END IF;
-		END IF;
-		
-		IF (NEW.periodos_dia < 0) THEN
-			SET invalid = invalid + 1;
-            IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, ", periodos_dia");
-            ELSE
-				SET error_message = CONCAT(error_message, "periodos_dia");
-            END IF;
-		END IF;
-        
-        IF (invalid > 0) THEN
-			IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, " inválidos!");
-			ELSE
-				SET error_message = CONCAT(error_message, " inválido!");
-			END IF;
-            SIGNAL SQLSTATE VALUE '45000'
-			SET MESSAGE_TEXT = error_message;
-		END IF;
-END */;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-
---
--- Table structure for table `especie`
---
-
-DROP TABLE IF EXISTS `especie`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `especie` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Código de identificação com autoincremento',
-  `nome` varchar(50) NOT NULL COMMENT 'Nome da espécie',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `especie_BEFORE_INSERT` BEFORE INSERT ON `especie` FOR EACH ROW
-BEGIN
-	DECLARE invalid INT;
-	DECLARE error_message VARCHAR(100);
-        
-	SET invalid = 0;
-	SET error_message = "";
-    
-	IF NOT nome_valido(NEW.nome) THEN
-		SET invalid = invalid + 1;
-		IF (invalid > 1) THEN
-			SET error_message = CONCAT(error_message, ", nome");
-		ELSE
-			SET error_message = CONCAT(error_message, "nome");
-		END IF;
-    END IF;
-    
-    IF (invalid > 0) THEN
-			IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, " inválidos!");
-			ELSE
-				SET error_message = CONCAT(error_message, " inválido!");
-			END IF;
-            SIGNAL SQLSTATE VALUE '45000'
-			SET MESSAGE_TEXT = error_message;
-		END IF;
-END */;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `especie_BEFORE_UPDATE` BEFORE UPDATE ON `especie` FOR EACH ROW
-BEGIN
-	DECLARE invalid INT;
-	DECLARE error_message VARCHAR(100);
-        
-	SET invalid = 0;
-	SET error_message = "";
-    
-	IF NOT nome_valido(NEW.nome) THEN
-		SET invalid = invalid + 1;
-		IF (invalid > 1) THEN
-			SET error_message = CONCAT(error_message, ", nome");
-		ELSE
-			SET error_message = CONCAT(error_message, "nome");
-		END IF;
-    END IF;
-    
-    IF (invalid > 0) THEN
-			IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, " inválidos!");
-			ELSE
-				SET error_message = CONCAT(error_message, " inválido!");
-			END IF;
-            SIGNAL SQLSTATE VALUE '45000'
-			SET MESSAGE_TEXT = error_message;
-		END IF;
-END */;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-
---
--- Table structure for table `estado`
---
-
-DROP TABLE IF EXISTS `estado`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `estado` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Código de identificação com autoincremento',
-  `nome` varchar(50) NOT NULL COMMENT 'Nome do estado',
-  `uf` varchar(2) NOT NULL COMMENT 'Unidade Federativa',
-  `pais_id` int(11) NOT NULL COMMENT 'País à qual pertence',
-  PRIMARY KEY (`id`),
-  KEY `fk_estado_pais1_idx` (`pais_id`),
-  CONSTRAINT `fk_estado_pais1` FOREIGN KEY (`pais_id`) REFERENCES `pais` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `estado_BEFORE_INSERT`
-BEFORE INSERT ON `estado`
-FOR EACH ROW
-BEGIN
-	DECLARE invalid INT;
-	DECLARE error_message VARCHAR(100);
-        
-	SET invalid = 0;
-	SET error_message = "";
-    
-	IF NOT nome_valido(NEW.nome) THEN
-		SET invalid = invalid + 1;
-		IF (invalid > 1) THEN
-			SET error_message = CONCAT(error_message, ", nome");
-		ELSE
-			SET error_message = CONCAT(error_message, "nome");
-		END IF;
-    END IF;
-    
-    IF (invalid > 0) THEN
-			IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, " inválidos!");
-			ELSE
-				SET error_message = CONCAT(error_message, " inválido!");
-			END IF;
-            SIGNAL SQLSTATE VALUE '45000'
-			SET MESSAGE_TEXT = error_message;
-		END IF;
-END */;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `estado_BEFORE_UPDATE`
-BEFORE UPDATE ON `estado`
-FOR EACH ROW
-BEGIN
-DECLARE invalid INT;
-	DECLARE error_message VARCHAR(100);
-        
-	SET invalid = 0;
-	SET error_message = "";
-    
-	IF NOT nome_valido(NEW.nome) THEN
-		SET invalid = invalid + 1;
-		IF (invalid > 1) THEN
-			SET error_message = CONCAT(error_message, ", nome");
-		ELSE
-			SET error_message = CONCAT(error_message, "nome");
-		END IF;
-    END IF;
-    
-    IF (invalid > 0) THEN
-			IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, " inválidos!");
-			ELSE
-				SET error_message = CONCAT(error_message, " inválido!");
-			END IF;
-            SIGNAL SQLSTATE VALUE '45000'
-			SET MESSAGE_TEXT = error_message;
-		END IF;
-END */;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-
---
--- Table structure for table `funcao`
---
-
-DROP TABLE IF EXISTS `funcao`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `funcao` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Código de identificação com autoincremento',
-  `nome` varchar(50) NOT NULL COMMENT 'Função da pessoa no sistema. Somente o administrador pode alterar\n',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `funcao_BEFORE_INSERT`
-BEFORE INSERT ON `funcao`
-FOR EACH ROW
-BEGIN
-	DECLARE invalid INT;
-	DECLARE error_message VARCHAR(100);
-        
-	SET invalid = 0;
-	SET error_message = "";
-
-	IF NOT nome_valido(NEW.nome) THEN
-		SET invalid = invalid + 1;
-		IF (invalid > 1) THEN
-			SET error_message = CONCAT(error_message, ", nome");
-		ELSE
-			SET error_message = CONCAT(error_message, "nome");
-		END IF;
-	END IF;
-	
-	IF (invalid > 0) THEN
-		IF (invalid > 1) THEN
-			SET error_message = CONCAT(error_message, " inválidos!");
-		ELSE
-			SET error_message = CONCAT(error_message, " inválido!");
-		END IF;
-		SIGNAL SQLSTATE VALUE '45000'
-		SET MESSAGE_TEXT = error_message;
-	END IF;
-END */;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `funcao_BEFORE_UPDATE`
-BEFORE UPDATE ON `funcao`
-FOR EACH ROW
-BEGIN
-	DECLARE invalid INT;
-	DECLARE error_message VARCHAR(100);
-	
-    SET invalid = 0;
-	SET error_message = "";
-
-	IF NOT nome_valido(NEW.nome) THEN
-		SET invalid = invalid + 1;
-		IF (invalid > 1) THEN
-			SET error_message = CONCAT(error_message, ", nome");
-		ELSE
-			SET error_message = CONCAT(error_message, "nome");
-		END IF;
-	END IF;
-	
-	IF (invalid > 0) THEN
-		IF (invalid > 1) THEN
-			SET error_message = CONCAT(error_message, " inválidos!");
-		ELSE
-			SET error_message = CONCAT(error_message, " inválido!");
-		END IF;
-		SIGNAL SQLSTATE VALUE '45000'
-		SET MESSAGE_TEXT = error_message;
-	END IF;
-END */;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-
---
--- Table structure for table `grupo_de_item`
---
-
-DROP TABLE IF EXISTS `grupo_de_item`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `grupo_de_item` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Código de identificação com autoincremento',
-  `nome` varchar(50) NOT NULL COMMENT 'Descrição da categoria',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `grupo_de_item_BEFORE_INSERT` BEFORE INSERT ON `grupo_de_item` FOR EACH ROW
-BEGIN
-	DECLARE invalid INT;
-	DECLARE error_message VARCHAR(100);
-        
-	SET invalid = 0;
-	SET error_message = "";
-
-	IF NOT nome_valido(NEW.nome) THEN
-		SET invalid = invalid + 1;
-		IF (invalid > 1) THEN
-			SET error_message = CONCAT(error_message, ", nome");
-		ELSE
-			SET error_message = CONCAT(error_message, "nome");
-		END IF;
-	END IF;
-	
-	IF (invalid > 0) THEN
-		IF (invalid > 1) THEN
-			SET error_message = CONCAT(error_message, " inválidos!");
-		ELSE
-			SET error_message = CONCAT(error_message, " inválido!");
-		END IF;
-		SIGNAL SQLSTATE VALUE '45000'
-		SET MESSAGE_TEXT = error_message;
-	END IF;
-END */;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `grupo_de_item_BEFORE_UPDATE` BEFORE UPDATE ON `grupo_de_item` FOR EACH ROW
-BEGIN
-	DECLARE invalid INT;
-	DECLARE error_message VARCHAR(100);
-        
-	SET invalid = 0;
-	SET error_message = "";
-
-	IF NOT nome_valido(NEW.nome) THEN
-		SET invalid = invalid + 1;
-		IF (invalid > 1) THEN
-			SET error_message = CONCAT(error_message, ", nome");
-		ELSE
-			SET error_message = CONCAT(error_message, "nome");
-		END IF;
-	END IF;
-	
-	IF (invalid > 0) THEN
-		IF (invalid > 1) THEN
-			SET error_message = CONCAT(error_message, " inválidos!");
-		ELSE
-			SET error_message = CONCAT(error_message, " inválido!");
-		END IF;
-		SIGNAL SQLSTATE VALUE '45000'
-		SET MESSAGE_TEXT = error_message;
-	END IF;
-END */;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-
---
--- Table structure for table `item`
---
-
-DROP TABLE IF EXISTS `item`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `item` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Código de identificação com autoincremento',
-  `nome` varchar(100) NOT NULL COMMENT 'Nome do produto',
-  `preco` decimal(10,2) NOT NULL COMMENT 'Preço de compra do produto',
-  `quantidade` int(11) NOT NULL COMMENT 'Quantidade unitária em estoque',
-  `data_hora_cadastro` datetime NOT NULL COMMENT 'Controla o momento em que o produto foi cadastrado',
-  `grupo_de_item_id` int(11) NOT NULL COMMENT 'Produto pertece à um grupo',
-  PRIMARY KEY (`id`),
-  KEY `fk_item_grupo_de_item1_idx` (`grupo_de_item_id`),
-  CONSTRAINT `fk_item_grupo_de_item1` FOREIGN KEY (`grupo_de_item_id`) REFERENCES `grupo_de_item` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `item_BEFORE_INSERT`
-BEFORE INSERT ON `item`
-FOR EACH ROW
-BEGIN
-
-        DECLARE invalid INT;
-        DECLARE error_message VARCHAR(100);
-        
-        SET invalid = 0;
-		SET error_message = "";
-
-		IF (NEW.preco < 0) THEN
-			SET invalid = invalid + 1;
-            IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, ", preco");
-            ELSE
-				SET error_message = CONCAT(error_message, "preco");
-            END IF;
-		END IF;
-        
-        IF (NEW.data_hora_cadastro <> NOW()) THEN
-			SET invalid = invalid + 1;
-            IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, ", data hora cadastro");
-            ELSE
-				SET error_message = CONCAT(error_message, "data hora cadastro");
-            END IF;
-		END IF;
-		
-        IF (NEW.quantidade < 0) THEN
-			SET invalid = invalid + 1;
-            IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, ", quantidade");
-            ELSE
-				SET error_message = CONCAT(error_message, "quantidade");
-            END IF;
-		END IF;
-        
-        IF (invalid > 0) THEN
-			IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, " inválidos!");
-			ELSE
-				SET error_message = CONCAT(error_message, " inválido!");
-			END IF;
-            SIGNAL SQLSTATE VALUE '45000'
-			SET MESSAGE_TEXT = error_message;
-		END IF;
-END */;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `item_BEFORE_UPDATE`
-BEFORE UPDATE ON `item`
-FOR EACH ROW
-BEGIN
-DECLARE invalid INT;
-        DECLARE error_message VARCHAR(100);
-        
-        SET invalid = 0;
-		SET error_message = "";
-
-		IF (NEW.preco < 0) THEN
-			SET invalid = invalid + 1;
-            IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, ", preco");
-            ELSE
-				SET error_message = CONCAT(error_message, "preco");
-            END IF;
-		END IF;
-        
-        IF (invalid > 0) THEN
-			IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, " inválidos!");
-			ELSE
-				SET error_message = CONCAT(error_message, " inválido!");
-			END IF;
-            SIGNAL SQLSTATE VALUE '45000'
-			SET MESSAGE_TEXT = error_message;
-		END IF;
-END */;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-
---
--- Table structure for table `item_de_venda`
---
-
-DROP TABLE IF EXISTS `item_de_venda`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `item_de_venda` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Código de identificação com autoincremento',
-  `preco` decimal(10,2) NOT NULL COMMENT 'Valor em reais do produto. Preço > 0',
-  `quantidade` int(11) NOT NULL COMMENT 'Quantidade pedida, em unidades',
-  `item_id` int(11) NOT NULL COMMENT 'Produto associado com o item',
-  `pedido_id` int(11) NOT NULL COMMENT 'Item de venda pertece à um pedido',
-  PRIMARY KEY (`id`),
-  KEY `fk_item_de_venda_item1_idx` (`item_id`),
-  KEY `fk_item_de_venda_pedido1_idx` (`pedido_id`),
-  CONSTRAINT `fk_item_de_venda_item1` FOREIGN KEY (`item_id`) REFERENCES `item` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_item_de_venda_pedido1` FOREIGN KEY (`pedido_id`) REFERENCES `pedido` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `item_de_venda_BEFORE_INSERT`
-BEFORE INSERT ON `item_de_venda`
-FOR EACH ROW
-BEGIN
-DECLARE invalid INT;
-        DECLARE error_message VARCHAR(100);
-        
-        SET invalid = 0;
-		SET error_message = "";
-
-		IF (NEW.preco < 0) THEN
-			SET invalid = invalid + 1;
-            IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, ", preco");
-            ELSE
-				SET error_message = CONCAT(error_message, "preco");
-            END IF;
-		END IF;
-        
-        IF (NEW.quantidade < 0) THEN
-			SET invalid = invalid + 1;
-            IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, ", quantidade");
-            ELSE
-				SET error_message = CONCAT(error_message, "quantidade");
-            END IF;
-		END IF;
-        
-        IF (invalid > 0) THEN
-			IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, " inválidos!");
-			ELSE
-				SET error_message = CONCAT(error_message, " inválido!");
-			END IF;
-            SIGNAL SQLSTATE VALUE '45000'
-			SET MESSAGE_TEXT = error_message;
-		END IF;
-END */;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `item_de_venda_BEFORE_UPDATE`
-BEFORE UPDATE ON `item_de_venda`
-FOR EACH ROW
-BEGIN
-DECLARE invalid INT;
-        DECLARE error_message VARCHAR(100);
-        
-        SET invalid = 0;
-		SET error_message = "";
-
-		IF (NEW.preco < 0) THEN
-			SET invalid = invalid + 1;
-            IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, ", preco");
-            ELSE
-				SET error_message = CONCAT(error_message, "preco");
-            END IF;
-		END IF;
-        
-        IF (NEW.quantidade < 0) THEN
-			SET invalid = invalid + 1;
-            IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, ", quantidade");
-            ELSE
-				SET error_message = CONCAT(error_message, "quantidade");
-            END IF;
-		END IF;
-        
-        IF (invalid > 0) THEN
-			IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, " inválidos!");
-			ELSE
-				SET error_message = CONCAT(error_message, " inválido!");
-			END IF;
-            SIGNAL SQLSTATE VALUE '45000'
-			SET MESSAGE_TEXT = error_message;
-		END IF;
-END */;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-
---
--- Table structure for table `lembrete`
---
-
-DROP TABLE IF EXISTS `lembrete`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `lembrete` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Código de identificação com autoincremento',
-  `descricao` varchar(200) NOT NULL COMMENT 'Descrição do lembrete',
-  `data_hora` datetime NOT NULL COMMENT 'Data e Hora da atividade',
-  `executado` varchar(45) NOT NULL COMMENT 'Controle se o lembrete já foi executado',
-  `pessoa_id` int(9) NOT NULL COMMENT 'Pessao a qual este lembrete se destina',
-  PRIMARY KEY (`id`),
-  KEY `fk_lembrete_pessoa1_idx` (`pessoa_id`),
-  CONSTRAINT `fk_lembrete_pessoa1` FOREIGN KEY (`pessoa_id`) REFERENCES `pessoa` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `lembrete_BEFORE_INSERT` BEFORE INSERT ON `lembrete` FOR EACH ROW
-BEGIN
-	DECLARE invalid INT;
-        DECLARE error_message VARCHAR(100);
-        
-        SET invalid = 0;
-		SET error_message = "";
-        
-        IF (NEW.data_hora < NOW()) THEN
-			SET invalid = invalid + 1;
-            IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, ", data Hora");
-            ELSE
-				SET error_message = CONCAT(error_message, "data Hora");
-            END IF;
-		END IF;
-        
-        IF (invalid > 0) THEN
-			IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, " inválidos!");
-			ELSE
-				SET error_message = CONCAT(error_message, " inválido!");
-			END IF;
-            SIGNAL SQLSTATE VALUE '45000'
-			SET MESSAGE_TEXT = error_message;
-		END IF;
-END */;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `lembrete_BEFORE_UPDATE` BEFORE UPDATE ON `lembrete` FOR EACH ROW
-BEGIN
-	DECLARE invalid INT;
-        DECLARE error_message VARCHAR(100);
-        
-        SET invalid = 0;
-		SET error_message = "";
-        
-        IF (invalid > 0) THEN
-			IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, " inválidos!");
-			ELSE
-				SET error_message = CONCAT(error_message, " inválido!");
-			END IF;
-            SIGNAL SQLSTATE VALUE '45000'
-			SET MESSAGE_TEXT = error_message;
-		END IF;
-END */;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-
---
--- Table structure for table `lote`
---
-
-DROP TABLE IF EXISTS `lote`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `lote` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Código de identificação com autoincremento',
-  `numero` varchar(50) NOT NULL COMMENT 'Número do lote cadastrado',
-  `vencimento` date NOT NULL COMMENT 'Data de Vencimento deste lote',
-  `preco` decimal(10,2) NOT NULL COMMENT 'Preço base à ser vendido deste lote',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `lote_BEFORE_INSERT` BEFORE INSERT ON `lote` FOR EACH ROW
-BEGIN
-	DECLARE invalid INT;
-	DECLARE error_message VARCHAR(100);
-    
-	SET invalid = 0;
-	SET error_message = "";
-    
-    IF (NEW.vencimento <= NOW()) THEN
-		SET invalid = invalid + 1;
-            IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, ", vencimento");
-            ELSE
-				SET error_message = CONCAT(error_message, "vencimento");
-            END IF;
-    END IF;
-    
-    IF (NEW.preco < 0) THEN
-		SET invalid = invalid + 1;
-            IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, ", preco");
-            ELSE
-				SET error_message = CONCAT(error_message, "preco");
-            END IF;
-    END IF;
-    
-    IF (invalid > 0) THEN
-			IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, " inválidos!");
-			ELSE
-				SET error_message = CONCAT(error_message, " inválido!");
-			END IF;
-            SIGNAL SQLSTATE VALUE '45000'
-			SET MESSAGE_TEXT = error_message;
-		END IF;
-END */;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `lote_BEFORE_UPDATE` BEFORE UPDATE ON `lote` FOR EACH ROW
-BEGIN
-DECLARE invalid INT;
-	DECLARE error_message VARCHAR(100);
-    
-	SET invalid = 0;
-	SET error_message = "";
-    
-    IF (NEW.vencimento <= NOW()) THEN
-		SET invalid = invalid + 1;
-            IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, ", vencimento");
-            ELSE
-				SET error_message = CONCAT(error_message, "vencimento");
-            END IF;
-    END IF;
-    
-    IF (NEW.preco < 0) THEN
-		SET invalid = invalid + 1;
-            IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, ", preco");
-            ELSE
-				SET error_message = CONCAT(error_message, "preco");
-            END IF;
-    END IF;
-    
-    IF (invalid > 0) THEN
-			IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, " inválidos!");
-			ELSE
-				SET error_message = CONCAT(error_message, " inválido!");
-			END IF;
-            SIGNAL SQLSTATE VALUE '45000'
-			SET MESSAGE_TEXT = error_message;
-		END IF;
-END */;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-
---
--- Table structure for table `oauth`
---
-
-DROP TABLE IF EXISTS `oauth`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `oauth` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Código de identificação com autoincremento',
-  `data_hora` datetime NOT NULL COMMENT 'Data e Hora que o token foi gerado',
-  `vencimento` datetime NOT NULL COMMENT 'Data e hora em que o token se torna inválido',
-  `token` varchar(100) NOT NULL COMMENT 'Token de autentificação',
-  `refresh_token` varchar(100) DEFAULT NULL COMMENT 'Token para atualizar a autenticação',
-  `valido` tinyint(4) NOT NULL COMMENT 'Controle da validade do token',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `pais`
---
-
-DROP TABLE IF EXISTS `pais`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `pais` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Código de identificação com autoincremento',
-  `nome` varchar(50) NOT NULL COMMENT 'Nome do país',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `pais_BEFORE_INSERT`
-BEFORE INSERT ON `pais`
-FOR EACH ROW
-BEGIN
-	DECLARE invalid INT;
-	DECLARE error_message VARCHAR(100);
-        
-	SET invalid = 0;
-	SET error_message = "";
-    
-	IF NOT nome_valido(NEW.nome) THEN
-		SET invalid = invalid + 1;
-		IF (invalid > 1) THEN
-			SET error_message = CONCAT(error_message, ", nome");
-		ELSE
-			SET error_message = CONCAT(error_message, "nome");
-		END IF;
-    END IF;
-    
-    IF (invalid > 0) THEN
-			IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, " inválidos!");
-			ELSE
-				SET error_message = CONCAT(error_message, " inválido!");
-			END IF;
-            SIGNAL SQLSTATE VALUE '45000'
-			SET MESSAGE_TEXT = error_message;
-		END IF;
-END */;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `pais_BEFORE_UPDATE`
-BEFORE UPDATE ON `pais`
-FOR EACH ROW
-BEGIN
-	DECLARE invalid INT;
-	DECLARE error_message VARCHAR(100);
-        
-	SET invalid = 0;
-	SET error_message = "";
-    
-	IF NOT nome_valido(NEW.nome) THEN
-		SET invalid = invalid + 1;
-		IF (invalid > 1) THEN
-			SET error_message = CONCAT(error_message, ", nome");
-		ELSE
-			SET error_message = CONCAT(error_message, "nome");
-		END IF;
-    END IF;
-    
-    IF (invalid > 0) THEN
-			IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, " inválidos!");
-			ELSE
-				SET error_message = CONCAT(error_message, " inválido!");
-			END IF;
-            SIGNAL SQLSTATE VALUE '45000'
-			SET MESSAGE_TEXT = error_message;
-		END IF;
-END */;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-
---
--- Table structure for table `pedido`
---
-
-DROP TABLE IF EXISTS `pedido`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `pedido` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Código de identificação com autoincremento',
-  `valor` decimal(10,2) NOT NULL COMMENT 'Valor total do pedido',
-  `desconto` decimal(10,2) NOT NULL COMMENT 'Desconto dado no total do pedido',
-  `transacao_id` int(11) NOT NULL COMMENT 'Identificação da transação associada',
-  `cliente_id` int(11) DEFAULT NULL COMMENT 'Cliente que realizou o pedido',
-  `funcionario_id` int(11) NOT NULL COMMENT 'Funcionario que realizou o pedido',
-  PRIMARY KEY (`id`),
-  KEY `fk_pedido_transacao1_idx` (`transacao_id`),
-  KEY `fk_pedido_pessoa_tem_funcao1_idx` (`cliente_id`),
-  KEY `fk_pedido_pessoa_tem_funcao2_idx` (`funcionario_id`),
-  CONSTRAINT `fk_pedido_pessoa_tem_funcao1` FOREIGN KEY (`cliente_id`) REFERENCES `pessoa_tem_funcao` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_pedido_pessoa_tem_funcao2` FOREIGN KEY (`funcionario_id`) REFERENCES `pessoa_tem_funcao` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_pedido_transacao1` FOREIGN KEY (`transacao_id`) REFERENCES `transacao` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `pedido_BEFORE_INSERT`
-BEFORE INSERT ON `pedido`
-FOR EACH ROW
-BEGIN
-		DECLARE pessoa_cliente VARCHAR(50);
-        DECLARE pessoa_funcionario VARCHAR(50);
-		DECLARE invalid INT;
-        DECLARE error_message VARCHAR(100);
-        
-        SET invalid = 0;
-		SET error_message = "";
-
-		IF (NEW.valor < 0) THEN
-			SET invalid = invalid + 1;
-            IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, ", valor");
-            ELSE
-				SET error_message = CONCAT(error_message, "valor");
-            END IF;
-		END IF;
-        
-        IF (NEW.desconto < 0) THEN
-			SET invalid = invalid + 1;
-            IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, ", desconto");
-            ELSE
-				SET error_message = CONCAT(error_message, "desconto");
-            END IF;
-		END IF;
-        
-        SELECT nome INTO pessoa_funcionario FROM tipo_funcao WHERE id = NEW.funcionario_id;
-		IF(pessoa_funcionario <> 'funcionario' AND pessoa_funcionario <> 'fornecedor') THEN
-			SET invalid = invalid + 1;
-			IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, ", funcionario");
-			ELSE
-				SET error_message = CONCAT(error_message, "funcionario");
-			END IF;
-		END IF;
-        
-        SELECT nome INTO pessoa_cliente FROM tipo_funcao WHERE id = NEW.cliente_id;
-		IF(pessoa_cliente <> 'cliente' AND pessoa_cliente <> 'cliente-especial') THEN
-			SET invalid = invalid + 1;
-			IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, ", cliente");
-			ELSE
-				SET error_message = CONCAT(error_message, "cliente");
-			END IF;
-		END IF;
-        
-        IF (invalid > 0) THEN
-			IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, " inválidos!");
-			ELSE
-				SET error_message = CONCAT(error_message, " inválido!");
-			END IF;
-            SIGNAL SQLSTATE VALUE '45000'
-			SET MESSAGE_TEXT = error_message;
-		END IF;
-END */;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `pedido_BEFORE_UPDATE`
-BEFORE UPDATE ON `pedido`
-FOR EACH ROW
-BEGIN
-		DECLARE pessoa_cliente VARCHAR(50);
-        DECLARE pessoa_funcionario VARCHAR(50);
-		DECLARE invalid INT;
-        DECLARE error_message VARCHAR(100);
-        
-        SET invalid = 0;
-		SET error_message = "";
-
-		IF (NEW.valor < 0) THEN
-			SET invalid = invalid + 1;
-            IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, ", valor");
-            ELSE
-				SET error_message = CONCAT(error_message, "valor");
-            END IF;
-		END IF;
-        
-        IF (NEW.desconto < 0) THEN
-			SET invalid = invalid + 1;
-            IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, ", desconto");
-            ELSE
-				SET error_message = CONCAT(error_message, "desconto");
-            END IF;
-		END IF;
-        
-        SELECT nome INTO pessoa_funcionario FROM tipo_funcao WHERE id = NEW.funcionario_id;
-		IF(pessoa_funcionario <> 'funcionario' AND pessoa_funcionario <> 'fornecedor') THEN
-			SET invalid = invalid + 1;
-			IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, ", funcionario");
-			ELSE
-				SET error_message = CONCAT(error_message, "funcionario");
-			END IF;
-		END IF;
-        
-        SELECT nome INTO pessoa_cliente FROM tipo_funcao WHERE id = NEW.cliente_id;
-		IF(pessoa_cliente <> 'cliente' AND pessoa_cliente <> 'cliente-especial') THEN
-			SET invalid = invalid + 1;
-			IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, ", cliente");
-			ELSE
-				SET error_message = CONCAT(error_message, "cliente");
-			END IF;
-		END IF;
-        
-        IF (invalid > 0) THEN
-			IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, " inválidos!");
-			ELSE
-				SET error_message = CONCAT(error_message, " inválido!");
-			END IF;
-            SIGNAL SQLSTATE VALUE '45000'
-			SET MESSAGE_TEXT = error_message;
-		END IF;
-END */;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-
---
--- Table structure for table `permissao`
---
-
-DROP TABLE IF EXISTS `permissao`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `permissao` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Código de identificação com autoincremento',
-  `modulo` varchar(50) NOT NULL COMMENT 'Descrição da permissão, somente o administrador pode alterar',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `permissao_BEFORE_INSERT` BEFORE INSERT ON `permissao` FOR EACH ROW
-BEGIN
-	DECLARE invalid INT;
-	DECLARE error_message VARCHAR(100);
-        
-	SET invalid = 0;
-	SET error_message = "";
-    
-	IF NOT nome_valido(NEW.modulo) THEN
-		SET invalid = invalid + 1;
-		IF (invalid > 1) THEN
-			SET error_message = CONCAT(error_message, ", modulo");
-		ELSE
-			SET error_message = CONCAT(error_message, "modulo");
-		END IF;
-    END IF;
-    
-    IF (invalid > 0) THEN
-			IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, " inválidos!");
-			ELSE
-				SET error_message = CONCAT(error_message, " inválido!");
-			END IF;
-            SIGNAL SQLSTATE VALUE '45000'
-			SET MESSAGE_TEXT = error_message;
-		END IF;	
-END */;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `permissao_BEFORE_UPDATE` BEFORE UPDATE ON `permissao` FOR EACH ROW
-BEGIN
-	DECLARE invalid INT;
-	DECLARE error_message VARCHAR(100);
-        
-	SET invalid = 0;
-	SET error_message = "";
-    
-	IF NOT nome_valido(NEW.modulo) THEN
-		SET invalid = invalid + 1;
-		IF (invalid > 1) THEN
-			SET error_message = CONCAT(error_message, ", modulo");
-		ELSE
-			SET error_message = CONCAT(error_message, "modulo");
-		END IF;
-    END IF;
-    
-    IF (invalid > 0) THEN
-			IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, " inválidos!");
-			ELSE
-				SET error_message = CONCAT(error_message, " inválido!");
-			END IF;
-            SIGNAL SQLSTATE VALUE '45000'
-			SET MESSAGE_TEXT = error_message;
-		END IF;	
-END */;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-
---
--- Table structure for table `pessoa`
---
-
-DROP TABLE IF EXISTS `pessoa`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `pessoa` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Código de identificação com autoincremento',
-  `nome` varchar(100) NOT NULL COMMENT 'Nome da pessoa',
-  `data_hora_cadastro` datetime NOT NULL COMMENT 'Controla o momento em que o usuário foi cadastrado',
-  `email` varchar(50) NOT NULL COMMENT 'Email de contato, que deve ser válidado',
-  `registro` varchar(14) NOT NULL COMMENT 'Número de registro (CPF ou CNPJ), sem máscaras e apenas dígitos',
-  `logradouro` varchar(100) NOT NULL COMMENT 'Logradouro em que a pessoa mora (Ex: Rua, Avenida)',
-  `numero` int(11) NOT NULL COMMENT 'Número do local presente no logradouro',
-  `complemento` varchar(50) DEFAULT NULL COMMENT 'Complemento do endereço',
-  `cep` varchar(8) NOT NULL COMMENT 'CEP do endereço',
-  `ponto_de_referencia` varchar(200) DEFAULT NULL COMMENT 'Ponto de referência para ajudar na busca do endereço',
-  `cidade_id` int(11) NOT NULL COMMENT 'Códio da cidade a qual o endereço pertence',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `email_UNIQUE` (`email`),
-  UNIQUE KEY `registro_UNIQUE` (`registro`),
-  UNIQUE KEY `id_UNIQUE` (`id`),
-  KEY `fk_pessoa_cidade1_idx` (`cidade_id`),
-  CONSTRAINT `fk_pessoa_cidade1` FOREIGN KEY (`cidade_id`) REFERENCES `cidade` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `pessoa_BEFORE_INSERT`
-BEFORE INSERT ON `pessoa`
-FOR EACH ROW
-BEGIN
-		
-        DECLARE invalid INT;
-        DECLARE error_message VARCHAR(100);
-        
-        SET invalid = 0;
-		SET error_message = "";
-
-		IF NOT nome_valido(NEW.nome) THEN
-			SET invalid = invalid + 1;
-            IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, ", nome");
-            ELSE
-				SET error_message = CONCAT(error_message, "nome");
-            END IF;
-		END IF;
-        
-        IF (NEW.data_hora_cadastro <> NOW()) THEN
-			SET invalid = invalid + 1;
-            IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, ", data hora cadastro");
-            ELSE
-				SET error_message = CONCAT(error_message, "data hora cadastro");
-            END IF;
-		END IF;
-		
-		IF NOT email_valido(NEW.email) THEN
-			SET invalid = invalid + 1;
-            IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, ", email");
-            ELSE
-				SET error_message = CONCAT(error_message, "email");
-            END IF;
-		END IF;
-        
-        IF NOT (cpf_valido(NEW.registro) OR cnpj_valido(NEW.registro)) THEN
-			SET invalid = invalid + 1;
-            IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, ", registro");
-            ELSE
-				SET error_message = CONCAT(error_message, "registro");
-            END IF;
-		END IF;
-        
-        IF (invalid > 0) THEN
-			IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, " inválidos!");
-			ELSE
-				SET error_message = CONCAT(error_message, " inválido!");
-			END IF;
-            SIGNAL SQLSTATE VALUE '45000'
-			SET MESSAGE_TEXT = error_message;
-		END IF;
-        
-	END */;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `pessoa_BEFORE_UPDATE`
-BEFORE UPDATE ON `pessoa`
-FOR EACH ROW
-BEGIN
-	
-        DECLARE invalid INT;
-        DECLARE error_message VARCHAR(100);
-        
-        SET invalid = 0;
-		SET error_message = "";
-
-		IF NOT nome_valido(NEW.nome) THEN
-			SET invalid = invalid + 1;
-            IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, ", nome");
-            ELSE
-				SET error_message = CONCAT(error_message, "nome");
-            END IF;
-		END IF;
-        
-		IF NOT email_valido(NEW.email) THEN
-			SET invalid = invalid + 1;
-            IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, ", email");
-            ELSE
-				SET error_message = CONCAT(error_message, "email");
-            END IF;
-		END IF;
-        
-        IF NOT (cpf_valido(NEW.registro) OR cnpj_valido(NEW.registro)) THEN
-			SET invalid = invalid + 1;
-            IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, ", registro");
-            ELSE
-				SET error_message = CONCAT(error_message, "registro");
-            END IF;
-		END IF;
-        
-        IF (invalid > 0) THEN
-			IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, " inválidos!");
-			ELSE
-				SET error_message = CONCAT(error_message, " inválido!");
-			END IF;
-            SIGNAL SQLSTATE VALUE '45000'
-			SET MESSAGE_TEXT = error_message;
-		END IF;
-END */;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-
---
--- Table structure for table `pessoa_tem_funcao`
---
-
-DROP TABLE IF EXISTS `pessoa_tem_funcao`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `pessoa_tem_funcao` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Código de identificação com autoincremento',
-  `pessoa_id` int(11) NOT NULL COMMENT 'Relaciona uma pessoa à uma função, como cliente ou funcionário',
-  `funcao_id` int(11) NOT NULL COMMENT 'Função da pessoa',
-  `oauth_id` int(11) DEFAULT NULL COMMENT 'Código da autentificação atual desta pessoa',
-  `password` varchar(100) DEFAULT NULL COMMENT 'Password desta pessoa criptografada',
-  PRIMARY KEY (`id`),
-  KEY `fk_pessoa_has_funcao_funcao1_idx` (`funcao_id`),
-  KEY `fk_pessoa_has_funcao_pessoa1_idx` (`pessoa_id`),
-  KEY `fk_oauth1_idx` (`oauth_id`),
-  CONSTRAINT `fk_oauth1` FOREIGN KEY (`oauth_id`) REFERENCES `oauth` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_pessoa_has_funcao_funcao1` FOREIGN KEY (`funcao_id`) REFERENCES `funcao` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_pessoa_has_funcao_pessoa1` FOREIGN KEY (`pessoa_id`) REFERENCES `pessoa` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `pessoa_tem_funcao_BEFORE_INSERT`
-BEFORE INSERT ON `pessoa_tem_funcao`
-FOR EACH ROW
-BEGIN
-	DECLARE error_message VARCHAR(100);
-	DECLARE funcao_nome VARCHAR(50);
-    DECLARE verifica VARCHAR(10);
-    DECLARE pessoa_registro VARCHAR(15);
-
-	SET error_message = "";
-
-	SELECT nome INTO funcao_nome
-		FROM funcao
-		WHERE id = NEW.funcao_id;
-
-    SELECT registro INTO pessoa_registro
-		FROM pessoa
-		WHERE id = NEW.pessoa_id;
-    
-	CASE funcao_nome
-		WHEN "cliente" THEN SELECT "cpf" INTO verifica;
-        WHEN "cliente-especial" THEN SELECT "cpf" INTO verifica;
-        WHEN "funcionario" THEN SELECT "cpf" INTO verifica;
-        WHEN "fornecedor" THEN SELECT "cnpj" INTO verifica;
-        WHEN "terceiro" THEN SELECT "cnpj" INTO verifica;
-        WHEN "administrador" THEN SELECT "cpf" INTO verifica;
-        ELSE SELECT "erro" INTO verifica;
-	END CASE;
-    
-    IF(verifica = "cpf") THEN
-		IF NOT cpf_valido(pessoa_registro) THEN
-			SET error_message = CONCAT(error_message, "cpf inválido!"); 
-            SIGNAL SQLSTATE VALUE '45000'
-            SET MESSAGE_TEXT = error_message;
-        END IF;
-    ELSEIF(verifica = "cnpj") THEN
-		IF NOT cnpj_valido(pessoa_registro) THEN
-			SET error_message = CONCAT(error_message, "cnpj inválido!"); 
-			SIGNAL SQLSTATE VALUE '45000'
-			SET MESSAGE_TEXT = error_message;
-        END IF;
-    ELSE
-		SET error_message = CONCAT(error_message, "tipo de registro não definido!");
-		SIGNAL SQLSTATE VALUE '45000'
-		SET MESSAGE_TEXT = error_message;
-    END IF;
-END */;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `pessoa_tem_funcao_BEFORE_UPDATE`
-BEFORE UPDATE ON `pessoa_tem_funcao`
-FOR EACH ROW
-BEGIN
-	DECLARE error_message VARCHAR(100);
-	DECLARE funcao_nome VARCHAR(50);
-    DECLARE verifica VARCHAR(10);
-    DECLARE registro VARCHAR(15);
-
-	SET error_message = "";
-
-	SELECT funcao.nome, pessoa.registro INTO funcao_nome, registro
-		FROM pessoa_tem_funcao
-		INNER JOIN funcao
-        INNER JOIN pessoa
-        WHERE pessoa.id = NEW.pessoa_id
-        AND funcao.id = NEW.funcao_id;
-        
-	CASE funcao_nome
-		WHEN "cliente" THEN SELECT "cpf" INTO verifica;
-        WHEN "cliente_especial" THEN SELECT "cpf" INTO verifica;
-        WHEN "funcionario" THEN SELECT "cpf" INTO verifica;
-        WHEN "fornecedor" THEN SELECT "cnpj" INTO verifica;
-        WHEN "terceiro" THEN SELECT "cnpj" INTO verifica;
-	END CASE;
-    
-    IF(verifica = "cpf") THEN
-		IF NOT cpf_valido(registro) THEN
-			SET error_message = CONCAT(error_message, "cpf inválido!"); 
-            SIGNAL SQLSTATE VALUE '45000'
-            SET MESSAGE_TEXT = error_message;
-        END IF;
-    ELSEIF(verifica = "cnpj") THEN
-		IF NOT cnpj_valido(registro) THEN
-			SET error_message = CONCAT(error_message, "cnpj inválido!"); 
-			SIGNAL SQLSTATE VALUE '45000'
-			SET MESSAGE_TEXT = error_message;
-        END IF;
-    ELSE
-		SET error_message = CONCAT(error_message, "tipo de registro não definido!");
-		SIGNAL SQLSTATE VALUE '45000'
-		SET MESSAGE_TEXT = error_message;
-    END IF;
-END */;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-
---
--- Table structure for table `pessoa_tem_permissao`
---
-
-DROP TABLE IF EXISTS `pessoa_tem_permissao`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `pessoa_tem_permissao` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Código de identificação com autoincremento',
-  `pessoa_tem_funcao_id` int(11) NOT NULL COMMENT 'Dá à uma pessoa alguma permissão no sistema, como funcionário ser banhista',
-  `permissoes_id` int(11) NOT NULL COMMENT 'Permissão da pessoa',
-  PRIMARY KEY (`id`),
-  KEY `fk_pessoa_tem_funcao_has_permissoes_permissoes1_idx` (`permissoes_id`),
-  KEY `fk_pessoa_tem_funcao_has_permissoes_pessoa_tem_funcao1_idx` (`pessoa_tem_funcao_id`),
-  CONSTRAINT `fk_pessoa_tem_funcao_has_permissoes_permissoes1` FOREIGN KEY (`permissoes_id`) REFERENCES `permissao` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_pessoa_tem_funcao_has_permissoes_pessoa_tem_funcao1` FOREIGN KEY (`pessoa_tem_funcao_id`) REFERENCES `pessoa_tem_funcao` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `pessoa_tem_permissoes_BEFORE_INSERT`
-BEFORE INSERT ON `pessoa_tem_permissao` FOR EACH ROW
-BEGIN
-	DECLARE invalid INT;
-	DECLARE error_message VARCHAR(100);
-	DECLARE tipo_pessoa VARCHAR(50);
-        
-	SET invalid = 0;
-	SET error_message = "";
-    
-    SELECT nome INTO tipo_pessoa FROM tipo_funcao WHERE id = NEW.pessoa_tem_funcao_id;
-    IF(tipo_pessoa <> 'funcionario' AND tipo_pessoa <> 'administrador') THEN
-		SET invalid = invalid + 1;
-		IF (invalid > 1) THEN
-			SET error_message = CONCAT(error_message, ", pessoa");
-		ELSE
-			SET error_message = CONCAT(error_message, "pessoa");
-		END IF;
-    END IF;
-    
-    IF (invalid > 0) THEN
-			IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, " inválidos!");
-			ELSE
-				SET error_message = CONCAT(error_message, " inválido!");
-			END IF;
-            SIGNAL SQLSTATE VALUE '45000'
-			SET MESSAGE_TEXT = error_message;
-		END IF;
-END */;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `pessoa_tem_permissoes_BEFORE_UPDATE`
-BEFORE UPDATE ON `pessoa_tem_permissao` FOR EACH ROW
-BEGIN
-DECLARE invalid INT;
-	DECLARE error_message VARCHAR(100);
-	DECLARE tipo_pessoa VARCHAR(50);
-        
-	SET invalid = 0;
-	SET error_message = "";
-    
-    SELECT nome INTO tipo_pessoa FROM tipo_funcao WHERE id = NEW.pessoa_tem_funcao_id;
-    IF(tipo_pessoa <> 'funcionario' AND tipo_pessoa <> 'administrador') THEN
-		SET invalid = invalid + 1;
-		IF (invalid > 1) THEN
-			SET error_message = CONCAT(error_message, ", pessoa");
-		ELSE
-			SET error_message = CONCAT(error_message, "pessoa");
-		END IF;
-    END IF;
-    
-    IF (invalid > 0) THEN
-			IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, " inválidos!");
-			ELSE
-				SET error_message = CONCAT(error_message, " inválido!");
-			END IF;
-            SIGNAL SQLSTATE VALUE '45000'
-			SET MESSAGE_TEXT = error_message;
-		END IF;
-END */;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-
---
--- Table structure for table `pessoa_tem_rede_social`
---
-
-DROP TABLE IF EXISTS `pessoa_tem_rede_social`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `pessoa_tem_rede_social` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Código de identificação com autoincremento',
-  `perfil` varchar(200) NOT NULL COMMENT 'Como encontrar a pessoa na rede social',
-  `rede_social_id` int(11) NOT NULL COMMENT 'Rede social desta relação',
-  `pessoa_id` int(11) NOT NULL COMMENT 'Pessoa desta relação',
-  PRIMARY KEY (`id`),
-  KEY `fk_pessoa_tem_rede_social_rede_social1_idx` (`rede_social_id`),
-  KEY `fk_pessoa_tem_rede_social_pessoa1_idx` (`pessoa_id`),
-  CONSTRAINT `fk_pessoa_tem_rede_social_pessoa1` FOREIGN KEY (`pessoa_id`) REFERENCES `pessoa` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_pessoa_tem_rede_social_rede_social1` FOREIGN KEY (`rede_social_id`) REFERENCES `rede_social` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `porte`
---
-
-DROP TABLE IF EXISTS `porte`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `porte` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Código de identificação com autoincremento',
-  `nome` varchar(50) NOT NULL COMMENT 'Descrição do porte',
-  `tamanho_minimo` int(11) DEFAULT NULL COMMENT 'Tamanho mínimo do porte em centímetros',
-  `tamanho_maximo` int(11) DEFAULT NULL COMMENT 'Tamanho máximo do porte em centímetros',
-  `peso_minimo` int(11) DEFAULT NULL COMMENT 'peso mínimo do porte em gramas',
-  `peso_maximo` int(11) DEFAULT NULL COMMENT 'Peso máximo do porte em gramas',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `porte_BEFORE_INSERT`
-BEFORE INSERT ON `porte`
-FOR EACH ROW
-BEGIN
-	DECLARE invalid INT;
-	DECLARE error_message VARCHAR(100);
-        
-	SET invalid = 0;
-	SET error_message = "";
-    
-    IF(NEW.tamanho_minimo <= 0) THEN
-		SET invalid = invalid + 1;
-		IF (invalid > 1) THEN
-			SET error_message = CONCAT(error_message, ", tamanho minimo");
-		ELSE
-			SET error_message = CONCAT(error_message, "tamanho minimo");
-		END IF;
-    END IF;
-    
-    IF(NEW.tamanho_maximo <= NEW.tamanho_minimo) THEN
-		SET invalid = invalid + 1;
-		IF (invalid > 1) THEN
-			SET error_message = CONCAT(error_message, ", tamanho maximo");
-		ELSE
-			SET error_message = CONCAT(error_message, "tamanho maximo");
-		END IF;
-	END IF;
-        
-	IF(NEW.peso_minimo < 0) THEN
-		SET invalid = invalid + 1;
-		IF (invalid > 1) THEN
-			SET error_message = CONCAT(error_message, ", peso minimo");
-		ELSE
-			SET error_message = CONCAT(error_message, "peso minimo");
-		END IF;
-    END IF;
-    
-    IF(NEW.peso_maximo <= NEW.peso_minimo) THEN
-		SET invalid = invalid + 1;
-		IF (invalid > 1) THEN
-			SET error_message = CONCAT(error_message, ", peso maximo");
-		ELSE
-			SET error_message = CONCAT(error_message, "peso maximo");
-		END IF;
-    END IF;
-    
-    IF (invalid > 0) THEN
-			IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, " inválidos!");
-			ELSE
-				SET error_message = CONCAT(error_message, " inválido!");
-			END IF;
-            SIGNAL SQLSTATE VALUE '45000'
-			SET MESSAGE_TEXT = error_message;
-	END IF;
-END */;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `porte_BEFORE_UPDATE`
-BEFORE UPDATE ON `porte`
-FOR EACH ROW
-BEGIN
-	DECLARE invalid INT;
-	DECLARE error_message VARCHAR(100);
-        
-	SET invalid = 0;
-	SET error_message = "";
-    
-    IF(NEW.tamanho_minimo <= 0) THEN
-		SET invalid = invalid + 1;
-		IF (invalid > 1) THEN
-			SET error_message = CONCAT(error_message, ", tamanho minimo");
-		ELSE
-			SET error_message = CONCAT(error_message, "tamanho minimo");
-		END IF;
-    END IF;
-    
-    IF(NEW.tamanho_maximo <= NEW.tamanho_minimo) THEN
-		SET invalid = invalid + 1;
-		IF (invalid > 1) THEN
-			SET error_message = CONCAT(error_message, ", tamanho maximo");
-		ELSE
-			SET error_message = CONCAT(error_message, "tamanho maximo");
-		END IF;
-	END IF;
-        
-	IF(NEW.peso_minimo < 0) THEN
-		SET invalid = invalid + 1;
-		IF (invalid > 1) THEN
-			SET error_message = CONCAT(error_message, ", peso minimo");
-		ELSE
-			SET error_message = CONCAT(error_message, "peso minimo");
-		END IF;
-    END IF;
-    
-    IF(NEW.peso_maximo <= NEW.peso_minimo) THEN
-		SET invalid = invalid + 1;
-		IF (invalid > 1) THEN
-			SET error_message = CONCAT(error_message, ", peso maximo");
-		ELSE
-			SET error_message = CONCAT(error_message, "peso maximo");
-		END IF;
-    END IF;
-    
-    IF (invalid > 0) THEN
-			IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, " inválidos!");
-			ELSE
-				SET error_message = CONCAT(error_message, " inválido!");
-			END IF;
-            SIGNAL SQLSTATE VALUE '45000'
-			SET MESSAGE_TEXT = error_message;
-		END IF;
-END */;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-
---
--- Table structure for table `raca`
---
-
-DROP TABLE IF EXISTS `raca`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `raca` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Código de identificação com autoincremento',
-  `nome` varchar(50) NOT NULL COMMENT 'Nome da raça',
-  `especie_id` int(11) NOT NULL COMMENT 'A raça pertence à alguma espécie',
-  `porte_id` int(11) NOT NULL COMMENT 'Código do Porte desta raça',
-  PRIMARY KEY (`id`),
-  KEY `fk_raca_especie1_idx` (`especie_id`),
-  KEY `fk_raca_porte1_idx` (`porte_id`),
-  CONSTRAINT `fk_raca_porte1` FOREIGN KEY (`porte_id`) REFERENCES `porte` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_raca_especie1` FOREIGN KEY (`especie_id`) REFERENCES `especie` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=193 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `raca_BEFORE_INSERT` BEFORE INSERT ON `raca` FOR EACH ROW
-BEGIN
-	DECLARE invalid INT;
-	DECLARE error_message VARCHAR(100);
-        
-	SET invalid = 0;
-	SET error_message = "";
-    
-	IF NOT nome_valido(NEW.nome) THEN
-		SET invalid = invalid + 1;
-		IF (invalid > 1) THEN
-			SET error_message = CONCAT(error_message, ", nome");
-		ELSE
-			SET error_message = CONCAT(error_message, "nome");
-		END IF;
-    END IF;
-    
-    IF (invalid > 0) THEN
-			IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, " inválidos!");
-			ELSE
-				SET error_message = CONCAT(error_message, " inválido!");
-			END IF;
-            SIGNAL SQLSTATE VALUE '45000'
-			SET MESSAGE_TEXT = error_message;
-		END IF;
-END */;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `raca_BEFORE_UPDATE` BEFORE UPDATE ON `raca` FOR EACH ROW
-BEGIN
-	DECLARE invalid INT;
-	DECLARE error_message VARCHAR(100);
-        
-	SET invalid = 0;
-	SET error_message = "";
-    
-	IF NOT nome_valido(NEW.nome) THEN
-		SET invalid = invalid + 1;
-		IF (invalid > 1) THEN
-			SET error_message = CONCAT(error_message, ", nome");
-		ELSE
-			SET error_message = CONCAT(error_message, "nome");
-		END IF;
-    END IF;
-    
-    IF (invalid > 0) THEN
-			IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, " inválidos!");
-			ELSE
-				SET error_message = CONCAT(error_message, " inválido!");
-			END IF;
-            SIGNAL SQLSTATE VALUE '45000'
-			SET MESSAGE_TEXT = error_message;
-		END IF;
-END */;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-
---
--- Table structure for table `rede_social`
---
-
-DROP TABLE IF EXISTS `rede_social`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `rede_social` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Código de identificação com autoincremento',
-  `nome` varchar(50) NOT NULL COMMENT 'Nome da rede social',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `rede_social_BEFORE_INSERT` BEFORE INSERT ON `rede_social` FOR EACH ROW
-BEGIN
-	DECLARE invalid INT;
-	DECLARE error_message VARCHAR(100);
-        
-	SET invalid = 0;
-	SET error_message = "";
-    
-	IF NOT nome_valido(NEW.nome) THEN
-		SET invalid = invalid + 1;
-		IF (invalid > 1) THEN
-			SET error_message = CONCAT(error_message, ", nome");
-		ELSE
-			SET error_message = CONCAT(error_message, "nome");
-		END IF;
-    END IF;
-    
-    IF (invalid > 0) THEN
-			IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, " inválidos!");
-			ELSE
-				SET error_message = CONCAT(error_message, " inválido!");
-			END IF;
-            SIGNAL SQLSTATE VALUE '45000'
-			SET MESSAGE_TEXT = error_message;
-		END IF;
-END */;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `rede_social_BEFORE_UPDATE` BEFORE UPDATE ON `rede_social` FOR EACH ROW
-BEGIN
-	DECLARE invalid INT;
-	DECLARE error_message VARCHAR(100);
-        
-	SET invalid = 0;
-	SET error_message = "";
-    
-	IF NOT nome_valido(NEW.nome) THEN
-		SET invalid = invalid + 1;
-		IF (invalid > 1) THEN
-			SET error_message = CONCAT(error_message, ", nome");
-		ELSE
-			SET error_message = CONCAT(error_message, "nome");
-		END IF;
-    END IF;
-    
-    IF (invalid > 0) THEN
-			IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, " inválidos!");
-			ELSE
-				SET error_message = CONCAT(error_message, " inválido!");
-			END IF;
-            SIGNAL SQLSTATE VALUE '45000'
-			SET MESSAGE_TEXT = error_message;
-		END IF;
-END */;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-
---
--- Table structure for table `restricao`
---
-
-DROP TABLE IF EXISTS `restricao`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `restricao` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Código de identificação com autoincremento',
-  `restricao` varchar(50) NOT NULL COMMENT 'Nome da restrição',
-  `descricao` varchar(200) DEFAULT NULL COMMENT 'Informações da restrição',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `servico`
---
-
-DROP TABLE IF EXISTS `servico`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `servico` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Código de identificação com autoincremento',
-  `nome` varchar(50) NOT NULL COMMENT 'Nome do serviço',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `servico_BEFORE_INSERT`
-BEFORE INSERT ON `servico`
-FOR EACH ROW
-BEGIN
-	DECLARE invalid INT;
-	DECLARE error_message VARCHAR(100);
-        
-	SET invalid = 0;
-	SET error_message = "";
-    
-    IF NOT nome_valido(NEW.nome) THEN
-		SET invalid = invalid + 1;
-		IF (invalid > 1) THEN
-			SET error_message = CONCAT(error_message, ", nome");
-		ELSE
-			SET error_message = CONCAT(error_message, "nome");
-		END IF;
-    END IF;
-    
-    IF (invalid > 0) THEN
-			IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, " inválidos!");
-			ELSE
-				SET error_message = CONCAT(error_message, " inválido!");
-			END IF;
-            SIGNAL SQLSTATE VALUE '45000'
-			SET MESSAGE_TEXT = error_message;
-		END IF;
-END */;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `servico_BEFORE_UPDATE`
-BEFORE UPDATE ON `servico`
-FOR EACH ROW
-BEGIN
-DECLARE invalid INT;
-	DECLARE error_message VARCHAR(100);
-        
-	SET invalid = 0;
-	SET error_message = "";
-    
-    IF NOT nome_valido(NEW.nome) THEN
-		SET invalid = invalid + 1;
-		IF (invalid > 1) THEN
-			SET error_message = CONCAT(error_message, ", nome");
-		ELSE
-			SET error_message = CONCAT(error_message, "nome");
-		END IF;
-    END IF;
-    
-    IF (invalid > 0) THEN
-			IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, " inválidos!");
-			ELSE
-				SET error_message = CONCAT(error_message, " inválido!");
-			END IF;
-            SIGNAL SQLSTATE VALUE '45000'
-			SET MESSAGE_TEXT = error_message;
-		END IF;
-END */;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-
---
--- Table structure for table `servico_agendado`
---
-
-DROP TABLE IF EXISTS `servico_agendado`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `servico_agendado` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Código de identificação com autoincremento',
-  `preco` decimal(10,2) NOT NULL COMMENT 'Valor total do serviço',
-  `recorrente` tinyint(1) NOT NULL COMMENT 'Se vai ser realizado mais vezes',
-  `data_hora` datetime NOT NULL COMMENT 'Dia e Horário do agendamento',
-  `servico_tem_porte_id` int(11) NOT NULL COMMENT 'Código do conjunto servico-porte correspondente',
-  `animal_id` int(11) NOT NULL COMMENT 'Animal que vai receber o serviço',
-  `servico_contratado_id` int(11) NOT NULL COMMENT 'O serviço agendado pertence à um contrato',
-  `executado` tinyint(1) NOT NULL COMMENT 'Controla se já foi executado ou não',
-  `pago` tinyint(1) NOT NULL COMMENT 'Controla se já foi realizado seu pagamento',
-  `observacao` varchar(200) DEFAULT NULL COMMENT 'Informações adicionais',
-  `data_hora_executado` datetime DEFAULT NULL COMMENT 'Momento em que foi executado',
-  `funcionario_executa_id` int(11) DEFAULT NULL COMMENT 'Funcionário que executou o serviço',
-  PRIMARY KEY (`id`),
-  KEY `fk_servico_agendado_animal1_idx` (`animal_id`),
-  KEY `fk_servico_agendado_servico_contratado1_idx` (`servico_contratado_id`),
-  KEY `fk_servico_agendado_pessoa_tem_funcao1_idx` (`funcionario_executa_id`),
-  KEY `fk_servico_agendado_servico_tem_porte1_idx` (`servico_tem_porte_id`),
-  CONSTRAINT `fk_servico_agendado_servico_tem_porte1` FOREIGN KEY (`servico_tem_porte_id`) REFERENCES `servico_tem_porte` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_servico_agendado_animal1` FOREIGN KEY (`animal_id`) REFERENCES `animal` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_servico_agendado_pessoa_tem_funcao1` FOREIGN KEY (`funcionario_executa_id`) REFERENCES `pessoa_tem_funcao` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_servico_agendado_servico_contratado1` FOREIGN KEY (`servico_contratado_id`) REFERENCES `servico_contratado` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `servico_agendado_BEFORE_INSERT`
-BEFORE INSERT ON `servico_agendado`
-FOR EACH ROW
-BEGIN
-		DECLARE numero_animais INT;
-        DECLARE tipo_pessoa VARCHAR(50);
-        DECLARE invalid INT;
-        DECLARE error_message VARCHAR(100);
-        
-        SET invalid = 0;
-		SET error_message = "";
-
-		IF (NEW.preco < 0) THEN
-			SET invalid = invalid + 1;
-            IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, ", preco");
-            ELSE
-				SET error_message = CONCAT(error_message, "preco");
-            END IF;
-		END IF;
-		
-        SELECT nome INTO tipo_pessoa FROM tipo_funcao WHERE id = NEW.funcionario_executa_id;
-		IF(tipo_pessoa <> 'funcionario') THEN
-			SET invalid = invalid + 1;
-			IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, ", pessoa");
-			ELSE
-				SET error_message = CONCAT(error_message, "pessoa");
-			END IF;
-		END IF;
-        
-        #SELECT COUNT(*) INTO numero_animais FROM animais_dia WHERE data_hora = NEW.data_hora;
-		#IF(numero_animais >= (SELECT quantidade_animais FROM configuracao)) THEN
-		#	SET invalid = invalid + 1;
-		#	IF (invalid > 1) THEN
-		#		SET error_message = CONCAT(error_message, ", data hora");
-		#	ELSE
-		#		SET error_message = CONCAT(error_message, "data hora");
-		#	END IF;
-		#END IF;
-        
-        IF (invalid > 0) THEN
-			IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, " inválidos!");
-			ELSE
-				SET error_message = CONCAT(error_message, " inválido!");
-			END IF;
-            SIGNAL SQLSTATE VALUE '45000'
-			SET MESSAGE_TEXT = error_message;
-		END IF;
-END */;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `servico_agendado_BEFORE_UPDATE`
-BEFORE UPDATE ON `servico_agendado`
-FOR EACH ROW
-BEGIN
-DECLARE numero_animais INT;
-        DECLARE tipo_pessoa VARCHAR(50);
-        DECLARE invalid INT;
-        DECLARE error_message VARCHAR(100);
-        
-        SET invalid = 0;
-		SET error_message = "";
-
-		IF (NEW.preco < 0) THEN
-			SET invalid = invalid + 1;
-            IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, ", preco");
-            ELSE
-				SET error_message = CONCAT(error_message, "preco");
-            END IF;
-		END IF;
-		
-        SELECT nome INTO tipo_pessoa FROM tipo_funcao WHERE id = NEW.funcionario_executa_id;
-		IF(tipo_pessoa <> 'funcionario') THEN
-			SET invalid = invalid + 1;
-			IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, ", pessoa");
-			ELSE
-				SET error_message = CONCAT(error_message, "pessoa");
-			END IF;
-		END IF;
-        
-        #SELECT COUNT(*) INTO numero_animais FROM animais_dia WHERE data_hora = NEW.data_hora;
-		#IF(numero_animais <= (SELECT quantidade_animais FROM configuracao)) THEN
-		#	SET invalid = invalid + 1;
-		#	IF (invalid > 1) THEN
-		#		SET error_message = CONCAT(error_message, ", data hora");
-		#	ELSE
-		#		SET error_message = CONCAT(error_message, "data hora");
-		#	END IF;
-		#END IF;
-        
-        IF (invalid > 0) THEN
-			IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, " inválidos!");
-			ELSE
-				SET error_message = CONCAT(error_message, " inválido!");
-			END IF;
-            SIGNAL SQLSTATE VALUE '45000'
-			SET MESSAGE_TEXT = error_message;
-		END IF;
-END */;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-
---
--- Table structure for table `servico_contratado`
---
-
-DROP TABLE IF EXISTS `servico_contratado`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `servico_contratado` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Código de identificação com autoincremento',
-  `pessoa_tem_funcao_id_funcionario` int(11) NOT NULL COMMENT 'Funcionário que realizou o agendamento',
-  `preco` decimal(10,2) NOT NULL COMMENT 'Valor total do contrato',
-  `data_hora` datetime NOT NULL COMMENT 'Controla o momento em que o contrato foi cadastrado',
-  `transacao_id` int(11) NOT NULL COMMENT 'Código da transação gerada por este contrato',
-  PRIMARY KEY (`id`),
-  KEY `fk_servico_contratado_pessoa_tem_funcao1_idx` (`pessoa_tem_funcao_id_funcionario`),
-  KEY `fk_servico_contratado_transacao1_idx` (`transacao_id`),
-  CONSTRAINT `fk_servico_contratado_transacao1` FOREIGN KEY (`transacao_id`) REFERENCES `transacao` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_servico_contratado_pessoa_tem_funcao1` FOREIGN KEY (`pessoa_tem_funcao_id_funcionario`) REFERENCES `pessoa_tem_funcao` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `servico_contratado_BEFORE_INSERT`
-BEFORE INSERT ON `servico_contratado`
-FOR EACH ROW
-BEGIN
-		DECLARE tipo_pessoa VARCHAR(50);
-        DECLARE invalid INT;
-        DECLARE error_message VARCHAR(100);
-        
-        SET invalid = 0;
-		SET error_message = "";
-
-		IF (NEW.preco < 0) THEN
-			SET invalid = invalid + 1;
-            IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, ", preco");
-            ELSE
-				SET error_message = CONCAT(error_message, "preco");
-            END IF;
-		END IF;
-        
-        IF (NEW.data_hora <> NOW()) THEN
-			SET invalid = invalid + 1;
-            IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, ", data hora");
-            ELSE
-				SET error_message = CONCAT(error_message, "data hora");
-            END IF;
-		END IF;
-		
-        SELECT nome INTO tipo_pessoa FROM tipo_funcao WHERE id = NEW.pessoa_tem_funcao_id_funcionario;
-		IF(tipo_pessoa <> 'funcionario') THEN
-			SET invalid = invalid + 1;
-			IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, ", pessoa");
-			ELSE
-				SET error_message = CONCAT(error_message, "pessoa");
-			END IF;
-		END IF;
-        
-        IF (invalid > 0) THEN
-			IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, " inválidos!");
-			ELSE
-				SET error_message = CONCAT(error_message, " inválido!");
-			END IF;
-            SIGNAL SQLSTATE VALUE '45000'
-			SET MESSAGE_TEXT = error_message;
-		END IF;
-END */;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `servico_contratado_BEFORE_UPDATE`
-BEFORE UPDATE ON `servico_contratado`
-FOR EACH ROW
-BEGIN
-DECLARE tipo_pessoa VARCHAR(50);
-        DECLARE invalid INT;
-        DECLARE error_message VARCHAR(100);
-        
-        SET invalid = 0;
-		SET error_message = "";
-
-		IF (NEW.preco < 0) THEN
-			SET invalid = invalid + 1;
-            IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, ", preco");
-            ELSE
-				SET error_message = CONCAT(error_message, "preco");
-            END IF;
-		END IF;
-        
-        IF (NEW.data_hora <> NOW()) THEN
-			SET invalid = invalid + 1;
-            IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, ", data hora");
-            ELSE
-				SET error_message = CONCAT(error_message, "data hora");
-            END IF;
-		END IF;
-		
-        SELECT nome INTO tipo_pessoa FROM tipo_funcao WHERE id = NEW.pessoa_tem_funcao_id_funcionario;
-		IF(tipo_pessoa <> 'funcionario') THEN
-			SET invalid = invalid + 1;
-			IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, ", pessoa");
-			ELSE
-				SET error_message = CONCAT(error_message, "pessoa");
-			END IF;
-		END IF;
-        
-        IF (invalid > 0) THEN
-			IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, " inválidos!");
-			ELSE
-				SET error_message = CONCAT(error_message, " inválido!");
-			END IF;
-            SIGNAL SQLSTATE VALUE '45000'
-			SET MESSAGE_TEXT = error_message;
-		END IF;
-END */;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-
---
--- Table structure for table `servico_tem_porte`
---
-
-DROP TABLE IF EXISTS `servico_tem_porte`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `servico_tem_porte` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Código de identificação com autoincremento',
-  `servico_id` int(11) NOT NULL COMMENT 'Código do serviço relacionado',
-  `porte_id` int(11) NOT NULL COMMENT 'Código do porte relacionado',
-  `preco` varchar(45) NOT NULL COMMENT 'Preço do serviço para aquele porte',
-  PRIMARY KEY (`id`),
-  KEY `fk_servico_tem_porte_servico_id_idx` (`servico_id`),
-  KEY `fk_servico_tem_porte_porte_id_idx` (`porte_id`),
-  CONSTRAINT `fk_servico_tem_porte_porte` FOREIGN KEY (`porte_id`) REFERENCES `porte` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_servico_tem_porte_servico` FOREIGN KEY (`servico_id`) REFERENCES `servico` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=71 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `servico_tem_porte_BEFORE_INSERT` BEFORE INSERT ON `servico_tem_porte` FOR EACH ROW
-BEGIN
-        DECLARE invalid INT;
-        DECLARE error_message VARCHAR(100);
-        
-        SET invalid = 0;
-		SET error_message = "";
-
-		IF (NEW.preco < 0) THEN
-			SET invalid = invalid + 1;
-            IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, ", preco");
-            ELSE
-				SET error_message = CONCAT(error_message, "preco");
-            END IF;
-		END IF;
-        
-        IF (invalid > 0) THEN
-			IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, " inválidos!");
-			ELSE
-				SET error_message = CONCAT(error_message, " inválido!");
-			END IF;
-            SIGNAL SQLSTATE VALUE '45000'
-			SET MESSAGE_TEXT = error_message;
-		END IF;
-END */;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `servico_tem_porte_BEFORE_UPDATE` BEFORE UPDATE ON `servico_tem_porte` FOR EACH ROW
-BEGIN
-	DECLARE invalid INT;
-        DECLARE error_message VARCHAR(100);
-        
-        SET invalid = 0;
-		SET error_message = "";
-
-		IF (NEW.preco < 0) THEN
-			SET invalid = invalid + 1;
-            IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, ", preco");
-            ELSE
-				SET error_message = CONCAT(error_message, "preco");
-            END IF;
-		END IF;
-        
-        IF (invalid > 0) THEN
-			IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, " inválidos!");
-			ELSE
-				SET error_message = CONCAT(error_message, " inválido!");
-			END IF;
-            SIGNAL SQLSTATE VALUE '45000'
-			SET MESSAGE_TEXT = error_message;
-		END IF;
-END */;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-
---
--- Table structure for table `telefone`
---
-
-DROP TABLE IF EXISTS `telefone`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `telefone` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Código de identificação com autoincremento',
-  `numero` varchar(9) NOT NULL COMMENT 'Número do telefone. Somente dígitos. Tamanho máximo ''9'' permite números de outros estados',
-  `codigo_area` varchar(3) NOT NULL COMMENT 'Código de área da região',
-  `codigo_pais` varchar(3) NOT NULL COMMENT 'Código do país',
-  `pessoa_id` int(11) NOT NULL COMMENT 'Telefone pertence à uma pessoa',
-  PRIMARY KEY (`id`),
-  KEY `fk_telefone_pessoa1_idx` (`pessoa_id`),
-  CONSTRAINT `fk_telefone_pessoa1` FOREIGN KEY (`pessoa_id`) REFERENCES `pessoa` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `telefone_BEFORE_INSERT` BEFORE INSERT ON `telefone` FOR EACH ROW
-BEGIN
-	DECLARE invalid INT;
-	DECLARE error_message VARCHAR(100);
-	
-    SET invalid = 0;
-	SET error_message = "";
-
-    IF NOT (SELECT pais REGEXP '^0[0-9]{2}$') THEN
-		SET invalid = invalid + 1;
-            IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, ", codigo pais");
-            ELSE
-				SET error_message = CONCAT(error_message, "codigo pais");
-            END IF;
-	END IF;
-    
-    IF NOT (SELECT area REGEXP '^0[0-9]{2}$') THEN
-		SET invalid = invalid + 1;
-            IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, ", codigo area");
-            ELSE
-				SET error_message = CONCAT(error_message, "codigo area");
-            END IF;
-	END IF;
-    
-    IF NOT (SELECT numero REGEXP '^[0-9]{8,9}$') THEN
-		SET invalid = invalid + 1;
-            IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, ", numero");
-            ELSE
-				SET error_message = CONCAT(error_message, "numero");
-            END IF;
-	END IF;
-    
-    IF (invalid > 0) THEN
-			IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, " inválidos!");
-			ELSE
-				SET error_message = CONCAT(error_message, " inválido!");
-			END IF;
-            SIGNAL SQLSTATE VALUE '45000'
-			SET MESSAGE_TEXT = error_message;
-		END IF;
-END */;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `telefone_BEFORE_UPDATE` BEFORE UPDATE ON `telefone` FOR EACH ROW
-BEGIN
-	DECLARE invalid INT;
-	DECLARE error_message VARCHAR(100);
-	
-    SET invalid = 0;
-	SET error_message = "";
-
-    IF NOT (SELECT pais REGEXP '^0[0-9]{2}$') THEN
-		SET invalid = invalid + 1;
-            IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, ", codigo pais");
-            ELSE
-				SET error_message = CONCAT(error_message, "codigo pais");
-            END IF;
-	END IF;
-    
-    IF NOT (SELECT area REGEXP '^0[0-9]{2}$') THEN
-		SET invalid = invalid + 1;
-            IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, ", codigo area");
-            ELSE
-				SET error_message = CONCAT(error_message, "codigo area");
-            END IF;
-	END IF;
-    
-    IF NOT (SELECT numero REGEXP '^[0-9]{8,9}$') THEN
-		SET invalid = invalid + 1;
-            IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, ", numero");
-            ELSE
-				SET error_message = CONCAT(error_message, "numero");
-            END IF;
-	END IF;
-    
-    IF (invalid > 0) THEN
-			IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, " inválidos!");
-			ELSE
-				SET error_message = CONCAT(error_message, " inválido!");
-			END IF;
-            SIGNAL SQLSTATE VALUE '45000'
-			SET MESSAGE_TEXT = error_message;
-		END IF;
-END */;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-
---
--- Temporary view structure for view `tipo_funcao`
---
-
-DROP TABLE IF EXISTS `tipo_funcao`;
-/*!50001 DROP VIEW IF EXISTS `tipo_funcao`*/;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
-/*!50001 CREATE VIEW `tipo_funcao` AS SELECT 
- 1 AS `nome`,
- 1 AS `id`*/;
-SET character_set_client = @saved_cs_client;
-
---
--- Temporary view structure for view `tipo_servico`
---
-
-DROP TABLE IF EXISTS `tipo_servico`;
-/*!50001 DROP VIEW IF EXISTS `tipo_servico`*/;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
-/*!50001 CREATE VIEW `tipo_servico` AS SELECT 
- 1 AS `nome`,
- 1 AS `id`*/;
-SET character_set_client = @saved_cs_client;
-
---
--- Table structure for table `transacao`
---
-
-DROP TABLE IF EXISTS `transacao`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `transacao` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Código de identificação com autoincremento',
-  `tipo` char(1) NOT NULL COMMENT 'Se é receita ou despesa (''C'' ou ''D'')',
-  `data_hora` datetime NOT NULL COMMENT 'Controla o momento em que a transação foi cadastrada\n',
-  `valor` decimal(10,2) NOT NULL COMMENT 'Valor em reais',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `transacao_BEFORE_INSERT`
-BEFORE INSERT ON `transacao`
-FOR EACH ROW
-BEGIN
-	DECLARE invalid INT;
-	DECLARE error_message VARCHAR(100);
-        
-	SET invalid = 0;
-	SET error_message = "";
-    
-    IF(NEW.tipo <> 'C' AND NEW.tipo <> 'D') THEN
-		SET invalid = invalid + 1;
-		IF (invalid > 1) THEN
-			SET error_message = CONCAT(error_message, ", tipo");
-		ELSE
-			SET error_message = CONCAT(error_message, "tipo");
-		END IF;
-    END IF;
-    
-    IF(NEW.valor < 0) THEN
-		SET invalid = invalid + 1;
-		IF (invalid > 1) THEN
-			SET error_message = CONCAT(error_message, ", valor");
-		ELSE
-			SET error_message = CONCAT(error_message, "valor");
-		END IF;
-    END IF;
-    
-    IF(NEW.data_hora <> NOW()) THEN
-		SET invalid = invalid + 1;
-		IF (invalid > 1) THEN
-			SET error_message = CONCAT(error_message, ", data hora");
-		ELSE
-			SET error_message = CONCAT(error_message, "data hora");
-		END IF;
-    END IF;
-    
-    IF (invalid > 0) THEN
-			IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, " inválidos!");
-			ELSE
-				SET error_message = CONCAT(error_message, " inválido!");
-			END IF;
-            SIGNAL SQLSTATE VALUE '45000'
-			SET MESSAGE_TEXT = error_message;
-		END IF;
-END */;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `transacao_BEFORE_UPDATE`
-BEFORE UPDATE ON `transacao`
-FOR EACH ROW
-BEGIN
-DECLARE invalid INT;
-	DECLARE error_message VARCHAR(100);
-        
-	SET invalid = 0;
-	SET error_message = "";
-    
-    IF(NEW.tipo <> 'C' AND NEW.tipo <> 'D') THEN
-		SET invalid = invalid + 1;
-		IF (invalid > 1) THEN
-			SET error_message = CONCAT(error_message, ", tipo");
-		ELSE
-			SET error_message = CONCAT(error_message, "tipo");
-		END IF;
-    END IF;
-    
-    IF(NEW.valor < 0) THEN
-		SET invalid = invalid + 1;
-		IF (invalid > 1) THEN
-			SET error_message = CONCAT(error_message, ", valor");
-		ELSE
-			SET error_message = CONCAT(error_message, "valor");
-		END IF;
-    END IF;
-    
-    IF (invalid > 0) THEN
-			IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, " inválidos!");
-			ELSE
-				SET error_message = CONCAT(error_message, " inválido!");
-			END IF;
-            SIGNAL SQLSTATE VALUE '45000'
-			SET MESSAGE_TEXT = error_message;
-		END IF;
-END */;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-
---
--- Table structure for table `vacina`
---
-
-DROP TABLE IF EXISTS `vacina`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `vacina` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Código de identificação com autoincremento',
-  `nome` varchar(50) NOT NULL COMMENT 'Nome da vacina',
-  `dose` int(11) NOT NULL COMMENT 'Quantidade da dose em mililitros',
-  `intervalo` int(11) NOT NULL COMMENT 'Número de dias entre uma aplicação e outra',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `vacina_BEFORE_INSERT`
-BEFORE INSERT ON `vacina`
-FOR EACH ROW
-BEGIN
-	DECLARE invalid INT;
-	DECLARE error_message VARCHAR(100);
-        
-	SET invalid = 0;
-	SET error_message = "";
-    
-    IF(NEW.dose <= 0) THEN
-		SET invalid = invalid + 1;
-		IF (invalid > 1) THEN
-			SET error_message = CONCAT(error_message, ", dose");
-		ELSE
-			SET error_message = CONCAT(error_message, "dose");
-		END IF;
-    END IF;
-    
-    IF(NEW.intervalo <= 0) THEN
-		SET invalid = invalid + 1;
-		IF (invalid > 1) THEN
-			SET error_message = CONCAT(error_message, ", intervalo");
-		ELSE
-			SET error_message = CONCAT(error_message, "intervalo");
-		END IF;
-    END IF;
-    
-    IF (invalid > 0) THEN
-			IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, " inválidos!");
-			ELSE
-				SET error_message = CONCAT(error_message, " inválido!");
-			END IF;
-            SIGNAL SQLSTATE VALUE '45000'
-			SET MESSAGE_TEXT = error_message;
-		END IF;
-END */;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `vacina_BEFORE_UPDATE` BEFORE UPDATE ON `vacina` FOR EACH ROW
-BEGIN
-	DECLARE invalid INT;
-	DECLARE error_message VARCHAR(100);
-        
-	SET invalid = 0;
-	SET error_message = "";
-    
-    IF(NEW.dose <= 0) THEN
-		SET invalid = invalid + 1;
-		IF (invalid > 1) THEN
-			SET error_message = CONCAT(error_message, ", dose");
-		ELSE
-			SET error_message = CONCAT(error_message, "dose");
-		END IF;
-    END IF;
-    
-    IF(NEW.intervalo <= 0) THEN
-		SET invalid = invalid + 1;
-		IF (invalid > 1) THEN
-			SET error_message = CONCAT(error_message, ", intervalo");
-		ELSE
-			SET error_message = CONCAT(error_message, "intervalo");
-		END IF;
-    END IF;
-    
-    IF (invalid > 0) THEN
-			IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, " inválidos!");
-			ELSE
-				SET error_message = CONCAT(error_message, " inválido!");
-			END IF;
-            SIGNAL SQLSTATE VALUE '45000'
-			SET MESSAGE_TEXT = error_message;
-		END IF;
-END */;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-
---
--- Table structure for table `vacina_tem_lote`
---
-
-DROP TABLE IF EXISTS `vacina_tem_lote`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `vacina_tem_lote` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Código de identificação com autoincremento',
-  `vacina_id` int(11) NOT NULL COMMENT 'Código da vacina',
-  `lote_id` int(11) NOT NULL COMMENT 'Código do lote',
-  PRIMARY KEY (`id`),
-  KEY `fk_vacina1_idx` (`vacina_id`),
-  KEY `fk_lote1_idx` (`lote_id`),
-  CONSTRAINT `fk_vacina1` FOREIGN KEY (`vacina_id`) REFERENCES `vacina` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_lote1` FOREIGN KEY (`lote_id`) REFERENCES `lote` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `vacina_tem_lote_BEFORE_INSERT` BEFORE INSERT ON `vacina_tem_lote` FOR EACH ROW
-BEGIN
-	DECLARE p_vencimento DATE;
-	DECLARE invalid INT;
-	DECLARE error_message VARCHAR(100);
-        
-	SET invalid = 0;
-	SET error_message = "";
-    
-    SELECT vencimento INTO p_vencimento FROM lote WHERE lote.id = NEW.lote_id;
-    
-    IF(p_vencimento < NOW()) THEN
-		SET invalid = invalid + 1;
-		IF (invalid > 1) THEN
-			SET error_message = CONCAT(error_message, ", lote vencido");
-		ELSE
-			SET error_message = CONCAT(error_message, "lote vencido");
-		END IF;
-    END IF;
-    
-    IF (invalid > 0) THEN
-            SIGNAL SQLSTATE VALUE '45000'
-			SET MESSAGE_TEXT = error_message;
-	END IF;
-END */;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `vacina_tem_lote_BEFORE_UPDATE` BEFORE UPDATE ON `vacina_tem_lote` FOR EACH ROW
-BEGIN
-	DECLARE p_vencimento DATE;
-	DECLARE invalid INT;
-	DECLARE error_message VARCHAR(100);
-        
-	SET invalid = 0;
-	SET error_message = "";
-    
-    SELECT vencimento INTO p_vencimento FROM lote WHERE lote.id = NEW.lote_id;
-    
-    IF(p_vencimento < NOW()) THEN
-		SET invalid = invalid + 1;
-		IF (invalid > 1) THEN
-			SET error_message = CONCAT(error_message, ", lote vencido");
-		ELSE
-			SET error_message = CONCAT(error_message, "lote vencido");
-		END IF;
-    END IF;
-    
-    IF (invalid > 0) THEN
-            SIGNAL SQLSTATE VALUE '45000'
-			SET MESSAGE_TEXT = error_message;
-	END IF;
-END */;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-
---
--- Dumping events for database 'pet_shop'
---
-
 --
 -- Dumping routines for database 'pet_shop'
 --
@@ -4068,6 +285,3814 @@ BEGIN
 		RETURN TRUE;
 	END IF;
 END ;;
+
+--
+-- Table structure for table `pais`
+--
+DROP TABLE IF EXISTS `pais`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `pais` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Código de identificação com autoincremento',
+  `nome` varchar(50) NOT NULL COMMENT 'Nome do país',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `pais_BEFORE_INSERT`
+BEFORE INSERT ON `pais`
+FOR EACH ROW
+BEGIN
+	DECLARE invalid INT;
+	DECLARE error_message VARCHAR(100);
+        
+	SET invalid = 0;
+	SET error_message = "";
+    
+	IF NOT nome_valido(NEW.nome) THEN
+		SET invalid = invalid + 1;
+		IF (invalid > 1) THEN
+			SET error_message = CONCAT(error_message, ", nome");
+		ELSE
+			SET error_message = CONCAT(error_message, "nome");
+		END IF;
+    END IF;
+    
+    IF (invalid > 0) THEN
+			IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, " inválidos!");
+			ELSE
+				SET error_message = CONCAT(error_message, " inválido!");
+			END IF;
+            SIGNAL SQLSTATE VALUE '45000'
+			SET MESSAGE_TEXT = error_message;
+		END IF;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `pais_BEFORE_UPDATE`
+BEFORE UPDATE ON `pais`
+FOR EACH ROW
+BEGIN
+	DECLARE invalid INT;
+	DECLARE error_message VARCHAR(100);
+        
+	SET invalid = 0;
+	SET error_message = "";
+    
+	IF NOT nome_valido(NEW.nome) THEN
+		SET invalid = invalid + 1;
+		IF (invalid > 1) THEN
+			SET error_message = CONCAT(error_message, ", nome");
+		ELSE
+			SET error_message = CONCAT(error_message, "nome");
+		END IF;
+    END IF;
+    
+    IF (invalid > 0) THEN
+			IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, " inválidos!");
+			ELSE
+				SET error_message = CONCAT(error_message, " inválido!");
+			END IF;
+            SIGNAL SQLSTATE VALUE '45000'
+			SET MESSAGE_TEXT = error_message;
+		END IF;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+
+--
+-- Table structure for table `estado`
+--
+
+DROP TABLE IF EXISTS `estado`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `estado` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Código de identificação com autoincremento',
+  `nome` varchar(50) NOT NULL COMMENT 'Nome do estado',
+  `uf` varchar(2) NOT NULL COMMENT 'Unidade Federativa',
+  `pais_id` int(11) NOT NULL COMMENT 'País à qual pertence',
+  PRIMARY KEY (`id`),
+  KEY `fk_estado_pais1_idx` (`pais_id`),
+  CONSTRAINT `fk_estado_pais1` FOREIGN KEY (`pais_id`) REFERENCES `pais` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `estado_BEFORE_INSERT`
+BEFORE INSERT ON `estado`
+FOR EACH ROW
+BEGIN
+	DECLARE invalid INT;
+	DECLARE error_message VARCHAR(100);
+        
+	SET invalid = 0;
+	SET error_message = "";
+    
+	IF NOT nome_valido(NEW.nome) THEN
+		SET invalid = invalid + 1;
+		IF (invalid > 1) THEN
+			SET error_message = CONCAT(error_message, ", nome");
+		ELSE
+			SET error_message = CONCAT(error_message, "nome");
+		END IF;
+    END IF;
+    
+    IF (invalid > 0) THEN
+			IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, " inválidos!");
+			ELSE
+				SET error_message = CONCAT(error_message, " inválido!");
+			END IF;
+            SIGNAL SQLSTATE VALUE '45000'
+			SET MESSAGE_TEXT = error_message;
+		END IF;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `estado_BEFORE_UPDATE`
+BEFORE UPDATE ON `estado`
+FOR EACH ROW
+BEGIN
+DECLARE invalid INT;
+	DECLARE error_message VARCHAR(100);
+        
+	SET invalid = 0;
+	SET error_message = "";
+    
+	IF NOT nome_valido(NEW.nome) THEN
+		SET invalid = invalid + 1;
+		IF (invalid > 1) THEN
+			SET error_message = CONCAT(error_message, ", nome");
+		ELSE
+			SET error_message = CONCAT(error_message, "nome");
+		END IF;
+    END IF;
+    
+    IF (invalid > 0) THEN
+			IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, " inválidos!");
+			ELSE
+				SET error_message = CONCAT(error_message, " inválido!");
+			END IF;
+            SIGNAL SQLSTATE VALUE '45000'
+			SET MESSAGE_TEXT = error_message;
+		END IF;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+
+
+--
+-- Table structure for table `cidade`
+--
+
+DROP TABLE IF EXISTS `cidade`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `cidade` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Código de identificação com autoincremento',
+  `nome` varchar(100) NOT NULL COMMENT 'Nome da cidade',
+  `estado_id` int(11) NOT NULL COMMENT 'Estado à qual pertence',
+  PRIMARY KEY (`id`),
+  KEY `fk_cidade_estado1_idx` (`estado_id`),
+  CONSTRAINT `fk_cidade_estado1` FOREIGN KEY (`estado_id`) REFERENCES `estado` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=5565 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `cidade_BEFORE_INSERT`
+BEFORE INSERT ON `cidade`
+FOR EACH ROW
+BEGIN
+
+	DECLARE invalid INT;
+	DECLARE error_message VARCHAR(100);
+        
+	SET invalid = 0;
+	SET error_message = "";
+    
+	IF NOT nome_valido(NEW.nome) THEN
+		SET invalid = invalid + 1;
+		IF (invalid > 1) THEN
+			SET error_message = CONCAT(error_message, ", nome");
+		ELSE
+			SET error_message = CONCAT(error_message, "nome");
+		END IF;
+    END IF;
+    
+    IF (invalid > 0) THEN
+			IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, " inválidos!");
+			ELSE
+				SET error_message = CONCAT(error_message, " inválido!");
+			END IF;
+            SIGNAL SQLSTATE VALUE '45000'
+			SET MESSAGE_TEXT = error_message;
+		END IF;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `cidade_BEFORE_UPDATE`
+BEFORE UPDATE ON `cidade`
+FOR EACH ROW
+BEGIN
+DECLARE invalid INT;
+	DECLARE error_message VARCHAR(100);
+        
+	SET invalid = 0;
+	SET error_message = "";
+    
+	IF NOT nome_valido(NEW.nome) THEN
+		SET invalid = invalid + 1;
+		IF (invalid > 1) THEN
+			SET error_message = CONCAT(error_message, ", nome");
+		ELSE
+			SET error_message = CONCAT(error_message, "nome");
+		END IF;
+    END IF;
+    
+    IF (invalid > 0) THEN
+			IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, " inválidos!");
+			ELSE
+				SET error_message = CONCAT(error_message, " inválido!");
+			END IF;
+            SIGNAL SQLSTATE VALUE '45000'
+			SET MESSAGE_TEXT = error_message;
+		END IF;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+
+--
+-- Table structure for table `pessoa`
+--
+
+DROP TABLE IF EXISTS `pessoa`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `pessoa` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Código de identificação com autoincremento',
+  `nome` varchar(100) NOT NULL COMMENT 'Nome da pessoa',
+  `data_hora_cadastro` datetime NOT NULL COMMENT 'Controla o momento em que o usuário foi cadastrado',
+  `email` varchar(50) NOT NULL COMMENT 'Email de contato, que deve ser válidado',
+  `registro` varchar(14) NOT NULL COMMENT 'Número de registro (CPF ou CNPJ), sem máscaras e apenas dígitos',
+  `logradouro` varchar(100) NOT NULL COMMENT 'Logradouro em que a pessoa mora (Ex: Rua, Avenida)',
+  `numero` int(11) NOT NULL COMMENT 'Número do local presente no logradouro',
+  `complemento` varchar(50) DEFAULT NULL COMMENT 'Complemento do endereço',
+  `cep` varchar(8) NOT NULL COMMENT 'CEP do endereço',
+  `ponto_de_referencia` varchar(200) DEFAULT NULL COMMENT 'Ponto de referência para ajudar na busca do endereço',
+  `cidade_id` int(11) NOT NULL COMMENT 'Códio da cidade a qual o endereço pertence',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `email_UNIQUE` (`email`),
+  UNIQUE KEY `registro_UNIQUE` (`registro`),
+  UNIQUE KEY `id_UNIQUE` (`id`),
+  KEY `fk_pessoa_cidade1_idx` (`cidade_id`),
+  CONSTRAINT `fk_pessoa_cidade1` FOREIGN KEY (`cidade_id`) REFERENCES `cidade` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `pessoa_BEFORE_INSERT`
+BEFORE INSERT ON `pessoa`
+FOR EACH ROW
+BEGIN
+		
+        DECLARE invalid INT;
+        DECLARE error_message VARCHAR(100);
+        
+        SET invalid = 0;
+		SET error_message = "";
+
+		IF NOT nome_valido(NEW.nome) THEN
+			SET invalid = invalid + 1;
+            IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, ", nome");
+            ELSE
+				SET error_message = CONCAT(error_message, "nome");
+            END IF;
+		END IF;
+        
+        IF (NEW.data_hora_cadastro <> NOW()) THEN
+			SET invalid = invalid + 1;
+            IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, ", data hora cadastro");
+            ELSE
+				SET error_message = CONCAT(error_message, "data hora cadastro");
+            END IF;
+		END IF;
+		
+		IF NOT email_valido(NEW.email) THEN
+			SET invalid = invalid + 1;
+            IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, ", email");
+            ELSE
+				SET error_message = CONCAT(error_message, "email");
+            END IF;
+		END IF;
+        
+        IF NOT (cpf_valido(NEW.registro) OR cnpj_valido(NEW.registro)) THEN
+			SET invalid = invalid + 1;
+            IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, ", registro");
+            ELSE
+				SET error_message = CONCAT(error_message, "registro");
+            END IF;
+		END IF;
+        
+        IF (invalid > 0) THEN
+			IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, " inválidos!");
+			ELSE
+				SET error_message = CONCAT(error_message, " inválido!");
+			END IF;
+            SIGNAL SQLSTATE VALUE '45000'
+			SET MESSAGE_TEXT = error_message;
+		END IF;
+        
+	END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `pessoa_BEFORE_UPDATE`
+BEFORE UPDATE ON `pessoa`
+FOR EACH ROW
+BEGIN
+	
+        DECLARE invalid INT;
+        DECLARE error_message VARCHAR(100);
+        
+        SET invalid = 0;
+		SET error_message = "";
+
+		IF NOT nome_valido(NEW.nome) THEN
+			SET invalid = invalid + 1;
+            IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, ", nome");
+            ELSE
+				SET error_message = CONCAT(error_message, "nome");
+            END IF;
+		END IF;
+        
+		IF NOT email_valido(NEW.email) THEN
+			SET invalid = invalid + 1;
+            IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, ", email");
+            ELSE
+				SET error_message = CONCAT(error_message, "email");
+            END IF;
+		END IF;
+        
+        IF NOT (cpf_valido(NEW.registro) OR cnpj_valido(NEW.registro)) THEN
+			SET invalid = invalid + 1;
+            IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, ", registro");
+            ELSE
+				SET error_message = CONCAT(error_message, "registro");
+            END IF;
+		END IF;
+        
+        IF (invalid > 0) THEN
+			IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, " inválidos!");
+			ELSE
+				SET error_message = CONCAT(error_message, " inválido!");
+			END IF;
+            SIGNAL SQLSTATE VALUE '45000'
+			SET MESSAGE_TEXT = error_message;
+		END IF;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+
+--
+-- Table structure for table `telefone`
+--
+
+DROP TABLE IF EXISTS `telefone`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `telefone` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Código de identificação com autoincremento',
+  `numero` varchar(9) NOT NULL COMMENT 'Número do telefone. Somente dígitos. Tamanho máximo ''9'' permite números de outros estados',
+  `codigo_area` varchar(3) NOT NULL COMMENT 'Código de área da região',
+  `codigo_pais` varchar(3) NOT NULL COMMENT 'Código do país',
+  `pessoa_id` int(11) NOT NULL COMMENT 'Telefone pertence à uma pessoa',
+  PRIMARY KEY (`id`),
+  KEY `fk_telefone_pessoa1_idx` (`pessoa_id`),
+  CONSTRAINT `fk_telefone_pessoa1` FOREIGN KEY (`pessoa_id`) REFERENCES `pessoa` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `telefone_BEFORE_INSERT` BEFORE INSERT ON `telefone` FOR EACH ROW
+BEGIN
+	DECLARE invalid INT;
+	DECLARE error_message VARCHAR(100);
+	
+    SET invalid = 0;
+	SET error_message = "";
+
+    IF NOT (SELECT pais REGEXP '^0[0-9]{2}$') THEN
+		SET invalid = invalid + 1;
+            IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, ", codigo pais");
+            ELSE
+				SET error_message = CONCAT(error_message, "codigo pais");
+            END IF;
+	END IF;
+    
+    IF NOT (SELECT area REGEXP '^0[0-9]{2}$') THEN
+		SET invalid = invalid + 1;
+            IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, ", codigo area");
+            ELSE
+				SET error_message = CONCAT(error_message, "codigo area");
+            END IF;
+	END IF;
+    
+    IF NOT (SELECT numero REGEXP '^[0-9]{8,9}$') THEN
+		SET invalid = invalid + 1;
+            IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, ", numero");
+            ELSE
+				SET error_message = CONCAT(error_message, "numero");
+            END IF;
+	END IF;
+    
+    IF (invalid > 0) THEN
+			IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, " inválidos!");
+			ELSE
+				SET error_message = CONCAT(error_message, " inválido!");
+			END IF;
+            SIGNAL SQLSTATE VALUE '45000'
+			SET MESSAGE_TEXT = error_message;
+		END IF;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `telefone_BEFORE_UPDATE` BEFORE UPDATE ON `telefone` FOR EACH ROW
+BEGIN
+	DECLARE invalid INT;
+	DECLARE error_message VARCHAR(100);
+	
+    SET invalid = 0;
+	SET error_message = "";
+
+    IF NOT (SELECT pais REGEXP '^0[0-9]{2}$') THEN
+		SET invalid = invalid + 1;
+            IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, ", codigo pais");
+            ELSE
+				SET error_message = CONCAT(error_message, "codigo pais");
+            END IF;
+	END IF;
+    
+    IF NOT (SELECT area REGEXP '^0[0-9]{2}$') THEN
+		SET invalid = invalid + 1;
+            IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, ", codigo area");
+            ELSE
+				SET error_message = CONCAT(error_message, "codigo area");
+            END IF;
+	END IF;
+    
+    IF NOT (SELECT numero REGEXP '^[0-9]{8,9}$') THEN
+		SET invalid = invalid + 1;
+            IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, ", numero");
+            ELSE
+				SET error_message = CONCAT(error_message, "numero");
+            END IF;
+	END IF;
+    
+    IF (invalid > 0) THEN
+			IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, " inválidos!");
+			ELSE
+				SET error_message = CONCAT(error_message, " inválido!");
+			END IF;
+            SIGNAL SQLSTATE VALUE '45000'
+			SET MESSAGE_TEXT = error_message;
+		END IF;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+
+--
+-- Table structure for table `rede_social`
+--
+
+DROP TABLE IF EXISTS `rede_social`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `rede_social` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Código de identificação com autoincremento',
+  `nome` varchar(50) NOT NULL COMMENT 'Nome da rede social',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `rede_social_BEFORE_INSERT` BEFORE INSERT ON `rede_social` FOR EACH ROW
+BEGIN
+	DECLARE invalid INT;
+	DECLARE error_message VARCHAR(100);
+        
+	SET invalid = 0;
+	SET error_message = "";
+    
+	IF NOT nome_valido(NEW.nome) THEN
+		SET invalid = invalid + 1;
+		IF (invalid > 1) THEN
+			SET error_message = CONCAT(error_message, ", nome");
+		ELSE
+			SET error_message = CONCAT(error_message, "nome");
+		END IF;
+    END IF;
+    
+    IF (invalid > 0) THEN
+			IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, " inválidos!");
+			ELSE
+				SET error_message = CONCAT(error_message, " inválido!");
+			END IF;
+            SIGNAL SQLSTATE VALUE '45000'
+			SET MESSAGE_TEXT = error_message;
+		END IF;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `rede_social_BEFORE_UPDATE` BEFORE UPDATE ON `rede_social` FOR EACH ROW
+BEGIN
+	DECLARE invalid INT;
+	DECLARE error_message VARCHAR(100);
+        
+	SET invalid = 0;
+	SET error_message = "";
+    
+	IF NOT nome_valido(NEW.nome) THEN
+		SET invalid = invalid + 1;
+		IF (invalid > 1) THEN
+			SET error_message = CONCAT(error_message, ", nome");
+		ELSE
+			SET error_message = CONCAT(error_message, "nome");
+		END IF;
+    END IF;
+    
+    IF (invalid > 0) THEN
+			IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, " inválidos!");
+			ELSE
+				SET error_message = CONCAT(error_message, " inválido!");
+			END IF;
+            SIGNAL SQLSTATE VALUE '45000'
+			SET MESSAGE_TEXT = error_message;
+		END IF;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+
+--
+-- Table structure for table `pessoa_tem_rede_social`
+--
+
+DROP TABLE IF EXISTS `pessoa_tem_rede_social`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `pessoa_tem_rede_social` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Código de identificação com autoincremento',
+  `perfil` varchar(200) NOT NULL COMMENT 'Como encontrar a pessoa na rede social',
+  `rede_social_id` int(11) NOT NULL COMMENT 'Rede social desta relação',
+  `pessoa_id` int(11) NOT NULL COMMENT 'Pessoa desta relação',
+  PRIMARY KEY (`id`),
+  KEY `fk_pessoa_tem_rede_social_rede_social1_idx` (`rede_social_id`),
+  KEY `fk_pessoa_tem_rede_social_pessoa1_idx` (`pessoa_id`),
+  CONSTRAINT `fk_pessoa_tem_rede_social_pessoa1` FOREIGN KEY (`pessoa_id`) REFERENCES `pessoa` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_pessoa_tem_rede_social_rede_social1` FOREIGN KEY (`rede_social_id`) REFERENCES `rede_social` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+
+--
+-- Table structure for table `lembrete`
+--
+
+DROP TABLE IF EXISTS `lembrete`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `lembrete` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Código de identificação com autoincremento',
+  `descricao` varchar(200) NOT NULL COMMENT 'Descrição do lembrete',
+  `data_hora` datetime NOT NULL COMMENT 'Data e Hora da atividade',
+  `executado` varchar(45) NOT NULL COMMENT 'Controle se o lembrete já foi executado',
+  `pessoa_id` int(9) NOT NULL COMMENT 'Pessao a qual este lembrete se destina',
+  PRIMARY KEY (`id`),
+  KEY `fk_lembrete_pessoa1_idx` (`pessoa_id`),
+  CONSTRAINT `fk_lembrete_pessoa1` FOREIGN KEY (`pessoa_id`) REFERENCES `pessoa` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `lembrete_BEFORE_INSERT` BEFORE INSERT ON `lembrete` FOR EACH ROW
+BEGIN
+	DECLARE invalid INT;
+        DECLARE error_message VARCHAR(100);
+        
+        SET invalid = 0;
+		SET error_message = "";
+        
+        IF (NEW.data_hora < NOW()) THEN
+			SET invalid = invalid + 1;
+            IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, ", data Hora");
+            ELSE
+				SET error_message = CONCAT(error_message, "data Hora");
+            END IF;
+		END IF;
+        
+        IF (invalid > 0) THEN
+			IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, " inválidos!");
+			ELSE
+				SET error_message = CONCAT(error_message, " inválido!");
+			END IF;
+            SIGNAL SQLSTATE VALUE '45000'
+			SET MESSAGE_TEXT = error_message;
+		END IF;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `lembrete_BEFORE_UPDATE` BEFORE UPDATE ON `lembrete` FOR EACH ROW
+BEGIN
+	DECLARE invalid INT;
+        DECLARE error_message VARCHAR(100);
+        
+        SET invalid = 0;
+		SET error_message = "";
+        
+        IF (invalid > 0) THEN
+			IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, " inválidos!");
+			ELSE
+				SET error_message = CONCAT(error_message, " inválido!");
+			END IF;
+            SIGNAL SQLSTATE VALUE '45000'
+			SET MESSAGE_TEXT = error_message;
+		END IF;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+
+
+--
+-- Table structure for table `funcao`
+--
+
+DROP TABLE IF EXISTS `funcao`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `funcao` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Código de identificação com autoincremento',
+  `nome` varchar(50) NOT NULL COMMENT 'Função da pessoa no sistema. Somente o administrador pode alterar\n',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `funcao_BEFORE_INSERT`
+BEFORE INSERT ON `funcao`
+FOR EACH ROW
+BEGIN
+	DECLARE invalid INT;
+	DECLARE error_message VARCHAR(100);
+        
+	SET invalid = 0;
+	SET error_message = "";
+
+	IF NOT nome_valido(NEW.nome) THEN
+		SET invalid = invalid + 1;
+		IF (invalid > 1) THEN
+			SET error_message = CONCAT(error_message, ", nome");
+		ELSE
+			SET error_message = CONCAT(error_message, "nome");
+		END IF;
+	END IF;
+	
+	IF (invalid > 0) THEN
+		IF (invalid > 1) THEN
+			SET error_message = CONCAT(error_message, " inválidos!");
+		ELSE
+			SET error_message = CONCAT(error_message, " inválido!");
+		END IF;
+		SIGNAL SQLSTATE VALUE '45000'
+		SET MESSAGE_TEXT = error_message;
+	END IF;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `funcao_BEFORE_UPDATE`
+BEFORE UPDATE ON `funcao`
+FOR EACH ROW
+BEGIN
+	DECLARE invalid INT;
+	DECLARE error_message VARCHAR(100);
+	
+    SET invalid = 0;
+	SET error_message = "";
+
+	IF NOT nome_valido(NEW.nome) THEN
+		SET invalid = invalid + 1;
+		IF (invalid > 1) THEN
+			SET error_message = CONCAT(error_message, ", nome");
+		ELSE
+			SET error_message = CONCAT(error_message, "nome");
+		END IF;
+	END IF;
+	
+	IF (invalid > 0) THEN
+		IF (invalid > 1) THEN
+			SET error_message = CONCAT(error_message, " inválidos!");
+		ELSE
+			SET error_message = CONCAT(error_message, " inválido!");
+		END IF;
+		SIGNAL SQLSTATE VALUE '45000'
+		SET MESSAGE_TEXT = error_message;
+	END IF;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+
+--
+-- Table structure for table `oauth`
+--
+
+DROP TABLE IF EXISTS `oauth`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `oauth` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Código de identificação com autoincremento',
+  `data_hora` datetime NOT NULL COMMENT 'Data e Hora que o token foi gerado',
+  `vencimento` datetime NOT NULL COMMENT 'Data e hora em que o token se torna inválido',
+  `token` varchar(100) NOT NULL COMMENT 'Token de autentificação',
+  `refresh_token` varchar(100) DEFAULT NULL COMMENT 'Token para atualizar a autenticação',
+  `valido` tinyint(4) NOT NULL COMMENT 'Controle da validade do token',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+
+--
+-- Table structure for table `pessoa_tem_funcao`
+--
+
+DROP TABLE IF EXISTS `pessoa_tem_funcao`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `pessoa_tem_funcao` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Código de identificação com autoincremento',
+  `pessoa_id` int(11) NOT NULL COMMENT 'Relaciona uma pessoa à uma função, como cliente ou funcionário',
+  `funcao_id` int(11) NOT NULL COMMENT 'Função da pessoa',
+  `oauth_id` int(11) DEFAULT NULL COMMENT 'Código da autentificação atual desta pessoa',
+  `password` varchar(100) DEFAULT NULL COMMENT 'Password desta pessoa criptografada',
+  PRIMARY KEY (`id`),
+  KEY `fk_pessoa_has_funcao_funcao1_idx` (`funcao_id`),
+  KEY `fk_pessoa_has_funcao_pessoa1_idx` (`pessoa_id`),
+  KEY `fk_oauth1_idx` (`oauth_id`),
+  CONSTRAINT `fk_oauth1` FOREIGN KEY (`oauth_id`) REFERENCES `oauth` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_pessoa_has_funcao_funcao1` FOREIGN KEY (`funcao_id`) REFERENCES `funcao` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_pessoa_has_funcao_pessoa1` FOREIGN KEY (`pessoa_id`) REFERENCES `pessoa` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `pessoa_tem_funcao_BEFORE_INSERT`
+BEFORE INSERT ON `pessoa_tem_funcao`
+FOR EACH ROW
+BEGIN
+	DECLARE error_message VARCHAR(100);
+	DECLARE funcao_nome VARCHAR(50);
+    DECLARE verifica VARCHAR(10);
+    DECLARE pessoa_registro VARCHAR(15);
+
+	SET error_message = "";
+
+	SELECT nome INTO funcao_nome
+		FROM funcao
+		WHERE id = NEW.funcao_id;
+
+    SELECT registro INTO pessoa_registro
+		FROM pessoa
+		WHERE id = NEW.pessoa_id;
+    
+	CASE funcao_nome
+		WHEN "cliente" THEN SELECT "cpf" INTO verifica;
+        WHEN "cliente-especial" THEN SELECT "cpf" INTO verifica;
+        WHEN "funcionario" THEN SELECT "cpf" INTO verifica;
+        WHEN "fornecedor" THEN SELECT "cnpj" INTO verifica;
+        WHEN "terceiro" THEN SELECT "cnpj" INTO verifica;
+        WHEN "administrador" THEN SELECT "cpf" INTO verifica;
+        ELSE SELECT "erro" INTO verifica;
+	END CASE;
+    
+    IF(verifica = "cpf") THEN
+		IF NOT cpf_valido(pessoa_registro) THEN
+			SET error_message = CONCAT(error_message, "cpf inválido!"); 
+            SIGNAL SQLSTATE VALUE '45000'
+            SET MESSAGE_TEXT = error_message;
+        END IF;
+    ELSEIF(verifica = "cnpj") THEN
+		IF NOT cnpj_valido(pessoa_registro) THEN
+			SET error_message = CONCAT(error_message, "cnpj inválido!"); 
+			SIGNAL SQLSTATE VALUE '45000'
+			SET MESSAGE_TEXT = error_message;
+        END IF;
+    ELSE
+		SET error_message = CONCAT(error_message, "tipo de registro não definido!");
+		SIGNAL SQLSTATE VALUE '45000'
+		SET MESSAGE_TEXT = error_message;
+    END IF;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `pessoa_tem_funcao_BEFORE_UPDATE`
+BEFORE UPDATE ON `pessoa_tem_funcao`
+FOR EACH ROW
+BEGIN
+	DECLARE error_message VARCHAR(100);
+	DECLARE funcao_nome VARCHAR(50);
+    DECLARE verifica VARCHAR(10);
+    DECLARE registro VARCHAR(15);
+
+	SET error_message = "";
+
+	SELECT funcao.nome, pessoa.registro INTO funcao_nome, registro
+		FROM pessoa_tem_funcao
+		INNER JOIN funcao
+        INNER JOIN pessoa
+        WHERE pessoa.id = NEW.pessoa_id
+        AND funcao.id = NEW.funcao_id;
+        
+	CASE funcao_nome
+		WHEN "cliente" THEN SELECT "cpf" INTO verifica;
+        WHEN "cliente_especial" THEN SELECT "cpf" INTO verifica;
+        WHEN "funcionario" THEN SELECT "cpf" INTO verifica;
+        WHEN "fornecedor" THEN SELECT "cnpj" INTO verifica;
+        WHEN "terceiro" THEN SELECT "cnpj" INTO verifica;
+	END CASE;
+    
+    IF(verifica = "cpf") THEN
+		IF NOT cpf_valido(registro) THEN
+			SET error_message = CONCAT(error_message, "cpf inválido!"); 
+            SIGNAL SQLSTATE VALUE '45000'
+            SET MESSAGE_TEXT = error_message;
+        END IF;
+    ELSEIF(verifica = "cnpj") THEN
+		IF NOT cnpj_valido(registro) THEN
+			SET error_message = CONCAT(error_message, "cnpj inválido!"); 
+			SIGNAL SQLSTATE VALUE '45000'
+			SET MESSAGE_TEXT = error_message;
+        END IF;
+    ELSE
+		SET error_message = CONCAT(error_message, "tipo de registro não definido!");
+		SIGNAL SQLSTATE VALUE '45000'
+		SET MESSAGE_TEXT = error_message;
+    END IF;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+
+
+--
+-- Table structure for table `permissao`
+--
+
+DROP TABLE IF EXISTS `permissao`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `permissao` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Código de identificação com autoincremento',
+  `modulo` varchar(50) NOT NULL COMMENT 'Descrição da permissão, somente o administrador pode alterar',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `permissao_BEFORE_INSERT` BEFORE INSERT ON `permissao` FOR EACH ROW
+BEGIN
+	DECLARE invalid INT;
+	DECLARE error_message VARCHAR(100);
+        
+	SET invalid = 0;
+	SET error_message = "";
+    
+	IF NOT nome_valido(NEW.modulo) THEN
+		SET invalid = invalid + 1;
+		IF (invalid > 1) THEN
+			SET error_message = CONCAT(error_message, ", modulo");
+		ELSE
+			SET error_message = CONCAT(error_message, "modulo");
+		END IF;
+    END IF;
+    
+    IF (invalid > 0) THEN
+			IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, " inválidos!");
+			ELSE
+				SET error_message = CONCAT(error_message, " inválido!");
+			END IF;
+            SIGNAL SQLSTATE VALUE '45000'
+			SET MESSAGE_TEXT = error_message;
+		END IF;	
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `permissao_BEFORE_UPDATE` BEFORE UPDATE ON `permissao` FOR EACH ROW
+BEGIN
+	DECLARE invalid INT;
+	DECLARE error_message VARCHAR(100);
+        
+	SET invalid = 0;
+	SET error_message = "";
+    
+	IF NOT nome_valido(NEW.modulo) THEN
+		SET invalid = invalid + 1;
+		IF (invalid > 1) THEN
+			SET error_message = CONCAT(error_message, ", modulo");
+		ELSE
+			SET error_message = CONCAT(error_message, "modulo");
+		END IF;
+    END IF;
+    
+    IF (invalid > 0) THEN
+			IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, " inválidos!");
+			ELSE
+				SET error_message = CONCAT(error_message, " inválido!");
+			END IF;
+            SIGNAL SQLSTATE VALUE '45000'
+			SET MESSAGE_TEXT = error_message;
+		END IF;	
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+
+
+--
+-- Table structure for table `pessoa_tem_permissao`
+--
+
+DROP TABLE IF EXISTS `pessoa_tem_permissao`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `pessoa_tem_permissao` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Código de identificação com autoincremento',
+  `pessoa_tem_funcao_id` int(11) NOT NULL COMMENT 'Dá à uma pessoa alguma permissão no sistema, como funcionário ser banhista',
+  `permissoes_id` int(11) NOT NULL COMMENT 'Permissão da pessoa',
+  PRIMARY KEY (`id`),
+  KEY `fk_pessoa_tem_funcao_has_permissoes_permissoes1_idx` (`permissoes_id`),
+  KEY `fk_pessoa_tem_funcao_has_permissoes_pessoa_tem_funcao1_idx` (`pessoa_tem_funcao_id`),
+  CONSTRAINT `fk_pessoa_tem_funcao_has_permissoes_permissoes1` FOREIGN KEY (`permissoes_id`) REFERENCES `permissao` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_pessoa_tem_funcao_has_permissoes_pessoa_tem_funcao1` FOREIGN KEY (`pessoa_tem_funcao_id`) REFERENCES `pessoa_tem_funcao` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `pessoa_tem_permissoes_BEFORE_INSERT`
+BEFORE INSERT ON `pessoa_tem_permissao` FOR EACH ROW
+BEGIN
+	DECLARE invalid INT;
+	DECLARE error_message VARCHAR(100);
+	DECLARE tipo_pessoa VARCHAR(50);
+        
+	SET invalid = 0;
+	SET error_message = "";
+    
+    SELECT nome INTO tipo_pessoa FROM tipo_funcao WHERE id = NEW.pessoa_tem_funcao_id;
+    IF(tipo_pessoa <> 'funcionario' AND tipo_pessoa <> 'administrador') THEN
+		SET invalid = invalid + 1;
+		IF (invalid > 1) THEN
+			SET error_message = CONCAT(error_message, ", pessoa");
+		ELSE
+			SET error_message = CONCAT(error_message, "pessoa");
+		END IF;
+    END IF;
+    
+    IF (invalid > 0) THEN
+			IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, " inválidos!");
+			ELSE
+				SET error_message = CONCAT(error_message, " inválido!");
+			END IF;
+            SIGNAL SQLSTATE VALUE '45000'
+			SET MESSAGE_TEXT = error_message;
+		END IF;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `pessoa_tem_permissoes_BEFORE_UPDATE`
+BEFORE UPDATE ON `pessoa_tem_permissao` FOR EACH ROW
+BEGIN
+DECLARE invalid INT;
+	DECLARE error_message VARCHAR(100);
+	DECLARE tipo_pessoa VARCHAR(50);
+        
+	SET invalid = 0;
+	SET error_message = "";
+    
+    SELECT nome INTO tipo_pessoa FROM tipo_funcao WHERE id = NEW.pessoa_tem_funcao_id;
+    IF(tipo_pessoa <> 'funcionario' AND tipo_pessoa <> 'administrador') THEN
+		SET invalid = invalid + 1;
+		IF (invalid > 1) THEN
+			SET error_message = CONCAT(error_message, ", pessoa");
+		ELSE
+			SET error_message = CONCAT(error_message, "pessoa");
+		END IF;
+    END IF;
+    
+    IF (invalid > 0) THEN
+			IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, " inválidos!");
+			ELSE
+				SET error_message = CONCAT(error_message, " inválido!");
+			END IF;
+            SIGNAL SQLSTATE VALUE '45000'
+			SET MESSAGE_TEXT = error_message;
+		END IF;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+
+
+--
+-- Table structure for table `especie`
+--
+
+DROP TABLE IF EXISTS `especie`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `especie` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Código de identificação com autoincremento',
+  `nome` varchar(50) NOT NULL COMMENT 'Nome da espécie',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `especie_BEFORE_INSERT` BEFORE INSERT ON `especie` FOR EACH ROW
+BEGIN
+	DECLARE invalid INT;
+	DECLARE error_message VARCHAR(100);
+        
+	SET invalid = 0;
+	SET error_message = "";
+    
+	IF NOT nome_valido(NEW.nome) THEN
+		SET invalid = invalid + 1;
+		IF (invalid > 1) THEN
+			SET error_message = CONCAT(error_message, ", nome");
+		ELSE
+			SET error_message = CONCAT(error_message, "nome");
+		END IF;
+    END IF;
+    
+    IF (invalid > 0) THEN
+			IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, " inválidos!");
+			ELSE
+				SET error_message = CONCAT(error_message, " inválido!");
+			END IF;
+            SIGNAL SQLSTATE VALUE '45000'
+			SET MESSAGE_TEXT = error_message;
+		END IF;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `especie_BEFORE_UPDATE` BEFORE UPDATE ON `especie` FOR EACH ROW
+BEGIN
+	DECLARE invalid INT;
+	DECLARE error_message VARCHAR(100);
+        
+	SET invalid = 0;
+	SET error_message = "";
+    
+	IF NOT nome_valido(NEW.nome) THEN
+		SET invalid = invalid + 1;
+		IF (invalid > 1) THEN
+			SET error_message = CONCAT(error_message, ", nome");
+		ELSE
+			SET error_message = CONCAT(error_message, "nome");
+		END IF;
+    END IF;
+    
+    IF (invalid > 0) THEN
+			IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, " inválidos!");
+			ELSE
+				SET error_message = CONCAT(error_message, " inválido!");
+			END IF;
+            SIGNAL SQLSTATE VALUE '45000'
+			SET MESSAGE_TEXT = error_message;
+		END IF;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+
+
+--
+-- Table structure for table `porte`
+--
+
+DROP TABLE IF EXISTS `porte`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `porte` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Código de identificação com autoincremento',
+  `nome` varchar(50) NOT NULL COMMENT 'Descrição do porte',
+  `tamanho_minimo` int(11) DEFAULT NULL COMMENT 'Tamanho mínimo do porte em centímetros',
+  `tamanho_maximo` int(11) DEFAULT NULL COMMENT 'Tamanho máximo do porte em centímetros',
+  `peso_minimo` int(11) DEFAULT NULL COMMENT 'peso mínimo do porte em gramas',
+  `peso_maximo` int(11) DEFAULT NULL COMMENT 'Peso máximo do porte em gramas',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `porte_BEFORE_INSERT`
+BEFORE INSERT ON `porte`
+FOR EACH ROW
+BEGIN
+	DECLARE invalid INT;
+	DECLARE error_message VARCHAR(100);
+        
+	SET invalid = 0;
+	SET error_message = "";
+    
+    IF(NEW.tamanho_minimo <= 0) THEN
+		SET invalid = invalid + 1;
+		IF (invalid > 1) THEN
+			SET error_message = CONCAT(error_message, ", tamanho minimo");
+		ELSE
+			SET error_message = CONCAT(error_message, "tamanho minimo");
+		END IF;
+    END IF;
+    
+    IF(NEW.tamanho_maximo <= NEW.tamanho_minimo) THEN
+		SET invalid = invalid + 1;
+		IF (invalid > 1) THEN
+			SET error_message = CONCAT(error_message, ", tamanho maximo");
+		ELSE
+			SET error_message = CONCAT(error_message, "tamanho maximo");
+		END IF;
+	END IF;
+        
+	IF(NEW.peso_minimo < 0) THEN
+		SET invalid = invalid + 1;
+		IF (invalid > 1) THEN
+			SET error_message = CONCAT(error_message, ", peso minimo");
+		ELSE
+			SET error_message = CONCAT(error_message, "peso minimo");
+		END IF;
+    END IF;
+    
+    IF(NEW.peso_maximo <= NEW.peso_minimo) THEN
+		SET invalid = invalid + 1;
+		IF (invalid > 1) THEN
+			SET error_message = CONCAT(error_message, ", peso maximo");
+		ELSE
+			SET error_message = CONCAT(error_message, "peso maximo");
+		END IF;
+    END IF;
+    
+    IF (invalid > 0) THEN
+			IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, " inválidos!");
+			ELSE
+				SET error_message = CONCAT(error_message, " inválido!");
+			END IF;
+            SIGNAL SQLSTATE VALUE '45000'
+			SET MESSAGE_TEXT = error_message;
+	END IF;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `porte_BEFORE_UPDATE`
+BEFORE UPDATE ON `porte`
+FOR EACH ROW
+BEGIN
+	DECLARE invalid INT;
+	DECLARE error_message VARCHAR(100);
+        
+	SET invalid = 0;
+	SET error_message = "";
+    
+    IF(NEW.tamanho_minimo <= 0) THEN
+		SET invalid = invalid + 1;
+		IF (invalid > 1) THEN
+			SET error_message = CONCAT(error_message, ", tamanho minimo");
+		ELSE
+			SET error_message = CONCAT(error_message, "tamanho minimo");
+		END IF;
+    END IF;
+    
+    IF(NEW.tamanho_maximo <= NEW.tamanho_minimo) THEN
+		SET invalid = invalid + 1;
+		IF (invalid > 1) THEN
+			SET error_message = CONCAT(error_message, ", tamanho maximo");
+		ELSE
+			SET error_message = CONCAT(error_message, "tamanho maximo");
+		END IF;
+	END IF;
+        
+	IF(NEW.peso_minimo < 0) THEN
+		SET invalid = invalid + 1;
+		IF (invalid > 1) THEN
+			SET error_message = CONCAT(error_message, ", peso minimo");
+		ELSE
+			SET error_message = CONCAT(error_message, "peso minimo");
+		END IF;
+    END IF;
+    
+    IF(NEW.peso_maximo <= NEW.peso_minimo) THEN
+		SET invalid = invalid + 1;
+		IF (invalid > 1) THEN
+			SET error_message = CONCAT(error_message, ", peso maximo");
+		ELSE
+			SET error_message = CONCAT(error_message, "peso maximo");
+		END IF;
+    END IF;
+    
+    IF (invalid > 0) THEN
+			IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, " inválidos!");
+			ELSE
+				SET error_message = CONCAT(error_message, " inválido!");
+			END IF;
+            SIGNAL SQLSTATE VALUE '45000'
+			SET MESSAGE_TEXT = error_message;
+		END IF;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+
+
+--
+-- Table structure for table `raca`
+--
+
+DROP TABLE IF EXISTS `raca`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `raca` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Código de identificação com autoincremento',
+  `nome` varchar(50) NOT NULL COMMENT 'Nome da raça',
+  `especie_id` int(11) NOT NULL COMMENT 'A raça pertence à alguma espécie',
+  `porte_id` int(11) NOT NULL COMMENT 'Código do Porte desta raça',
+  PRIMARY KEY (`id`),
+  KEY `fk_raca_especie1_idx` (`especie_id`),
+  KEY `fk_raca_porte1_idx` (`porte_id`),
+  CONSTRAINT `fk_raca_porte1` FOREIGN KEY (`porte_id`) REFERENCES `porte` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_raca_especie1` FOREIGN KEY (`especie_id`) REFERENCES `especie` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=193 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `raca_BEFORE_INSERT` BEFORE INSERT ON `raca` FOR EACH ROW
+BEGIN
+	DECLARE invalid INT;
+	DECLARE error_message VARCHAR(100);
+        
+	SET invalid = 0;
+	SET error_message = "";
+    
+	IF NOT nome_valido(NEW.nome) THEN
+		SET invalid = invalid + 1;
+		IF (invalid > 1) THEN
+			SET error_message = CONCAT(error_message, ", nome");
+		ELSE
+			SET error_message = CONCAT(error_message, "nome");
+		END IF;
+    END IF;
+    
+    IF (invalid > 0) THEN
+			IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, " inválidos!");
+			ELSE
+				SET error_message = CONCAT(error_message, " inválido!");
+			END IF;
+            SIGNAL SQLSTATE VALUE '45000'
+			SET MESSAGE_TEXT = error_message;
+		END IF;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `raca_BEFORE_UPDATE` BEFORE UPDATE ON `raca` FOR EACH ROW
+BEGIN
+	DECLARE invalid INT;
+	DECLARE error_message VARCHAR(100);
+        
+	SET invalid = 0;
+	SET error_message = "";
+    
+	IF NOT nome_valido(NEW.nome) THEN
+		SET invalid = invalid + 1;
+		IF (invalid > 1) THEN
+			SET error_message = CONCAT(error_message, ", nome");
+		ELSE
+			SET error_message = CONCAT(error_message, "nome");
+		END IF;
+    END IF;
+    
+    IF (invalid > 0) THEN
+			IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, " inválidos!");
+			ELSE
+				SET error_message = CONCAT(error_message, " inválido!");
+			END IF;
+            SIGNAL SQLSTATE VALUE '45000'
+			SET MESSAGE_TEXT = error_message;
+		END IF;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+
+--
+-- Table structure for table `animal`
+--
+
+DROP TABLE IF EXISTS `animal`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `animal` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Código de identificação com autoincremento',
+  `nome` varchar(50) NOT NULL COMMENT 'Nome do animal',
+  `sexo` char(1) NOT NULL COMMENT 'Sexo do Animal (''M'' ou ''F'')',
+  `data_hora_cadastro` datetime NOT NULL COMMENT 'Controla o momento em que o animal foi cadastrado',
+  `data_nascimento` datetime DEFAULT NULL COMMENT 'Data de nascimento do animal',
+  `pessoa_tem_funcao_id` int(11) NOT NULL COMMENT 'Pessoa a qual este animal pertence',
+  `raca_id` int(11) NOT NULL COMMENT 'Código de identificação da raça do animal',
+  `porte_id` int(11) NOT NULL COMMENT 'Código de identificação do porte atula do animal',
+  PRIMARY KEY (`id`),
+  KEY `fk_animal_pessoa_tem_funcao1_idx` (`pessoa_tem_funcao_id`),
+  KEY `fk_animal_raca1_idx` (`raca_id`),
+  KEY `fk_animal_porte1_idx` (`porte_id`),
+  CONSTRAINT `fk_animal_pessoa_tem_funcao1` FOREIGN KEY (`pessoa_tem_funcao_id`) REFERENCES `pessoa_tem_funcao` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_animal_porte1` FOREIGN KEY (`porte_id`) REFERENCES `porte` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_animal_raca1` FOREIGN KEY (`raca_id`) REFERENCES `raca` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `animal_BEFORE_INSERT`
+BEFORE INSERT ON `animal`
+FOR EACH ROW
+BEGIN
+
+	DECLARE invalid INT;
+	DECLARE error_message VARCHAR(100);
+	DECLARE tipo_pessoa VARCHAR(50);
+        
+	SET invalid = 0;
+	SET error_message = "";
+    
+	IF NOT nome_valido(NEW.nome) THEN
+		SET invalid = invalid + 1;
+		IF (invalid > 1) THEN
+			SET error_message = CONCAT(error_message, ", nome");
+		ELSE
+			SET error_message = CONCAT(error_message, "nome");
+		END IF;
+    END IF;
+    
+    
+    IF(NEW.sexo <> 'M' AND NEW.sexo <> 'F') THEN
+		SET invalid = invalid + 1;
+		IF (invalid > 1) THEN
+			SET error_message = CONCAT(error_message, ", sexo");
+		ELSE
+			SET error_message = CONCAT(error_message, "sexo");
+		END IF;
+    END IF;
+    
+    IF(NEW.data_hora_cadastro <> NOW()) THEN
+		SET invalid = invalid + 1;
+		IF (invalid > 1) THEN
+			SET error_message = CONCAT(error_message, ", data hora cadastro");
+		ELSE
+			SET error_message = CONCAT(error_message, "data hora cadastro");
+		END IF;
+    END IF;
+    
+    IF(NEW.data_nascimento > NOW()) THEN
+		SET invalid = invalid + 1;
+		IF (invalid > 1) THEN
+			SET error_message = CONCAT(error_message, ", data nascimento");
+		ELSE
+			SET error_message = CONCAT(error_message, "data nascimento");
+		END IF;
+    END IF;
+    
+    SELECT nome INTO tipo_pessoa FROM tipo_funcao WHERE id = NEW.pessoa_tem_funcao_id;
+    IF(tipo_pessoa <> 'cliente' AND tipo_pessoa <> 'cliente-especial') THEN
+		SET invalid = invalid + 1;
+		IF (invalid > 1) THEN
+			SET error_message = CONCAT(error_message, ", pessoa");
+		ELSE
+			SET error_message = CONCAT(error_message, "pessoa");
+		END IF;
+    END IF;
+    
+    IF (invalid > 0) THEN
+			IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, " inválidos!");
+			ELSE
+				SET error_message = CONCAT(error_message, " inválido!");
+			END IF;
+            SIGNAL SQLSTATE VALUE '45000'
+			SET MESSAGE_TEXT = error_message;
+		END IF;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `animal_BEFORE_UPDATE`
+BEFORE UPDATE ON `animal`
+FOR EACH ROW
+BEGIN
+	DECLARE invalid INT;
+	DECLARE error_message VARCHAR(100);
+	DECLARE tipo_pessoa VARCHAR(50);
+        
+	SET invalid = 0;
+	SET error_message = "";
+    
+	IF NOT nome_valido(NEW.nome) THEN
+		SET invalid = invalid + 1;
+		IF (invalid > 1) THEN
+			SET error_message = CONCAT(error_message, ", nome");
+		ELSE
+			SET error_message = CONCAT(error_message, "nome");
+		END IF;
+    END IF;
+    
+    IF(NEW.sexo <> 'M' AND NEW.sexo <> 'F') THEN
+		SET invalid = invalid + 1;
+		IF (invalid > 1) THEN
+			SET error_message = CONCAT(error_message, ", sexo");
+		ELSE
+			SET error_message = CONCAT(error_message, "sexo");
+		END IF;
+    END IF;
+    
+    IF(NEW.data_nascimento > NOW()) THEN
+		SET invalid = invalid + 1;
+		IF (invalid > 1) THEN
+			SET error_message = CONCAT(error_message, ", data nascimento");
+		ELSE
+			SET error_message = CONCAT(error_message, "data nascimento");
+		END IF;
+    END IF;
+    
+    SELECT nome INTO tipo_pessoa FROM tipo_funcao WHERE id = NEW.pessoa_tem_funcao_id;
+    IF(tipo_pessoa <> 'cliente' AND tipo_pessoa <> 'cliente-especial') THEN
+		SET invalid = invalid + 1;
+		IF (invalid > 1) THEN
+			SET error_message = CONCAT(error_message, ", pessoa");
+		ELSE
+			SET error_message = CONCAT(error_message, "pessoa");
+		END IF;
+    END IF;
+    
+    IF (invalid > 0) THEN
+		IF (invalid > 1) THEN
+			SET error_message = CONCAT(error_message, " inválidos!");
+		ELSE
+			SET error_message = CONCAT(error_message, " inválido!");
+		END IF;
+		SIGNAL SQLSTATE VALUE '45000'
+		SET MESSAGE_TEXT = error_message;
+	END IF;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+
+
+--
+-- Table structure for table `restricao`
+--
+
+DROP TABLE IF EXISTS `restricao`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `restricao` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Código de identificação com autoincremento',
+  `restricao` varchar(50) NOT NULL COMMENT 'Nome da restrição',
+  `descricao` varchar(200) DEFAULT NULL COMMENT 'Informações da restrição',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `animal_tem_restricao`
+--
+
+DROP TABLE IF EXISTS `animal_tem_restricao`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `animal_tem_restricao` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Código de identificação com autoincremento',
+  `restricao_id` int(11) NOT NULL COMMENT 'Relaciona o animal com a restrição cadastrada',
+  `animal_id` int(11) NOT NULL COMMENT 'Código de identificação do animal',
+  PRIMARY KEY (`id`),
+  KEY `fk_animal_tem_restricao_restricao1_idx` (`restricao_id`),
+  KEY `fk_animal_tem_restricao_animal1_idx` (`animal_id`),
+  CONSTRAINT `fk_animal_tem_restricao_animal1` FOREIGN KEY (`animal_id`) REFERENCES `animal` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_animal_tem_restricao_restricao1` FOREIGN KEY (`restricao_id`) REFERENCES `restricao` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `servico`
+--
+
+DROP TABLE IF EXISTS `servico`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `servico` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Código de identificação com autoincremento',
+  `nome` varchar(50) NOT NULL COMMENT 'Nome do serviço',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `servico_BEFORE_INSERT`
+BEFORE INSERT ON `servico`
+FOR EACH ROW
+BEGIN
+	DECLARE invalid INT;
+	DECLARE error_message VARCHAR(100);
+        
+	SET invalid = 0;
+	SET error_message = "";
+    
+    IF NOT nome_valido(NEW.nome) THEN
+		SET invalid = invalid + 1;
+		IF (invalid > 1) THEN
+			SET error_message = CONCAT(error_message, ", nome");
+		ELSE
+			SET error_message = CONCAT(error_message, "nome");
+		END IF;
+    END IF;
+    
+    IF (invalid > 0) THEN
+			IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, " inválidos!");
+			ELSE
+				SET error_message = CONCAT(error_message, " inválido!");
+			END IF;
+            SIGNAL SQLSTATE VALUE '45000'
+			SET MESSAGE_TEXT = error_message;
+		END IF;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `servico_BEFORE_UPDATE`
+BEFORE UPDATE ON `servico`
+FOR EACH ROW
+BEGIN
+DECLARE invalid INT;
+	DECLARE error_message VARCHAR(100);
+        
+	SET invalid = 0;
+	SET error_message = "";
+    
+    IF NOT nome_valido(NEW.nome) THEN
+		SET invalid = invalid + 1;
+		IF (invalid > 1) THEN
+			SET error_message = CONCAT(error_message, ", nome");
+		ELSE
+			SET error_message = CONCAT(error_message, "nome");
+		END IF;
+    END IF;
+    
+    IF (invalid > 0) THEN
+			IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, " inválidos!");
+			ELSE
+				SET error_message = CONCAT(error_message, " inválido!");
+			END IF;
+            SIGNAL SQLSTATE VALUE '45000'
+			SET MESSAGE_TEXT = error_message;
+		END IF;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+
+--
+-- Table structure for table `servico_tem_porte`
+--
+
+DROP TABLE IF EXISTS `servico_tem_porte`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `servico_tem_porte` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Código de identificação com autoincremento',
+  `servico_id` int(11) NOT NULL COMMENT 'Código do serviço relacionado',
+  `porte_id` int(11) NOT NULL COMMENT 'Código do porte relacionado',
+  `preco` varchar(45) NOT NULL COMMENT 'Preço do serviço para aquele porte',
+  PRIMARY KEY (`id`),
+  KEY `fk_servico_tem_porte_servico_id_idx` (`servico_id`),
+  KEY `fk_servico_tem_porte_porte_id_idx` (`porte_id`),
+  CONSTRAINT `fk_servico_tem_porte_porte` FOREIGN KEY (`porte_id`) REFERENCES `porte` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_servico_tem_porte_servico` FOREIGN KEY (`servico_id`) REFERENCES `servico` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=71 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `servico_tem_porte_BEFORE_INSERT` BEFORE INSERT ON `servico_tem_porte` FOR EACH ROW
+BEGIN
+        DECLARE invalid INT;
+        DECLARE error_message VARCHAR(100);
+        
+        SET invalid = 0;
+		SET error_message = "";
+
+		IF (NEW.preco < 0) THEN
+			SET invalid = invalid + 1;
+            IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, ", preco");
+            ELSE
+				SET error_message = CONCAT(error_message, "preco");
+            END IF;
+		END IF;
+        
+        IF (invalid > 0) THEN
+			IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, " inválidos!");
+			ELSE
+				SET error_message = CONCAT(error_message, " inválido!");
+			END IF;
+            SIGNAL SQLSTATE VALUE '45000'
+			SET MESSAGE_TEXT = error_message;
+		END IF;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `servico_tem_porte_BEFORE_UPDATE` BEFORE UPDATE ON `servico_tem_porte` FOR EACH ROW
+BEGIN
+	DECLARE invalid INT;
+        DECLARE error_message VARCHAR(100);
+        
+        SET invalid = 0;
+		SET error_message = "";
+
+		IF (NEW.preco < 0) THEN
+			SET invalid = invalid + 1;
+            IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, ", preco");
+            ELSE
+				SET error_message = CONCAT(error_message, "preco");
+            END IF;
+		END IF;
+        
+        IF (invalid > 0) THEN
+			IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, " inválidos!");
+			ELSE
+				SET error_message = CONCAT(error_message, " inválido!");
+			END IF;
+            SIGNAL SQLSTATE VALUE '45000'
+			SET MESSAGE_TEXT = error_message;
+		END IF;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+
+
+--
+-- Table structure for table `transacao`
+--
+
+DROP TABLE IF EXISTS `transacao`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `transacao` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Código de identificação com autoincremento',
+  `tipo` char(1) NOT NULL COMMENT 'Se é receita ou despesa (''C'' ou ''D'')',
+  `data_hora` datetime NOT NULL COMMENT 'Controla o momento em que a transação foi cadastrada\n',
+  `valor` decimal(10,2) NOT NULL COMMENT 'Valor em reais',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `transacao_BEFORE_INSERT`
+BEFORE INSERT ON `transacao`
+FOR EACH ROW
+BEGIN
+	DECLARE invalid INT;
+	DECLARE error_message VARCHAR(100);
+        
+	SET invalid = 0;
+	SET error_message = "";
+    
+    IF(NEW.tipo <> 'C' AND NEW.tipo <> 'D') THEN
+		SET invalid = invalid + 1;
+		IF (invalid > 1) THEN
+			SET error_message = CONCAT(error_message, ", tipo");
+		ELSE
+			SET error_message = CONCAT(error_message, "tipo");
+		END IF;
+    END IF;
+    
+    IF(NEW.valor < 0) THEN
+		SET invalid = invalid + 1;
+		IF (invalid > 1) THEN
+			SET error_message = CONCAT(error_message, ", valor");
+		ELSE
+			SET error_message = CONCAT(error_message, "valor");
+		END IF;
+    END IF;
+    
+    IF(NEW.data_hora <> NOW()) THEN
+		SET invalid = invalid + 1;
+		IF (invalid > 1) THEN
+			SET error_message = CONCAT(error_message, ", data hora");
+		ELSE
+			SET error_message = CONCAT(error_message, "data hora");
+		END IF;
+    END IF;
+    
+    IF (invalid > 0) THEN
+			IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, " inválidos!");
+			ELSE
+				SET error_message = CONCAT(error_message, " inválido!");
+			END IF;
+            SIGNAL SQLSTATE VALUE '45000'
+			SET MESSAGE_TEXT = error_message;
+		END IF;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `transacao_BEFORE_UPDATE`
+BEFORE UPDATE ON `transacao`
+FOR EACH ROW
+BEGIN
+DECLARE invalid INT;
+	DECLARE error_message VARCHAR(100);
+        
+	SET invalid = 0;
+	SET error_message = "";
+    
+    IF(NEW.tipo <> 'C' AND NEW.tipo <> 'D') THEN
+		SET invalid = invalid + 1;
+		IF (invalid > 1) THEN
+			SET error_message = CONCAT(error_message, ", tipo");
+		ELSE
+			SET error_message = CONCAT(error_message, "tipo");
+		END IF;
+    END IF;
+    
+    IF(NEW.valor < 0) THEN
+		SET invalid = invalid + 1;
+		IF (invalid > 1) THEN
+			SET error_message = CONCAT(error_message, ", valor");
+		ELSE
+			SET error_message = CONCAT(error_message, "valor");
+		END IF;
+    END IF;
+    
+    IF (invalid > 0) THEN
+			IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, " inválidos!");
+			ELSE
+				SET error_message = CONCAT(error_message, " inválido!");
+			END IF;
+            SIGNAL SQLSTATE VALUE '45000'
+			SET MESSAGE_TEXT = error_message;
+		END IF;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+
+
+--
+-- Table structure for table `servico_contratado`
+--
+
+DROP TABLE IF EXISTS `servico_contratado`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `servico_contratado` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Código de identificação com autoincremento',
+  `pessoa_tem_funcao_id_funcionario` int(11) NOT NULL COMMENT 'Funcionário que realizou o agendamento',
+  `preco` decimal(10,2) NOT NULL COMMENT 'Valor total do contrato',
+  `data_hora` datetime NOT NULL COMMENT 'Controla o momento em que o contrato foi cadastrado',
+  `transacao_id` int(11) NOT NULL COMMENT 'Código da transação gerada por este contrato',
+  PRIMARY KEY (`id`),
+  KEY `fk_servico_contratado_pessoa_tem_funcao1_idx` (`pessoa_tem_funcao_id_funcionario`),
+  KEY `fk_servico_contratado_transacao1_idx` (`transacao_id`),
+  CONSTRAINT `fk_servico_contratado_transacao1` FOREIGN KEY (`transacao_id`) REFERENCES `transacao` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_servico_contratado_pessoa_tem_funcao1` FOREIGN KEY (`pessoa_tem_funcao_id_funcionario`) REFERENCES `pessoa_tem_funcao` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `servico_contratado_BEFORE_INSERT`
+BEFORE INSERT ON `servico_contratado`
+FOR EACH ROW
+BEGIN
+		DECLARE tipo_pessoa VARCHAR(50);
+        DECLARE invalid INT;
+        DECLARE error_message VARCHAR(100);
+        
+        SET invalid = 0;
+		SET error_message = "";
+
+		IF (NEW.preco < 0) THEN
+			SET invalid = invalid + 1;
+            IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, ", preco");
+            ELSE
+				SET error_message = CONCAT(error_message, "preco");
+            END IF;
+		END IF;
+        
+        IF (NEW.data_hora <> NOW()) THEN
+			SET invalid = invalid + 1;
+            IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, ", data hora");
+            ELSE
+				SET error_message = CONCAT(error_message, "data hora");
+            END IF;
+		END IF;
+		
+        SELECT nome INTO tipo_pessoa FROM tipo_funcao WHERE id = NEW.pessoa_tem_funcao_id_funcionario;
+		IF(tipo_pessoa <> 'funcionario') THEN
+			SET invalid = invalid + 1;
+			IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, ", pessoa");
+			ELSE
+				SET error_message = CONCAT(error_message, "pessoa");
+			END IF;
+		END IF;
+        
+        IF (invalid > 0) THEN
+			IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, " inválidos!");
+			ELSE
+				SET error_message = CONCAT(error_message, " inválido!");
+			END IF;
+            SIGNAL SQLSTATE VALUE '45000'
+			SET MESSAGE_TEXT = error_message;
+		END IF;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `servico_contratado_BEFORE_UPDATE`
+BEFORE UPDATE ON `servico_contratado`
+FOR EACH ROW
+BEGIN
+DECLARE tipo_pessoa VARCHAR(50);
+        DECLARE invalid INT;
+        DECLARE error_message VARCHAR(100);
+        
+        SET invalid = 0;
+		SET error_message = "";
+
+		IF (NEW.preco < 0) THEN
+			SET invalid = invalid + 1;
+            IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, ", preco");
+            ELSE
+				SET error_message = CONCAT(error_message, "preco");
+            END IF;
+		END IF;
+        
+        IF (NEW.data_hora <> NOW()) THEN
+			SET invalid = invalid + 1;
+            IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, ", data hora");
+            ELSE
+				SET error_message = CONCAT(error_message, "data hora");
+            END IF;
+		END IF;
+		
+        SELECT nome INTO tipo_pessoa FROM tipo_funcao WHERE id = NEW.pessoa_tem_funcao_id_funcionario;
+		IF(tipo_pessoa <> 'funcionario') THEN
+			SET invalid = invalid + 1;
+			IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, ", pessoa");
+			ELSE
+				SET error_message = CONCAT(error_message, "pessoa");
+			END IF;
+		END IF;
+        
+        IF (invalid > 0) THEN
+			IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, " inválidos!");
+			ELSE
+				SET error_message = CONCAT(error_message, " inválido!");
+			END IF;
+            SIGNAL SQLSTATE VALUE '45000'
+			SET MESSAGE_TEXT = error_message;
+		END IF;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+
+
+--
+-- Table structure for table `servico_agendado`
+--
+
+DROP TABLE IF EXISTS `servico_agendado`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `servico_agendado` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Código de identificação com autoincremento',
+  `preco` decimal(10,2) NOT NULL COMMENT 'Valor total do serviço',
+  `recorrente` tinyint(1) NOT NULL COMMENT 'Se vai ser realizado mais vezes',
+  `data_hora` datetime NOT NULL COMMENT 'Dia e Horário do agendamento',
+  `servico_tem_porte_id` int(11) NOT NULL COMMENT 'Código do conjunto servico-porte correspondente',
+  `animal_id` int(11) NOT NULL COMMENT 'Animal que vai receber o serviço',
+  `servico_contratado_id` int(11) NOT NULL COMMENT 'O serviço agendado pertence à um contrato',
+  `executado` tinyint(1) NOT NULL COMMENT 'Controla se já foi executado ou não',
+  `pago` tinyint(1) NOT NULL COMMENT 'Controla se já foi realizado seu pagamento',
+  `observacao` varchar(200) DEFAULT NULL COMMENT 'Informações adicionais',
+  `data_hora_executado` datetime DEFAULT NULL COMMENT 'Momento em que foi executado',
+  `funcionario_executa_id` int(11) DEFAULT NULL COMMENT 'Funcionário que executou o serviço',
+  PRIMARY KEY (`id`),
+  KEY `fk_servico_agendado_animal1_idx` (`animal_id`),
+  KEY `fk_servico_agendado_servico_contratado1_idx` (`servico_contratado_id`),
+  KEY `fk_servico_agendado_pessoa_tem_funcao1_idx` (`funcionario_executa_id`),
+  KEY `fk_servico_agendado_servico_tem_porte1_idx` (`servico_tem_porte_id`),
+  CONSTRAINT `fk_servico_agendado_servico_tem_porte1` FOREIGN KEY (`servico_tem_porte_id`) REFERENCES `servico_tem_porte` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_servico_agendado_animal1` FOREIGN KEY (`animal_id`) REFERENCES `animal` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_servico_agendado_pessoa_tem_funcao1` FOREIGN KEY (`funcionario_executa_id`) REFERENCES `pessoa_tem_funcao` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_servico_agendado_servico_contratado1` FOREIGN KEY (`servico_contratado_id`) REFERENCES `servico_contratado` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `servico_agendado_BEFORE_INSERT`
+BEFORE INSERT ON `servico_agendado`
+FOR EACH ROW
+BEGIN
+		DECLARE numero_animais INT;
+        DECLARE tipo_pessoa VARCHAR(50);
+        DECLARE invalid INT;
+        DECLARE error_message VARCHAR(100);
+        
+        SET invalid = 0;
+		SET error_message = "";
+
+		IF (NEW.preco < 0) THEN
+			SET invalid = invalid + 1;
+            IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, ", preco");
+            ELSE
+				SET error_message = CONCAT(error_message, "preco");
+            END IF;
+		END IF;
+		
+        SELECT nome INTO tipo_pessoa FROM tipo_funcao WHERE id = NEW.funcionario_executa_id;
+		IF(tipo_pessoa <> 'funcionario') THEN
+			SET invalid = invalid + 1;
+			IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, ", pessoa");
+			ELSE
+				SET error_message = CONCAT(error_message, "pessoa");
+			END IF;
+		END IF;
+        
+        #SELECT COUNT(*) INTO numero_animais FROM animais_dia WHERE data_hora = NEW.data_hora;
+		#IF(numero_animais >= (SELECT quantidade_animais FROM configuracao)) THEN
+		#	SET invalid = invalid + 1;
+		#	IF (invalid > 1) THEN
+		#		SET error_message = CONCAT(error_message, ", data hora");
+		#	ELSE
+		#		SET error_message = CONCAT(error_message, "data hora");
+		#	END IF;
+		#END IF;
+        
+        IF (invalid > 0) THEN
+			IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, " inválidos!");
+			ELSE
+				SET error_message = CONCAT(error_message, " inválido!");
+			END IF;
+            SIGNAL SQLSTATE VALUE '45000'
+			SET MESSAGE_TEXT = error_message;
+		END IF;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `servico_agendado_BEFORE_UPDATE`
+BEFORE UPDATE ON `servico_agendado`
+FOR EACH ROW
+BEGIN
+DECLARE numero_animais INT;
+        DECLARE tipo_pessoa VARCHAR(50);
+        DECLARE invalid INT;
+        DECLARE error_message VARCHAR(100);
+        
+        SET invalid = 0;
+		SET error_message = "";
+
+		IF (NEW.preco < 0) THEN
+			SET invalid = invalid + 1;
+            IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, ", preco");
+            ELSE
+				SET error_message = CONCAT(error_message, "preco");
+            END IF;
+		END IF;
+		
+        SELECT nome INTO tipo_pessoa FROM tipo_funcao WHERE id = NEW.funcionario_executa_id;
+		IF(tipo_pessoa <> 'funcionario') THEN
+			SET invalid = invalid + 1;
+			IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, ", pessoa");
+			ELSE
+				SET error_message = CONCAT(error_message, "pessoa");
+			END IF;
+		END IF;
+        
+        #SELECT COUNT(*) INTO numero_animais FROM animais_dia WHERE data_hora = NEW.data_hora;
+		#IF(numero_animais <= (SELECT quantidade_animais FROM configuracao)) THEN
+		#	SET invalid = invalid + 1;
+		#	IF (invalid > 1) THEN
+		#		SET error_message = CONCAT(error_message, ", data hora");
+		#	ELSE
+		#		SET error_message = CONCAT(error_message, "data hora");
+		#	END IF;
+		#END IF;
+        
+        IF (invalid > 0) THEN
+			IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, " inválidos!");
+			ELSE
+				SET error_message = CONCAT(error_message, " inválido!");
+			END IF;
+            SIGNAL SQLSTATE VALUE '45000'
+			SET MESSAGE_TEXT = error_message;
+		END IF;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+
+--
+-- Table structure for table `anamnese`
+--
+
+DROP TABLE IF EXISTS `anamnese`;
+CREATE TABLE `anamnese` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Código de identificação com autoincremento',
+  `peso` int(11) DEFAULT NULL COMMENT 'Peso do animal em gramas, maior que 0',
+  `tamanho` int(11) DEFAULT NULL COMMENT 'Tamanho do animal em centímetros, maior que 0',
+  `temperatura` int(11) DEFAULT NULL COMMENT 'Temperatura do animal em graus, maior que 0',
+  `servico_agendado_id` int(11) NOT NULL COMMENT 'Serviço (consulta) no qual a anamnese foi feita',
+  PRIMARY KEY (`id`),
+  KEY `fk_anamnese_servico_agendado1_idx` (`servico_agendado_id`),
+  CONSTRAINT `fk_anamnese_servico_agendado1` FOREIGN KEY (`servico_agendado_id`) REFERENCES `servico_agendado` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+DELIMITER ;;
+BEFORE INSERT ON `anamnese`
+FOR EACH ROW
+BEGIN
+		DECLARE servico VARCHAR(50);
+        DECLARE invalid INT;
+        DECLARE error_message VARCHAR(100);
+        
+        SET invalid = 0;
+		SET error_message = "";
+
+		IF (NEW.peso <= 0) THEN
+			SET invalid = invalid + 1;
+            IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, ", peso");
+            ELSE
+				SET error_message = CONCAT(error_message, "peso");
+            END IF;
+		END IF;
+        
+        IF (NEW.tamanho <= 0) THEN
+			SET invalid = invalid + 1;
+            IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, ", tamanho");
+            ELSE
+				SET error_message = CONCAT(error_message, "tamanho");
+            END IF;
+		END IF;
+		
+		IF (NEW.temperatura <= 0) THEN
+			SET invalid = invalid + 1;
+            IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, ", temperatura");
+            ELSE
+				SET error_message = CONCAT(error_message, "temperatura");
+            END IF;
+		END IF;
+        
+        SELECT nome INTO servico FROM tipo_servico WHERE id = NEW.servico_agendado_id;
+		IF(servico <> 'consulta') THEN
+			SET invalid = invalid + 1;
+			IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, ", servico");
+			ELSE
+				SET error_message = CONCAT(error_message, "servico");
+			END IF;
+		END IF;
+        
+        IF (invalid > 0) THEN
+			IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, " inválidos!");
+			ELSE
+				SET error_message = CONCAT(error_message, " inválido!");
+			END IF;
+            SIGNAL SQLSTATE VALUE '45000'
+			SET MESSAGE_TEXT = error_message;
+		END IF;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `anamnese_BEFORE_UPDATE`
+BEFORE UPDATE ON `anamnese`
+FOR EACH ROW
+BEGIN
+DECLARE servico VARCHAR(50);
+        DECLARE invalid INT;
+        DECLARE error_message VARCHAR(100);
+        
+        SET invalid = 0;
+		SET error_message = "";
+
+		IF (NEW.peso <= 0) THEN
+			SET invalid = invalid + 1;
+            IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, ", peso");
+            ELSE
+				SET error_message = CONCAT(error_message, "peso");
+            END IF;
+		END IF;
+        
+        IF (NEW.tamanho <= 0) THEN
+			SET invalid = invalid + 1;
+            IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, ", tamanho");
+            ELSE
+				SET error_message = CONCAT(error_message, "tamanho");
+            END IF;
+		END IF;
+		
+		IF (NEW.temperatura <= 0) THEN
+			SET invalid = invalid + 1;
+            IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, ", temperatura");
+            ELSE
+				SET error_message = CONCAT(error_message, "temperatura");
+            END IF;
+		END IF;
+        
+        SELECT nome INTO servico FROM tipo_servico WHERE id = NEW.servico_agendado_id;
+		IF(servico <> 'consulta') THEN
+			SET invalid = invalid + 1;
+			IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, ", servico");
+			ELSE
+				SET error_message = CONCAT(error_message, "servico");
+			END IF;
+		END IF;
+        
+        IF (invalid > 0) THEN
+			IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, " inválidos!");
+			ELSE
+				SET error_message = CONCAT(error_message, " inválido!");
+			END IF;
+            SIGNAL SQLSTATE VALUE '45000'
+			SET MESSAGE_TEXT = error_message;
+		END IF;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+
+
+--
+-- Table structure for table `vacina`
+--
+
+DROP TABLE IF EXISTS `vacina`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `vacina` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Código de identificação com autoincremento',
+  `nome` varchar(50) NOT NULL COMMENT 'Nome da vacina',
+  `dose` int(11) NOT NULL COMMENT 'Quantidade da dose em mililitros',
+  `intervalo` int(11) NOT NULL COMMENT 'Número de dias entre uma aplicação e outra',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `vacina_BEFORE_INSERT`
+BEFORE INSERT ON `vacina`
+FOR EACH ROW
+BEGIN
+	DECLARE invalid INT;
+	DECLARE error_message VARCHAR(100);
+        
+	SET invalid = 0;
+	SET error_message = "";
+    
+    IF(NEW.dose <= 0) THEN
+		SET invalid = invalid + 1;
+		IF (invalid > 1) THEN
+			SET error_message = CONCAT(error_message, ", dose");
+		ELSE
+			SET error_message = CONCAT(error_message, "dose");
+		END IF;
+    END IF;
+    
+    IF(NEW.intervalo <= 0) THEN
+		SET invalid = invalid + 1;
+		IF (invalid > 1) THEN
+			SET error_message = CONCAT(error_message, ", intervalo");
+		ELSE
+			SET error_message = CONCAT(error_message, "intervalo");
+		END IF;
+    END IF;
+    
+    IF (invalid > 0) THEN
+			IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, " inválidos!");
+			ELSE
+				SET error_message = CONCAT(error_message, " inválido!");
+			END IF;
+            SIGNAL SQLSTATE VALUE '45000'
+			SET MESSAGE_TEXT = error_message;
+		END IF;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `vacina_BEFORE_UPDATE` BEFORE UPDATE ON `vacina` FOR EACH ROW
+BEGIN
+	DECLARE invalid INT;
+	DECLARE error_message VARCHAR(100);
+        
+	SET invalid = 0;
+	SET error_message = "";
+    
+    IF(NEW.dose <= 0) THEN
+		SET invalid = invalid + 1;
+		IF (invalid > 1) THEN
+			SET error_message = CONCAT(error_message, ", dose");
+		ELSE
+			SET error_message = CONCAT(error_message, "dose");
+		END IF;
+    END IF;
+    
+    IF(NEW.intervalo <= 0) THEN
+		SET invalid = invalid + 1;
+		IF (invalid > 1) THEN
+			SET error_message = CONCAT(error_message, ", intervalo");
+		ELSE
+			SET error_message = CONCAT(error_message, "intervalo");
+		END IF;
+    END IF;
+    
+    IF (invalid > 0) THEN
+			IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, " inválidos!");
+			ELSE
+				SET error_message = CONCAT(error_message, " inválido!");
+			END IF;
+            SIGNAL SQLSTATE VALUE '45000'
+			SET MESSAGE_TEXT = error_message;
+		END IF;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+
+
+--
+-- Table structure for table `lote`
+--
+
+DROP TABLE IF EXISTS `lote`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `lote` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Código de identificação com autoincremento',
+  `numero` varchar(50) NOT NULL COMMENT 'Número do lote cadastrado',
+  `vencimento` date NOT NULL COMMENT 'Data de Vencimento deste lote',
+  `preco` decimal(10,2) NOT NULL COMMENT 'Preço base à ser vendido deste lote',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `lote_BEFORE_INSERT` BEFORE INSERT ON `lote` FOR EACH ROW
+BEGIN
+	DECLARE invalid INT;
+	DECLARE error_message VARCHAR(100);
+    
+	SET invalid = 0;
+	SET error_message = "";
+    
+    IF (NEW.vencimento <= NOW()) THEN
+		SET invalid = invalid + 1;
+            IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, ", vencimento");
+            ELSE
+				SET error_message = CONCAT(error_message, "vencimento");
+            END IF;
+    END IF;
+    
+    IF (NEW.preco < 0) THEN
+		SET invalid = invalid + 1;
+            IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, ", preco");
+            ELSE
+				SET error_message = CONCAT(error_message, "preco");
+            END IF;
+    END IF;
+    
+    IF (invalid > 0) THEN
+			IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, " inválidos!");
+			ELSE
+				SET error_message = CONCAT(error_message, " inválido!");
+			END IF;
+            SIGNAL SQLSTATE VALUE '45000'
+			SET MESSAGE_TEXT = error_message;
+		END IF;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `lote_BEFORE_UPDATE` BEFORE UPDATE ON `lote` FOR EACH ROW
+BEGIN
+DECLARE invalid INT;
+	DECLARE error_message VARCHAR(100);
+    
+	SET invalid = 0;
+	SET error_message = "";
+    
+    IF (NEW.vencimento <= NOW()) THEN
+		SET invalid = invalid + 1;
+            IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, ", vencimento");
+            ELSE
+				SET error_message = CONCAT(error_message, "vencimento");
+            END IF;
+    END IF;
+    
+    IF (NEW.preco < 0) THEN
+		SET invalid = invalid + 1;
+            IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, ", preco");
+            ELSE
+				SET error_message = CONCAT(error_message, "preco");
+            END IF;
+    END IF;
+    
+    IF (invalid > 0) THEN
+			IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, " inválidos!");
+			ELSE
+				SET error_message = CONCAT(error_message, " inválido!");
+			END IF;
+            SIGNAL SQLSTATE VALUE '45000'
+			SET MESSAGE_TEXT = error_message;
+		END IF;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+
+
+
+--
+-- Table structure for table `vacina_tem_lote`
+--
+
+DROP TABLE IF EXISTS `vacina_tem_lote`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `vacina_tem_lote` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Código de identificação com autoincremento',
+  `vacina_id` int(11) NOT NULL COMMENT 'Código da vacina',
+  `lote_id` int(11) NOT NULL COMMENT 'Código do lote',
+  PRIMARY KEY (`id`),
+  KEY `fk_vacina1_idx` (`vacina_id`),
+  KEY `fk_lote1_idx` (`lote_id`),
+  CONSTRAINT `fk_vacina1` FOREIGN KEY (`vacina_id`) REFERENCES `vacina` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_lote1` FOREIGN KEY (`lote_id`) REFERENCES `lote` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `vacina_tem_lote_BEFORE_INSERT` BEFORE INSERT ON `vacina_tem_lote` FOR EACH ROW
+BEGIN
+	DECLARE p_vencimento DATE;
+	DECLARE invalid INT;
+	DECLARE error_message VARCHAR(100);
+        
+	SET invalid = 0;
+	SET error_message = "";
+    
+    SELECT vencimento INTO p_vencimento FROM lote WHERE lote.id = NEW.lote_id;
+    
+    IF(p_vencimento < NOW()) THEN
+		SET invalid = invalid + 1;
+		IF (invalid > 1) THEN
+			SET error_message = CONCAT(error_message, ", lote vencido");
+		ELSE
+			SET error_message = CONCAT(error_message, "lote vencido");
+		END IF;
+    END IF;
+    
+    IF (invalid > 0) THEN
+            SIGNAL SQLSTATE VALUE '45000'
+			SET MESSAGE_TEXT = error_message;
+	END IF;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `vacina_tem_lote_BEFORE_UPDATE` BEFORE UPDATE ON `vacina_tem_lote` FOR EACH ROW
+BEGIN
+	DECLARE p_vencimento DATE;
+	DECLARE invalid INT;
+	DECLARE error_message VARCHAR(100);
+        
+	SET invalid = 0;
+	SET error_message = "";
+    
+    SELECT vencimento INTO p_vencimento FROM lote WHERE lote.id = NEW.lote_id;
+    
+    IF(p_vencimento < NOW()) THEN
+		SET invalid = invalid + 1;
+		IF (invalid > 1) THEN
+			SET error_message = CONCAT(error_message, ", lote vencido");
+		ELSE
+			SET error_message = CONCAT(error_message, "lote vencido");
+		END IF;
+    END IF;
+    
+    IF (invalid > 0) THEN
+            SIGNAL SQLSTATE VALUE '45000'
+			SET MESSAGE_TEXT = error_message;
+	END IF;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+
+
+--
+-- Temporary view structure for view `animais_dia`
+--
+
+DROP TABLE IF EXISTS `animais_dia`;
+/*!50001 DROP VIEW IF EXISTS `animais_dia`*/;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+/*!50001 CREATE VIEW `animais_dia` AS SELECT 
+ 1 AS `nome`,
+ 1 AS `data_hora`*/;
+SET character_set_client = @saved_cs_client;
+
+
+--
+-- Table structure for table `aplicacao`
+--
+
+DROP TABLE IF EXISTS `aplicacao`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `aplicacao` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Código de identificação com autoincremento',
+  `data_hora` datetime NOT NULL COMMENT 'Dia e horário da aplicação',
+  `aplicado` tinyint(1) NOT NULL COMMENT 'Controle se já foi aplicada ou não',
+  `dose` int(11) NOT NULL COMMENT 'Dose aplicada',
+  `vacina_id` int(11) NOT NULL COMMENT 'Código de identificação da vacina aplicada',
+  `servico_agendado_id` int(11) NOT NULL COMMENT 'Serviço associado (consulta)',
+  PRIMARY KEY (`id`),
+  KEY `fk_aplicacao_vacina1_idx` (`vacina_id`),
+  KEY `fk_aplicacao_servico_agendado1_idx` (`servico_agendado_id`),
+  CONSTRAINT `fk_aplicacao_vacina1` FOREIGN KEY (`vacina_id`) REFERENCES `vacina` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_aplicacao_servico_agendado1` FOREIGN KEY (`servico_agendado_id`) REFERENCES `servico_agendado` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `aplicacao_BEFORE_INSERT`
+BEFORE INSERT ON `aplicacao`
+FOR EACH ROW
+BEGIN
+		DECLARE vencimento_data DATE;
+		DECLARE servico VARCHAR(50);
+        DECLARE invalid INT;
+        DECLARE error_message VARCHAR(100);
+        
+        SET invalid = 0;
+		SET error_message = "";
+        
+        SELECT nome INTO servico FROM tipo_servico WHERE id = NEW.servico_agendado_id;
+		IF(servico <> 'consulta') THEN
+			SET invalid = invalid + 1;
+			IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, ", servico");
+			ELSE
+				SET error_message = CONCAT(error_message, "servico");
+			END IF;
+		END IF;
+        
+        SELECT vencimento INTO vencimento_data FROM vacina INNER JOIN lote WHERE vacina.lote_id = lote.id AND NEW.vacina_id = vacina.id;
+        IF (vencimento_data < NOW()) THEN
+			SET invalid = invalid + 1;
+			IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, ", validade");
+			ELSE
+				SET error_message = CONCAT(error_message, "validade");
+			END IF;
+        END IF;
+        
+        
+        IF (invalid > 0) THEN
+			IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, " inválidos!");
+			ELSE
+				SET error_message = CONCAT(error_message, " inválido!");
+			END IF;
+            SIGNAL SQLSTATE VALUE '45000'
+			SET MESSAGE_TEXT = error_message;
+		END IF;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `aplicacao_BEFORE_UPDATE`
+BEFORE UPDATE ON `aplicacao`
+FOR EACH ROW
+BEGIN
+DECLARE vencimento_data DATE;
+		DECLARE servico VARCHAR(50);
+        DECLARE invalid INT;
+        DECLARE error_message VARCHAR(100);
+        
+        SET invalid = 0;
+		SET error_message = "";
+        
+        SELECT nome INTO servico FROM tipo_servico WHERE id = NEW.servico_agendado_id;
+		IF(servico <> 'consulta') THEN
+			SET invalid = invalid + 1;
+			IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, ", servico");
+			ELSE
+				SET error_message = CONCAT(error_message, "servico");
+			END IF;
+		END IF;
+        
+        SELECT vencimento INTO vencimento_data FROM vacina WHERE NEW.vacina_id = vacina.id;
+        IF (vencimento_data < NOW()) THEN
+			SET invalid = invalid + 1;
+			IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, ", validade");
+			ELSE
+				SET error_message = CONCAT(error_message, "validade");
+			END IF;
+        END IF;
+        
+        
+        IF (invalid > 0) THEN
+			IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, " inválidos!");
+			ELSE
+				SET error_message = CONCAT(error_message, " inválido!");
+			END IF;
+            SIGNAL SQLSTATE VALUE '45000'
+			SET MESSAGE_TEXT = error_message;
+		END IF;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+
+--
+-- Table structure for table `configuracao`
+--
+
+DROP TABLE IF EXISTS `configuracao`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `configuracao` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Código de identificação com autoincremento',
+  `quantidade_animais` int(11) NOT NULL DEFAULT '0' COMMENT 'Quantidade em unidades máxima de animais por período, a partir deste número todo agendamento será avisado para o usuário como ''overbooking''',
+  `periodos_dia` int(11) NOT NULL DEFAULT '0' COMMENT 'Quantidade em unidades de períodos em um dia',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `configuracao_BEFORE_INSERT`
+BEFORE INSERT ON `configuracao`
+FOR EACH ROW
+BEGIN
+DECLARE invalid INT;
+        DECLARE error_message VARCHAR(100);
+        
+        SET invalid = 0;
+		SET error_message = "";
+
+		IF (NEW.quantidade_animais < 0) THEN
+			SET invalid = invalid + 1;
+            IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, ", quantidade_animais");
+            ELSE
+				SET error_message = CONCAT(error_message, "quantidade_animais");
+            END IF;
+		END IF;
+		
+		IF (NEW.periodos_dia < 0) THEN
+			SET invalid = invalid + 1;
+            IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, ", periodos_dia");
+            ELSE
+				SET error_message = CONCAT(error_message, "periodos_dia");
+            END IF;
+		END IF;
+        
+        IF (invalid > 0) THEN
+			IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, " inválidos!");
+			ELSE
+				SET error_message = CONCAT(error_message, " inválido!");
+			END IF;
+            SIGNAL SQLSTATE VALUE '45000'
+			SET MESSAGE_TEXT = error_message;
+		END IF;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `configuracao_BEFORE_UPDATE`
+BEFORE UPDATE ON `configuracao`
+FOR EACH ROW
+BEGIN
+DECLARE invalid INT;
+        DECLARE error_message VARCHAR(100);
+        
+        SET invalid = 0;
+		SET error_message = "";
+
+		IF (NEW.quantidade_animais < 0) THEN
+			SET invalid = invalid + 1;
+            IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, ", quantidade_animais");
+            ELSE
+				SET error_message = CONCAT(error_message, "quantidade_animais");
+            END IF;
+		END IF;
+		
+		IF (NEW.periodos_dia < 0) THEN
+			SET invalid = invalid + 1;
+            IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, ", periodos_dia");
+            ELSE
+				SET error_message = CONCAT(error_message, "periodos_dia");
+            END IF;
+		END IF;
+        
+        IF (invalid > 0) THEN
+			IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, " inválidos!");
+			ELSE
+				SET error_message = CONCAT(error_message, " inválido!");
+			END IF;
+            SIGNAL SQLSTATE VALUE '45000'
+			SET MESSAGE_TEXT = error_message;
+		END IF;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+
+--
+-- Table structure for table `grupo_de_item`
+--
+
+DROP TABLE IF EXISTS `grupo_de_item`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `grupo_de_item` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Código de identificação com autoincremento',
+  `nome` varchar(50) NOT NULL COMMENT 'Descrição da categoria',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `grupo_de_item_BEFORE_INSERT` BEFORE INSERT ON `grupo_de_item` FOR EACH ROW
+BEGIN
+	DECLARE invalid INT;
+	DECLARE error_message VARCHAR(100);
+        
+	SET invalid = 0;
+	SET error_message = "";
+
+	IF NOT nome_valido(NEW.nome) THEN
+		SET invalid = invalid + 1;
+		IF (invalid > 1) THEN
+			SET error_message = CONCAT(error_message, ", nome");
+		ELSE
+			SET error_message = CONCAT(error_message, "nome");
+		END IF;
+	END IF;
+	
+	IF (invalid > 0) THEN
+		IF (invalid > 1) THEN
+			SET error_message = CONCAT(error_message, " inválidos!");
+		ELSE
+			SET error_message = CONCAT(error_message, " inválido!");
+		END IF;
+		SIGNAL SQLSTATE VALUE '45000'
+		SET MESSAGE_TEXT = error_message;
+	END IF;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `grupo_de_item_BEFORE_UPDATE` BEFORE UPDATE ON `grupo_de_item` FOR EACH ROW
+BEGIN
+	DECLARE invalid INT;
+	DECLARE error_message VARCHAR(100);
+        
+	SET invalid = 0;
+	SET error_message = "";
+
+	IF NOT nome_valido(NEW.nome) THEN
+		SET invalid = invalid + 1;
+		IF (invalid > 1) THEN
+			SET error_message = CONCAT(error_message, ", nome");
+		ELSE
+			SET error_message = CONCAT(error_message, "nome");
+		END IF;
+	END IF;
+	
+	IF (invalid > 0) THEN
+		IF (invalid > 1) THEN
+			SET error_message = CONCAT(error_message, " inválidos!");
+		ELSE
+			SET error_message = CONCAT(error_message, " inválido!");
+		END IF;
+		SIGNAL SQLSTATE VALUE '45000'
+		SET MESSAGE_TEXT = error_message;
+	END IF;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+
+--
+-- Table structure for table `item`
+--
+
+DROP TABLE IF EXISTS `item`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `item` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Código de identificação com autoincremento',
+  `nome` varchar(100) NOT NULL COMMENT 'Nome do produto',
+  `preco` decimal(10,2) NOT NULL COMMENT 'Preço de compra do produto',
+  `quantidade` int(11) NOT NULL COMMENT 'Quantidade unitária em estoque',
+  `data_hora_cadastro` datetime NOT NULL COMMENT 'Controla o momento em que o produto foi cadastrado',
+  `grupo_de_item_id` int(11) NOT NULL COMMENT 'Produto pertece à um grupo',
+  PRIMARY KEY (`id`),
+  KEY `fk_item_grupo_de_item1_idx` (`grupo_de_item_id`),
+  CONSTRAINT `fk_item_grupo_de_item1` FOREIGN KEY (`grupo_de_item_id`) REFERENCES `grupo_de_item` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `item_BEFORE_INSERT`
+BEFORE INSERT ON `item`
+FOR EACH ROW
+BEGIN
+
+        DECLARE invalid INT;
+        DECLARE error_message VARCHAR(100);
+        
+        SET invalid = 0;
+		SET error_message = "";
+
+		IF (NEW.preco < 0) THEN
+			SET invalid = invalid + 1;
+            IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, ", preco");
+            ELSE
+				SET error_message = CONCAT(error_message, "preco");
+            END IF;
+		END IF;
+        
+        IF (NEW.data_hora_cadastro <> NOW()) THEN
+			SET invalid = invalid + 1;
+            IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, ", data hora cadastro");
+            ELSE
+				SET error_message = CONCAT(error_message, "data hora cadastro");
+            END IF;
+		END IF;
+		
+        IF (NEW.quantidade < 0) THEN
+			SET invalid = invalid + 1;
+            IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, ", quantidade");
+            ELSE
+				SET error_message = CONCAT(error_message, "quantidade");
+            END IF;
+		END IF;
+        
+        IF (invalid > 0) THEN
+			IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, " inválidos!");
+			ELSE
+				SET error_message = CONCAT(error_message, " inválido!");
+			END IF;
+            SIGNAL SQLSTATE VALUE '45000'
+			SET MESSAGE_TEXT = error_message;
+		END IF;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `item_BEFORE_UPDATE`
+BEFORE UPDATE ON `item`
+FOR EACH ROW
+BEGIN
+DECLARE invalid INT;
+        DECLARE error_message VARCHAR(100);
+        
+        SET invalid = 0;
+		SET error_message = "";
+
+		IF (NEW.preco < 0) THEN
+			SET invalid = invalid + 1;
+            IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, ", preco");
+            ELSE
+				SET error_message = CONCAT(error_message, "preco");
+            END IF;
+		END IF;
+        
+        IF (invalid > 0) THEN
+			IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, " inválidos!");
+			ELSE
+				SET error_message = CONCAT(error_message, " inválido!");
+			END IF;
+            SIGNAL SQLSTATE VALUE '45000'
+			SET MESSAGE_TEXT = error_message;
+		END IF;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+
+
+--
+-- Table structure for table `pedido`
+--
+
+DROP TABLE IF EXISTS `pedido`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `pedido` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Código de identificação com autoincremento',
+  `valor` decimal(10,2) NOT NULL COMMENT 'Valor total do pedido',
+  `desconto` decimal(10,2) NOT NULL COMMENT 'Desconto dado no total do pedido',
+  `transacao_id` int(11) NOT NULL COMMENT 'Identificação da transação associada',
+  `cliente_id` int(11) DEFAULT NULL COMMENT 'Cliente que realizou o pedido',
+  `funcionario_id` int(11) NOT NULL COMMENT 'Funcionario que realizou o pedido',
+  PRIMARY KEY (`id`),
+  KEY `fk_pedido_transacao1_idx` (`transacao_id`),
+  KEY `fk_pedido_pessoa_tem_funcao1_idx` (`cliente_id`),
+  KEY `fk_pedido_pessoa_tem_funcao2_idx` (`funcionario_id`),
+  CONSTRAINT `fk_pedido_pessoa_tem_funcao1` FOREIGN KEY (`cliente_id`) REFERENCES `pessoa_tem_funcao` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_pedido_pessoa_tem_funcao2` FOREIGN KEY (`funcionario_id`) REFERENCES `pessoa_tem_funcao` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_pedido_transacao1` FOREIGN KEY (`transacao_id`) REFERENCES `transacao` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `pedido_BEFORE_INSERT`
+BEFORE INSERT ON `pedido`
+FOR EACH ROW
+BEGIN
+		DECLARE pessoa_cliente VARCHAR(50);
+        DECLARE pessoa_funcionario VARCHAR(50);
+		DECLARE invalid INT;
+        DECLARE error_message VARCHAR(100);
+        
+        SET invalid = 0;
+		SET error_message = "";
+
+		IF (NEW.valor < 0) THEN
+			SET invalid = invalid + 1;
+            IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, ", valor");
+            ELSE
+				SET error_message = CONCAT(error_message, "valor");
+            END IF;
+		END IF;
+        
+        IF (NEW.desconto < 0) THEN
+			SET invalid = invalid + 1;
+            IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, ", desconto");
+            ELSE
+				SET error_message = CONCAT(error_message, "desconto");
+            END IF;
+		END IF;
+        
+        SELECT nome INTO pessoa_funcionario FROM tipo_funcao WHERE id = NEW.funcionario_id;
+		IF(pessoa_funcionario <> 'funcionario' AND pessoa_funcionario <> 'fornecedor') THEN
+			SET invalid = invalid + 1;
+			IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, ", funcionario");
+			ELSE
+				SET error_message = CONCAT(error_message, "funcionario");
+			END IF;
+		END IF;
+        
+        SELECT nome INTO pessoa_cliente FROM tipo_funcao WHERE id = NEW.cliente_id;
+		IF(pessoa_cliente <> 'cliente' AND pessoa_cliente <> 'cliente-especial') THEN
+			SET invalid = invalid + 1;
+			IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, ", cliente");
+			ELSE
+				SET error_message = CONCAT(error_message, "cliente");
+			END IF;
+		END IF;
+        
+        IF (invalid > 0) THEN
+			IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, " inválidos!");
+			ELSE
+				SET error_message = CONCAT(error_message, " inválido!");
+			END IF;
+            SIGNAL SQLSTATE VALUE '45000'
+			SET MESSAGE_TEXT = error_message;
+		END IF;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `pedido_BEFORE_UPDATE`
+BEFORE UPDATE ON `pedido`
+FOR EACH ROW
+BEGIN
+		DECLARE pessoa_cliente VARCHAR(50);
+        DECLARE pessoa_funcionario VARCHAR(50);
+		DECLARE invalid INT;
+        DECLARE error_message VARCHAR(100);
+        
+        SET invalid = 0;
+		SET error_message = "";
+
+		IF (NEW.valor < 0) THEN
+			SET invalid = invalid + 1;
+            IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, ", valor");
+            ELSE
+				SET error_message = CONCAT(error_message, "valor");
+            END IF;
+		END IF;
+        
+        IF (NEW.desconto < 0) THEN
+			SET invalid = invalid + 1;
+            IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, ", desconto");
+            ELSE
+				SET error_message = CONCAT(error_message, "desconto");
+            END IF;
+		END IF;
+        
+        SELECT nome INTO pessoa_funcionario FROM tipo_funcao WHERE id = NEW.funcionario_id;
+		IF(pessoa_funcionario <> 'funcionario' AND pessoa_funcionario <> 'fornecedor') THEN
+			SET invalid = invalid + 1;
+			IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, ", funcionario");
+			ELSE
+				SET error_message = CONCAT(error_message, "funcionario");
+			END IF;
+		END IF;
+        
+        SELECT nome INTO pessoa_cliente FROM tipo_funcao WHERE id = NEW.cliente_id;
+		IF(pessoa_cliente <> 'cliente' AND pessoa_cliente <> 'cliente-especial') THEN
+			SET invalid = invalid + 1;
+			IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, ", cliente");
+			ELSE
+				SET error_message = CONCAT(error_message, "cliente");
+			END IF;
+		END IF;
+        
+        IF (invalid > 0) THEN
+			IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, " inválidos!");
+			ELSE
+				SET error_message = CONCAT(error_message, " inválido!");
+			END IF;
+            SIGNAL SQLSTATE VALUE '45000'
+			SET MESSAGE_TEXT = error_message;
+		END IF;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+
+
+--
+-- Table structure for table `item_de_venda`
+--
+
+DROP TABLE IF EXISTS `item_de_venda`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `item_de_venda` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Código de identificação com autoincremento',
+  `preco` decimal(10,2) NOT NULL COMMENT 'Valor em reais do produto. Preço > 0',
+  `quantidade` int(11) NOT NULL COMMENT 'Quantidade pedida, em unidades',
+  `item_id` int(11) NOT NULL COMMENT 'Produto associado com o item',
+  `pedido_id` int(11) NOT NULL COMMENT 'Item de venda pertece à um pedido',
+  PRIMARY KEY (`id`),
+  KEY `fk_item_de_venda_item1_idx` (`item_id`),
+  KEY `fk_item_de_venda_pedido1_idx` (`pedido_id`),
+  CONSTRAINT `fk_item_de_venda_item1` FOREIGN KEY (`item_id`) REFERENCES `item` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_item_de_venda_pedido1` FOREIGN KEY (`pedido_id`) REFERENCES `pedido` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `item_de_venda_BEFORE_INSERT`
+BEFORE INSERT ON `item_de_venda`
+FOR EACH ROW
+BEGIN
+DECLARE invalid INT;
+        DECLARE error_message VARCHAR(100);
+        
+        SET invalid = 0;
+		SET error_message = "";
+
+		IF (NEW.preco < 0) THEN
+			SET invalid = invalid + 1;
+            IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, ", preco");
+            ELSE
+				SET error_message = CONCAT(error_message, "preco");
+            END IF;
+		END IF;
+        
+        IF (NEW.quantidade < 0) THEN
+			SET invalid = invalid + 1;
+            IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, ", quantidade");
+            ELSE
+				SET error_message = CONCAT(error_message, "quantidade");
+            END IF;
+		END IF;
+        
+        IF (invalid > 0) THEN
+			IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, " inválidos!");
+			ELSE
+				SET error_message = CONCAT(error_message, " inválido!");
+			END IF;
+            SIGNAL SQLSTATE VALUE '45000'
+			SET MESSAGE_TEXT = error_message;
+		END IF;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `item_de_venda_BEFORE_UPDATE`
+BEFORE UPDATE ON `item_de_venda`
+FOR EACH ROW
+BEGIN
+DECLARE invalid INT;
+        DECLARE error_message VARCHAR(100);
+        
+        SET invalid = 0;
+		SET error_message = "";
+
+		IF (NEW.preco < 0) THEN
+			SET invalid = invalid + 1;
+            IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, ", preco");
+            ELSE
+				SET error_message = CONCAT(error_message, "preco");
+            END IF;
+		END IF;
+        
+        IF (NEW.quantidade < 0) THEN
+			SET invalid = invalid + 1;
+            IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, ", quantidade");
+            ELSE
+				SET error_message = CONCAT(error_message, "quantidade");
+            END IF;
+		END IF;
+        
+        IF (invalid > 0) THEN
+			IF (invalid > 1) THEN
+				SET error_message = CONCAT(error_message, " inválidos!");
+			ELSE
+				SET error_message = CONCAT(error_message, " inválido!");
+			END IF;
+            SIGNAL SQLSTATE VALUE '45000'
+			SET MESSAGE_TEXT = error_message;
+		END IF;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+
+--
+-- Temporary view structure for view `tipo_funcao`
+--
+
+DROP TABLE IF EXISTS `tipo_funcao`;
+/*!50001 DROP VIEW IF EXISTS `tipo_funcao`*/;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+/*!50001 CREATE VIEW `tipo_funcao` AS SELECT 
+ 1 AS `nome`,
+ 1 AS `id`*/;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Temporary view structure for view `tipo_servico`
+--
+
+DROP TABLE IF EXISTS `tipo_servico`;
+/*!50001 DROP VIEW IF EXISTS `tipo_servico`*/;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+/*!50001 CREATE VIEW `tipo_servico` AS SELECT 
+ 1 AS `nome`,
+ 1 AS `id`*/;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Dumping events for database 'pet_shop'
+--
+
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
