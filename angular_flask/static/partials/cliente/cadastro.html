@@ -19,14 +19,14 @@
                      <div class="col-md-7">
                         <div class="form-group">
                            <label>Nome *</label>
-                           <input class="form-control" type="text" data-ng-model="cliente.nome_cliente" name="nome_cliente">
+                           <input class="form-control" type="text" data-ng-model="cliente.form.nome" name="nome">
                            <p class="help-block">Insira o nome completo do cliente</p>
                         </div>
                      </div>
                      <div class="col-md-5">
                         <div class="form-group">
                            <label>Email *</label>
-                           <input class="form-control" type="text" data-ng-model="cliente.email">
+                           <input class="form-control" type="text" data-ng-model="cliente.form.email">
                            <p class="help-block">Insira o email do cliente no formato:
                               <i>email@exemplo.com</i>
                            </p>
@@ -39,7 +39,7 @@
                            <label>Tipo de Cliente *</label>
                            <div class="checkbox">
                               <label>
-                                 <input type="checkbox" data-ng-model="cliente.clienteEspecial">&nbsp;&nbsp; Cliente Especial
+                                 <input type="checkbox" data-ng-model="cliente.form.clienteEspecial">&nbsp;&nbsp; Cliente Especial
                               </label>
                            </div>
                            <p class="help-block">Marque esta opção se o cliente tiver benefícios</p>
@@ -48,14 +48,14 @@
                      <div class="col-md-5">
                         <div class="form-group">
                            <label>CPF/CNPJ *</label>
-                           <input class="form-control" type="text" data-ng-model="cliente.cpf_cnpj">
+                           <input class="form-control" type="text" data-ng-model="cliente.form.cpf_cnpj">
                            <p class="help-block">Insira o CPF ou CNPJ do cliente</p>
                         </div>
                      </div>
                      <div class="col-md-4">
                         <div class="form-group">
                            <label>RG/Insc. Estadual *</label>
-                           <input class="form-control" type="text" data-ng-model="cliente.rg_inscEstadual">
+                           <input class="form-control" type="text" data-ng-model="cliente.form.rg_inscEstadual">
                            <p class="help-block">Insira o número do RG ou Inscrição Estadual</p>
                         </div>
                      </div>
@@ -63,7 +63,7 @@
                   <hr>
                   <div class="row">
                      <div class="col-lg-6">
-                        <div class="row">
+                        <!-- <div class="row">
                            <div class="col-lg-12">
                               <div class="form-group">
                                  <label>Telefones</label>
@@ -73,13 +73,13 @@
                                  </button>
                               </div>
                            </div>
-                        </div>
+                        </div> -->
                         <div class="row">
-                           <fieldset ng-show="adicionarTelefone">
+                           <fieldset ng-show="adicionarTelefone || true">
                               <div class="col-lg-2 col-sm-2">
                                  <div class="form-group">
                                     <label>Cód. País *</label>
-                                    <input class="form-control" type="text" data-ng-model="cliente.pais_telefone">
+                                    <input class="form-control" type="text" data-ng-model="cliente.form.pais_telefone">
                                     <p class="help-block">Brasil:
                                        <i>+55</i>
                                     </p>
@@ -87,18 +87,18 @@
                               </div>
                               <div class="col-lg-2 col-sm-2">
                                  <div class="form-group">
-                                    <label>Cód. Área *</label>
-                                    <input class="form-control" type="text" data-ng-model="cliente.area_telefone">
-                                    <p class="help-block">Ponta Grossa:
+                                    <label>Área *</label>
+                                    <input class="form-control" type="text" data-ng-model="cliente.form.area_telefone">
+                                    <p class="help-block">PG:
                                        <i>42</i>
                                     </p>
                                  </div>
                               </div>
                               <div class="col-lg-4 col-sm-4">
                                  <div class="form-group">
-                                    <label>Telefone da Tho linda *</label>
-                                    <input class="form-control" type="text" data-ng-model="cliente.numero_telefone">
-                                    <p class="help-block">Insira o número do telefone</p>
+                                    <label>Telefone *</label>
+                                    <input class="form-control" type="text" data-ng-model="cliente.form.numero_telefone">
+                                    <p class="help-block">Número</p>
                                  </div>
                               </div>
                               <div class="col-lg-2 col-sm-2">
@@ -106,26 +106,17 @@
                                     <label>Whatsapp</label>
                                     <div class="checkbox">
                                        <label>
-                                          <input type="checkbox" data-ng-model="whatsapp">&nbsp;&nbsp; Sim
+                                          <input type="checkbox" data-ng-model="cliente.form.whatsapp">&nbsp;&nbsp; Sim
                                        </label>
                                     </div>
                                  </div>
                               </div>
-                              <div class="col-lg-2 col-sm-2">
-                                 <div class="form-group">
-                                    <label>Remover</label>
-                                    <button class="form-control btn btn-danger" ng-click="cliente.removeTelefone()" data-toggle="tooltip" data-placement="top" title="" data-title="Auto-completar endereço a partir do CEP">
-                                       <i class="fa fa-minus"></i>&nbsp;<i class="fa fa-phone"></i>
-                                    </button>
-                                    <p class="help-block"></p>
-                                 </div>
-                              </div>
                            </fieldset>
-                           <fieldset data-ng-repeat="telefone in cliente.telefones">
+                           <fieldset data-ng-repeat="telefone in cliente.form.telefones">
                               <div class="col-lg-2 col-sm-2">
                                  <div class="form-group">
                                     <label>Cód. País *</label>
-                                    <input class="form-control" type="text" data-ng-model="cliente.pais_telefone">
+                                    <input class="form-control" type="text" data-ng-model="telefone.pais_telefone">
                                     <p class="help-block">Brasil:
                                        <i>+55</i>
                                     </p>
@@ -134,7 +125,7 @@
                               <div class="col-lg-2 col-sm-2">
                                  <div class="form-group">
                                     <label>Cód. Área *</label>
-                                    <input class="form-control" type="text" data-ng-model="cliente.area_telefone">
+                                    <input class="form-control" type="text" data-ng-model="telefone.area_telefone">
                                     <p class="help-block">Ponta Grossa:
                                        <i>42</i>
                                     </p>
@@ -143,7 +134,7 @@
                               <div class="col-lg-4 col-sm-4">
                                  <div class="form-group">
                                     <label>Telefone *</label>
-                                    <input class="form-control" type="text" data-ng-model="cliente.numero_telefone">
+                                    <input class="form-control" type="text" data-ng-model="telefone.numero_telefone">
                                     <p class="help-block">Insira o número do telefone</p>
                                  </div>
                               </div>
@@ -152,25 +143,25 @@
                                     <label>Whatsapp</label>
                                     <div class="checkbox">
                                        <label>
-                                          <input type="checkbox" data-ng-model="whatsapp">&nbsp;&nbsp; Sim
+                                          <input type="checkbox" data-ng-model="telefone.whatsapp">&nbsp;&nbsp; Sim
                                        </label>
                                     </div>
                                  </div>
                               </div>
-                              <div class="col-lg-2 col-sm-2">
+                              <!-- <div class="col-lg-2 col-sm-2">
                                  <div class="form-group" ng-hide="$first">
                                     <label>Remover</label>
-                                    <button class="form-control btn btn-danger" ng-click="cliente.removeTelefone()" data-toggle="tooltip" data-placement="top" title="" data-title="Auto-completar endereço a partir do CEP">
+                                    <button class="form-control btn btn-danger" ng-click="cliente.removeTelefone(entry.id)" data-toggle="tooltip" data-placement="top" title="" data-title="Auto-completar endereço a partir do CEP">
                                        <i class="fa fa-minus"></i>&nbsp;<i class="fa fa-phone"></i>
                                     </button>
                                     <p class="help-block"></p>
                                  </div>
-                              </div>
+                              </div> -->
                            </fieldset>
                         </div>
                      </div>
                      <div class="col-lg-6">
-                        <div class="row">
+                        <!-- <div class="row">
                            <div class="col-md-12">
                               <div class="form-group">
                                  <label>Redes Sociais</label>
@@ -179,22 +170,44 @@
                                  </button>
                               </div>
                            </div>
-                        </div>
+                        </div> -->
                         <div class="row">
-                           <fieldset data-ng-repeat="social in cliente.socials">
+                           <fieldset>
                               <div class="col-lg-3">
                                  <div class="form-group">
                                     <label>Rede Social *</label>
-                                    <select class="form-control" data-ng-model="cliente.tipoRedeSocial">
+                                    <select class="form-control" data-ng-model="cliente.form.rede"
+                                             ng-options="social.id as social.nome for social in cliente.redesSociais">
+                                       <option data-ng-repeat="rede in cliente.tipoRedeSocial">
                                        <option value="facebook">Facebook</option>
                                     </select>
-                                    <p class="help-block"></p>
+                                 </div>
+                              </div>
+                              <div class="col-lg-9">
+                                 <div class="form-group">
+                                    <label>Perfil/Endereço *</label>
+                                    <input class="form-control" type="text" data-ng-model="cliente.form.endereco_social">
+                                    <p class="help-block">Insira o perfil ou endereço para encontrar a pessoa na rede social</p>
+                                 </div>
+                              </div>
+                           </fieldset>
+                        </div>
+                        <div class="row">
+                           <fieldset data-ng-repeat="social in cliente.form.socials">
+                              <div class="col-lg-3">
+                                 <div class="form-group">
+                                    <label>Rede Social *</label>
+                                    <select class="form-control" data-ng-model="cliente.form.rede"
+                                             ng-options="social.id as social.nome for social in cliente.redesSociais">
+                                       <option data-ng-repeat="rede in cliente.tipoRedeSocial">
+                                       <option value="facebook">Facebook</option>
+                                    </select>
                                  </div>
                               </div>
                               <div class="col-lg-7">
                                  <div class="form-group">
                                     <label>Perfil/Endereço *</label>
-                                    <input class="form-control" type="text" data-ng-model="cliente.endereco_social">
+                                    <input class="form-control" type="text" data-ng-model="cliente.form.endereco_social">
                                     <p class="help-block">Insira o perfil ou endereço para encontrar a pessoa na rede social</p>
                                  </div>
                               </div>
@@ -209,7 +222,7 @@
                               </div>
                            </fieldset>
                         </div>
-                        <div class="row" ng-show="cliente.novaSocial">
+                        <!-- <div class="row" ng-show="cliente.novaSocial">
                            <div class="col-md-12">
                               <div class="form-group">
                                  <button class="form-control btn btn-link" data-toggle="modal" data-target="#adicionarRedeSocial" data-toggle="tooltip" data-placement="top" title="Cadastrar uma nova rede social">
@@ -217,7 +230,7 @@
                                  </button>
                               </div>
                            </div>
-                        </div>
+                        </div> -->
                      </div>
                   </div>
                   <hr>
@@ -225,7 +238,7 @@
                      <div class="col-md-2">
                         <div class="form-group">
                            <label>CEP *</label>
-                           <input class="form-control" type="text" data-ng-model="cliente.cep">
+                           <input class="form-control" type="text" data-ng-model="cliente.form.cep">
                            <p class="help-block">CEP da localidade do cliente</p>
                         </div>
                      </div>
@@ -241,21 +254,21 @@
                      <div class="col-md-5">
                         <div class="form-group">
                            <label>Logradouro *</label>
-                           <input class="form-control" type="text" data-ng-model="cliente.rua">
+                           <input class="form-control" type="text" data-ng-model="cliente.form.rua">
                            <p class="help-block">Nome da rua</p>
                         </div>
                      </div>
                      <div class="col-md-1">
                         <div class="form-group">
                            <label>Número *</label>
-                           <input class="form-control" type="text" data-ng-model="cliente.numero">
+                           <input class="form-control" type="text" data-ng-model="cliente.form.numero">
                            <p class="help-block">No. da residência</p>
                         </div>
                      </div>
                      <div class="col-md-3">
                         <div class="form-group">
                            <label>Complemento</label>
-                           <input class="form-control" type="text" data-ng-model="cliente.complemento">
+                           <input class="form-control" type="text" data-ng-model="cliente.form.complemento">
                            <p class="help-block">Informações adicionais</p>
                         </div>
                      </div>
@@ -264,21 +277,21 @@
                      <div class="col-md-3">
                         <div class="form-group">
                            <label>Ponto de Referência</label>
-                           <input class="form-control" type="text" data-ng-model="cliente.pontoDeReferencia">
+                           <input class="form-control" type="text" data-ng-model="cliente.form.pontoDeReferencia">
                            <p class="help-block">Insira uma localidade próxima conhecida</p>
                         </div>
                      </div>
                      <div class="col-md-5">
                         <div class="form-group">
                            <label>Cidade *</label>
-                           <input class="form-control" type="text" data-ng-model="cliente.cidade">
+                           <input class="form-control" type="text" data-ng-model="cliente.form.cidade">
                            <p class="help-block">Insira a cidade do cliente</p>
                         </div>
                      </div>
                      <div class="col-md-2">
                         <div class="form-group">
                            <label>Estado (UF) *</label>
-                           <input class="form-control" type="text" data-ng-model="cliente.estado">
+                           <input class="form-control" type="text" data-ng-model="cliente.form.estado">
                            <p class="help-block">Uni. Federativa. Ex.:
                               <i>PR</i>
                            </p>
@@ -287,7 +300,7 @@
                      <div class="col-md-2">
                         <div class="form-group">
                            <label>País *</label>
-                           <input class="form-control" type="text" data-ng-model="cliente.pais">
+                           <input class="form-control" type="text" data-ng-model="cliente.form.pais">
                            <p class="help-block">País. Ex.:
                               <i>Brasil</i>
                            </p>
@@ -296,23 +309,23 @@
                   </div>
                   <div class="row">
                      <div class="col-lg-12">
-                        <button type="submit" class="btn btn-success" data-toggle="tooltip" data-placement="top" title="Armazena as informações inseridas acima">
-                           <span class="fa fa-check">&nbsp;
+                        <button type="submit" ng-click="cliente.add()" class="btn btn-success" data-toggle="tooltip" data-placement="top" title="Armazena as informações inseridas acima">
+                           <span class="fa fa-check"></span>&nbsp;&nbsp;
                               <b>Salvar</b>
-                           </button>
-                           <button type="submit" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Incluir Pet">
-                              <span class="fa fa-bug">&nbsp;
-                                 <b>Incluir Pet</b>
-                              </button>
-                           </div>
-                        </div>
-                     </form>
+                        </button>
+                        <button type="submit" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Incluir Pet">
+                           <span class="fa fa-bug"></span>&nbsp;&nbsp;
+                              <b>Incluir Pet</b>
+                        </button>
+                     </div>
                   </div>
-               </div>
+               </form>
             </div>
          </div>
       </div>
-      <!--
+   </div>
+</div>
+<!--
 <script type="text/javascript">
   $( function() {
     $('.selectpicker').selectpicker();

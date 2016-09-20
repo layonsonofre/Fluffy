@@ -28,13 +28,13 @@
       vm.alt = alt;
       vm.del = del;
 
-      vm.servicos = {
-         'id': 1,
-         'nome': 'teste123',
-         'preco': '123'
-      };
-
-      console.log('aoooooba');
+      ServicoFactory.getAgendados()
+         .then(function(response) {
+            vm.agendadosHoje = response.data.result;
+            console.log(response.data.result);
+         }, function(response) {
+            console.error(response);
+         });
 
       ServicoFactory.get()
          .then(function(response) {
@@ -72,46 +72,47 @@
             });
       }
 
-      $scope.animais = [{
-         'nome': 'Fluffy',
-         'sexo': 'm',
-         'data': '15/08/1992',
-         'raca': 'Pastor Alemão'
-      }, {
-         'nome': 'Bumma',
-         'sexo': 'f',
-         'data': '28/11/2013',
-         'raca': 'Beagle'
-      }];
-      $scope.servicosAgendados = [];
-      $scope.removeServicosAgendados = function(index) {
-         $scope.servicosAgendados.splice(index, 1);
-      }
-      $scope.animalAgendado = {
-         'nome': ''
-      };
-      $scope.removeAnimalAgendado = function() {
-         $scope.animalAgendado = {
-            'nome': ''
-         };
-      }
+      vm.agendamentos = [];
+      //
+      // $scope.animais = [{
+      //    'nome': 'Fluffy',
+      //    'sexo': 'm',
+      //    'data': '15/08/1992',
+      //    'raca': 'Pastor Alemão'
+      // }, {
+      //    'nome': 'Bumma',
+      //    'sexo': 'f',
+      //    'data': '28/11/2013',
+      //    'raca': 'Beagle'
+      // }];
+      // $scope.servicosAgendados = [];
+      // $scope.removeServicosAgendados = function(index) {
+      //    $scope.servicosAgendados.splice(index, 1);
+      // }
+      // $scope.animalAgendado = {
+      //    'nome': ''
+      // };
+      // $scope.removeAnimalAgendado = function() {
+      //    $scope.animalAgendado = {
+      //       'nome': ''
+      //    };
+      // }
    }
 
    ServicoFactory.$inject = ['$http', 'Fluffy'];
 
    function ServicoFactory($http, Fluffy) {
       var _url = Fluffy.urlBase;
-      alert(_url);
       var ServicoFactory = {
          get: get,
          add: add,
          alt: alt,
-         del: del
+         del: del,
+         getAgendados: getAgendados
       };
       return ServicoFactory;
 
       function get() {
-         alert('get');
          return $http.get(
                _url + '/servico'
             )
@@ -174,6 +175,23 @@
          return $http.delete(
                _url + '/servico',
                id
+            )
+            .then(success)
+            .catch(failed);
+
+         function success(response) {
+            return response;
+         }
+
+         function failed(response) {
+            console.error('Failed: ' + JSON.stringify(response));
+         }
+      }
+
+      function getAgendados() {
+         alert('oi');
+         return $http.get(
+               _url + '/servicoAgendado'
             )
             .then(success)
             .catch(failed);

@@ -11,6 +11,10 @@
    function LembreteController($scope, $http, LembreteFactory) {
       var vm = this;
 
+      vm.form = {};
+      vm.form.visualizado = false;
+      vm.form.pessoa_id = 3;
+
       vm.add = add;
       vm.alt = alt;
       vm.del = del;
@@ -24,12 +28,7 @@
          });
 
       function add() {
-         var data = {
-            descricao: vm.descricao,
-            data_hora: vm.data_hora,
-            executado: vm.executado
-         }
-         LembreteFactory.add(data)
+         LembreteFactory.add(vm.form)
             .then(function(response) {
                console.log(response);
             }, function(response) {
@@ -37,12 +36,13 @@
             });
       }
 
-      function alt(data, id, pessoa) {
-         LembreteFactory.alt(data, id, pessoa).then(function(response) {
-            console.log(response.data.result);
-         }, function(response) {
-            console.error(response)
-         });
+      function alt(data) {
+         LembreteFactory.alt(data)
+            .then(function(response) {
+               console.log(response);
+            }, function(response) {
+               console.error(response)
+            });
       }
 
       function del(id) {
@@ -58,7 +58,7 @@
          console.log('Discarding changes...');
          vm.descricao = null;
          vm.data_hora = null;
-         vm.executado = null;
+         vm.visualizado = null;
       }
    }
 
@@ -92,10 +92,15 @@
 
       function add(data) {
          console.log('SAVING: ' + JSON.stringify(data));
-         return $http.post(
-               _url + '/lembrete',
-               data
-            )
+         return $http({
+               method: 'POST',
+               url: _url + '/lembrete',
+               data: {
+                  descricao: data.descricao,
+                  data_hora: data.data_hora,
+                  visualizado: data.visualizado
+               }
+            })
             .then(success)
             .catch(failed);
 
@@ -108,17 +113,18 @@
          }
       }
 
-      function alt(data, id, pessoa) {
-         console.log('UPDATING: ' + JSON.stringify({
-            id: pessoa.id
-         }));
+      function alt(data) {
+         console.log('UPDATING: ' + JSON.stringify(data));
+         console.log(JSON.stringify({visualizado: data.visualizado === false ? 0 : 1}))
          return $http({
                method: 'PUT',
                url: _url + '/lembrete',
                data: {
-                  id: id,
+                  id: data.id,
                   descricao: data.descricao,
-                  pessoa_id: pessoa.id
+                  pessoa_id: data.pessoa.id,
+                  visualizado: data.visualizado === false ? 0 : 1,
+                  data_hora: data.data_hora
                }
             })
             .then(success)
@@ -134,14 +140,19 @@
       }
 
       function del(id) {
-         return $http.delete(
-               _url + '/lembrete',
-               id
-            )
+         console.log(JSON.stringify(id));
+         return $http({
+               method: 'DELETE',
+               url: _url + '/lembrete',
+               data: {
+                  id: id
+               }
+            })
             .then(success)
             .catch(failed);
 
          function success(response) {
+            console.log(response);
             return response;
          }
 
