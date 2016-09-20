@@ -44,7 +44,7 @@ class Util:
         args["item"] = ["id","nome","preco","quantidade","grupo_de_item_id"]
         args["itemDeVenda"] = ["id","preco","quantidade","item_id","pedido_id"]
         args["lembrete"] = ["id","descricao","data_hora","executado","pessoa_id"]
-        args["lote"] = ["id","numero","vencimento","preco"]
+        args["lote"] = ["id","numero","vencimento","preco","quantidade"]
         args["oAuth"] = ["id", "token", "refresh_token", "valido"]
         args["pais"] = ["id","nome"]
         args["pedido"] = ["id","valor","desconto","transacao_id","pessoa_tem_funcao_cliente_id","pessoa_tem_funcao_funcionario_id"]
