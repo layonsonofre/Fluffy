@@ -1,5 +1,5 @@
 #!/bin/bash
-pid=$!
+
 echo "**********Iniciando Instalação do Sistema Fluffy*********"
 echo "-Atualizando Instalador"
 echo "--Apt-Get"
@@ -19,7 +19,6 @@ echo "-Instalando Banco de Dados"
 echo "--Servidor Mysql"
 sudo debconf-set-selections <<< 'mysql-server-5.6 mysql-server/root_password pa$
 sudo debconf-set-selections <<< 'mysql-server-5.6 mysql-server/root_password_ag$
-sudo apt-get install -qq -y mysql-client-5.6
 sudo apt-get install -qq -y mysql-server-5.6
 echo "-Inicializando Banco de Dados"
 sudo service mysql stop
@@ -30,10 +29,11 @@ echo "--Criando Tabelas"
 echo "--Criando Funções"
 echo "--Criando Procedimentos"
 echo "--Configurando Triggers"
-sudo mysql --defaults-extra-file=db/.mysql petshop < db/createTABLES.sql
+sudo mysql --defaults-extra-file=db/.mysql pet_shop < db/createTABLES.sql
 echo "--Adicionando Dados"
-sudo mysql  --defaults-extra-file=db/.mysql petshop < db/seedDB.sql
+sudo mysql  --defaults-extra-file=db/.mysql pet_shop < db/seedDB.sql
 echo "-Inicializando Sistema"
-sudo nohup python runserver.py > log.out
+pid=$!
+sudo nohup python runserver.py > log.out &
 kill $pid
 echo "**********Fim da Instalação do Sistema Fluffy*********"
