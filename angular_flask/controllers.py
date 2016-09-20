@@ -4,6 +4,7 @@ from flask import Flask, request, Response, jsonify
 from flask import render_template, url_for, redirect, send_from_directory
 from flask import send_file, make_response, abort
 from flask_cors import cross_origin
+from uuid import uuid4
 
 from angular_flask import app
 
@@ -48,7 +49,7 @@ def get_modelo(modelo=None):
 		return jsonify(success=True,result=[p.toJSON() for p in list],message="")
 
 
-@app.route('/<modelo>/', methods=['POST','PUT','DELETE'])
+@app.route('/<modelo>', methods=['POST','PUT','DELETE'])
 def form_modelo(modelo = None):
 	args = []
 	
@@ -72,6 +73,38 @@ def form_modelo(modelo = None):
 	try:
 		data = Util.postData(proc, args)
 		return jsonify(success=True, result={"id":data[0]}, message="")
+	except Exception as e:
+		messages = e.__str__().split(', ')
+		code = int(messages[0].split("(")[1])
+		error_message = unicode((messages[1].split(")")[0]), "utf-8")
+		return jsonify(success=False, result={}, codigo=code,message=error_message.decode('cp1251').encode('utf8'))
+
+@app.route('/login/', methods=['POST'])
+def login():
+
+
+	CLIENT_ID = "FLUFFY_1234"
+	CLIENT_SECRET = ""
+
+	json = request.json
+	username = json['usuario']
+	passwd = json['senha']
+	client_id = json['client-id']
+	try:
+		data = Util.getData('getPessoaTemFuncao', [None,None,None, username, None, passwd, None, None])
+		ptf = PessoaTemFuncao(data[0])
+		if len(data) == 1 and client_id == CLIENT_ID:
+			token = str(uuid4())
+			refresh_token = str(uuid4())
+			print([token, refresh_token])
+			id = Util.postData('insOAuth',[token, refresh_token])
+			print(id[0])
+			print(ptf.id)
+			result = Util.postData('altPessoaTemFuncao', [ptf.id, ptf.pessoa[0], ptf.funcao[0], None, id[0]])
+			print(result)
+			return jsonify(success=True, result={"token":token, "refresh_token":refresh_token}, message="")	
+		else:
+			return jsonify(success=False, result={}, message="Usuario e/ou Senha incorretos")
 	except Exception as e:
 		return jsonify(success=False, result={}, message=e.__str__())
 
