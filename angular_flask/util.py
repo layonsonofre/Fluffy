@@ -50,7 +50,7 @@ class Util:
         args["pedido"] = ["id","valor","desconto","transacao_id","pessoa_tem_funcao_cliente_id","pessoa_tem_funcao_funcionario_id"]
         args["permissao"] = ["id","modulo"]
         args["pessoa"] = ["id","nome","email","registro","logradouro","numero","complemento","cep","ponto_de_referencia","cidade_id"]
-        args["pessoaTemFuncao"] = ["id","pessoa_id","funcao_id"]
+        args["pessoaTemFuncao"] = ["id","pessoa_id","funcao_id","password","oauth_id"]
         args["pessoaTemPermissao"] = ["id","pessoa_id","permissao_id"]
         args["pessoaTemRedeSocial"] = ["id","perfil","pessoa_id","rede_social_id"]
         args["porte"] = ["id", "nome", "tamanho_minimo", "tamanho_maximo", "peso_minimo", "peso_maximo"]
