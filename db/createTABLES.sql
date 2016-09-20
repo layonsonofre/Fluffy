@@ -11,7 +11,7 @@
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` FUNCTION `cnpj_valido`(cnpj VARCHAR(14)) RETURNS tinyint(1)
 BEGIN
 	
@@ -79,8 +79,8 @@ BEGIN
 	END IF;
     
 	RETURN TRUE;
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -94,7 +94,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` FUNCTION `cpf_valido`(cpf VARCHAR(14)) RETURNS tinyint(1)
 BEGIN
 
@@ -157,8 +157,8 @@ BEGIN
 	END IF;
     
 	RETURN TRUE;
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -172,7 +172,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` FUNCTION `email_valido`(email VARCHAR(50)) RETURNS tinyint(1)
 BEGIN
 	IF NOT (SELECT email REGEXP '^[A-Z0-9._%-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$') THEN
@@ -180,8 +180,8 @@ BEGIN
 	ELSE
 		RETURN TRUE;
 	END IF;
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -195,7 +195,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` FUNCTION `nome_valido`(nome VARCHAR(100)) RETURNS tinyint(1)
 BEGIN
 
@@ -204,8 +204,8 @@ BEGIN
 	ELSE
 		RETURN TRUE;
 	END IF;
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -219,7 +219,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` FUNCTION `senha_valida`(senha VARCHAR(50)) RETURNS tinyint(1)
 BEGIN
 	IF NOT (SELECT senha REGEXP BINARY '[a-z]' 
@@ -231,8 +231,8 @@ BEGIN
     ELSE 
 		RETURN TRUE;
 	END IF;
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -246,7 +246,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` FUNCTION `split_str`(
   x VARCHAR(255),
   delim VARCHAR(12),
@@ -257,8 +257,8 @@ BEGIN
     RETURN REPLACE(SUBSTRING(SUBSTRING_INDEX(x, delim, pos),
        LENGTH(SUBSTRING_INDEX(x, delim, pos -1)) + 1),
        delim, '');
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -272,7 +272,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` FUNCTION `valida_senha`(senha VARCHAR(50)) RETURNS tinyint(1)
 BEGIN
 	IF NOT (SELECT senha REGEXP BINARY '[a-z]' 
@@ -284,7 +284,7 @@ BEGIN
     ELSE 
 		RETURN TRUE;
 	END IF;
-END ;;
+END ;
 
 --
 -- Table structure for table `pais`
@@ -306,7 +306,7 @@ CREATE TABLE `pais` (
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `pais_BEFORE_INSERT`
 BEFORE INSERT ON `pais`
 FOR EACH ROW
@@ -336,7 +336,7 @@ BEGIN
 			SET MESSAGE_TEXT = error_message;
 		END IF;
 END */;;
-DELIMITER ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -349,7 +349,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `pais_BEFORE_UPDATE`
 BEFORE UPDATE ON `pais`
 FOR EACH ROW
@@ -379,7 +379,7 @@ BEGIN
 			SET MESSAGE_TEXT = error_message;
 		END IF;
 END */;;
-DELIMITER ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -410,7 +410,7 @@ CREATE TABLE `estado` (
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `estado_BEFORE_INSERT`
 BEFORE INSERT ON `estado`
 FOR EACH ROW
@@ -440,7 +440,7 @@ BEGIN
 			SET MESSAGE_TEXT = error_message;
 		END IF;
 END */;;
-DELIMITER ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -453,7 +453,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `estado_BEFORE_UPDATE`
 BEFORE UPDATE ON `estado`
 FOR EACH ROW
@@ -483,7 +483,7 @@ DECLARE invalid INT;
 			SET MESSAGE_TEXT = error_message;
 		END IF;
 END */;;
-DELIMITER ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -514,7 +514,7 @@ CREATE TABLE `cidade` (
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `cidade_BEFORE_INSERT`
 BEFORE INSERT ON `cidade`
 FOR EACH ROW
@@ -545,7 +545,7 @@ BEGIN
 			SET MESSAGE_TEXT = error_message;
 		END IF;
 END */;;
-DELIMITER ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -558,7 +558,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `cidade_BEFORE_UPDATE`
 BEFORE UPDATE ON `cidade`
 FOR EACH ROW
@@ -588,7 +588,7 @@ DECLARE invalid INT;
 			SET MESSAGE_TEXT = error_message;
 		END IF;
 END */;;
-DELIMITER ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -629,7 +629,7 @@ CREATE TABLE `pessoa` (
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `pessoa_BEFORE_INSERT`
 BEFORE INSERT ON `pessoa`
 FOR EACH ROW
@@ -688,7 +688,7 @@ BEGIN
 		END IF;
         
 	END */;;
-DELIMITER ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -701,7 +701,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `pessoa_BEFORE_UPDATE`
 BEFORE UPDATE ON `pessoa`
 FOR EACH ROW
@@ -750,7 +750,7 @@ BEGIN
 			SET MESSAGE_TEXT = error_message;
 		END IF;
 END */;;
-DELIMITER ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -782,7 +782,7 @@ CREATE TABLE `telefone` (
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `telefone_BEFORE_INSERT` BEFORE INSERT ON `telefone` FOR EACH ROW
 BEGIN
 	DECLARE invalid INT;
@@ -828,7 +828,7 @@ BEGIN
 			SET MESSAGE_TEXT = error_message;
 		END IF;
 END */;;
-DELIMITER ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -841,7 +841,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `telefone_BEFORE_UPDATE` BEFORE UPDATE ON `telefone` FOR EACH ROW
 BEGIN
 	DECLARE invalid INT;
@@ -887,7 +887,7 @@ BEGIN
 			SET MESSAGE_TEXT = error_message;
 		END IF;
 END */;;
-DELIMITER ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -914,7 +914,7 @@ CREATE TABLE `rede_social` (
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `rede_social_BEFORE_INSERT` BEFORE INSERT ON `rede_social` FOR EACH ROW
 BEGIN
 	DECLARE invalid INT;
@@ -942,7 +942,7 @@ BEGIN
 			SET MESSAGE_TEXT = error_message;
 		END IF;
 END */;;
-DELIMITER ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -955,7 +955,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `rede_social_BEFORE_UPDATE` BEFORE UPDATE ON `rede_social` FOR EACH ROW
 BEGIN
 	DECLARE invalid INT;
@@ -983,7 +983,7 @@ BEGIN
 			SET MESSAGE_TEXT = error_message;
 		END IF;
 END */;;
-DELIMITER ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -1036,7 +1036,7 @@ CREATE TABLE `lembrete` (
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `lembrete_BEFORE_INSERT` BEFORE INSERT ON `lembrete` FOR EACH ROW
 BEGIN
 	DECLARE invalid INT;
@@ -1064,7 +1064,7 @@ BEGIN
 			SET MESSAGE_TEXT = error_message;
 		END IF;
 END */;;
-DELIMITER ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -1077,7 +1077,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `lembrete_BEFORE_UPDATE` BEFORE UPDATE ON `lembrete` FOR EACH ROW
 BEGIN
 	DECLARE invalid INT;
@@ -1096,7 +1096,7 @@ BEGIN
 			SET MESSAGE_TEXT = error_message;
 		END IF;
 END */;;
-DELIMITER ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -1124,7 +1124,7 @@ CREATE TABLE `funcao` (
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `funcao_BEFORE_INSERT`
 BEFORE INSERT ON `funcao`
 FOR EACH ROW
@@ -1154,7 +1154,7 @@ BEGIN
 		SET MESSAGE_TEXT = error_message;
 	END IF;
 END */;;
-DELIMITER ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -1167,7 +1167,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `funcao_BEFORE_UPDATE`
 BEFORE UPDATE ON `funcao`
 FOR EACH ROW
@@ -1197,7 +1197,7 @@ BEGIN
 		SET MESSAGE_TEXT = error_message;
 	END IF;
 END */;;
-DELIMITER ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -1252,7 +1252,7 @@ CREATE TABLE `pessoa_tem_funcao` (
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `pessoa_tem_funcao_BEFORE_INSERT`
 BEFORE INSERT ON `pessoa_tem_funcao`
 FOR EACH ROW
@@ -1300,7 +1300,7 @@ BEGIN
 		SET MESSAGE_TEXT = error_message;
     END IF;
 END */;;
-DELIMITER ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -1313,7 +1313,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `pessoa_tem_funcao_BEFORE_UPDATE`
 BEFORE UPDATE ON `pessoa_tem_funcao`
 FOR EACH ROW
@@ -1358,7 +1358,7 @@ BEGIN
 		SET MESSAGE_TEXT = error_message;
     END IF;
 END */;;
-DELIMITER ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -1386,7 +1386,7 @@ CREATE TABLE `permissao` (
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `permissao_BEFORE_INSERT` BEFORE INSERT ON `permissao` FOR EACH ROW
 BEGIN
 	DECLARE invalid INT;
@@ -1414,7 +1414,7 @@ BEGIN
 			SET MESSAGE_TEXT = error_message;
 		END IF;	
 END */;;
-DELIMITER ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -1427,7 +1427,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `permissao_BEFORE_UPDATE` BEFORE UPDATE ON `permissao` FOR EACH ROW
 BEGIN
 	DECLARE invalid INT;
@@ -1455,7 +1455,7 @@ BEGIN
 			SET MESSAGE_TEXT = error_message;
 		END IF;	
 END */;;
-DELIMITER ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -1488,7 +1488,7 @@ CREATE TABLE `pessoa_tem_permissao` (
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `pessoa_tem_permissoes_BEFORE_INSERT`
 BEFORE INSERT ON `pessoa_tem_permissao` FOR EACH ROW
 BEGIN
@@ -1519,7 +1519,7 @@ BEGIN
 			SET MESSAGE_TEXT = error_message;
 		END IF;
 END */;;
-DELIMITER ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -1532,7 +1532,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `pessoa_tem_permissoes_BEFORE_UPDATE`
 BEFORE UPDATE ON `pessoa_tem_permissao` FOR EACH ROW
 BEGIN
@@ -1563,7 +1563,7 @@ DECLARE invalid INT;
 			SET MESSAGE_TEXT = error_message;
 		END IF;
 END */;;
-DELIMITER ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -1591,7 +1591,7 @@ CREATE TABLE `especie` (
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `especie_BEFORE_INSERT` BEFORE INSERT ON `especie` FOR EACH ROW
 BEGIN
 	DECLARE invalid INT;
@@ -1619,7 +1619,7 @@ BEGIN
 			SET MESSAGE_TEXT = error_message;
 		END IF;
 END */;;
-DELIMITER ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -1632,7 +1632,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `especie_BEFORE_UPDATE` BEFORE UPDATE ON `especie` FOR EACH ROW
 BEGIN
 	DECLARE invalid INT;
@@ -1660,7 +1660,7 @@ BEGIN
 			SET MESSAGE_TEXT = error_message;
 		END IF;
 END */;;
-DELIMITER ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -1692,7 +1692,7 @@ CREATE TABLE `porte` (
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `porte_BEFORE_INSERT`
 BEFORE INSERT ON `porte`
 FOR EACH ROW
@@ -1749,7 +1749,7 @@ BEGIN
 			SET MESSAGE_TEXT = error_message;
 	END IF;
 END */;;
-DELIMITER ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -1762,7 +1762,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `porte_BEFORE_UPDATE`
 BEFORE UPDATE ON `porte`
 FOR EACH ROW
@@ -1819,7 +1819,7 @@ BEGIN
 			SET MESSAGE_TEXT = error_message;
 		END IF;
 END */;;
-DELIMITER ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -1853,7 +1853,7 @@ CREATE TABLE `raca` (
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `raca_BEFORE_INSERT` BEFORE INSERT ON `raca` FOR EACH ROW
 BEGIN
 	DECLARE invalid INT;
@@ -1881,7 +1881,7 @@ BEGIN
 			SET MESSAGE_TEXT = error_message;
 		END IF;
 END */;;
-DELIMITER ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -1894,7 +1894,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `raca_BEFORE_UPDATE` BEFORE UPDATE ON `raca` FOR EACH ROW
 BEGIN
 	DECLARE invalid INT;
@@ -1922,7 +1922,7 @@ BEGIN
 			SET MESSAGE_TEXT = error_message;
 		END IF;
 END */;;
-DELIMITER ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -1961,7 +1961,7 @@ CREATE TABLE `animal` (
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `animal_BEFORE_INSERT`
 BEFORE INSERT ON `animal`
 FOR EACH ROW
@@ -2031,7 +2031,7 @@ BEGIN
 			SET MESSAGE_TEXT = error_message;
 		END IF;
 END */;;
-DELIMITER ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -2044,7 +2044,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `animal_BEFORE_UPDATE`
 BEFORE UPDATE ON `animal`
 FOR EACH ROW
@@ -2103,7 +2103,7 @@ BEGIN
 		SET MESSAGE_TEXT = error_message;
 	END IF;
 END */;;
-DELIMITER ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -2165,7 +2165,7 @@ CREATE TABLE `servico` (
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `servico_BEFORE_INSERT`
 BEFORE INSERT ON `servico`
 FOR EACH ROW
@@ -2195,7 +2195,7 @@ BEGIN
 			SET MESSAGE_TEXT = error_message;
 		END IF;
 END */;;
-DELIMITER ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -2208,7 +2208,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `servico_BEFORE_UPDATE`
 BEFORE UPDATE ON `servico`
 FOR EACH ROW
@@ -2238,7 +2238,7 @@ DECLARE invalid INT;
 			SET MESSAGE_TEXT = error_message;
 		END IF;
 END */;;
-DELIMITER ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -2271,7 +2271,7 @@ CREATE TABLE `servico_tem_porte` (
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `servico_tem_porte_BEFORE_INSERT` BEFORE INSERT ON `servico_tem_porte` FOR EACH ROW
 BEGIN
         DECLARE invalid INT;
@@ -2299,7 +2299,7 @@ BEGIN
 			SET MESSAGE_TEXT = error_message;
 		END IF;
 END */;;
-DELIMITER ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -2312,7 +2312,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `servico_tem_porte_BEFORE_UPDATE` BEFORE UPDATE ON `servico_tem_porte` FOR EACH ROW
 BEGIN
 	DECLARE invalid INT;
@@ -2340,7 +2340,7 @@ BEGIN
 			SET MESSAGE_TEXT = error_message;
 		END IF;
 END */;;
-DELIMITER ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -2370,7 +2370,7 @@ CREATE TABLE `transacao` (
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `transacao_BEFORE_INSERT`
 BEFORE INSERT ON `transacao`
 FOR EACH ROW
@@ -2418,7 +2418,7 @@ BEGIN
 			SET MESSAGE_TEXT = error_message;
 		END IF;
 END */;;
-DELIMITER ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -2431,7 +2431,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `transacao_BEFORE_UPDATE`
 BEFORE UPDATE ON `transacao`
 FOR EACH ROW
@@ -2470,7 +2470,7 @@ DECLARE invalid INT;
 			SET MESSAGE_TEXT = error_message;
 		END IF;
 END */;;
-DELIMITER ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -2505,7 +2505,7 @@ CREATE TABLE `servico_contratado` (
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `servico_contratado_BEFORE_INSERT`
 BEFORE INSERT ON `servico_contratado`
 FOR EACH ROW
@@ -2555,7 +2555,7 @@ BEGIN
 			SET MESSAGE_TEXT = error_message;
 		END IF;
 END */;;
-DELIMITER ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -2568,7 +2568,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `servico_contratado_BEFORE_UPDATE`
 BEFORE UPDATE ON `servico_contratado`
 FOR EACH ROW
@@ -2618,7 +2618,7 @@ DECLARE tipo_pessoa VARCHAR(50);
 			SET MESSAGE_TEXT = error_message;
 		END IF;
 END */;;
-DELIMITER ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -2664,7 +2664,7 @@ CREATE TABLE `servico_agendado` (
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `servico_agendado_BEFORE_INSERT`
 BEFORE INSERT ON `servico_agendado`
 FOR EACH ROW
@@ -2716,7 +2716,7 @@ BEGIN
 			SET MESSAGE_TEXT = error_message;
 		END IF;
 END */;;
-DELIMITER ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -2729,7 +2729,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `servico_agendado_BEFORE_UPDATE`
 BEFORE UPDATE ON `servico_agendado`
 FOR EACH ROW
@@ -2781,7 +2781,7 @@ DECLARE numero_animais INT;
 			SET MESSAGE_TEXT = error_message;
 		END IF;
 END */;;
-DELIMITER ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -2802,7 +2802,7 @@ CREATE TABLE `anamnese` (
   KEY `fk_anamnese_servico_agendado1_idx` (`servico_agendado_id`),
   CONSTRAINT `fk_anamnese_servico_agendado1` FOREIGN KEY (`servico_agendado_id`) REFERENCES `servico_agendado` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
-DELIMITER ;;
+
 BEFORE INSERT ON `anamnese`
 FOR EACH ROW
 BEGIN
@@ -2860,7 +2860,7 @@ BEGIN
 			SET MESSAGE_TEXT = error_message;
 		END IF;
 END */;;
-DELIMITER ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -2873,7 +2873,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `anamnese_BEFORE_UPDATE`
 BEFORE UPDATE ON `anamnese`
 FOR EACH ROW
@@ -2932,7 +2932,7 @@ DECLARE servico VARCHAR(50);
 			SET MESSAGE_TEXT = error_message;
 		END IF;
 END */;;
-DELIMITER ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -2962,7 +2962,7 @@ CREATE TABLE `vacina` (
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `vacina_BEFORE_INSERT`
 BEFORE INSERT ON `vacina`
 FOR EACH ROW
@@ -3001,7 +3001,7 @@ BEGIN
 			SET MESSAGE_TEXT = error_message;
 		END IF;
 END */;;
-DELIMITER ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -3014,7 +3014,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `vacina_BEFORE_UPDATE` BEFORE UPDATE ON `vacina` FOR EACH ROW
 BEGIN
 	DECLARE invalid INT;
@@ -3051,7 +3051,7 @@ BEGIN
 			SET MESSAGE_TEXT = error_message;
 		END IF;
 END */;;
-DELIMITER ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -3081,7 +3081,7 @@ CREATE TABLE `lote` (
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `lote_BEFORE_INSERT` BEFORE INSERT ON `lote` FOR EACH ROW
 BEGIN
 	DECLARE invalid INT;
@@ -3118,7 +3118,7 @@ BEGIN
 			SET MESSAGE_TEXT = error_message;
 		END IF;
 END */;;
-DELIMITER ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -3131,7 +3131,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `lote_BEFORE_UPDATE` BEFORE UPDATE ON `lote` FOR EACH ROW
 BEGIN
 DECLARE invalid INT;
@@ -3168,7 +3168,7 @@ DECLARE invalid INT;
 			SET MESSAGE_TEXT = error_message;
 		END IF;
 END */;;
-DELIMITER ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -3202,7 +3202,7 @@ CREATE TABLE `vacina_tem_lote` (
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `vacina_tem_lote_BEFORE_INSERT` BEFORE INSERT ON `vacina_tem_lote` FOR EACH ROW
 BEGIN
 	DECLARE p_vencimento DATE;
@@ -3228,7 +3228,7 @@ BEGIN
 			SET MESSAGE_TEXT = error_message;
 	END IF;
 END */;;
-DELIMITER ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -3241,7 +3241,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `vacina_tem_lote_BEFORE_UPDATE` BEFORE UPDATE ON `vacina_tem_lote` FOR EACH ROW
 BEGIN
 	DECLARE p_vencimento DATE;
@@ -3267,7 +3267,7 @@ BEGIN
 			SET MESSAGE_TEXT = error_message;
 	END IF;
 END */;;
-DELIMITER ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -3317,7 +3317,7 @@ CREATE TABLE `aplicacao` (
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `aplicacao_BEFORE_INSERT`
 BEFORE INSERT ON `aplicacao`
 FOR EACH ROW
@@ -3361,7 +3361,7 @@ BEGIN
 			SET MESSAGE_TEXT = error_message;
 		END IF;
 END */;;
-DELIMITER ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -3374,7 +3374,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `aplicacao_BEFORE_UPDATE`
 BEFORE UPDATE ON `aplicacao`
 FOR EACH ROW
@@ -3418,7 +3418,7 @@ DECLARE vencimento_data DATE;
 			SET MESSAGE_TEXT = error_message;
 		END IF;
 END */;;
-DELIMITER ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -3446,7 +3446,7 @@ CREATE TABLE `configuracao` (
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `configuracao_BEFORE_INSERT`
 BEFORE INSERT ON `configuracao`
 FOR EACH ROW
@@ -3485,7 +3485,7 @@ DECLARE invalid INT;
 			SET MESSAGE_TEXT = error_message;
 		END IF;
 END */;;
-DELIMITER ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -3498,7 +3498,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `configuracao_BEFORE_UPDATE`
 BEFORE UPDATE ON `configuracao`
 FOR EACH ROW
@@ -3537,7 +3537,7 @@ DECLARE invalid INT;
 			SET MESSAGE_TEXT = error_message;
 		END IF;
 END */;;
-DELIMITER ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -3564,7 +3564,7 @@ CREATE TABLE `grupo_de_item` (
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `grupo_de_item_BEFORE_INSERT` BEFORE INSERT ON `grupo_de_item` FOR EACH ROW
 BEGIN
 	DECLARE invalid INT;
@@ -3592,7 +3592,7 @@ BEGIN
 		SET MESSAGE_TEXT = error_message;
 	END IF;
 END */;;
-DELIMITER ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -3605,7 +3605,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `grupo_de_item_BEFORE_UPDATE` BEFORE UPDATE ON `grupo_de_item` FOR EACH ROW
 BEGIN
 	DECLARE invalid INT;
@@ -3633,7 +3633,7 @@ BEGIN
 		SET MESSAGE_TEXT = error_message;
 	END IF;
 END */;;
-DELIMITER ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -3666,7 +3666,7 @@ CREATE TABLE `item` (
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `item_BEFORE_INSERT`
 BEFORE INSERT ON `item`
 FOR EACH ROW
@@ -3715,7 +3715,7 @@ BEGIN
 			SET MESSAGE_TEXT = error_message;
 		END IF;
 END */;;
-DELIMITER ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -3728,7 +3728,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `item_BEFORE_UPDATE`
 BEFORE UPDATE ON `item`
 FOR EACH ROW
@@ -3758,7 +3758,7 @@ DECLARE invalid INT;
 			SET MESSAGE_TEXT = error_message;
 		END IF;
 END */;;
-DELIMITER ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -3796,7 +3796,7 @@ CREATE TABLE `pedido` (
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `pedido_BEFORE_INSERT`
 BEFORE INSERT ON `pedido`
 FOR EACH ROW
@@ -3857,7 +3857,7 @@ BEGIN
 			SET MESSAGE_TEXT = error_message;
 		END IF;
 END */;;
-DELIMITER ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -3870,7 +3870,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `pedido_BEFORE_UPDATE`
 BEFORE UPDATE ON `pedido`
 FOR EACH ROW
@@ -3931,7 +3931,7 @@ BEGIN
 			SET MESSAGE_TEXT = error_message;
 		END IF;
 END */;;
-DELIMITER ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -3966,7 +3966,7 @@ CREATE TABLE `item_de_venda` (
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `item_de_venda_BEFORE_INSERT`
 BEFORE INSERT ON `item_de_venda`
 FOR EACH ROW
@@ -4005,7 +4005,7 @@ DECLARE invalid INT;
 			SET MESSAGE_TEXT = error_message;
 		END IF;
 END */;;
-DELIMITER ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -4018,7 +4018,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `item_de_venda_BEFORE_UPDATE`
 BEFORE UPDATE ON `item_de_venda`
 FOR EACH ROW
@@ -4057,7 +4057,7 @@ DECLARE invalid INT;
 			SET MESSAGE_TEXT = error_message;
 		END IF;
 END */;;
-DELIMITER ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -4093,7 +4093,7 @@ SET character_set_client = @saved_cs_client;
 -- Dumping events for database 'pet_shop'
 --
 
-DELIMITER ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -4107,7 +4107,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `altAnamnese`(
 	IN p_id int
   , IN p_peso int
@@ -4154,8 +4154,8 @@ BEGIN
 	 WHERE id = p_id;
 	
     SELECT p_id;
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -4169,7 +4169,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `altAnimal`(
 	IN p_id INT
   , IN p_nome varchar(50)
@@ -4240,8 +4240,8 @@ BEGIN
 	
     SELECT p_id;
 
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -4255,7 +4255,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `altAnimalTemRestricao`(
 	IN p_id int
   , IN p_restricao_id int
@@ -4317,8 +4317,8 @@ BEGIN
 	 WHERE id = p_id;
 	
     SELECT p_id;
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -4332,7 +4332,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `altAplicacao`(
 	IN p_id int
   , IN p_data_hora datetime
@@ -4390,8 +4390,8 @@ BEGIN
 	 WHERE id = p_id;
 	
     SELECT p_id;
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -4405,7 +4405,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `altCidade`(
 	IN p_id int
   , IN p_nome varchar(100)
@@ -4448,8 +4448,8 @@ BEGIN
 	 WHERE id = p_id;
 	
     SELECT p_id;
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -4463,7 +4463,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `altConfiguracao`(
 	IN p_quantidade_animais int
   , IN p_periodos_dia int
@@ -4482,8 +4482,8 @@ BEGIN
 	
     SELECT p_id;
 
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -4497,7 +4497,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `altEspecie`(
 	IN p_id int
   , IN p_nome varchar(50)
@@ -4539,8 +4539,8 @@ BEGIN
 	
     SELECT p_id;
 
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -4554,7 +4554,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `altEstado`(
 	IN p_id int
   , IN p_nome varchar(50)
@@ -4618,8 +4618,8 @@ BEGIN
 	
     SELECT p_id;
 
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -4633,7 +4633,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `altFuncao`(
 	IN p_id int
   , IN p_nome varchar(50)
@@ -4675,8 +4675,8 @@ BEGIN
 	
     SELECT p_id;
 
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -4690,7 +4690,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `altGrupoDeItem`(
 	IN p_id int
   , IN p_nome varchar(50)
@@ -4732,8 +4732,8 @@ BEGIN
 	
     SELECT p_id;
 
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -4747,7 +4747,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `altItem`(
 	IN p_id int
   , IN p_nome varchar(100)
@@ -4804,8 +4804,8 @@ BEGIN
 	
     SELECT p_id;
 
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -4819,7 +4819,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `altItemDeVenda`(
 	IN p_id int
   , IN p_preco decimal(10, 2)
@@ -4876,8 +4876,8 @@ BEGIN
 	
     SELECT p_id;
 
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -4891,7 +4891,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `altLembrete`(
 	IN p_id int
   , IN p_descricao varchar(200)
@@ -4939,8 +4939,8 @@ BEGIN
 	
     SELECT p_id;
 
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -4954,7 +4954,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `altLote`(
 	IN p_id int
   , IN p_numero varchar(50)
@@ -4999,8 +4999,8 @@ BEGIN
 	 WHERE id = p_id;
 	
     SELECT p_id;
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -5014,7 +5014,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `altOAuth`(
 		IN p_id INT
     ,	IN p_token VARCHAR(100)
@@ -5068,8 +5068,8 @@ BEGIN
 	
     SELECT p_id;
     
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -5083,7 +5083,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `altPais`(
 	IN p_id int
   , IN p_nome varchar(50)
@@ -5125,8 +5125,8 @@ BEGIN
 	
     SELECT p_id;
 
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -5140,7 +5140,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `altPedido`(
 	IN p_id int
   , IN p_valor decimal(10, 2)
@@ -5208,8 +5208,8 @@ BEGIN
 	
     SELECT p_id;
 
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -5223,7 +5223,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `altPermissao`(
 	IN p_id int
   , IN p_modulo varchar(50)
@@ -5264,8 +5264,8 @@ BEGIN
 	 WHERE id = p_id;
      
 	SELECT p_id;
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -5279,7 +5279,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `altPessoa`(
 	IN p_id int
   , IN p_nome varchar(100)
@@ -5346,8 +5346,8 @@ BEGIN
 	 WHERE id = p_id;
 	
     SELECT p_id;
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -5361,7 +5361,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `altPessoaTemFuncao`(
 	IN p_id int
   , IN p_pessoa_id int
@@ -5423,8 +5423,8 @@ BEGIN
 	 WHERE id = p_id;
 	
     SELECT p_id;
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -5438,7 +5438,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `altPessoaTemPermissoes`(
 	IN p_id int
   , IN p_pessoa_tem_funcao_id int
@@ -5500,8 +5500,8 @@ BEGIN
 	 WHERE id = p_id;
 	
     SELECT p_id;
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -5515,7 +5515,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `altPessoaTemRedeSocial`(
 	IN p_id int
   , IN p_perfil varchar(200)
@@ -5579,8 +5579,8 @@ BEGIN
 	 WHERE id = p_id;
 	
     SELECT p_id;
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -5594,7 +5594,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `altPorte`(
 	IN p_id int
   , IN p_nome varchar(50)
@@ -5643,8 +5643,8 @@ BEGIN
 	 WHERE id = p_id;
      
 	SELECT p_id;
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -5658,7 +5658,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `altRaca`(
 	IN p_id int
   , IN p_nome varchar(50)
@@ -5721,8 +5721,8 @@ BEGIN
 	 WHERE id = p_id;
      
 	SELECT p_id;
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -5736,7 +5736,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `altRedeSocial`(
 	IN p_id int
   , IN p_nome varchar(50)
@@ -5777,8 +5777,8 @@ BEGIN
 	 WHERE id = p_id;
 	
     SELECT p_id;
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -5792,7 +5792,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `altRestricao`(
 	IN p_id int
   , IN p_restricao varchar(50)
@@ -5816,8 +5816,8 @@ BEGIN
 	 WHERE id = p_id;
 	
     SELECT p_id;
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -5831,7 +5831,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `altServico`(
 	IN p_id int
   , IN p_nome varchar(50)
@@ -5872,8 +5872,8 @@ BEGIN
 	 WHERE id = p_id;
 	
     SELECT p_id;
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -5887,7 +5887,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `altServicoAgendado`(
 	IN p_id int
   , IN p_preco decimal(10, 2)
@@ -5977,8 +5977,8 @@ BEGIN
 	 WHERE id = p_id;
 	
     SELECT p_id;
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -5992,7 +5992,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `altServicoContratado`(
 	IN p_id int
   , IN p_pessoa_tem_funcao_id_funcionario int
@@ -6046,8 +6046,8 @@ BEGIN
 	 WHERE id = p_id;
 	
     SELECT p_id;
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -6061,7 +6061,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `altServicoTemPorte`(
 	IN p_id int
   , IN p_servico_id int
@@ -6125,8 +6125,8 @@ BEGIN
 	 WHERE id = p_id;
 	
     SELECT p_id;
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -6140,7 +6140,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `altTelefone`(
 	IN p_id int
   , IN p_numero int
@@ -6197,8 +6197,8 @@ BEGIN
 	 WHERE id = p_id;
 	
     SELECT p_id;
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -6212,7 +6212,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `altTransacao`(
 	IN p_id int
   , IN p_tipo char(1)
@@ -6246,8 +6246,8 @@ BEGIN
 	 WHERE id = p_id;
 	
     SELECT p_id;
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -6261,7 +6261,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `altVacina`(
 	IN p_id int
   , IN p_nome varchar(50)
@@ -6307,8 +6307,8 @@ BEGIN
 	 WHERE id = p_id;
 	
     SELECT p_id;
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -6322,7 +6322,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `altVacinaTemLote`(
 		IN p_id INT
 	,	IN p_vacina_id INT
@@ -6385,8 +6385,8 @@ BEGIN
 	
     SELECT p_id;
     
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -6400,7 +6400,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `delAnamnese`(
 	IN p_id int
 )
@@ -6425,8 +6425,8 @@ BEGIN
 	 WHERE id = p_id;
      
 	SELECT NULL;
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -6440,7 +6440,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `delAnimal`(
 	IN p_id int
 )
@@ -6466,8 +6466,8 @@ BEGIN
      
 	SELECT NULL;
 
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -6481,7 +6481,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `delAnimalTemRestricao`(
 	IN p_id int
 )
@@ -6507,8 +6507,8 @@ BEGIN
     
     SELECT NULL;
 
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -6522,7 +6522,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `delAplicacao`(
 	IN p_id int
 )
@@ -6548,8 +6548,8 @@ BEGIN
 
 	SELECT NULL;
 
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -6563,7 +6563,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `delCidade`(
 	IN p_id int
 )
@@ -6589,8 +6589,8 @@ BEGIN
 
 	SELECT NULL;
     
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -6604,7 +6604,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `delConfiguracao`(
 	IN p_id int
 )
@@ -6630,8 +6630,8 @@ BEGIN
 
 	SELECT NULL;
 
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -6645,7 +6645,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `delEspecie`(
 	IN p_id int
 )
@@ -6671,8 +6671,8 @@ BEGIN
 	
 	SELECT NULL;
 
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -6686,7 +6686,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `delEstado`(
 	IN p_id int
 )
@@ -6712,8 +6712,8 @@ BEGIN
 
 	SELECT NULL;
 
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -6727,7 +6727,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `delFuncao`(
 	IN p_id int
 )
@@ -6753,8 +6753,8 @@ BEGIN
     
     SELECT NULL;
 
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -6768,7 +6768,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `delGrupoDeItem`(
 	IN p_id int
 )
@@ -6794,8 +6794,8 @@ BEGIN
     
     SELECT NULL;
 
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -6809,7 +6809,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `delItem`(
 	IN p_id int
 )
@@ -6835,8 +6835,8 @@ BEGIN
     
     SELECT NULL;
 
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -6850,7 +6850,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `delItemDeVenda`(
 	IN p_id int
 )
@@ -6875,8 +6875,8 @@ BEGIN
 	WHERE id = p_id;
     
     SELECT NULL;
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -6890,7 +6890,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `delLembrete`(
 	IN p_id int
 )
@@ -6915,8 +6915,8 @@ BEGIN
 	WHERE id = p_id;
     
     SELECT NULL;
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -6930,7 +6930,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `delLote`(
 	IN p_id int
 )
@@ -6955,8 +6955,8 @@ BEGIN
 	WHERE id = p_id;
     
     SELECT NULL;
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -6970,7 +6970,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `delOAuth`(
 	IN p_id INT
 )
@@ -6995,8 +6995,8 @@ BEGIN
 	WHERE id = p_id;
 	
 	SELECT NULL;
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -7010,7 +7010,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `delPais`(
 	IN p_id int
 )
@@ -7035,8 +7035,8 @@ BEGIN
 	WHERE id = p_id;
     
     SELECT NULL;
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -7050,7 +7050,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `delPedido`(
 	IN p_id int
 )
@@ -7073,8 +7073,8 @@ BEGIN
 
 	DELETE FROM pedido
 	WHERE id = p_id;
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -7088,7 +7088,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `delPermissao`(
 	IN p_id int
 )
@@ -7113,8 +7113,8 @@ BEGIN
 	WHERE id = p_id;
     
     SELECT NULL;
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -7128,7 +7128,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `delPessoa`(
 	IN p_id int
 )
@@ -7154,8 +7154,8 @@ BEGIN
     
     SELECT NULL;
     
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -7169,7 +7169,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `delPessoaTemFuncao`(
 	IN p_id int
   , OUT ret varchar(200)
@@ -7195,8 +7195,8 @@ BEGIN
 	 WHERE id = p_id;
      
      SELECT NULL;
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -7210,7 +7210,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `delPessoaTemPermissao`(
 	IN p_id int
   , OUT ret varchar(200)
@@ -7237,8 +7237,8 @@ BEGIN
     
     SELECT NULL;
 	
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -7252,7 +7252,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `delPessoaTemRedeSocial`(
 	IN p_id int
   , OUT ret varchar(200)
@@ -7279,8 +7279,8 @@ BEGIN
     
     SELECT NULL;
 	
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -7294,7 +7294,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `delPorte`(
 	IN p_id int
 )
@@ -7320,8 +7320,8 @@ BEGIN
     
     SELECT NULL;
 	
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -7335,7 +7335,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `delRaca`(
 	IN p_id int
 )
@@ -7361,8 +7361,8 @@ BEGIN
     
     SELECT NULL;
 	
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -7376,7 +7376,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `delRedeSocial`(
 	IN p_id int
 )
@@ -7402,8 +7402,8 @@ BEGIN
     
     SELECT NULL;
 	
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -7417,7 +7417,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `delRestricao`(
 	IN p_id int
   , OUT ret varchar(200)
@@ -7444,8 +7444,8 @@ BEGIN
     
     SELECT NULL;
 	
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -7459,7 +7459,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `delServico`(
 	IN p_id int
   , OUT ret varchar(200)
@@ -7486,8 +7486,8 @@ BEGIN
     
     SELECT NULL;
 	
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -7501,7 +7501,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `delServicoAgendado`(
 	IN p_id int
 )
@@ -7527,8 +7527,8 @@ BEGIN
     
     SELECT NULL;
 	
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -7542,7 +7542,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `delServicoContratado`(
 	IN p_id int
   , OUT ret varchar(200)
@@ -7569,8 +7569,8 @@ BEGIN
 	
     SELECT NULL;
     
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -7584,7 +7584,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `delServicoTemPorte`(
 	IN p_id int
   , OUT ret varchar(200)
@@ -7611,8 +7611,8 @@ BEGIN
     
     SELECT NULL;
 	
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -7626,7 +7626,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `delTelefone`(
 	IN p_id int
   , OUT ret varchar(200)
@@ -7653,8 +7653,8 @@ BEGIN
     
     SELECT NULL;
 		
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -7668,7 +7668,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `delTransacao`(
 	IN p_id int
   , OUT ret varchar(200)
@@ -7695,8 +7695,8 @@ BEGIN
     
     SELECT NULL;
 		
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -7710,7 +7710,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `delVacina`(
 	IN p_id int
   , OUT ret varchar(200)
@@ -7737,8 +7737,8 @@ BEGIN
     
     SELECT NULL;
 		
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -7752,7 +7752,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `delVacinaTemLote`(
 		IN p_id INT
 )
@@ -7778,8 +7778,8 @@ BEGIN
     
     SELECT NULL;
 
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -7793,7 +7793,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getAnamnese`(
 		IN id INT
     , 	IN servico_agendado_id INT
@@ -7813,8 +7813,8 @@ BEGIN
         AND ((servico_contratado_id IS NULL) or (sa.servico_contratado_id = servico_contratado_id))
         AND ((animal_id IS NULL) or (an.id = animal_id))
 	 ;
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -7828,7 +7828,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getAnimal`(
   IN p_id INT
   , IN p_nome VARCHAR(50)
@@ -7852,8 +7852,8 @@ BEGIN
     AND ((p_raca_id is null) or (a.raca_id = p_raca_id))
     AND ((p_porte_id is null) or (a.porte_id = p_porte_id))
     ;
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -7867,7 +7867,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getAnimalTemRestricao`(
 	IN id INT
     , IN animal_id INT
@@ -7882,8 +7882,8 @@ BEGIN
     AND ((animal_id IS NULL) or (a.id = animal_id))
     AND ((restricao_id IS NULL) or (r.id = restricao_id))
     ;
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -7897,7 +7897,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getAplicacao`(
 	IN id INT
     , IN data_hora_inicio DATETIME
@@ -7925,8 +7925,8 @@ BEGIN
         AND ((servico_contratado_id IS NULL) or(sa.servico_contratado_id = servico_contratado_id))
         AND ((animal_id IS NULL) or(sa.animal_id = animal_id))
 	 ;
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -7940,7 +7940,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getCidade`(
 	IN p_id INT
   , IN p_nome VARCHAR(100)
@@ -7959,8 +7959,8 @@ BEGIN
        AND ((p_nome is null) OR (c.nome like concat('%', p_nome, '%')))
        AND ((p_estado_id is null) OR (c.estado_id = p_estado_id))
        AND ((p_pais_id is null) OR (e.pais_id = p_pais_id));
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -7974,13 +7974,13 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getConfiguracao`()
 BEGIN
 	SELECT quantidade_animais, periodos_dia
     FROM configuracao;
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -7994,7 +7994,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getEspecie`(
 	IN p_id int
   , IN p_nome varchar(50)
@@ -8005,8 +8005,8 @@ BEGIN
 		WHERE 1 = 1
 		AND ((p_id is null) or (e.id = p_id))
 		AND ((p_nome is null) or (e.nome like concat('%', p_nome, '%')));
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -8020,7 +8020,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getEstado`(
 	IN p_id int
   , IN p_nome varchar(50)
@@ -8036,8 +8036,8 @@ BEGIN
 		AND ((p_nome is null) or (e.nome like concat('%', p_nome, '%')))
 		AND ((p_uf is null) or (e.uf like p_nome))
 		AND ((p_pais_id is null) or (e.pais_id = p_pais_id));
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -8051,7 +8051,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getFuncao`(
 	IN p_id int
   , IN p_nome varchar(50)
@@ -8062,8 +8062,8 @@ BEGIN
 		WHERE 1 = 1
 		AND ((p_id is null) or (f.id = p_id))
 		AND ((p_nome is null) or (f.nome = p_nome));
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -8077,7 +8077,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getGrupoDeItem`(
 		IN id INT
     ,	IN nome VARCHAR(50)
@@ -8089,8 +8089,8 @@ BEGIN
     AND ((id IS NULL) or (gdi.id = id))
     AND ((nome IS NULL) or (gdi.nome = nome))
     ;
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -8104,7 +8104,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getItem`(
 		IN id INT
     ,	IN nome VARCHAR(50)
@@ -8119,8 +8119,8 @@ BEGIN
         AND ((nome IS NULL) or (i.nome = nome))
         AND ((grupo_de_item_id IS NULL) or (i.grupo_de_item_id = grupo_de_item_id))
 	;
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -8134,7 +8134,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getItemDeVenda`(
 		IN id INT
 	,	IN item_id INT
@@ -8148,8 +8148,8 @@ BEGIN
     AND ((id IS NULL) or (idv.id = id))
     AND ((item_id IS NULL) or (idv.item_id = item_id))
     ;
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -8163,7 +8163,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getLembrete`(
 		IN id INT
 	,	IN data_hora_inicio DATETIME
@@ -8181,8 +8181,8 @@ BEGIN
     AND ((executado IS NULL) or (l.executado = executado))
     AND ((pessoa_id IS NULL) or (l.pessoa_id = pessoa_id))
     ;
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -8196,7 +8196,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getLote`(
 		IN id INT
 	,	IN numero VARCHAR(50)
@@ -8211,8 +8211,8 @@ BEGIN
     AND ((numero IS NULL) or (l.numero = numero))
     AND ((vencimento_inicio IS NULL AND vencimento_fim IS NULL) or (l.vencimento BETWEEN vencimento_inicio AND vencimento_fim))
     ;
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -8226,7 +8226,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getOAuth`(
 		IN p_id INT
 	,	IN p_token VARCHAR(100)
@@ -8242,8 +8242,8 @@ BEGIN
     AND ((p_refresh_token IS NULL) or (o.refresh_token = p_refresh_token))
     AND ((p_valido IS NULL) or (o.valido = p_valido))
     ;
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -8257,7 +8257,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getPais`(
 	IN p_id int
   , IN p_nome varchar(50)
@@ -8268,8 +8268,8 @@ BEGIN
 		WHERE 1 = 1
 		AND ((p_id is null) or (p.id = p_id))
 		AND ((p_nome is null) or (p.nome like concat('%', p_nome, '%')));
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -8283,7 +8283,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getPedido`(
 		IN id INT
 	,	IN pessoa_tem_funcao_cliente_id INT
@@ -8306,8 +8306,8 @@ BEGIN
     AND ((funcionario_id IS NULL) or (pe2.id = funcionario_id))
     ;
     
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -8321,7 +8321,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getPermissao`(
 		IN id INT
 	,	IN modulo VARCHAR(50)
@@ -8333,8 +8333,8 @@ BEGIN
     AND ((id IS NULL) or (p.id = id))
     AND ((modulo IS NULL) or (p.modulo = modulo))
     ;
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -8348,7 +8348,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getPessoa`(
 		IN pessoa_id INT
     ,	IN nome VARCHAR(255)
@@ -8375,8 +8375,8 @@ BEGIN
     AND ((estado_id is null) or (c.estado_id = estado_id))
     AND ((pais_id is null) or (e.pais_id = pais_id))
     ;
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -8390,7 +8390,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getPessoaTemFuncao`(
 	IN p_id int
   , IN p_pessoa_id int
@@ -8422,8 +8422,8 @@ BEGIN
        AND ((p_oauth_id is null) OR (o.id = p_oauth_id))
        AND ((p_oauth_token is null) OR (o.token = p_oauth_token))
 	;
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -8437,7 +8437,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getPessoaTemPermissao`(
 		IN id INT
 	, 	IN pessoa_id INT
@@ -8454,8 +8454,8 @@ BEGIN
     AND ((pessoa_id IS NULL) or (p.id = pessoa_id))
     AND ((permissao_id IS NULL) or (pe.id = permissao_id))
     ;
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -8469,7 +8469,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getPessoaTemRedeSocial`(
 	IN p_id int
   , IN p_perfil varchar(200)
@@ -8488,8 +8488,8 @@ BEGIN
        AND ((p_perfil is null) OR (ptrs.perfil like concat('%', p_perfil, '%')))
        AND ((p_rede_social_id is null) OR (ptrs.rede_social_id = p_rede_social_id))
        AND ((p_pessoa_id is null) OR (ptrs.pessoa_id = p_pessoa_id));
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -8503,7 +8503,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getPorte`(
 		IN id int
 	,	IN nome VARCHAR(50)
@@ -8516,8 +8516,8 @@ BEGIN
     AND ((id IS NULL) or (p.id = id))
     AND ((nome IS NULL) or (p.nome = nome))
     ;
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -8531,7 +8531,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getRaca`(
 	IN p_id int
   , IN p_nome varchar(50)
@@ -8548,8 +8548,8 @@ BEGIN
 		AND ((p_nome is null) OR (r.nome like concat('%', p_nome, '%')))
 		AND ((p_especie_id is null) OR (r.especie_id = p_especie_id))
 		AND ((p_porte_id is null) OR (r.porte_id = p_porte_id));
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -8563,7 +8563,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getRedeSocial`(
 	IN p_id int
   , IN p_nome varchar(50)
@@ -8574,8 +8574,8 @@ BEGIN
 		WHERE 1 = 1
 		AND ((p_id is null) OR (rs.id = p_id))
 		AND ((p_nome is null) OR (rs.nome like concat('%', p_nome, '%')));
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -8589,7 +8589,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getRestricao`(
 		IN id INT
 	,	IN restricao VARCHAR(50)
@@ -8601,8 +8601,8 @@ BEGIN
     AND ((id IS NULL) or (r.id = id))
     AND ((restricao IS NULL) or (r.restricao = restricao))
     ;
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -8616,7 +8616,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getServico`(
     IN id INT,
     IN nome VARCHAR(50)
@@ -8627,8 +8627,8 @@ BEGIN
     WHERE 1 = 1
     AND ((id IS NULL) or (s.id = id))
     AND ((nome IS NULL) or (s.nome = nome));
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -8642,7 +8642,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getServicoAgendado`(
 	IN id INT,
     IN servico_contratado_id INT,
@@ -8679,8 +8679,8 @@ BEGIN
         AND ((servico_id IS NULL) or(s.id = servico_id))
         ;
 
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -8694,7 +8694,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getServicoContratado`(
 		IN id int
 	,	IN data_hora_inicio DATETIME
@@ -8712,8 +8712,8 @@ BEGIN
       AND ((data_hora_inicio IS NULL AND data_hora_fim IS NULL) or (s.data_hora BETWEEN data_hora_inicio AND data_hora_fim))
       ;
           
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -8727,7 +8727,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getServicoTemPorte`(
 	IN id INT,
 	IN servico_id INT,
@@ -8742,8 +8742,8 @@ BEGIN
     AND ((id IS NULL) or (sp.id = s.id))
     AND ((servico_id IS NULL) or (sp.servico_id = servico_id))
     AND ((porte_id IS NULL) or (sp.porte_id = porte_id));
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -8757,7 +8757,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getTelefone`(
 		IN id INT
 	, 	IN pessoa_id INT
@@ -8774,8 +8774,8 @@ BEGIN
     AND ((codigo_pais IS NULL) or (t.codigo_pais = codigo_pais))
     AND ((codigo_area IS NULL) or (t.codigo_area = codigo_area))
     ;
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -8789,7 +8789,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getTransacao`(
 	IN p_id int
   , IN p_tipo char(1)
@@ -8803,8 +8803,8 @@ BEGIN
 		AND ((p_id is null) OR (t.id = p_id))
 		AND ((p_tipo is null) OR (t.tipo = p_tipo))
 		AND ((p_data_inicio is null and p_data_fim is null) OR (t.data_hora between p_data_inicio and p_data_fim));
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -8818,7 +8818,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getVacina`(
 		IN id INT
     , 	IN nome VARCHAR(50)
@@ -8830,8 +8830,8 @@ BEGIN
     AND ((id IS NULL) or (v.id = id))
     AND ((nome IS NULL) or (v.nome = nome))
     ;
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -8845,7 +8845,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getVacinaTemLote`(
 		IN p_id INT
 	,	IN p_vacina_id INT
@@ -8870,8 +8870,8 @@ BEGIN
     AND ((p_lote_vencimento_inicio IS NULL AND p_lote_vencimento_fim IS NULL) or (l.vencimento BETWEEN p_lote_vencimento_inicio AND p_lote_vencimento_fim))
     ;
 
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -8885,7 +8885,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `insAnamnese`(
 	IN p_peso int
   , IN p_tamanho int
@@ -8914,8 +8914,8 @@ BEGIN
 		(p_peso, p_tamanho, p_temperatura, p_servico_agendado_id);
         
 	SELECT LAST_INSERT_ID();
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -8929,7 +8929,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `insAnimal`(
 		IN a_nome VARCHAR(100)
 	,	IN a_sexo CHAR(1)
@@ -8978,8 +8978,8 @@ BEGIN
 		(a_nome, a_sexo, NOW(), a_pessoa_tem_funcao_id, a_raca_id, porte_id);
         
 	SELECT LAST_INSERT_ID();
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -8993,7 +8993,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `insAnimalTemRestricao`(
 	IN p_restricao_id int
   , IN p_animal_id int
@@ -9040,8 +9040,8 @@ BEGIN
 		(p_restricao_id, p_animal_id);
 	
     SELECT last_insert_id();
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -9055,7 +9055,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `insAplicacao`(
 	IN p_data_hora datetime
   , IN p_aplicado tinyint
@@ -9094,8 +9094,8 @@ BEGIN
 		(p_data_hora, p_aplicado, p_dose, p_vacina_id, p_servico_agendado_id);
 	
     SELECT last_insert_id();
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -9109,7 +9109,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `insCidade`(
 	IN p_nome varchar(100)
   , IN p_estado_id int
@@ -9137,8 +9137,8 @@ BEGIN
 		(p_nome, p_estado_id);
         
 	SELECT last_insert_id();
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -9152,7 +9152,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `insConfiguracao`(
 	IN p_quantidade_animais int
   , IN p_periodos_dia int
@@ -9169,8 +9169,8 @@ BEGIN
 		(p_quantidade_animais, p_periodos_dia);
         
 	SELECT last_insert_id();
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -9184,7 +9184,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `insEspecie`(
 	IN p_nome varchar(50)
 )
@@ -9211,8 +9211,8 @@ BEGIN
 		(p_nome);
         
 	SELECT last_insert_id();
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -9226,7 +9226,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `insEstado`(
 	IN p_nome varchar(50)
   , IN p_uf varchar(2)
@@ -9273,8 +9273,8 @@ BEGIN
 		(p_nome, p_uf, p_pais_id);
         
 	SELECT last_insert_id();
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -9288,7 +9288,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `insFuncao`(
 	IN p_nome varchar(50)
 )
@@ -9315,8 +9315,8 @@ BEGIN
 		(p_nome);
 	
     SELECT last_insert_id();
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -9330,7 +9330,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `insGrupoDeItem`(
 	IN p_nome varchar(50)
 )
@@ -9357,8 +9357,8 @@ BEGIN
 		(p_nome);
 	
     SELECT last_insert_id();
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -9372,7 +9372,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `insItem`(
 	IN p_nome varchar(100)
   , IN p_preco decimal(10, 2)
@@ -9411,8 +9411,8 @@ BEGIN
 		(p_nome, p_preco, p_quantidade, p_grupo_de_item_id, NOW());
 	
     SELECT last_insert_id();
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -9426,7 +9426,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `insItemDeVenda`(
     IN p_preco decimal(10, 2)
   , IN p_quantidade int
@@ -9464,8 +9464,8 @@ BEGIN
 		(p_preco, p_quantidade, p_item_id, p_pedido_id);
 	
     SELECT last_insert_id();
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -9479,7 +9479,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `insLembrete`(
 	IN p_descricao varchar(200)
   , IN p_data_hora datetime
@@ -9509,8 +9509,8 @@ BEGIN
 		(p_descricao, p_data_hora_apontamento, p_executado, p_pessoa_id);
         
 	SELECT last_insert_id();
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -9524,7 +9524,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `insLote`(
 	IN p_numero VARCHAR(50)
   , IN p_vencimento DATE
@@ -9554,8 +9554,8 @@ BEGIN
 		(p_numero, p_vencimento, p_preco);
         
 	SELECT LAST_INSERT_ID();
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -9569,7 +9569,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `insOAuth`(
 		IN p_token VARCHAR(100)
 	,	IN p_refresh_token VARCHAR(100)
@@ -9610,8 +9610,8 @@ BEGIN
         
 	SELECT LAST_INSERT_ID();
     
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -9625,7 +9625,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `insPais`(
 	IN p_nome varchar(50)
 )
@@ -9652,8 +9652,8 @@ BEGIN
 		(p_nome);
 	
     SELECT last_insert_id();
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -9667,7 +9667,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `insPedido`(
 	IN p_valor decimal(10, 2)
   , IN p_desconto decimal(10, 2)
@@ -9716,8 +9716,8 @@ BEGIN
 		(p_valor, p_desconto, p_transacao_id, p_cliente_id, p_funcionario_id);
 	
     SELECT last_insert_id();
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -9731,7 +9731,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `insPermissao`(
 	IN p_modulo varchar(50)
 )
@@ -9758,8 +9758,8 @@ BEGIN
 		(p_modulo);
 	
     SELECT last_insert_id();
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -9773,7 +9773,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `insPessoa`(
 	IN p_nome varchar(100)
   , IN p_email varchar(50)
@@ -9827,8 +9827,8 @@ BEGIN
 		(p_nome, NOW(), p_email, p_registro, p_logradouro, p_numero, p_complemento, p_cep, p_ponto_de_referencia, p_cidade_id);
 
 	SELECT LAST_INSERT_ID();
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -9842,7 +9842,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `insPessoaTemFuncao`(
 	IN p_pessoa_id int
   , IN p_funcao_id int
@@ -9889,8 +9889,8 @@ BEGIN
 		(p_pessoa_id, p_funcao_id);
 	
     SELECT last_insert_id();
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -9904,7 +9904,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `insPessoaTemPermissoes`(
 	IN p_pessoa_tem_funcao_id int
   , IN p_permissoes_id int
@@ -9951,8 +9951,8 @@ BEGIN
 		(p_pessoa_tem_funcao_id, p_permissoes_id);
 	
     SELECT last_insert_id();
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -9966,7 +9966,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `insPessoaTemRedeSocial`(
 	IN p_perfil varchar(200)
   , IN p_rede_social_id int
@@ -10013,8 +10013,8 @@ BEGIN
 		(p_perfil, p_rede_social_id, p_pessoa_id);
 	
     SELECT last_insert_id();
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -10028,7 +10028,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `insPorte`(
 	IN p_nome varchar(50)
   , IN p_tamanho_minimo int
@@ -10058,8 +10058,8 @@ BEGIN
 		(p_nome, p_tamanho_minimo, p_tamanho_maximo, p_peso_minimo, p_peso_maximo);
 	
     SELECT last_insert_id();
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -10073,7 +10073,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `insRaca`(
 	IN p_nome varchar(50)
   , IN p_especie_id int
@@ -10120,8 +10120,8 @@ BEGIN
 		(p_nome, p_especie_id, p_porte_id);
 	
     SELECT last_insert_id();
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -10135,7 +10135,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `insRedeSocial`(
 	IN p_nome varchar(50)
 )
@@ -10162,8 +10162,8 @@ BEGIN
 		(p_nome);
 	
     SELECT last_insert_id();
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -10177,7 +10177,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `insRestricao`(
 	IN p_restricao varchar(50)
   , IN p_descricao varchar(200)
@@ -10205,8 +10205,8 @@ BEGIN
 		(p_restricao, p_descricao);
 	
     SELECT last_insert_id();
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -10220,7 +10220,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `insServico`(
 	IN p_servico varchar(50)
 )
@@ -10247,8 +10247,8 @@ BEGIN
 		(p_servico);
 	
     SELECT last_insert_id();
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -10262,7 +10262,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `insServicoAgendado`(
 	IN p_preco decimal(10, 2)
   , IN p_recorrente tinyint(1)
@@ -10321,8 +10321,8 @@ BEGIN
         , p_executado, p_pago, p_observacao, p_data_hora_executado, p_funcionario_executa_id);
 	
     SELECT last_insert_id();
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -10336,7 +10336,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `insServicoContratado`(
 	IN p_pessoa_tem_funcao_id_funcionario int
   , IN p_preco decimal(10, 2)
@@ -10374,8 +10374,8 @@ BEGIN
 		(p_pessoa_tem_funcao_id_funcionario, p_preco, NOW(), p_transacao_id);
     
     SELECT last_insert_id();
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -10389,7 +10389,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `insServicoTemPorte`(
 	IN p_servico_id int
   , IN p_porte_id int
@@ -10437,8 +10437,8 @@ BEGIN
 		(p_servico_id, p_porte_id, p_preco);
 	
     SELECT last_insert_id();
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -10452,7 +10452,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `insTelefone`(
 	IN p_numero int
   , IN p_codigo_area int
@@ -10493,8 +10493,8 @@ BEGIN
 		(p_numero, p_codigo_area, p_codigo_pais, p_pessoa_id);
 	
     SELECT last_insert_id();
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -10508,7 +10508,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `insTransacao`(
 	IN p_tipo char(1)
   , IN p_valor decimal(10, 2)
@@ -10526,8 +10526,8 @@ BEGIN
 		(p_tipo, p_valor, NOW());
 	
     SELECT last_insert_id();
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -10541,7 +10541,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `insVacina`(
 	IN p_nome varchar(50)
   , IN p_dose int
@@ -10571,8 +10571,8 @@ BEGIN
 		(p_nome, p_dose, p_intervalo);
 	
     SELECT last_insert_id();
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -10586,7 +10586,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `insVacinaTemLote`(
 		IN p_vacina_id INT
 	,	IN p_lote_id INT
@@ -10635,8 +10635,8 @@ BEGIN
     SELECT last_insert_id();
     
 
-END ;;
-DELIMITER ;
+END ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
