@@ -1,8 +1,11 @@
-'use strict';
+(function() {
+  'use strict';
 
-angular
-	.module('Index', [])
-	.controller('IndexController', IndexController);
+  angular
+    .module('Index', [])
+    .controller('IndexController', IndexController);
 
-	IndexController.$inject = ['$scope'];
-	function IndexController() {}
+  IndexController.$inject = ['$scope'];
+
+  function IndexController() {}
+})()

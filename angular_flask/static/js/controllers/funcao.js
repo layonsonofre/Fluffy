@@ -1,49 +1,51 @@
-'use strict';
+(function() {
+  'use strict';
 
-angular
-   .module('Funcao', [])
-   .config(['$routeProvider', function($routeProvider) {
+  angular
+    .module('Funcao', [])
+    .config(['$routeProvider', function($routeProvider) {
       $routeProvider
-         .when('/funcao', {
-            templateUrl: '../static/partials/avancado/funcao.html',
-            controller: 'FuncaoController',
-            controllerAs: 'Funcao'
-         })
-   }])
-   .controller('FuncaoController', FuncaoController)
-   .factory('FuncaoFactory', FuncaoFactory);
+        .when('/funcao', {
+          templateUrl: '../static/partials/avancado/funcao.html',
+          controller: 'FuncaoController',
+          controllerAs: 'Funcao'
+        })
+    }])
+    .controller('FuncaoController', FuncaoController)
+    .factory('FuncaoFactory', FuncaoFactory);
 
-FuncaoController.$inject = ['$scope', 'FuncaoFactory'];
+  FuncaoController.$inject = ['$scope', 'FuncaoFactory'];
 
-function FuncaoController($scope, FuncaoFactory) {
-   var vm = this;
-   FuncaoFactory.get().then(function(response) {
+  function FuncaoController($scope, FuncaoFactory) {
+    var vm = this;
+    FuncaoFactory.get().then(function(response) {
       vm.funcoes = response;
-   }, function(response) {
+    }, function(response) {
       console.log('Failed to load funcao' + response);
-   })
-}
+    })
+  }
 
-FuncaoFactory.$inject = ['$http', 'Fluffy'];
+  FuncaoFactory.$inject = ['$http', 'Fluffy'];
 
-function FuncaoFactory($http, Fluffy) {
-   var _url = Fluffy.urlBase;
-   var FuncaoFactory = {
+  function FuncaoFactory($http, Fluffy) {
+    var _url = Fluffy.urlBase;
+    var FuncaoFactory = {
       get: get
-   };
-   return FuncaoFactory;
+    };
+    return FuncaoFactory;
 
-   function get() {
+    function get() {
       return $http.get(_url + '/funcao')
-         .then(success)
-         .catch(failed);
+        .then(success)
+        .catch(failed);
 
       function success(response) {
-         return response.data.result;
+        return response.data.result;
       }
 
       function failed(error) {
-         console.error('Failed funcoes: ' + error.data);
+        console.error('Failed funcoes: ' + error.data);
       }
-   }
-}
+    }
+  }
+})()
