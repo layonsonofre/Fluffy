@@ -8,7 +8,7 @@
         .when('/estoque/grupoItem', {
           templateUrl: '../static/partials/estoque/grupoItem.html',
           controller: 'GrupoItemController',
-          controllerAs: 'GrupoItem'
+          controllerAs: 'vm'
         })
     }])
     .controller('GrupoItemController', GrupoItemController);

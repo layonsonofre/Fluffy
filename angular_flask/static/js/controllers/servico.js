@@ -24,7 +24,6 @@
   ServicoController.$inject = ['ServicoFactory', 'calendarConfig'];
 
   function ServicoController(ServicoFactory, calendarConfig) {
-    console.log('aqui');
     var vm = this;
 
     vm.add = add;
@@ -32,6 +31,100 @@
     vm.del = del;
 
     init();
+
+    vm.todayInicio = function() {
+      vm.inicio = new Date();
+    }
+    vm.clearInicio = function() {
+      vm.inicio = null;
+    }
+    vm.todayFim = function() {
+      vm.fim = new Date();
+    }
+    vm.clearFim = function() {
+      vm.fim = null;
+    }
+    vm.disabled = disabled;
+    vm.toggleMin = toggleMin;
+    vm.openInicio = function() {
+      vm.popupInicio = true;
+    }
+    vm.openFim = function() {
+      vm.popupFim = true;
+    }
+    vm.setDateInicio = setDateInicio;
+    vm.setDateFim = setDateFim;
+
+    vm.todayInicio();
+    vm.todayFim();
+
+    vm.formats = ['dd/MM/yyyy', 'dd-MMMM-yyyy', 'shortDate'];
+    vm.format = vm.formats[0];
+    vm.altInputFormats = ['d!/M!/yyyy'];
+
+    vm.popupInicio = false;
+    vm.popupFim = false;
+
+    vm.inlineOptions = {
+      customClass: getDayClass,
+      minDate: new Date(),
+      showWeeks: true
+    };
+
+    vm.oneYearFromNow = new Date();
+    vm.oneYearFromNow.setDate(vm.oneYearFromNow.getDate() + 1);
+
+    vm.oneMonthAgo = new Date();
+    vm.oneMonthAgo.setDate(vm.oneMonthAgo.getDate() - 30);
+
+    vm.dateOptions = {
+      dateDisabled: disabled,
+      formatYear: 'yyyy',
+      maxDate: vm.oneYearFromNow,
+      minDate: vm.oneMonthAgo,
+      startingDay: 1
+    }
+
+    //disabled weekend selection
+    function disabled(data) {
+      var date = data.date,
+        mode = data.mode;
+      return mode == 'day' && (date.getDay() === 0 || date.getDay() === 6);
+    }
+
+    function toggleMin() {
+      vm.inlineOptions.minDate = vm.inlineOptions.minDate ? null : new Date();
+      vm.dateOptions.minDate = vm.inlineOptions.minDate;
+    }
+
+    vm.toggleMin();
+
+    function setDateInicio(year, month, day) {
+      vm.inicio = new Date(year, month, day);
+    }
+
+    function setDateFim(year, month, day) {
+      vm.fim = new Date(year, month, day);
+    }
+
+
+    function getDayClass(data) {
+      var date = data.date,
+        mode = data.mode;
+      if (mode === 'day') {
+        var dayToCheck = new Date(date).setHours(0, 0, 0, 0);
+
+        for (var i = 0; i < vm.events.length; i++) {
+          var currentDay = new Date(vm.events[i].date).setHours(0, 0, 0, 0);
+
+          if (dayToCheck === currentDay) {
+            return vm.events[i].status;
+          }
+        }
+      }
+
+      return '';
+    }
 
     function init() {
       ServicoFactory.getAgendados()
@@ -43,7 +136,6 @@
         });
 
     }
-
 
     ServicoFactory.get()
       .then(function(response) {
@@ -80,7 +172,6 @@
         });
     }
 
-    vm.teste = 'ads';
     //These variables MUST be set as a minimum for the calendar to work
     vm.calendarView = 'week';
     vm.viewDate = moment();
@@ -97,28 +188,18 @@
     }];
     vm.events = [{
       title: 'An event',
-      color: calendarConfig.colorTypes.warning,
       startsAt: moment().startOf('week').subtract(2, 'days').add(8, 'hours').toDate(),
       endsAt: moment().startOf('week').add(1, 'week').add(9, 'hours').toDate(),
-      draggable: true,
-      resizable: true,
       actions: actions
     }, {
       title: '<i class="glyphicon glyphicon-asterisk"></i> <span class="text-primary">Another event</span>, with a <i>html</i> title',
-      color: calendarConfig.colorTypes.info,
       startsAt: moment().subtract(1, 'day').toDate(),
       endsAt: moment().add(5, 'days').toDate(),
-      draggable: true,
-      resizable: true,
       actions: actions
     }, {
       title: 'This is a really long event title that occurs on every year',
-      color: calendarConfig.colorTypes.important,
       startsAt: moment().startOf('day').add(7, 'hours').toDate(),
       endsAt: moment().startOf('day').add(19, 'hours').toDate(),
-      recursOn: 'year',
-      draggable: true,
-      resizable: true,
       actions: actions
     }];
 
@@ -158,7 +239,6 @@
     };
 
     vm.timespanClicked = function(date, cell) {
-
       if (vm.calendarView === 'month') {
         if ((vm.cellIsOpen && moment(date).startOf('day').isSame(moment(vm.viewDate).startOf('day'))) || cell.events.length === 0 || !cell.inMonth) {
           vm.cellIsOpen = false;
@@ -178,30 +258,6 @@
     };
 
     vm.agendamentos = [];
-    //
-    // $scope.animais = [{
-    //    'nome': 'Fluffy',
-    //    'sexo': 'm',
-    //    'data': '15/08/1992',
-    //    'raca': 'Pastor Alemão'
-    // }, {
-    //    'nome': 'Bumma',
-    //    'sexo': 'f',
-    //    'data': '28/11/2013',
-    //    'raca': 'Beagle'
-    // }];
-    // $scope.servicosAgendados = [];
-    // $scope.removeServicosAgendados = function(index) {
-    //    $scope.servicosAgendados.splice(index, 1);
-    // }
-    // $scope.animalAgendado = {
-    //    'nome': ''
-    // };
-    // $scope.removeAnimalAgendado = function() {
-    //    $scope.animalAgendado = {
-    //       'nome': ''
-    //    };
-    // }
   }
 
   ServicoFactory.$inject = ['$http', 'Fluffy'];

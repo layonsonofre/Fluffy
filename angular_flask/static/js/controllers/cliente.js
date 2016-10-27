@@ -8,17 +8,17 @@
         .when('/cliente/cadastro', {
           templateUrl: '../static/partials/cliente/cadastro.html',
           controller: 'ClienteController',
-          controllerAs: 'cliente'
+          controllerAs: 'vm'
         })
         .when('/cliente/pet', {
           templateUrl: '../static/partials/cliente/pet.html',
           controller: 'ClienteController',
-          controllerAs: 'cliente'
+          controllerAs: 'vm'
         })
         .when('/cliente/busca', {
           templateUrl: '../static/partials/cliente/busca.html',
           controller: 'ClienteController',
-          controllerAs: 'cliente'
+          controllerAs: 'vm'
         })
     }])
     .controller('ClienteController', ClienteController)

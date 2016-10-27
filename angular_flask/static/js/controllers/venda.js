@@ -8,17 +8,17 @@
         .when('/venda/nova', {
           templateUrl: '../static/partials/venda/nova.html',
           controller: 'VendaController',
-          controllerAs: 'Venda'
+          controllerAs: 'vm'
         })
         .when('/venda/nova/pagamento', {
           templateUrl: '../static/partials/venda/pagamento.html',
           controller: 'VendaController',
-          controllerAs: 'Venda'
+          controllerAs: 'vm'
         })
         .when('/venda/nova/confirmada', {
           templateUrl: '../static/partials/venda/confirmada.html',
           controller: 'VendaController',
-          controllerAs: 'Venda'
+          controllerAs: 'vm'
         })
     }])
     .controller('VendaController', VendaController);

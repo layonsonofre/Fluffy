@@ -8,7 +8,7 @@
         .when('/estatisticas', {
           templateUrl: '../static/partials/estatisticas.html',
           controller: 'EstatisticasController',
-          controllerAs: 'Estatisticas'
+          controllerAs: 'vm'
         })
     }])
     .controller('EstatisticasController', EstatisticasController)

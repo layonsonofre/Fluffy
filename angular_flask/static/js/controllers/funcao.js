@@ -8,7 +8,7 @@
         .when('/funcao', {
           templateUrl: '../static/partials/avancado/funcao.html',
           controller: 'FuncaoController',
-          controllerAs: 'Funcao'
+          controllerAs: 'vm'
         })
     }])
     .controller('FuncaoController', FuncaoController)

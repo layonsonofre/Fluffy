@@ -8,12 +8,12 @@
         .when('/estoque/cadastro', {
           templateUrl: '../static/partials/estoque/cadastro.html',
           controller: 'ProdutoController',
-          controllerAs: 'Produto'
+          controllerAs: 'vm'
         })
         .when('/estoque/busca', {
           templateUrl: '../static/partials/estoque/busca.html',
           controller: 'ProdutoController',
-          controllerAs: 'Produto'
+          controllerAs: 'vm'
         })
     }])
     .controller('ProdutoController', ProdutoController)

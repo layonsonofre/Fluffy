@@ -8,7 +8,7 @@
         .when('/redesSociais', {
           templateUrl: '../static/partials/avancado/redeSocial.html',
           controller: 'RedeSocialController',
-          controllerAs: 'RedeSocial'
+          controllerAs: 'vm'
         })
     }])
     .controller('RedeSocialController', RedeSocialController)
