@@ -19,14 +19,14 @@
               <div class="form-group">
                 <label>Insira os parâmetros da busca</label>
                 <input class="form-control" type="text" ng-model="buscar">
-                <p class="help-block">Você pode pesquisar por qualquer dado do cliente ou animal</p>
+                <p class="help-block" ng-show="vm.helpActive">Você pode pesquisar por qualquer dado do cliente ou animal</p>
               </div>
             </div>
             <div class="col-md-2">
               <div class="form-group">
                 <label><span class="fa fa-search"></span> Buscar</label>
                 <button class="form-control btn btn-primary" ng-click="buscar_cliente()" data-toggle="tooltip" data-placement="top" title="Pesquise pelos parâmetros inseridos"><span class="fa fa-search"></span></button>
-                <!-- <p class="help-block"></p> -->
+                <!-- <p class="help-block" ng-show="vm.helpActive"></p> -->
               </div>
             </div>
           </div>
@@ -91,7 +91,7 @@
                 <div class="form-group">
                   <label>Nome *</label>
                   <input class="form-control" type="text" data-ng-model="cliente.nome_animal">
-                  <p class="help-block"></p>
+                  <p class="help-block" ng-show="vm.helpActive"></p>
                 </div>
               </div>
               <div class="col-lg-3 col-md-3">
@@ -101,14 +101,14 @@
                     <option value="femea">Fêmea</option>
                     <option value="macho">Macho</option>
                   </select>
-                  <p class="help-block"></p>
+                  <p class="help-block" ng-show="vm.helpActive"></p>
                 </div>
               </div>
               <div class="col-lg-3 col-md-3">
                 <div class="form-group">
                   <label>Nascimento *</label>
                   <input class="form-control data" type="text" data-ng-model="cliente.dataNascimento_animal" placeholder="DD/MM/AAAA">
-                  <p class="help-block"></p>
+                  <p class="help-block" ng-show="vm.helpActive"></p>
                 </div>
               </div>
             </div>
@@ -120,7 +120,7 @@
                     <option value="especie1">Cachorro</option>
                     <option value="especie2">Gato</option>
                   </select>
-                  <p class="help-block"></p>
+                  <p class="help-block" ng-show="vm.helpActive"></p>
                 </div>
               </div>
               <div class="col-lg-1 col-sm-2">
@@ -136,7 +136,7 @@
                     <option value="raca1">Doberman</option>
                     <option value="raca2">Pastor Alemão</option>
                   </select>
-                  <p class="help-block"></p>
+                  <p class="help-block" ng-show="vm.helpActive"></p>
                 </div>
               </div>
               <div class="col-lg-1 col-sm-2">
@@ -152,7 +152,7 @@
                     <option value="porte1">Mini</option>
                     <option value="porte2">Grande</option>
                   </select>
-                  <p class="help-block"></p>
+                  <p class="help-block" ng-show="vm.helpActive"></p>
                 </div>
               </div>
             </div>
@@ -164,7 +164,7 @@
                     <option value="alergia1">Alergia1</option>
                     <option value="alergia2">Alergia1</option>
                   </select>
-                  <p class="help-block"></p>
+                  <p class="help-block" ng-show="vm.helpActive"></p>
                 </div>
               </div>
               <div class="col-md-3">
@@ -247,7 +247,7 @@
                 <div class="form-group">
                   <label>Nome *</label>
                   <input class="form-control" type="text" name="nome_restricao">
-                  <p class="help-block"></p>
+                  <p class="help-block" ng-show="vm.helpActive"></p>
                 </div>
               </div>
             </div>
@@ -256,7 +256,7 @@
                 <div class="form-group">
                   <label>Descrição *</label>
                   <textarea class="form-control" rows="3" name="descricao_restricao"></textarea>
-                  <p class="help-block"></p>
+                  <p class="help-block" ng-show="vm.helpActive"></p>
                 </div>
               </div>
             </div>
@@ -284,7 +284,7 @@
                 <div class="form-group">
                   <label>Nome *</label>
                   <input class="form-control" type="text" name="nome_especie">
-                  <p class="help-block"></p>
+                  <p class="help-block" ng-show="vm.helpActive"></p>
                 </div>
               </div>
             </div>
@@ -350,7 +350,7 @@
                 <div class="form-group">
                   <label>Nome *</label>
                   <input class="form-control" type="text" name="nome_raca">
-                  <p class="help-block"></p>
+                  <p class="help-block" ng-show="vm.helpActive"></p>
                 </div>
               </div>
             </div>
@@ -378,7 +378,7 @@
                 <div class="form-group">
                   <label>Nome *</label>
                   <input class="form-control" type="text" name="nome_rede_social">
-                  <p class="help-block"></p>
+                  <p class="help-block" ng-show="vm.helpActive"></p>
                 </div>
               </div>
             </div>

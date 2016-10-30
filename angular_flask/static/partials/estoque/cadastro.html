@@ -19,21 +19,21 @@
                 <div class="form-group">
                   <label>Nome *</label>
                   <input class="form-control" type="text" data-ng-model="produto.nome_produto" name="nome_produto">
-                  <p class="help-block">Insira o nome do produto</p>
+                  <p class="help-block" ng-show="vm.helpActive">Insira o nome do produto</p>
                 </div>
               </div>
               <div class="col-md-3">
                 <div class="form-group">
                   <label>Preço *</label>
                   <input class="form-control" type="text" data-ng-model="produto.preco">
-                  <p class="help-block">Insira o preço do produto</p>
+                  <p class="help-block" ng-show="vm.helpActive">Insira o preço do produto</p>
                 </div>
               </div>
               <div class="col-md-3">
                 <div class="form-group">
                   <label>Quantidade *</label>
                   <input class="form-control" type="text" data-ng-model="produto.quantidade">
-                  <p class="help-block">Insira a quantidade</p>
+                  <p class="help-block" ng-show="vm.helpActive">Insira a quantidade</p>
                 </div>
               </div>
             </div>

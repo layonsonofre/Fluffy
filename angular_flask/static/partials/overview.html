@@ -23,13 +23,13 @@
                   <div class="col-md-4">
                      <div class="form-group">
                         <label>Descrição *</label>
-                        <input class="form-control" type="text" ng-model="Lembrete.form.descricao">
+                        <input class="form-control" type="text" ng-model="vm.form.descricao">
                      </div>
                   </div>
                   <div class="col-md-2">
                      <div class="form-group">
                         <label>Data *</label>
-                        <input class="form-control" type="date" ng-model="Lembrete.form.data_hora">
+                        <input class="form-control" type="date" ng-model="vm.form.data_hora">
                      </div>
                   </div>
                   <div class="col-lg-2">
@@ -37,17 +37,17 @@
                         <label>Situação *</label>
                         <div class="checkbox">
                            <label>
-                              <input type="checkbox" ng-model="Lembrete.form.visualizado">&nbsp;&nbsp; Executado
+                              <input type="checkbox" ng-model="vm.form.visualizado">&nbsp;&nbsp; Executado
                            </label>
                         </div>
                      </div>
                   </div>
                   <div class="col-lg-2">
                      <div class="buttons">
-                        <button type="submit" class="btn btn-success" data-ng-click="Lembrete.add()" data-toggle="tooltip" data-placement="top" title="Salvar cadastro">
+                        <button type="submit" class="btn btn-success" data-ng-click="vm.add()" data-toggle="tooltip" data-placement="top" title="Salvar cadastro">
                            <span class="fa fa-check"></span>
                         </button>
-                        <button type="button" class="btn btn-default" data-ng-click="Lembrete.cancel(); adicionar = false" data-toggle="tooltip" data-placement="top" title="Cancelar">
+                        <button type="button" class="btn btn-default" data-ng-click="vm.cancel(); adicionar = false" data-toggle="tooltip" data-placement="top" title="Cancelar">
                            <span class="fa fa-trash"></span>
                         </button>
                      </div>
@@ -64,7 +64,7 @@
                   </tr>
                </thead>
                <tbody>
-                  <tr ng-repeat="entry in Lembrete.lembretes">
+                  <tr ng-repeat="entry in vm.lembretes">
                      <td>
                         <span editable-text="entry.descricao" e-name="descricao" e-form="form" e-required>
                            {{ entry.descricao || '' }}
@@ -80,7 +80,7 @@
                            </a>
                         </td>
                         <td>
-                           <form editable-form name="form" ng-show="form.$visible" onbeforesave="Lembrete.alt(entry)" class="form-buttons form-inline" shown="inserted == entry">
+                           <form editable-form name="form" ng-show="form.$visible" onbeforesave="vm.alt(entry)" class="form-buttons form-inline" shown="inserted == entry">
                               <button type="submit" class="btn btn-success" ng-disabled="form.$waiting" data-toggle="tooltip" data-placement="top" title="Salvar">
                                  <span class="fa fa-check"></span>
                               </button>
@@ -92,7 +92,7 @@
                               <button type="button" class="btn btn-primary" ng-click="form.$show()" data-toggle="tooltip" data-placement="top" title="Editar">
                                  <span class="fa fa-pencil"></span>
                               </button>
-                              <button type="button" class="btn btn-danger" ng-click="Lembrete.del(entry.id)" data-toggle="tooltip" data-placement="top" title="Excluir">
+                              <button type="button" class="btn btn-danger" ng-click="vm.del(entry.id)" data-toggle="tooltip" data-placement="top" title="Excluir">
                                  <span class="fa fa-trash"></span>
                               </button>
                            </div>
@@ -126,7 +126,7 @@
                      </tr>
                   </thead>
                   <tbody>
-                     <tr data-ng-repeat="entry in Servico.agendadosHoje">
+                     <tr data-ng-repeat="entry in vm.agendados">
                         <td>
                            <span>{{ entry.nome_animal }}</span>
                         </td>

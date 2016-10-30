@@ -19,14 +19,14 @@
                 <div class="form-group">
                   <label>Insira os parâmetros da busca</label>
                   <input class="form-control" type="text" name="busca">
-                  <p class="help-block">Você pode pesquisar por qualquer dado do produto</p>
+                  <p class="help-block" ng-show="vm.helpActive">Você pode pesquisar por qualquer dado do produto</p>
                 </div>
               </div>
               <div class="col-md-2">
                 <div class="form-group">
                   <label>Buscar</label>
                   <button class="form-control btn btn-primary" ng-click="buscar_produto()" data-toggle="tooltip" data-placement="top" title="Pesquise pelos parâmetros inseridos"><span class="fa fa-search"></span></button>
-                  <!-- <p class="help-block"></p> -->
+                  <!-- <p class="help-block" ng-show="vm.helpActive"></p> -->
                 </div>
               </div>
             </div>

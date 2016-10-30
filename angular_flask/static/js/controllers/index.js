@@ -5,7 +5,10 @@
     .module('Index', [])
     .controller('IndexController', IndexController);
 
-  IndexController.$inject = ['$scope'];
+  IndexController.$inject = ['$rootScope'];
 
-  function IndexController() {}
+  function IndexController($rootScope) {
+    $rootScope.hideMenu = false;
+    $rootScope.bodyBackground = '';
+  }
 })()

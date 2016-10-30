@@ -20,7 +20,7 @@
                 <div class="form-group">
                   <label>Insira os parâmetros da busca</label>
                   <input class="form-control" type="text" ng-model="buscar">
-                  <p class="help-block">Busque por qualquer dado do cliente</p>
+                  <p class="help-block" ng-show="vm.helpActive">Busque por qualquer dado do cliente</p>
                 </div>
               </div>
             </div>
@@ -72,7 +72,7 @@
                 <div class="form-group">
                   <label>Insira os parâmetros da busca</label>
                   <input class="form-control" type="text" ng-model="buscar">
-                  <p class="help-block">Busque o produto pelos seus dados</p>
+                  <p class="help-block" ng-show="vm.helpActive">Busque o produto pelos seus dados</p>
                 </div>
               </div>
             </div>

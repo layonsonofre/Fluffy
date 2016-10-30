@@ -27,14 +27,14 @@
                   <div class="form-group">
                     <label>Nome *</label>
                     <input class="form-control" type="text" name="nome">
-                    <p class="help-block">Insira o nome do serviço</p>
+                    <p class="help-block" ng-show="vm.helpActive">Insira o nome do serviço</p>
                   </div>
                 </div>
                 <div class="col-md-3">
                   <div class="form-group">
                     <label>Preço (R$) *</label>
                     <input class="form-control" type="text" name="preco">
-                    <p class="help-block">Informe o valor do serviço</p>
+                    <p class="help-block" ng-show="vm.helpActive">Informe o valor do serviço</p>
                   </div>
                 </div>
                 <div class="col-md-1">
@@ -76,3 +76,4 @@
       </div>
     </div>
   </div>
+</div>

@@ -3,35 +3,38 @@
 
   angular
     .module('Servico', [])
-    .config(['$routeProvider',
-      function($routeProvider) {
-        $routeProvider
-          .when('/servico/cadastro', {
-            templateUrl: '../static/partials/servico/cadastro.html',
-            controller: 'ServicoController',
-            controllerAs: 'vm'
-          })
-          .when('/servico/agendar', {
-            templateUrl: '../static/partials/servico/agendar.html',
-            controller: 'ServicoController',
-            controllerAs: 'vm'
-          });
-      }
-    ])
+    .config(['$routeProvider', function($routeProvider) {
+      $routeProvider
+        .when('/servico/cadastro', {
+          templateUrl: '../static/partials/servico/cadastro.html',
+          controller: 'ServicoController',
+          controllerAs: 'vm'
+        })
+        .when('/servico/agendar', {
+          templateUrl: '../static/partials/servico/agendar.html',
+          controller: 'ServicoController',
+          controllerAs: 'vm'
+        });
+    }])
     .controller('ServicoController', ServicoController)
     .factory('ServicoFactory', ServicoFactory);
 
-  ServicoController.$inject = ['ServicoFactory', 'calendarConfig'];
+  ServicoController.$inject = ['ServicoFactory', 'calendarConfig', 'modalService'];
 
-  function ServicoController(ServicoFactory, calendarConfig) {
+  function ServicoController(ServicoFactory, calendarConfig, modalService) {
     var vm = this;
 
+    vm.form = null;
+
+    vm.get = get;
     vm.add = add;
     vm.alt = alt;
     vm.del = del;
 
-    init();
+    vm.agendamentos = [];
+    refreshData();
 
+    // INIT CALENDAR AND TIME PICKER
     vm.todayInicio = function() {
       vm.inicio = new Date();
     }
@@ -107,7 +110,6 @@
       vm.fim = new Date(year, month, day);
     }
 
-
     function getDayClass(data) {
       var date = data.date,
         mode = data.mode;
@@ -122,99 +124,27 @@
           }
         }
       }
-
       return '';
-    }
-
-    function init() {
-      ServicoFactory.getAgendados()
-        .then(function(response) {
-          vm.agendadosHoje = response.data.result;
-          console.log(response.data.result);
-        }, function(response) {
-          console.error(response);
-        });
-
-    }
-
-    ServicoFactory.get()
-      .then(function(response) {
-        vm.servicos = response.data.result;
-        console.log(response.data.result);
-      }, function(response) {
-        console.error(response);
-      });
-
-    function add(data) {
-      ServicoFactory.add(data).then(function(response) {
-        console.log(response);
-      }, function(response) {
-        console.error(response)
-      });
-    }
-
-    function alt(data, id) {
-      ServicoFactory.alt(data, id)
-        .then(function(response) {
-          console.log(response.data.result);
-        }, function(response) {
-          console.error(response)
-        });
-    }
-
-    function del(id) {
-      console.log(JSON.stringify(id));
-      ServicoFactory.del(id)
-        .then(function(response) {
-          console.log(response);
-        }, function(response) {
-          console.error(response)
-        });
     }
 
     //These variables MUST be set as a minimum for the calendar to work
     vm.calendarView = 'week';
-    vm.viewDate = moment();
+    vm.viewDate = new Date();
+
     var actions = [{
-      label: '<i class=\'glyphicon glyphicon-pencil\'></i>',
+      label: '<a href="#" data-toggle="modal" data-target="#novoAgendamento"><span class="fa fa-pencil"></span></a>',
       onClick: function(args) {
-        alert.show('Edited', args.calendarEvent);
+        vm.form = args.calendarEvent.info;
       }
     }, {
-      label: '<i class=\'glyphicon glyphicon-remove\'></i>',
+      label: '<a href="#"><span class="fa fa-trash"></span></a>',
       onClick: function(args) {
-        alert.show('Deleted', args.calendarEvent);
+        vm.form = args.calendarEvent.info;
+        vm.del();
       }
-    }];
-    vm.events = [{
-      title: 'An event',
-      startsAt: moment().startOf('week').subtract(2, 'days').add(8, 'hours').toDate(),
-      endsAt: moment().startOf('week').add(1, 'week').add(9, 'hours').toDate(),
-      actions: actions
-    }, {
-      title: '<i class="glyphicon glyphicon-asterisk"></i> <span class="text-primary">Another event</span>, with a <i>html</i> title',
-      startsAt: moment().subtract(1, 'day').toDate(),
-      endsAt: moment().add(5, 'days').toDate(),
-      actions: actions
-    }, {
-      title: 'This is a really long event title that occurs on every year',
-      startsAt: moment().startOf('day').add(7, 'hours').toDate(),
-      endsAt: moment().startOf('day').add(19, 'hours').toDate(),
-      actions: actions
     }];
 
     vm.cellIsOpen = true;
-
-    vm.addEvent = function() {
-      vm.events.push({
-        title: 'New event',
-        startsAt: moment().startOf('day').toDate(),
-        endsAt: moment().endOf('day').toDate(),
-        color: calendarConfig.colorTypes.important,
-        draggable: true,
-        resizable: true
-      });
-    };
 
     vm.eventClicked = function(event) {
       alert.show('Clicked', event);
@@ -254,10 +184,95 @@
           vm.viewDate = date;
         }
       }
-
     };
+    //END INIT CALENDAR AND DATEPICKER
 
-    vm.agendamentos = [];
+    function refreshData() {
+      ServicoFactory.getAgendados()
+        .then(function(response) {
+          vm.agendados = response.data.result;
+
+          angular.forEach(vm.agendados, function(value, key) {
+            if (value.executado === false) {
+              vm.agendamentos.push({
+                title: 'Serviço: <b>' + value.servico_contratado + '</b> - Animal: <b>' + value.animal.nome + '</b>',
+                startsAt: new Date(value.data_hora),
+                endsAt: new Date(value.data_hora),
+                actions: actions,
+                color: calendarConfig.colorTypes.warning,
+                info: value
+              });
+            } else {
+              vm.agendamentos.push({
+                title: 'Serviço: <b>' + value.servico_contratado + '</b> - Animal: <b>' + value.animal.nome + '</b>',
+                startsAt: new Date(value.data_hora),
+                endsAt: new Date(value.data_hora),
+                actions: actions,
+                color: calendarConfig.colorTypes.info,
+                info: value
+              });
+
+            }
+          });
+
+        }, function(response) {
+          console.error(response);
+        });
+    };
+    // END CALENDAR AND DATEPICKER
+
+    function get() {
+      ServicoFactory.get()
+        .then(function(response) {
+          vm.servicos = response.data.result;
+          console.log(response.data.result);
+        }, function(response) {
+          console.error(response);
+        });
+    }
+
+    function add(data) {
+      ServicoFactory.add(data).then(function(response) {
+        console.log(response);
+      }, function(response) {
+        console.error(response)
+      });
+    }
+
+    function alt(data, id) {
+      ServicoFactory.alt(data, id)
+        .then(function(response) {
+          console.log(response.data.result);
+        }, function(response) {
+          console.error(response)
+        });
+    }
+
+    function del() {
+      var modalOptions = {
+        closeButtonText: 'Cancelar',
+        actionButtonText: 'Excluir',
+        actionButtonClass: 'btn btn-danger'
+      };
+      modalService.showModal({}, modalOptions)
+        .then(function(result) {
+          ServicoFactory.del(vm.form.id)
+            .then(function(response) {
+              console.log(response);
+            }, function(response) {
+              console.error(response);
+            });
+        });
+    }
+
+    function updateSelection(position, entities) {
+      angular.forEach(entities, function(subscription, index) {
+        if (position != index) {
+          subscription.checked = false;
+        }
+      });
+    }
+
   }
 
   ServicoFactory.$inject = ['$http', 'Fluffy'];
@@ -349,9 +364,10 @@
       }
     }
 
-    function getAgendados() {
+    function getAgendados(data) {
       return $http.get(
-          _url + '/servicoAgendado'
+          _url + '/servicoAgendado',
+          data
         )
         .then(success)
         .catch(failed);

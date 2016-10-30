@@ -24,46 +24,135 @@
     .controller('ClienteController', ClienteController)
     .factory('ClienteFactory', ClienteFactory);
 
-  ClienteController.$inject = ['$scope', '$http', 'ClienteFactory'];
+  ClienteController.$inject = ['ClienteFactory', '$http', 'RedeSocialFactory', 'ServicoFactory', 'modalService', 'dataStorage'];
 
-  function ClienteController($scope, $http, ClienteFactory) {
+  function ClienteController(ClienteFactory, $http, RedeSocialFactory, ServicoFactory, modalService, dataStorage) {
     var vm = this;
 
     vm.form = {};
 
     vm.add = add;
     vm.alt = alt;
-    vm.del = del;
+    vm.excluir_cliente = excluir_cliente;
+
+    vm.removeTelefone = removeTelefone;
+    vm.incluirTelefone = incluirTelefone;
+    vm.getTelefones = getTelefones;
 
     vm.helpActive = false;
+    vm.getPessoaRedesSociais = getPessoaRedesSociais;
+    vm.getTiposRedesSociais = getTiposRedesSociais;
+    vm.incluirPessoaRedeSocial = incluirPessoaRedeSocial;
+    vm.addRedeSocial = addRedeSocial;
 
+    vm.getClientes = getClientes;
     vm.getAnimais = getAnimais;
+    vm.getHistorico = getHistorico;
+    vm.selectAnimal = selectAnimal;
+    vm.novoServico = novoServico;
+    vm.updateSelection = updateSelection;
 
-    ClienteFactory.getRedesSociais()
-      .then(function(response) {
-        vm.redesSociais = response;
-      }, function(response) {
-        vm.status = 'Failed to load socials networks: ' + error.message;
-      });
+    vm.adicionarAnimal = false;
+    vm.form.pais = "Brasil";
+    vm.form.estado = "PR";
+    vm.form.cidade = "Ponta Grossa";
+    vm.showAdicionarTelefone = false;
+    vm.showAdicionarAnimal = showAdicionarAnimal;
+    vm.search_zip_code = search_zip_code;
 
-    ClienteFactory.getTelefones(vm.pessoa_id)
-      .then(function(response) {
-        vm.telefones = response;
-      }, function(response) {
-        vm.status = 'Failed to load telefones: ' + error.message;
-      });
+    getTiposRedesSociais();
+    getClientes();
 
-    ClienteFactory.getClientes()
-      .then(function(response) {
-        vm.clientes = response;
-      }, function(response) {
-        vm.status = 'Failed to load clientes: ' + error.message;
-      });
+    function incluirTelefone() {
+      getTelefones(true);
+    }
 
-    function getAnimais(id) {
-      if (vm.cliente[id]) {
-        alert(id);
-        ClienteFactory.getAnimais(id)
+    function removeTelefone(item) {
+      if (id === null) {
+        vm.form.telefones = vm.form.telefones.splice(vm.form.telefones.indexOf(item), 1)
+      } else {
+        ClienteFactory.delTelefone(id)
+          .then(function(response) {
+            alert("MISSING BACKEND CALL");
+          }, function(response) {
+            vm.status = 'Falha na tentativa de remover o telefone.\n' + error.message;
+          });
+      }
+    }
+
+    function getTelefones(append) {
+      ClienteFactory.getTelefones(vm.form.pessoa_id)
+        .then(function(response) {
+          vm.form.telefones = response;
+          if (append) {
+            vm.form.telefones.push({});
+          }
+        }, function(response) {
+          vm.status = 'Failed to load telefones: ' + error.message;
+        });
+    }
+
+    function incluirPessoaRedeSocial() {
+      getPessoaRedesSociais(true);
+    }
+
+    function getPessoaRedesSociais(append) {
+      ClienteFactory.getPessoaRedesSociais()
+        .then(function(response) {
+          vm.form.redesSociais = response;
+          if (append) {
+            vm.form.redesSociais.push({});
+          }
+        }, function(response) {
+          vm.status = 'Failed to load socials networks: ' + error.message;
+        });
+    }
+
+    function removeRedeSocial(item) {
+      if (id === null) {
+        vm.form.redesSociais = vm.form.redesSociais.splice(vm.form.redesSociais.indexOf(item), 1)
+      } else {
+        ClienteFactory.delPessoaSocial(id)
+          .then(function(response) {
+            alert("MISSING BACKEND CALL");
+          }, function(response) {
+            vm.status = 'Falha na tentativa de remover a rede social.\n' + error.message;
+          });
+      }
+    }
+
+    function getTiposRedesSociais() {
+      RedeSocialFactory.get()
+        .then(function(response) {
+          vm.form.tiposRedesSociais = response;
+          console.log(vm.form.tiposRedesSociais);
+        }, function(response) {
+          vm.status = 'Failed to load socials networks: ' + error.message;
+        });
+    }
+
+    function addRedeSocial() {
+      RedeSocial.add(vm.form.redeSocial)
+        .then(function(response) {
+          console.log(response);
+        }, function(response) {
+          vm.status = 'Failed ' + error.message;
+        })
+    }
+
+    function getClientes() {
+      ClienteFactory.getClientes()
+        .then(function(response) {
+          vm.clientes = response;
+        }, function(response) {
+          vm.status = 'Failed to load clientes: ' + error.message;
+        });
+    }
+
+    function getAnimais(entry) {
+      vm.animais = {};
+      if (entry.checked) {
+        ClienteFactory.getAnimais(entry.id)
           .then(function(response) {
             vm.animais = response;
           }, function(response) {
@@ -72,19 +161,22 @@
       }
     }
 
-    ClienteFactory.getServicosContratados(id)
-      .then(function(response) {
-        vm.servicos = response;
-      }, function(response) {
-        vm.status = 'Failed to load clientes: ' + error.message;
-      });
+    function selectAnimal(entry) {
+      dataStorage.animal = entry;
+      getHistorico(entry);
+    }
 
-    vm.adicionarAnimal = false;
-    vm.form.pais = "Brasil";
-    vm.form.estado = "PR";
-    vm.form.cidade = "Ponta Grossa";
-    vm.showAdicionarAnimal = showAdicionarAnimal;
-    vm.search_zip_code = search_zip_code;
+    function getHistorico(entry) {
+      vm.historico = {};
+      if (entry.checked) {
+        ServicoFactory.getServicosAgendados(entry.id)
+          .then(function(response) {
+            vm.historico = response;
+          }, function(response) {
+            vm.status = 'Failed to load historico: ' + error.message;
+          });
+      }
+    }
 
     function showAdicionarAnimal() {
       vm.adicionarAnimal = (vm.adicionarAnimal == true) ? false : true;
@@ -116,8 +208,34 @@
       alert('alt');
     }
 
-    function del() {
-      alert('del');
+    function excluir_cliente(data) {
+      vm.form = data;
+      var modalOptions = {
+        closeButtonText: 'Cancelar',
+        actionButtonText: 'Excluir',
+        actionButtonClass: 'btn btn-danger'
+      };
+      modalService.showModal({}, modalOptions)
+        .then(function(result) {
+          ClienteFactory.del(vm.form.id)
+            .then(function(response) {
+              console.log(response);
+            }, function(response) {
+              console.error(response);
+            });
+        });
+    }
+
+    function novoServico() {
+      $location.path("/servico");
+    }
+
+    function updateSelection(position, entities) {
+      angular.forEach(entities, function(subscription, index) {
+        if (position != index) {
+          subscription.checked = false;
+        }
+      });
     }
   }
 
@@ -130,8 +248,12 @@
       getTelefones: getTelefones,
       getClientes: getClientes,
       getAnimais: getAnimais,
+      getHistorico: getHistorico,
       getServicosAgendados: getServicosAgendados,
-      add: add
+      add: add,
+      delTelefone: delTelefone,
+      del: del,
+      getPessoaRedesSociais: getPessoaRedesSociais
     };
     return ClienteFactory;
 
@@ -173,7 +295,7 @@
         .catch(failed);
 
       function success(response) {
-        console.log('CLIENTES: ' + response.data.result);
+        console.log(response.data.result);
         return response.data.result;
       }
 
@@ -190,7 +312,24 @@
         .catch(failed);
 
       function success(response) {
-        console.log('ANIMAIS: ' + response.data.result);
+        console.log(response.data.result);
+        return response.data.result;
+      }
+
+      function failed(error) {
+        console.error('Failed getRedesSociais: ' + error.data);
+      }
+    }
+
+    function getHistorico(id) {
+      return $http.get(_url + '/servicoAgendado', {
+          animal_id: id
+        })
+        .then(success)
+        .catch(failed);
+
+      function success(response) {
+        console.log(response.data.result);
         return response.data.result;
       }
 
@@ -213,7 +352,25 @@
       }
 
       function failed(error) {
-        console.error('Failed getRedesSociais: ' + error.data);
+        console.error('Failed getServicosAgendados: ' + error.data);
+      }
+    }
+
+    function getPessoaRedesSociais(id) {
+      return $http.get(
+          _url + '/pessoaTemRedeSocial', {
+            pessoa_id: id
+          })
+        .then(success)
+        .catch(failed);
+
+      function success(response) {
+        console.log(response.data.result);
+        return response.data.result;
+      }
+
+      function failed(error) {
+        console.error('Failed getPessoaRedesSociais: ' + error.data);
       }
     }
 
@@ -229,6 +386,47 @@
         .catch(failed);
 
       function success(response) {
+        return response;
+      }
+
+      function failed(response) {
+        console.error('Failed: ' + JSON.stringify(response));
+      }
+    }
+
+
+
+    function del(id) {
+      return $http.delete(
+          _url + '/cliente',
+          id
+        )
+        .then(success)
+        .catch(failed);
+
+      function success(response) {
+        return response;
+      }
+
+      function failed(response) {
+        console.error('Failed: ' + JSON.stringify(response));
+      }
+    }
+
+    function delTelefone(id) {
+      console.log(JSON.stringify(id));
+      return $http({
+          method: 'DELETE',
+          url: _url + '/telefone',
+          data: {
+            id: id
+          }
+        })
+        .then(success)
+        .catch(failed);
+
+      function success(response) {
+        console.log(response);
         return response;
       }
 

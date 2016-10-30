@@ -20,14 +20,14 @@
             <div class="col-lg-10">
               <div class="form-group">
                 <label>Insira os parâmetros da busca</label>
-                <input class="form-control" type="text" ng-model="buscar">
-                <p class="help-block">Você pode pesquisar por qualquer dado do cliente ou animal</p>
+                <input class="form-control" type="text" ng-model="vm.form.buscar">
+                <p class="help-block" ng-show="vm.helpActive">Você pode pesquisar por qualquer dado do cliente ou animal</p>
               </div>
             </div>
             <div class="col-lg-2">
               <div class="form-group">
                 <label><span class="fa fa-search"></span>Buscar</label>
-                <button class="form-control btn btn-primary" ng-click="buscar_cliente()" data-toggle="tooltip" data-placement="top" title="Pesquise pelos parâmetros inseridos">
+                <button class="form-control btn btn-primary" ng-click="vm.buscar_cliente()" data-toggle="tooltip" data-placement="top" title="Pesquise pelos parâmetros inseridos">
                   <span class="fa fa-search"></span>
                 </button>
               </div>
@@ -75,10 +75,11 @@
                   <tbody>
                     <tr ng-repeat="entry in vm.animais">
                       <th>
-                        <input type="checkbox">
+                        <input type="checkbox" ng-model="entry.checked" ng-click="vm.updateSelection($index, animais)">
                       </th>
                       <td>{{ entry.nome }}</td>
-                      <td>{{ entry.sexo === 'M' ? '<i class="fa fa-mars"></i>' : '<i class="fa fa-venus"></i>'}}</td>
+                      <td ng-if="entry.sexo === 'M'"><span class="fa fa-mars"></span></td>
+                      <td ng-if="entry.sexo === 'F'"><span class="fa fa-venus"></span></td>
                       <td>{{ entry.data_nascimento }}</td>
                       <td>{{ entry.raca.nome}}</td>
                       <td>{{ entry.porte.nome}}</td>
@@ -102,7 +103,7 @@
                   <tbody>
                     <tr ng-repeat="entry in vm.servicos">
                       <td>
-                        <input type="checkbox">
+                        <input type="checkbox" ng-model="entry.checked" ng-click="vm.updateSelection($index, servicos)">
                       </td>
                       <td>{{ entry.nome_servico }}</td>
                     </tr>
@@ -114,12 +115,11 @@
             <div class="col-lg-3">
               <label>Data início</label>
               <p class="input-group">
-                <input type="text" class="form-control" uib-datepicker-popup="{{vm.format}}"  ng-model="vm.inicio" ng-required="true" is-open="vm.popupInicio" datepicker-options="dateOptions" altInputFormats="altInputFormats" close-text="Fechar">
+                <input type="text" class="form-control" uib-datepicker-popup="{{vm.format}}"  ng-model="vm.form.inicio" ng-required="true" is-open="vm.popupInicio" datepicker-options="dateOptions" altInputFormats="altInputFormats" close-text="Fechar">
                 <span class="input-group-btn">
                   <button type="button" class="btn btn-default" ng-click="vm.openInicio()">
                     <span class="fa fa-calendar"></span>
                   </button>
-                  <!-- <button type="button" class="btn btn-default" ng-click="vm.toggleMin()">Data mínima</button> -->
                 </span>
               </p>
               <div uib-timepicker hour-step="1" minute-step="5" show-meridian="true" ng-model="vm.inicio"></div>
@@ -128,12 +128,11 @@
             <div class="col-lg-3">
               <label>Data fim previsto</label>
               <p class="input-group">
-                <input type="text" class="form-control" uib-datepicker-popup="{{vm.format}}"  ng-model="vm.fim" ng-required="true" is-open="vm.popupFim" datepicker-options="dateOptions" altInputFormats="altInputFormats" close-text="Fechar">
+                <input type="text" class="form-control" uib-datepicker-popup="{{vm.format}}"  ng-model="vm.form.fim" ng-required="true" is-open="vm.popupFim" datepicker-options="dateOptions" altInputFormats="altInputFormats" close-text="Fechar">
                 <span class="input-group-btn">
                   <button type="button" class="btn btn-default" ng-click="vm.openFim()">
                     <span class="fa fa-calendar"></span>
                   </button>
-                  <!-- <button type="button" class="btn btn-default" ng-click="vm.toggleMin()">Data mínima</button> -->
                 </span>
               </p>
               <div uib-timepicker hour-step="1" minute-step="5" show-meridian="true" ng-model="vm.fim"></div>
@@ -180,7 +179,7 @@
             </div>
           </div>
           <div class="wrapper-agenda">
-            <mwl-calendar view="vm.calendarView" view-date="vm.viewDate" events="vm.events" view-title="vm.calendarTitle" on-event-click="eventClicked(calendarEvent)" on-event-times-changed="calendarEvent.startsAt = calendarNewEventStart; calendarEvent.endsAt = calendarNewEventEnd"
+            <mwl-calendar view="vm.calendarView" view-date="vm.viewDate" events="vm.agendamentos" view-title="vm.calendarTitle" on-event-click="eventClicked(calendarEvent)" on-event-times-changed="calendarEvent.startsAt = calendarNewEventStart; calendarEvent.endsAt = calendarNewEventEnd"
               cell-is-open="true" day-view-start="06:00" day-view-end="22:59" day-view-split="15">
             </mwl-calendar>
           </div>

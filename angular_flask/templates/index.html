@@ -8,10 +8,11 @@
       <title>CHARME E FOFURA</title>
 
       <link href="static/css/bootstrap.css" rel="stylesheet"/>
-      <link href="static/css/cards.css" rel="stylesheet"/>
       <link href="static/css/font-awesome.min.css" rel="stylesheet"/>
       <link href="static/css/xeditable.min.css" rel="stylesheet"/>
       <link href="static/css/angular-bootstrap-calendar.css" rel="stylesheet"/>
+
+      <link href="static/css/cards.css" rel="stylesheet"/>
 
       <script src="static/lib/jquery/jquery.min.js"></script>
       <script src="static/lib/jquery/jquery-ui.min.js"></script>
@@ -19,6 +20,7 @@
       <script src="static/lib/angular/angular.min.js"></script>
       <script src="static/lib/angular/angular-locale_pt-br.js"></script>
       <script src="static/lib/angular/angular-route.min.js"></script>
+      <script src="static/lib/angular/angular-storage.min.js"></script>
       <script src="static/lib/angular/angular-resource.min.js"></script>
       <script src="static/lib/angular/angular-moment.min.js"></script>
       <script src="static/lib/angular/ui-bootstrap-tpls.min.js"></script>
@@ -34,22 +36,28 @@
 
       <script src="../static/js/app.js"></script>
       <script src="../static/js/app.provider.js"></script>
+      <script src="../static/js/services/authentication.js"></script>
+      <script src="../static/js/services/modalService.js"></script>
+      <script src="../static/js/services/dataStorage.js"></script>
+      <script src="../static/js/controllers/erro.js"></script>
+      <script src="../static/js/controllers/login.js"></script>
       <script src="../static/js/controllers/index.js"></script>
+      <script src="../static/js/controllers/servico.js"></script>
       <script src="../static/js/controllers/redeSocial.js"></script>
       <script src="../static/js/controllers/cliente.js"></script>
       <script src="../static/js/controllers/funcao.js"></script>
       <script src="../static/js/controllers/permissao.js"></script>
       <script src="../static/js/controllers/grupoItem.js"></script>
-      <script src="../static/js/controllers/servico.js"></script>
       <script src="../static/js/controllers/lembrete.js"></script>
       <script src="../static/js/controllers/estoque.js"></script>
       <script src="../static/js/controllers/consulta.js"></script>
       <script src="../static/js/controllers/venda.js"></script>
       <script src="../static/js/controllers/estatisticas.js"></script>
+
    </head>
 
-   <body>
-      <nav class="navbar navbar-default navbar-fixed-top">
+   <body class="{{bodyBackground}}">
+      <nav class="navbar navbar-default navbar-fixed-top" ng-hide="hideMenu">
          <div class="container">
             <div class="navbar-header page-scroll">
                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
@@ -58,7 +66,7 @@
                   <span class="icon-bar"></span>
                   <span class="icon-bar"></span>
                </button>
-               <a class="navbar-brand page-scroll" href="index2"><img src="static/img/logo.jpg">&nbsp;&nbsp;Charme e Fofura Pet Boutique</a>
+               <a class="navbar-brand page-scroll" href="/overview"><img src="static/img/logo.jpg">&nbsp;&nbsp;Charme e Fofura Pet Boutique</a>
             </div>
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                <ul class="nav navbar-nav navbar-right">
@@ -139,6 +147,16 @@
                         </li>
                      </ul>
                   </li>
+                  <li class="dropdown">
+                     <a style="" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Opções
+                        <span class="caret"></span>
+                     </a>
+                     <ul class="dropdown-menu" role="menu">
+                        <li>
+                           <a href="/api/login">Sair</a>
+                        </li>
+                     </ul>
+                  </li>
                </ul>
             </div>
          </div>
@@ -148,7 +166,7 @@
             <div id="content" ng-view></div>
          </div>
       </section>
-      <footer>
+      <footer ng-hide="hideMenu">
          <div class="container">
             <div class="text-center">
                Made with
