@@ -28,11 +28,13 @@
 
     vm.get = get;
     vm.add = add;
-    vm.alt = alt;
-    vm.del = del;
+    vm.delAgendado = delAgendado;
+    vm.editarServico = editarServico;
+    vm.excluirServico = excluirServico;
 
     vm.agendamentos = [];
     refreshData();
+    get();
 
     // INIT CALENDAR AND TIME PICKER
     vm.todayInicio = function() {
@@ -140,7 +142,7 @@
       label: '<a href="#"><span class="fa fa-trash"></span></a>',
       onClick: function(args) {
         vm.form = args.calendarEvent.info;
-        vm.del();
+        vm.delAgendado();
       }
     }];
 
@@ -225,30 +227,30 @@
       ServicoFactory.get()
         .then(function(response) {
           vm.servicos = response.data.result;
-          console.log(response.data.result);
         }, function(response) {
           console.error(response);
         });
     }
 
-    function add(data) {
-      ServicoFactory.add(data).then(function(response) {
-        console.log(response);
-      }, function(response) {
-        console.error(response)
-      });
+    function add() {
+      ServicoFactory.add(vm.form)
+        .then(function(response) {
+          get();
+        }, function(response) {
+          vm.status = response.message
+        });
     }
 
     function alt(data, id) {
       ServicoFactory.alt(data, id)
         .then(function(response) {
-          console.log(response.data.result);
+          get();
         }, function(response) {
           console.error(response)
         });
     }
 
-    function del() {
+    function delAgendado() {
       var modalOptions = {
         closeButtonText: 'Cancelar',
         actionButtonText: 'Excluir',
@@ -256,12 +258,39 @@
       };
       modalService.showModal({}, modalOptions)
         .then(function(result) {
-          ServicoFactory.del(vm.form.id)
+          ServicoFactory.delAgendado(vm.form.id)
             .then(function(response) {
               console.log(response);
             }, function(response) {
               console.error(response);
             });
+        });
+    }
+
+    function excluirServico(entry) {
+      var modalOptions = {
+        closeButtonText: 'Cancelar',
+        actionButtonText: 'Excluir',
+        actionButtonClass: 'btn btn-danger'
+      };
+      modalService.showModal({}, modalOptions)
+        .then(function(result) {
+          ServicoFactory.del(entry.id)
+            .then(function(response) {
+              get();
+            }, function(response) {
+              vm.status = response;
+            });
+        });
+    }
+
+    function editarServico(entry) {
+      console.log(JSON.stringify(entry));
+      ServicoFactory.alt(entry)
+        .then(function(response) {
+          get();
+        }, function(response) {
+          vm.status = response.message;
         });
     }
 
@@ -272,7 +301,6 @@
         }
       });
     }
-
   }
 
   ServicoFactory.$inject = ['$http', 'Fluffy'];
@@ -306,11 +334,11 @@
     }
 
     function add(data) {
-      console.log('SAVING: ' + JSON.stringify(data));
-      return $http.post(
-          _url + '/servico',
-          data
-        )
+      return $http({
+          url: _url + '/servico',
+          data: data,
+          method: 'POST'
+        })
         .then(success)
         .catch(failed);
 
@@ -323,16 +351,11 @@
       }
     }
 
-    function alt(data, id) {
-      console.log('UPDATING: ' + JSON.stringify({
-        id: id,
-        data: data
-      }));
+    function alt(data) {
+      console.log('UPDATING: ' + JSON.stringify(data));
       return $http({
           url: _url + '/servico',
-          data: {
-            id: id
-          },
+          data: data,
           method: 'PUT'
         })
         .then(success)
@@ -348,10 +371,11 @@
     }
 
     function del(id) {
-      return $http.delete(
-          _url + '/servico',
-          id
-        )
+      return $http({
+          url: _url + '/servico',
+          data: id,
+          method: 'DELETE'
+        })
         .then(success)
         .catch(failed);
 

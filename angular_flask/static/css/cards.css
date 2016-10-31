@@ -21,7 +21,7 @@
   background-position: center;
 }
 
-textarea:focus, input:focus, input[type]:focus, .uneditable-input:focus {
+textarea:focus, input:focus, input[type]:focus, .uneditable-input:focus, select:focus {
     border-color: rgba(241, 156, 187, 0.8);
     box-shadow: inset 0px -1px 0px 0px rgba(241, 156, 187, 0.075), inset 0px -2px 0px 0px rgba(241, 156, 187, 0.80)!important;
     outline: 0 none;

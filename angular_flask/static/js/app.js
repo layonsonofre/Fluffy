@@ -6,7 +6,7 @@
       'ngDragDrop', 'angularMoment', 'mwl.calendar', 'ui.bootstrap', 'Index', 'Cliente',
       'Funcao', 'Permissao', 'RedeSocial', 'GrupoItem', 'Servico', 'Consulta', 'Lembrete',
       'Estoque', 'Venda', 'Estatisticas', 'modalServiceModule', 'dataStorageService',
-      'Authentication', 'Login'
+      'Authentication', 'Login', 'Raca', 'Porte', 'Especie', 'Restricao'
     ])
     .config(['$routeProvider', '$locationProvider', '$httpProvider', 'calendarConfig', 'uibDatepickerPopupConfig',
       function($routeProvider, $locationProvider, $httpProvider, calendarConfig, uibDatepickerPopupConfig) {
@@ -15,7 +15,7 @@
         $httpProvider.defaults.headers.put["Content-Type"] = "application/json";
         $locationProvider.html5Mode(true);
         $routeProvider
-          .when('/api/login', {
+          .when('/login', {
             templateUrl: '../static/partials/login.html',
             controller: 'LoginController',
             controllerAs: 'vm'
@@ -30,7 +30,7 @@
             controller: 'IndexController',
             controllerAs: 'vm'
           })
-          .otherwise('/api/login');
+          .otherwise('/login');
         uibDatepickerPopupConfig.startingDay = 1;
         uibDatepickerPopupConfig.showWeeks = true;
         uibDatepickerPopupConfig.currentText = "Hoje";
@@ -50,10 +50,10 @@
 
       // redirect to login page if not logged in and trying to access a restricted page
       $rootScope.$on('$locationChangeStart', function(event, next, current) {
-        var publicPages = ['/api/login'];
+        var publicPages = ['/login'];
         var restrictedPage = publicPages.indexOf($location.path()) === -1;
         if (restrictedPage && !$window.localStorage.currentUser) {
-          $location.path('/api/login');
+          $location.path('/login');
         }
       });
     });

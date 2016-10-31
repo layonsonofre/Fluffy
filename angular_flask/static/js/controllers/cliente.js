@@ -24,16 +24,17 @@
     .controller('ClienteController', ClienteController)
     .factory('ClienteFactory', ClienteFactory);
 
-  ClienteController.$inject = ['ClienteFactory', '$http', 'RedeSocialFactory', 'ServicoFactory', 'modalService', 'dataStorage'];
+  ClienteController.$inject = ['ClienteFactory', '$http', 'RedeSocialFactory', 'ServicoFactory', 'PorteFactory', 'RacaFactory', 'EspecieFactory', 'RestricaoFactory', 'modalService', 'dataStorage', '$location', 'calendarConfig'];
 
-  function ClienteController(ClienteFactory, $http, RedeSocialFactory, ServicoFactory, modalService, dataStorage) {
+  function ClienteController(ClienteFactory, $http, RedeSocialFactory, ServicoFactory, PorteFactory, RacaFactory, EspecieFactory, RestricaoFactory, modalService, dataStorage, $location, calendarConfig) {
     var vm = this;
 
-    vm.form = {};
+    vm.form = dataStorage.getPessoa();
 
     vm.add = add;
     vm.alt = alt;
     vm.excluir_cliente = excluir_cliente;
+    vm.gotoAddPet = gotoAddPet;
 
     vm.removeTelefone = removeTelefone;
     vm.incluirTelefone = incluirTelefone;
@@ -52,6 +53,11 @@
     vm.novoServico = novoServico;
     vm.updateSelection = updateSelection;
 
+    vm.getPortes = getPortes;
+    vm.getEspecies = getEspecies;
+    vm.getRestricoes = getRestricoes;
+    vm.getRacas = getRacas;
+
     vm.adicionarAnimal = false;
     vm.form.pais = "Brasil";
     vm.form.estado = "PR";
@@ -62,6 +68,13 @@
 
     getTiposRedesSociais();
     getClientes();
+    vm.status = null;
+    vm.filtro = vm.form.nome;
+
+    getPortes();
+    getEspecies();
+    getRestricoes();
+    getRacas();
 
     function incluirTelefone() {
       getTelefones(true);
@@ -230,12 +243,73 @@
       $location.path("/servico");
     }
 
+    function gotoAddPet() {
+      dataStorage.addPessoa(vm.form);
+      $location.path('/cliente/pet');
+    }
+
     function updateSelection(position, entities) {
       angular.forEach(entities, function(subscription, index) {
         if (position != index) {
           subscription.checked = false;
         }
       });
+    }
+
+
+    vm.openNascimento = function() {
+      vm.popupNascimento = true;
+    }
+
+    vm.formats = ['dd/MM/yyyy', 'dd-MMMM-yyyy', 'shortDate'];
+    vm.format = vm.formats[0];
+    vm.altInputFormats = ['d!/M!/yyyy'];
+
+    vm.popupNascimento = false;
+    vm.setDateNascimento = setDateNascimento;
+
+    function setDateNascimento(year, month, day) {
+      vm.form.animal.data_nascimento = new Date(year, month, day);
+    }
+
+    function getPortes() {
+      PorteFactory.get()
+        .then(function(response) {
+          vm.portes = response;
+          console.log(vm.portes);
+        }, function(response) {
+          vm.status = 'Failed to load: ' + error.message;
+        });
+    }
+
+    function getRacas() {
+      RacaFactory.get()
+        .then(function(response) {
+          vm.racas = response;
+          console.log(vm.racas);
+        }, function(response) {
+          vm.status = 'Failed to load: ' + error.message;
+        });
+    }
+
+    function getEspecies() {
+      EspecieFactory.get()
+        .then(function(response) {
+          vm.especies = response;
+          console.log(vm.especies);
+        }, function(response) {
+          vm.status = 'Failed to load: ' + error.message;
+        });
+    }
+
+    function getRestricoes() {
+      RestricaoFactory.get()
+        .then(function(response) {
+          vm.restricoes = response;
+          console.log(vm.restricoes);
+        }, function(response) {
+          vm.status = 'Failed to load: ' + error.message;
+        });
     }
   }
 

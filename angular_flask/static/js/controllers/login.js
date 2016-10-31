@@ -5,9 +5,9 @@
     .module('Login', [])
     .controller('LoginController', LoginController);
 
-  LoginController.$inject = ['AuthService', '$location', '$rootScope'];
+  LoginController.$inject = ['AuthService', '$location', '$rootScope', 'dataStorage'];
 
-  function LoginController(AuthService, $location, $rootScope) {
+  function LoginController(AuthService, $location, $rootScope, dataStorage) {
     var vm = this;
     vm.login = login;
     vm.logout = logout;
@@ -20,12 +20,12 @@
 
     function logout() {
       AuthService.logout();
+      dataStorage.cleanUp();
     }
 
     function login() {
       vm.loading = true;
       AuthService.login(vm.email, vm.senha, function(result) {
-        console.log(result);
         if (result === true) {
           $location.path('/overview');
         } else {
