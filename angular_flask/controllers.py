@@ -14,21 +14,20 @@ from angular_flask.core import mysql
 from angular_flask.models import *
 
 # routing for basic pages (pass routing onto the Angular app)
-@app.route('/')
-@app.route('/index')
+@app.route('/#/<path>')
 @cross_origin()
 def basic_pages(**kwargs):
     return make_response(open('angular_flask/templates/index.html').read())
 
-@app.route('/<modelo>', methods=['GET'])
+@app.route('/api/<modelo>', methods=['GET'])
 def get_modelo(modelo=None):
 
 	args = []
 	args = Util.requestGetArgs(modelo)
-	
+
 	print("get"+modelo[0].upper()+modelo[1:])
 	print(args)
-	
+
 	try:
 		data = Util.getData("get"+modelo[0].upper()+modelo[1:], args)
 		print(data)
@@ -49,10 +48,10 @@ def get_modelo(modelo=None):
 		return jsonify(success=True,result=[p.toJSON() for p in list],message="")
 
 
-@app.route('/<modelo>', methods=['POST','PUT','DELETE'])
+@app.route('/api/<modelo>', methods=['POST','PUT','DELETE'])
 def form_modelo(modelo = None):
 	args = []
-	
+
 	args = Util.requestFormArgs(modelo, request.json)
 	proc = ""
 
@@ -79,7 +78,7 @@ def form_modelo(modelo = None):
 		error_message = unicode((messages[1].split(")")[0]), "utf-8")
 		return jsonify(success=False, result={}, codigo=code,message=error_message.decode('cp1251').encode('utf8'))
 
-@app.route('/login/', methods=['POST'])
+@app.route('/api/login/', methods=['POST'])
 def login():
 
 
@@ -102,7 +101,7 @@ def login():
 			print(ptf.id)
 			result = Util.postData('altPessoaTemFuncao', [ptf.id, ptf.pessoa[0], ptf.funcao[0], None, id[0]])
 			print(result)
-			return jsonify(success=True, result={"token":token, "refresh_token":refresh_token}, message="")	
+			return jsonify(success=True, result={"token":token, "refresh_token":refresh_token}, message="")
 		else:
 			return jsonify(success=False, result={}, message="Usuario e/ou Senha incorretos")
 	except Exception as e:
@@ -117,4 +116,4 @@ def favicon():
 
 @app.errorhandler(404)
 def page_not_found(e):
-    return render_template('404.html'), 404
+    return render_template('/404.html'), 404

@@ -70,12 +70,12 @@
                            {{ entry.descricao || '' }}
                         </td>
                         <td>
-                           <a href="#" editable-bsdate="entry.data_hora" e-datepicker-popup="dd-MMMM-yyyy hh:mm:ss">
+                           <a editable-bsdate="entry.data_hora" e-datepicker-popup="dd-MMMM-yyyy hh:mm:ss">
                               {{ entry.data_hora | date: "dd-MMMM-yyyy hh:mm:ss" || 'Não informada'}}
                            </a>
                         </td>
                         <td>
-                           <a href="#" editable-checkbox="entry.visualizado" e-title="Executado?">
+                           <a editable-checkbox="entry.visualizado" e-title="Executado?">
                               {{ entry.visualizado && "Executado" || "Não executado" }}
                            </a>
                         </td>

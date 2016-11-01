@@ -14,32 +14,61 @@
     .controller('RedeSocialController', RedeSocialController)
     .factory('RedeSocialFactory', RedeSocialFactory);
 
-  RedeSocialController.$inject = ['RedeSocialFactory'];
+  RedeSocialController.$inject = ['RedeSocialFactory', 'modalService'];
 
-  function RedeSocialController(RedeSocialFactory) {
+  function RedeSocialController(RedeSocialFactory, modalService) {
     var vm = this;
+    vm.form = null;
 
     vm.get = get;
     vm.add = add;
+    vm.alt = alt;
+    vm.del = del;
 
     get();
 
     function get() {
       RedeSocialFactory.get()
         .then(function(response) {
-          vm.redesSociais = response;
+          vm.redesSociais = response.data.result;
         }, function(response) {
-          vm.status = 'Failed to load socials networks: ' + error.message;
+          vm.status = response.message
         });
     }
 
-    function addRedeSocial() {
-      RedeSocial.add(vm.form.redeSocial)
+    function add() {
+      RedeSocialFactory.add(vm.form)
         .then(function(response) {
-          console.log(response);
+          get();
         }, function(response) {
-          vm.status = 'Failed ' + error.message;
-        })
+          vm.status = response.message
+        });
+    }
+
+    function alt(data) {
+      RedeSocialFactory.alt(data)
+        .then(function(response) {
+          get();
+        }, function(response) {
+          vm.status = response.message
+        });
+    }
+
+    function del(entry) {
+      var modalOptions = {
+        closeButtonText: 'Cancelar',
+        actionButtonText: 'Excluir',
+        actionButtonClass: 'btn btn-danger'
+      };
+      modalService.showModal({}, modalOptions)
+        .then(function(result) {
+          RedeSocialFactory.del(entry.id)
+            .then(function(response) {
+              get();
+            }, function(response) {
+              vm.status = response.message
+            });
+        });
     }
   }
 
@@ -49,30 +78,71 @@
     var _url = Fluffy.urlBase;
     var RedeSocialFactory = {
       get: get,
-      add: add
+      add: add,
+      alt: alt,
+      del: del
     };
     return RedeSocialFactory;
 
     function get() {
-      return $http.get(_url + '/redeSocial')
+      return $http.get(
+          _url + '/redeSocial'
+        )
         .then(success)
         .catch(failed);
 
       function success(response) {
-        return response.data.result;
+        console.log(response);
+        return response;
       }
 
-      function failed(error) {
-        console.error('Failed getRedesSociais: ' + error.data);
+      function failed(response) {
+        console.error('Failed: ' + JSON.stringify(response));
       }
     }
 
     function add(data) {
-      console.log('SAVING: ' + JSON.stringify(data));
       return $http({
-          method: 'POST',
           url: _url + '/redeSocial',
-          data: data
+          data: data,
+          method: 'POST'
+        })
+        .then(success)
+        .catch(failed);
+
+      function success(response) {
+        return response;
+      }
+
+      function failed(response) {
+        console.error('Failed: ' + JSON.stringify(response));
+      }
+    }
+
+    function alt(data) {
+      console.log('UPDATING: ' + JSON.stringify(data));
+      return $http({
+          url: _url + '/redeSocial',
+          data: data,
+          method: 'PUT'
+        })
+        .then(success)
+        .catch(failed);
+
+      function success(response) {
+        return response;
+      }
+
+      function failed(response) {
+        console.error('Failed: ' + JSON.stringify(response));
+      }
+    }
+
+    function del(id) {
+      return $http({
+          url: _url + '/redeSocial',
+          data: id,
+          method: 'DELETE'
         })
         .then(success)
         .catch(failed);

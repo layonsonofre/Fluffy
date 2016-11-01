@@ -134,12 +134,12 @@
     vm.viewDate = new Date();
 
     var actions = [{
-      label: '<a href="#" data-toggle="modal" data-target="#novoAgendamento"><span class="fa fa-pencil"></span></a>',
+      label: '<a data-toggle="modal" data-target="#novoAgendamento"><span class="fa fa-pencil"></span></a>',
       onClick: function(args) {
         vm.form = args.calendarEvent.info;
       }
     }, {
-      label: '<a href="#"><span class="fa fa-trash"></span></a>',
+      label: '<a><span class="fa fa-trash"></span></a>',
       onClick: function(args) {
         vm.form = args.calendarEvent.info;
         vm.delAgendado();

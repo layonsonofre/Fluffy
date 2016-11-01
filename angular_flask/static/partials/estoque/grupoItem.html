@@ -3,7 +3,7 @@
     <div class="col-md-12">
       <h1 class="page-head-line">Grupos de Ítens</h1>
       <h1 class="page-subhead-line">Veja todas as categorias de ítens cadastradas</h1>
-      <a href="#" ng-click="vm.helpActive = !vm.helpActive" class="btn btn-link pull-right"><span class="fa fa-info"></span></a>
+      <a ng-click="vm.helpActive = !vm.helpActive" class="btn btn-link pull-right"><span class="fa fa-info"></span></a>
 
       <div ng-show="vm.status" class="alert alert-info">{{vm.status}}</div>
     </div>
@@ -36,8 +36,8 @@
               <table class="table table-striped table-hover">
                 <thead>
                   <tr>
-                    <th>Nome</th>
-                    <th>Ações</th>
+                    <th class="col-xs-10">Nome</th>
+                    <th class="col-xs-2">Ações</th>
                   </tr>
                 </thead>
                 <tbody>

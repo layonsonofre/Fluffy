@@ -33,7 +33,7 @@
                 />
                 <button class="btn btn-link" ng-disabled="vm.loading" data-ng-click="vm.login()" data-toggle="tooltip" data-placement="top" title="Acessar o sistema"><span class="fa fa-unlock"></span>&nbsp;Acessar</button>
                 <button class="btn btn-link" data-ng-click="vm.logout()" data-ng-show="vm.isAuthenticated()" data-toggle="tooltip" data-placement="top" title="Sair do sistema"><span class="fa fa-sign-out"></span>&nbsp;Sair</button>
-                <a href="#" ng-click="vm.helpActive = !vm.helpActive" class="btn btn-link pull-right"><span class="fa fa-info"></span></a>
+                <a ng-click="vm.helpActive = !vm.helpActive" class="btn btn-link pull-right"><span class="fa fa-info"></span></a>
               </div>
             </div>
           </form>

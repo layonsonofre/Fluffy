@@ -3,7 +3,7 @@
     <div class="col-xs-12">
       <h1 class="page-head-line">Cadastrar Cliente</h1>
       <h1 class="page-subhead-line">Insira os dados dos clientes e seus animais</h1>
-      <a href="#" ng-click="vm.helpActive = !vm.helpActive" class="btn btn-link pull-right"><span class="fa fa-info"></span></a>
+      <a ng-click="vm.helpActive = !vm.helpActive" class="btn btn-link pull-right"><span class="fa fa-info"></span></a>
       <p class="text-muted">Os campos marcados com * são obrigatórios</p>
 
       <div ng-show="vm.status" class="alert alert-info">{{vm.status}}</div>
@@ -35,7 +35,7 @@
                 <table class="table table-striped table-hover">
                   <thead>
                     <tr>
-                      <th>Nome</th>
+                      <th class="col-xs-12">Nome</th>
                     </tr>
                   </thead>
                   <tbody>

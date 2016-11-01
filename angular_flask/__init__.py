@@ -7,8 +7,6 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
 
-app.config.from_object('angular_flask.settings')
-
 app.url_map.strict_slashes = False
 
 import angular_flask.core
