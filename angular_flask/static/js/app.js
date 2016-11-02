@@ -6,14 +6,13 @@
       'ngDragDrop', 'angularMoment', 'mwl.calendar', 'ui.bootstrap', 'Index', 'Cliente',
       'Funcao', 'Permissao', 'RedeSocial', 'GrupoItem', 'Servico', 'Consulta', 'Lembrete',
       'Estoque', 'Venda', 'Estatisticas', 'modalServiceModule', 'dataStorageService',
-      'Authentication', 'Login', 'Raca', 'Porte', 'Especie', 'Restricao'
+      'Authentication', 'Login', 'Raca', 'Porte', 'Especie', 'Restricao', 'Configuracao'
     ])
     .config(['$routeProvider', '$locationProvider', '$httpProvider', 'calendarConfig', 'uibDatepickerPopupConfig',
       function($routeProvider, $locationProvider, $httpProvider, calendarConfig, uibDatepickerPopupConfig) {
         $httpProvider.defaults.cache = false;
         $httpProvider.defaults.headers.post["Content-Type"] = "application/json";
         $httpProvider.defaults.headers.put["Content-Type"] = "application/json";
-        $locationProvider.html5Mode(true);
         $routeProvider
           .when('/login', {
             templateUrl: '../static/partials/login.html',

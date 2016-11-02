@@ -3,7 +3,7 @@
 
    <head>
       <meta charset="utf-8"/>
-      <base href="/">
+      <base href="/#">
       <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
       <title>CHARME E FOFURA</title>
 
@@ -26,37 +26,34 @@
       <script src="static/lib/angular/ui-bootstrap-tpls.min.js"></script>
       <script src="static/lib/angular/xeditable.min.js"></script>
       <script src="static/lib/angular/angular-dragdrop.js"></script>
-      <script src="static/stylejs/bootstrap.js"></script>
-      <script src="static/stylejs/jquery.metisMenu.js"></script>
-      <script src="static/stylejs/custom.js"></script>
-      <script src="static/stylejs/bootstrap-select.js"></script>
-      <script src="static/stylejs/bootstrap-select-pt_BR.js"></script>
-      <script src="static/stylejs/datetimepicker.js"></script>
       <script src="static/lib/angular/angular-bootstrap-calendar-tpls.min.js"></script>
+      <script src="static/lib/bootstrap/bootstrap.min.js"></script>
 
-      <script src="../static/js/app.js"></script>
-      <script src="../static/js/app.provider.js"></script>
-      <script src="../static/js/services/authentication.js"></script>
-      <script src="../static/js/services/modalService.js"></script>
-      <script src="../static/js/services/dataStorage.js"></script>
-      <script src="../static/js/controllers/erro.js"></script>
-      <script src="../static/js/controllers/login.js"></script>
-      <script src="../static/js/controllers/index.js"></script>
-      <script src="../static/js/controllers/servico.js"></script>
-      <script src="../static/js/controllers/redeSocial.js"></script>
-      <script src="../static/js/controllers/porte.js"></script>
-      <script src="../static/js/controllers/especie.js"></script>
-      <script src="../static/js/controllers/raca.js"></script>
-      <script src="../static/js/controllers/restricao.js"></script>
-      <script src="../static/js/controllers/cliente.js"></script>
-      <script src="../static/js/controllers/funcao.js"></script>
-      <script src="../static/js/controllers/permissao.js"></script>
-      <script src="../static/js/controllers/grupoItem.js"></script>
-      <script src="../static/js/controllers/lembrete.js"></script>
-      <script src="../static/js/controllers/estoque.js"></script>
-      <script src="../static/js/controllers/consulta.js"></script>
-      <script src="../static/js/controllers/venda.js"></script>
-      <script src="../static/js/controllers/estatisticas.js"></script>
+      <script src="static/js/app.js"></script>
+      <script src="static/js/app.provider.js"></script>
+      <script src="static/js/services/authentication.js"></script>
+      <script src="static/js/services/modalService.js"></script>
+      <script src="static/js/services/dataStorage.js"></script>
+      <script src="static/js/controllers/erro.js"></script>
+      <script src="static/js/controllers/login.js"></script>
+      <script src="static/js/controllers/index.js"></script>
+      <script src="static/js/controllers/servico.js"></script>
+      <script src="static/js/controllers/redeSocial.js"></script>
+      <script src="static/js/controllers/porte.js"></script>
+      <script src="static/js/controllers/especie.js"></script>
+      <script src="static/js/controllers/raca.js"></script>
+      <script src="static/js/controllers/restricao.js"></script>
+      <script src="static/js/controllers/cliente.js"></script>
+      <script src="static/js/controllers/funcao.js"></script>
+      <script src="static/js/controllers/permissao.js"></script>
+      <script src="static/js/controllers/grupoItem.js"></script>
+      <script src="static/js/controllers/lembrete.js"></script>
+      <script src="static/js/controllers/estoque.js"></script>
+      <script src="static/js/controllers/consulta.js"></script>
+      <script src="static/js/controllers/venda.js"></script>
+      <script src="static/js/controllers/estatisticas.js"></script>
+      <script src="static/js/controllers/configuracao.js"></script>
+      <script src="static/js/controllers/vacina.js"></script>
 
    </head>
 
@@ -78,83 +75,86 @@
                      <a href="#page-top"></a>
                   </li>
                   <li class="dropdown">
-                     <a style="" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Cliente
+                     <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Cliente
                         <span class="caret"></span>
                      </a>
                      <ul class="dropdown-menu" role="menu">
                         <li>
-                           <a href="/cliente/cadastro">Novo Cliente</a>
+                           <a href="#/cliente/cadastro">Novo Cliente</a>
                         </li>
                         <li>
-                           <a href="/cliente/pet">Novo Pet</a>
+                           <a href="#/cliente/pet">Novo Pet</a>
                         </li>
                         <li>
-                           <a href="/cliente/busca">Buscar</a>
+                           <a href="#/cliente/busca">Buscar</a>
                         </li>
                      </ul>
                   </li>
                   <li class="dropdown">
-                     <a style="" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Serviço
+                     <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Serviço
                         <span class="caret"></span>
                      </a>
                      <ul class="dropdown-menu" role="menu">
                         <li>
-                           <a href="/servico/agendar">Agendar</a>
+                           <a href="#/servico/agendar">Agendar</a>
                         </li>
                         <li>
-                           <a href="/servico/cadastro">Cadastrar</a>
+                           <a href="#/servico/cadastro">Cadastrar</a>
                         </li>
                      </ul>
                   </li>
                   <li class="dropdown">
-                     <a style="" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Estoque
+                     <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Estoque
                         <span class="caret"></span>
                      </a>
                      <ul class="dropdown-menu" role="menu">
                         <li>
-                           <a href="/estoque/controle">Controle</a>
+                           <a href="#/estoque/controle">Controle</a>
                         </li>
                         <li>
-                           <a href="/estoque/grupoItem">Grupo de Ítens</a>
+                           <a href="#/estoque/grupoItem">Grupo de Ítens</a>
                         </li>
                      </ul>
                   </li>
                   <li class="dropdown">
-                     <a style="" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Venda
+                     <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Venda
                         <span class="caret"></span>
                      </a>
                      <ul class="dropdown-menu" role="menu">
                         <li>
-                           <a href="/venda/nova">Nova</a>
+                           <a href="#/venda/nova">Nova</a>
                         </li>
                      </ul>
                   </li>
                   <li>
-                     <a href="/estatisticas">Estatísticas</a>
+                     <a href="#/estatisticas">Estatísticas</a>
                   </li>
                   <li class="dropdown">
-                     <a style="" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Avançado
+                     <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Avançado
                         <span class="caret"></span>
                      </a>
                      <ul class="dropdown-menu" role="menu">
                         <li>
-                           <a href="/funcao">Funções</a>
+                           <a href="#/configuracao">Configuração</a>
                         </li>
                         <li>
-                           <a href="/permissao">Permissões</a>
+                           <a href="#/funcao">Funções</a>
                         </li>
                         <li>
-                           <a href="/redesSociais">Redes Sociais</a>
+                           <a href="#/permissao">Permissões</a>
+                        </li>
+                        <li>
+                           <a href="#/redesSociais">Redes Sociais</a>
                         </li>
                      </ul>
                   </li>
                   <li class="dropdown">
-                     <a style="" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Opções
+                     <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Opções
                         <span class="caret"></span>
                      </a>
                      <ul class="dropdown-menu" role="menu">
                         <li>
-                           <a href="/login">Sair</a>
+                           <a href="#/login">Sair</a>
                         </li>
                      </ul>
                   </li>
