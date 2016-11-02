@@ -8,6 +8,8 @@ class Aplicacao():
 		self.doses_totais = data[4]
 		self.vacina = [data[5], data[6]]
 		self.animal = [data[7], data[8]]
+		self.servico_agendado_id = data[9]
+		self.servico_contratado_id = data[10]
 
 	def toJSON(self):
 		return {
@@ -23,7 +25,9 @@ class Aplicacao():
 			"animal": {
 				"id":self.animal[0],
 				"nome":self.animal[1]
-			}
+			},
+			"servico_agendado_id": self.servico_agendado_id,
+			"servico_contratado_id": self.servico_contratado_id
 		}
 
 	def fromJSON():

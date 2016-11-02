@@ -8,7 +8,7 @@ class Restricao():
 	def toJSON(self):
 		return {
 			"id":self.id,
-			"restricao":self.restricao,
+			"nome":self.restricao,
 			"descricao":self.descricao
 		}
 

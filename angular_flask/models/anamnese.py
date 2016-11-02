@@ -6,6 +6,8 @@ class Anamnese():
 		self.tamanho = data[2]
 		self.temperatura = data[3]
 		self.animal = [data[4], data[5]]
+		self.servico_agendado_id = data[6]
+		self.servico_contratado_id = data[7]
 
 	def toJSON(self):
 		return {
@@ -16,7 +18,9 @@ class Anamnese():
 			"animal": {
 				"id":self.animal[0],
 				"nome":self.animal[1]
-			}
+			},
+			"servico_agendado_id": self.servico_agendado_id,
+			"servico_contratado_id": self.servico_contratado_id
 		}
 
 	def fromJSON():

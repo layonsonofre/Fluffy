@@ -74,10 +74,12 @@ def form_modelo(modelo = None):
 		data = Util.postData(proc, args)
 		return jsonify(success=True, result={"id":data[0]}, message="")
 	except Exception as e:
-		messages = e.__str__().split(', ')
-		code = int(messages[0].split("(")[1])
-		error_message = unicode((messages[1].split(")")[0]), "utf-8")
-		return jsonify(success=False, result={}, codigo=code,message=error_message.decode('cp1251').encode('utf8'))
+		messages = e.__str__()#.split(', ')
+		#code = int(messages[0].split("(")[1])
+		#error_message = unicode((messages[1].split(")")[0]), "utf-8")
+		print(messages)
+		#return jsonify(success=False, result={}, codigo=code,message=error_message.decode('cp1251').encode('utf8'))
+		return jsonify(success=False, result={}, message=messages)
 
 @app.route('/login/', methods=['POST'])
 def login():
