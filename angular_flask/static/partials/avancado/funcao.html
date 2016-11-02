@@ -41,7 +41,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr data-ng-repeat="entry in vm.funcoes | orderBy:'nome'">
+                  <tr dir-paginate="entry in vm.funcoes | orderBy:'nome' | itemsPerPage: 10" pagination-id="funcao">
                     <td>
                       <span data-ng-hide="editMode">{{entry.nome}}</span>
                       <input type="text" data-ng-show="editMode" data-ng-model="entry.nome" data-ng-required>
@@ -55,6 +55,11 @@
                   </tr>
                 </tbody>
               </table>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-12 text-center">
+              <dir-pagination-controls pagination-id="funcao"></dir-pagination-controls>
             </div>
           </div>
         </div>

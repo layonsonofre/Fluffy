@@ -14,9 +14,9 @@
     .controller('VacinaController', VacinaController)
     .factory('VacinaFactory', VacinaFactory);
 
-  VacinaController.$inject = ['VacinaFactory', 'modalService'];
+  VacinaController.$inject = ['VacinaFactory', 'LoteFactory', 'modalService'];
 
-  function VacinaController(VacinaFactory, modalService) {
+  function VacinaController(VacinaFactory, LoteFactory, modalService) {
     var vm = this;
     vm.form = null;
 
@@ -25,12 +25,17 @@
     vm.alt = alt;
     vm.del = del;
 
+    vm.getLote = getLote;
+    vm.addLote = addLote;
+    vm.altLote = altLote;
+    vm.delLote = delLote;
+
     get();
 
     function get() {
       VacinaFactory.get()
         .then(function(response) {
-          vm.grupos = response.data.result;
+          vm.vacinas = response.data.result;
         }, function(response) {
           vm.status = response.message
         });
@@ -70,6 +75,52 @@
             });
         });
     }
+
+
+
+    function get() {
+      LoteFactory.get(vm.form.vacina_id)
+        .then(function(response) {
+          vm.lotes = response.data.result;
+        }, function(response) {
+          vm.status = response.message
+        });
+    }
+
+    function addLote() {
+      LoteFactory.add(vm.form)
+        .then(function(response) {
+          get();
+        }, function(response) {
+          vm.status = response.message
+        });
+    }
+
+    function altLote(data) {
+      LoteFactory.altLote(data)
+        .then(function(response) {
+          getLote();
+        }, function(response) {
+          vm.status = response.message
+        });
+    }
+
+    function delLote(entry) {
+      var modalOptions = {
+        closeButtonText: 'Cancelar',
+        actionButtonText: 'Excluir',
+        actionButtonClass: 'btn btn-danger'
+      };
+      modalService.showModal({}, modalOptions)
+        .then(function(result) {
+          LoteFactory.del(entry.id)
+            .then(function(response) {
+              getLote();
+            }, function(response) {
+              vm.status = response.message
+            });
+        });
+    }
   }
 
   VacinaFactory.$inject = ['$http', 'Fluffy'];
@@ -77,184 +128,17 @@
   function VacinaFactory($http, Fluffy) {
     var _url = Fluffy.urlBase;
     var VacinaFactory = {
-      getRedesSociais: getRedesSociais,
-      getTelefones: getTelefones,
-      getVacinas: getVacinas,
-      getAnimais: getAnimais,
-      getHistorico: getHistorico,
-      getServicosAgendados: getServicosAgendados,
+      get: get,
       add: add,
-      delTelefone: delTelefone,
-      del: del,
-      getPessoaRedesSociais: getPessoaRedesSociais
+      alt: alt,
+      del: del
     };
     return VacinaFactory;
 
-    function getRedesSociais() {
-      return $http.get(_url + '/redeSocial')
-        .then(success)
-        .catch(failed);
-
-      function success(response) {
-        console.log(response.data);
-        return response.data.result;
-      }
-
-      function failed(error) {
-        console.error('Failed getRedesSociais: ' + error.data);
-      }
-    }
-
-    function getTelefones(id) {
-      return $http.get(_url + '/telefone', {
-          pessoa_id: id
-        })
-        .then(success)
-        .catch(failed);
-
-      function success(response) {
-        console.log(response.data.result);
-        return response.data.result;
-      }
-
-      function failed(error) {
-        console.error('Failed getTelefones: ' + error.data);
-      }
-    }
-
-    function getVacinas() {
-      return $http.get(_url + '/pessoa')
-        .then(success)
-        .catch(failed);
-
-      function success(response) {
-        console.log(response.data.result);
-        return response.data.result;
-      }
-
-      function failed(error) {
-        console.error('Failed getTelefones: ' + error.data);
-      }
-    }
-
-    function getAnimais(id) {
-      return $http.get(_url + '/animal', {
-          pessoa_id: id
-        })
-        .then(success)
-        .catch(failed);
-
-      function success(response) {
-        console.log(response.data.result);
-        return response.data.result;
-      }
-
-      function failed(error) {
-        console.error('Failed getRedesSociais: ' + error.data);
-      }
-    }
-
-    function getHistorico(id) {
-      return $http.get(_url + '/servicoAgendado', {
-          animal_id: id
-        })
-        .then(success)
-        .catch(failed);
-
-      function success(response) {
-        console.log(response.data.result);
-        return response.data.result;
-      }
-
-      function failed(error) {
-        console.error('Failed getRedesSociais: ' + error.data);
-      }
-    }
-
-    function getServicosAgendados(id) {
+    function get() {
       return $http.get(
-          _url + '/servicoAgendado', {
-            pessoa_id: id
-          })
-        .then(success)
-        .catch(failed);
-
-      function success(response) {
-        console.log('SERVICOS: ' + response.data.result);
-        return response.data.result;
-      }
-
-      function failed(error) {
-        console.error('Failed getServicosAgendados: ' + error.data);
-      }
-    }
-
-    function getPessoaRedesSociais(id) {
-      return $http.get(
-          _url + '/pessoaTemRedeSocial', {
-            pessoa_id: id
-          })
-        .then(success)
-        .catch(failed);
-
-      function success(response) {
-        console.log(response.data.result);
-        return response.data.result;
-      }
-
-      function failed(error) {
-        console.error('Failed getPessoaRedesSociais: ' + error.data);
-      }
-    }
-
-
-    function add(data) {
-      console.log('SAVING: ' + JSON.stringify(data));
-      return $http({
-          method: 'POST',
-          url: _url + '/pessoa',
-          data: data
-        })
-        .then(success)
-        .catch(failed);
-
-      function success(response) {
-        return response;
-      }
-
-      function failed(response) {
-        console.error('Failed: ' + JSON.stringify(response));
-      }
-    }
-
-
-
-    function del(id) {
-      return $http.delete(
-          _url + '/cliente',
-          id
+          _url + '/vacina'
         )
-        .then(success)
-        .catch(failed);
-
-      function success(response) {
-        return response;
-      }
-
-      function failed(response) {
-        console.error('Failed: ' + JSON.stringify(response));
-      }
-    }
-
-    function delTelefone(id) {
-      console.log(JSON.stringify(id));
-      return $http({
-          method: 'DELETE',
-          url: _url + '/telefone',
-          data: {
-            id: id
-          }
-        })
         .then(success)
         .catch(failed);
 
@@ -268,6 +152,60 @@
       }
     }
 
+    function add(data) {
+      return $http({
+          url: _url + '/vacina',
+          data: data,
+          method: 'POST'
+        })
+        .then(success)
+        .catch(failed);
+
+      function success(response) {
+        return response;
+      }
+
+      function failed(response) {
+        console.error('Failed: ' + JSON.stringify(response));
+      }
+    }
+
+    function alt(data) {
+      console.log('UPDATING: ' + JSON.stringify(data));
+      return $http({
+          url: _url + '/vacina',
+          data: data,
+          method: 'PUT'
+        })
+        .then(success)
+        .catch(failed);
+
+      function success(response) {
+        return response;
+      }
+
+      function failed(response) {
+        console.error('Failed: ' + JSON.stringify(response));
+      }
+    }
+
+    function del(id) {
+      return $http({
+          url: _url + '/vacina',
+          data: id,
+          method: 'DELETE'
+        })
+        .then(success)
+        .catch(failed);
+
+      function success(response) {
+        return response;
+      }
+
+      function failed(response) {
+        console.error('Failed: ' + JSON.stringify(response));
+      }
+    }
   }
 
 })()

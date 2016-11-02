@@ -92,7 +92,7 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr ng-repeat="entry in vm.produtos | filter:vm.filtro | orderBy:'categoria' | orderBy: 'nome'">
+                    <tr dir-paginate="entry in vm.produtos | filter:vm.filtro | orderBy:'categoria' | orderBy: 'nome' | itemsPerPage: 10" pagination-id="estoque">
                       <td>
                         <span data-ng-hide="editMode">{{entry.categoria}}</span>
                         <span editable-select="vm.grupos" e-name="group" onshow="getGrupos()" e-form="rowform" e-ng-options="g.id as g.nome for g in vm.grupos">
@@ -124,6 +124,11 @@
                   </tbody>
                 </table>
               </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-12 text-center">
+              <dir-pagination-controls pagination-id="estoque"></dir-pagination-controls>
             </div>
           </div>
         </div>

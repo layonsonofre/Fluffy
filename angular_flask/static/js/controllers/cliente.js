@@ -71,6 +71,10 @@
     vm.status = null;
     vm.filtro = vm.form.nome;
 
+    function setPage(page) {
+      vm.currentPage = page;
+    }
+
     getPortes();
     getEspecies();
     getRestricoes();

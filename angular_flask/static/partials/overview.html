@@ -64,7 +64,7 @@
                   </tr>
                </thead>
                <tbody>
-                  <tr ng-repeat="entry in vm.lembretes">
+                  <tr dir-paginate="entry in vm.lembretes | itemsPerPage: 10" pagination-id="lembrete">
                      <td>
                         <span editable-text="entry.descricao" e-name="descricao" e-form="form" e-required>
                            {{ entry.descricao || '' }}
@@ -100,6 +100,11 @@
                      </tr>
                   </tbody>
                </table>
+               <div class="row">
+                 <div class="col-xs-12 text-center">
+                   <dir-pagination-controls pagination-id="lembrete"></dir-pagination-controls>
+                 </div>
+               </div>
             </div>
          </div>
 
@@ -126,7 +131,7 @@
                      </tr>
                   </thead>
                   <tbody>
-                     <tr data-ng-repeat="entry in vm.agendados">
+                     <tr dir-paginate="entry in vm.agendados | itemsPerPage: 10" pagination-id="servicosAgendados">
                         <td>
                            <span>{{ entry.nome_animal }}</span>
                         </td>
@@ -147,6 +152,12 @@
                      </tr>
                   </tbody>
                </table>
+
+               <div class="row">
+                 <div class="col-xs-12 text-center">
+                   <dir-pagination-controls pagination-id="servicosAgendados"></dir-pagination-controls>
+                 </div>
+               </div>
             </div>
          </div>
 
@@ -169,13 +180,19 @@
                      </tr>
                   </thead>
                   <tbody>
-                     <tr data-ng-repeat="entry in fields">
+                     <tr dir-paginate="entry in fields | itemsPerPage: 10" pagination-id="servicosRetorno">
                         <td>
                            <span>{{entry.nome}}</span>
                         </td>
                      </tr>
                   </tbody>
                </table>
+
+               <div class="row">
+                 <div class="col-xs-12 text-center">
+                   <dir-pagination-controls pagination-id="servicosRetorno"></dir-pagination-controls>
+                 </div>
+               </div>
             </div>
          </div>
       </div>
