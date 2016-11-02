@@ -39,6 +39,7 @@
     function add() {
       FuncaoFactory.add(vm.form)
         .then(function(response) {
+          vm.form = null;
           get();
         }, function(response) {
           vm.status = response.message
@@ -138,7 +139,9 @@
     function del(id) {
       return $http({
           url: _url + '/funcao',
-          data: id,
+          data: {
+            id: id
+          },
           method: 'DELETE'
         })
         .then(success)

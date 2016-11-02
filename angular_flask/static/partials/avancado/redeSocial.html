@@ -17,19 +17,21 @@
         </div>
         <div class="panel-body">
           <div class="row">
-            <div class="col-xs-5">
-              <div class="form-group">
-                <label>Nome *</label>
-                <input class="form-control" type="text" ng-model="vm.form.nome">
-                <p class="help-block" ng-show="vm.helpActive">Insira o nome da nova rede social que deseja cadastrar</p>
+            <form ng-submit="vm.add()">
+              <div class="col-xs-5">
+                <div class="form-group">
+                  <label>Nome *</label>
+                  <input class="form-control" type="text" ng-model="vm.form.nome">
+                  <p class="help-block" ng-show="vm.helpActive">Insira o nome da nova rede social que deseja cadastrar</p>
+                </div>
               </div>
-            </div>
-            <div class="col-xs-1">
-              <label>
-                <br>
-              </label>
-              <button class="btn btn-link" data-ng-click="vm.add()" data-toggle="tooltip" data-placement="top" title="Salvar cadastro"><span class="fa fa-check"></span></button>
-            </div>
+              <div class="col-xs-1">
+                <label>
+                  <br>
+                </label>
+                <button class="btn btn-link" data-ng-click="vm.add()" data-toggle="tooltip" data-placement="top" title="Salvar cadastro"><span class="fa fa-check"></span></button>
+              </div>
+            </form>
           </div>
           <div class="row">
             <div class="col-xs-12">
@@ -43,7 +45,7 @@
                 <tbody>
                   <tr dir-paginate="entry in vm.redesSociais | orderBy:'nome' | itemsPerPage: 10" pagination-id="redeSocial">
                     <td>
-                      <span data-ng-hide="editMode">{{entry.nome}}</span>
+                      <span data-ng-hide="editMode">{{entry.nome | capitalize}}</span>
                       <input type="text" data-ng-show="editMode" data-ng-model="entry.nome" data-ng-required>
                     </td>
                     <td>

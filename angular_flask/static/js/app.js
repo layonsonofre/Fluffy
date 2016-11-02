@@ -2,7 +2,7 @@
   'use strict';
 
   angular
-    .module('Fluffy', ['ngResource', 'ngRoute', 'angular-storage', 'xeditable',
+    .module('Fluffy', ['ngResource', 'ngRoute', 'angular-storage', 'xeditable', 'ui.select',
       'ngDragDrop', 'angularMoment', 'mwl.calendar', 'ui.bootstrap', 'Index', 'Cliente',
       'Funcao', 'Permissao', 'RedeSocial', 'GrupoItem', 'Servico', 'Consulta', 'Lembrete',
       'Estoque', 'Venda', 'Estatisticas', 'modalServiceModule', 'dataStorageService',
@@ -15,6 +15,7 @@
         $locationProvider.html5Mode(false);
         $httpProvider.defaults.headers.post["Content-Type"] = "application/json";
         $httpProvider.defaults.headers.put["Content-Type"] = "application/json";
+        $httpProvider.defaults.headers.delete = {'Content-Type': 'application/json'};
         $routeProvider
           .when('/login', {
             templateUrl: '../static/partials/login.html',
@@ -57,5 +58,40 @@
           $location.path('/login');
         }
       });
+    })
+
+    .filter('uppercase', function() {
+      return function(input) {
+        return input.toUpperCase();
+      }
+    })
+    .filter('capitalize', function() {
+      // Create the return function and set the required parameter as well as an optional paramater
+      return function(input, char) {
+
+        if (isNaN(input)) {
+
+          // If the input data is not a number, perform the operations to capitalize the correct letter.
+          var char = char - 1 || 0;
+          var letter = input.charAt(char).toUpperCase();
+          var out = [];
+
+          for (var i = 0; i < input.length; i++) {
+
+            if (i == char) {
+              out.push(letter);
+            } else {
+              out.push(input[i]);
+            }
+
+          }
+
+          return out.join('');
+
+        } else {
+          return input;
+        }
+
+      }
     });
 })()

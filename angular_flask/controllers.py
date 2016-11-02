@@ -17,7 +17,6 @@ from angular_flask.models import *
 @app.route('/')
 @cross_origin()
 def basic_pages(**kwargs):
-    print 'alou'
     return make_response(open('angular_flask/templates/index.html').read())
 
 @app.route('/api/<modelo>', methods=['GET'])

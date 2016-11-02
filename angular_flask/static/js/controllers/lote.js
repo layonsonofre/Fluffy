@@ -74,7 +74,9 @@
     function del(id) {
       return $http({
           url: _url + '/lote',
-          data: id,
+          data: {
+            id: id
+          },
           method: 'DELETE'
         })
         .then(success)

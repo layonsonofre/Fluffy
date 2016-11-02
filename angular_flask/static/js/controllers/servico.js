@@ -373,7 +373,9 @@
     function del(id) {
       return $http({
           url: _url + '/servico',
-          data: id,
+          data: {
+            id: id
+          },
           method: 'DELETE'
         })
         .then(success)

@@ -475,10 +475,13 @@
 
 
     function del(id) {
-      return $http.delete(
-          _url + '/cliente',
-          id
-        )
+      return $http({
+          url: _url + '/cliente',
+          data: {
+            id: id
+          },
+          method: 'DELETE'
+        })
         .then(success)
         .catch(failed);
 

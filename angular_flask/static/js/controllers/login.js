@@ -27,7 +27,7 @@
       vm.loading = true;
       AuthService.login(vm.email, vm.senha, function(result) {
         if (result === true) {
-          $location.path('/overview');
+          $location.path('#/overview');
         } else {
           vm.error = 'Credenciais incorretas.';
           vm.loading = false;

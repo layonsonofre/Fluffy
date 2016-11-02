@@ -192,7 +192,9 @@
     function del(id) {
       return $http({
           url: _url + '/vacina',
-          data: id,
+          data: {
+            id: id
+          },
           method: 'DELETE'
         })
         .then(success)

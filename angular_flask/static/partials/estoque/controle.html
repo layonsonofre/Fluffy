@@ -28,7 +28,7 @@
               <div class="col-xs-6">
                 <div class="form-group">
                   <label>Preço *</label>
-                  <input class="form-control" type="text" data-ng-model="produto.preco">
+                  <input class="form-control" type="text" data-ng-model="vm.form.preco">
                   <p class="help-block" ng-show="vm.helpActive">Insira o preço do produto</p>
                 </div>
               </div>
@@ -37,14 +37,14 @@
               <div class="col-xs-6">
                 <div class="form-group">
                   <label>Quantidade *</label>
-                  <input class="form-control" type="text" data-ng-model="vm.quantidade">
+                  <input class="form-control" type="text" data-ng-model="vm.form.quantidade">
                   <p class="help-block" ng-show="vm.helpActive">Insira a quantidade</p>
                 </div>
               </div>
               <div class="col-xs-6">
                 <div class="form-group">
                   <label>Categoria *</label>
-                  <select class="form-control" ng-model="vm.form.grupo" ng-options="grupo.nome for grupo in vm.grupos track by grupo.id">
+                  <select class="form-control" ng-model="vm.form.grupo_de_item_id" ng-options="grupo.id as grupo.nome for grupo in vm.grupos track by grupo.id">
                   </select>
                   <p class="help-block" ng-show="vm.helpActive">Selecione o grupo de ítem deste produto</p>
                 </div>
@@ -83,22 +83,16 @@
                 <table class="table table-striped table-hover">
                   <thead>
                     <tr>
-                      <th class="col-xs-2">Categoria</th>
                       <th class="col-xs-3">Nome</th>
                       <th class="col-xs-2">Quantidade</th>
                       <th class="col-xs-1">Preço</th>
                       <th class="col-xs-2">Total</th>
+                      <th class="col-xs-2">Categoria</th>
                       <th class="col-xs-2">Ações</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr dir-paginate="entry in vm.produtos | filter:vm.filtro | orderBy:'categoria' | orderBy: 'nome' | itemsPerPage: 10" pagination-id="estoque">
-                      <td>
-                        <span data-ng-hide="editMode">{{entry.categoria}}</span>
-                        <span editable-select="vm.grupos" e-name="group" onshow="getGrupos()" e-form="rowform" e-ng-options="g.id as g.nome for g in vm.grupos">
-                          {{ showGroup(user) }}
-                        </span>
-                      </td>
+                    <tr dir-paginate="entry in vm.produtos | filter:vm.filtro | orderBy: 'nome' | itemsPerPage: 10" pagination-id="estoque">
                       <td>
                         <span data-ng-hide="editMode">{{entry.nome}}</span>
                         <input type="text" data-ng-show="editMode" data-ng-model="entry.nome" data-ng-required>
@@ -113,6 +107,11 @@
                       </td>
                       <td>
                         {{entry.quantidade * entry.preco|currency:"R$ "}}
+                      </td>
+                      <td>
+                        <span editable-select="entry.grupo_de_item" e-name="grupo_de_item" onshow="vm.getGrupos()" e-form="rowform" e-ng-options="g.id as g.nome for g in vm.grupos track by g.id">
+                          {{ vm.mostrarGrupo(entry.grupo_de_item) }}
+                        </span>
                       </td>
                       <td>
                         <button class="btn btn-link" data-ng-hide="editMode" data-ng-click="editMode = true" data-toggle="tooltip" data-placement="top" title="Alterar dados cadastrados"><span class="fa fa-pencil"></span></button>
