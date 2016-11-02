@@ -3,8 +3,8 @@ class Raca():
 	def __init__(self, data):
 		self.id = data[0]
 		self.nome = data[1]
-		self.porte = [data[2], data[3]]
-		self.especie = [data[4], data[5]]
+		self.especie = [data[2], data[3]]
+		self.porte = [data[4], data[5]]
 
 	def toJSON(self):
 		return {
