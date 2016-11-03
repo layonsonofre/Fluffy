@@ -24,8 +24,6 @@
 
   function EstatisticasFactory($http, Fluffy) {
     var _url = Fluffy.urlBase;
-    var ClienteFactory = {};
-    return ClienteFactory;
   }
 
 })()

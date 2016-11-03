@@ -141,7 +141,9 @@
     function del(id) {
       return $http({
           url: _url + '/grupoDeItem',
-          data: id,
+          data: {
+            id: id
+          },
           method: 'DELETE'
         })
         .then(success)

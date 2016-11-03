@@ -34,8 +34,9 @@
         });
     }
 
-    function alt(data) {
-      ConfiguracaoFactory.alt(data)
+    function alt() {
+      console.log(vm.form);
+      ConfiguracaoFactory.alt(vm.form)
         .then(function(response) {
           get();
         }, function(response) {

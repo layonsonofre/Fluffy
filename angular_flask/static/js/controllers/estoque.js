@@ -14,9 +14,9 @@
     .controller('ProdutoController', ProdutoController)
     .factory('ProdutoFactory', ProdutoFactory);
 
-  ProdutoController.$inject = ['ProdutoFactory', 'GrupoItemFactory', 'modalService'];
+  ProdutoController.$inject = ['ProdutoFactory', 'GrupoItemFactory', 'modalService', '$filter'];
 
-  function ProdutoController(ProdutoFactory, GrupoItemFactory, modalService) {
+  function ProdutoController(ProdutoFactory, GrupoItemFactory, modalService, $filter) {
     var vm = this;
     vm.form = null;
 
@@ -25,6 +25,7 @@
     vm.alt = alt;
     vm.del = del;
     vm.getGrupos = getGrupos;
+    vm.mostrarGrupo = mostrarGrupo;
 
     get();
     getGrupos();
@@ -80,6 +81,15 @@
         }, function(response) {
           vm.status = response.message
         });
+    }
+
+    function mostrarGrupo(entry) {
+      if (entry.nome && vm.grupos && vm.grupos.length) {
+        var selected = $filter('filter')(vm.grupos, {id: entry.id});
+        return selected.length ? selected[0].nome : 'Não configurado';
+      } else {
+        return entry.nome || 'Não configurado';
+      }
     }
   }
 
@@ -152,7 +162,9 @@
     function del(id) {
       return $http({
           url: _url + '/item',
-          data: id,
+          data: {
+            id: id
+          },
           method: 'DELETE'
         })
         .then(success)

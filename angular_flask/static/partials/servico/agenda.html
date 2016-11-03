@@ -1,0 +1,49 @@
+<div>
+  <div class="row">
+    <div class="col-md-12">
+      <h1 class="page-head-line">Agenda</h1>
+      <h1 class="page-subhead-line">Veja uma lista dos serviços marcados e agende novos</h1>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          Agenda - <emphasized>{{vm.calendarTitle | uppercase}}</emphasized>
+        </div>
+        <div class="panel-body">
+          <div class="row">
+            <div class="col-md-3 text-center">
+              <div class="btn-group">
+                <button class="btn btn-primary" mwl-date-modifier date="vm.viewDate" decrement="vm.calendarView" ng-click="vm.cellIsOpen = false"><span class="fa fa-chevron-left"></span></button>
+                <button class="btn btn-default" mwl-date-modifier date="vm.viewDate" set-to-today ng-click="vm.cellIsOpen = false">Hoje</button>
+                <button class="btn btn-primary" mwl-date-modifier date="vm.viewDate" increment="vm.calendarView" ng-click="vm.cellIsOpen = false"><span class="fa fa-chevron-right"></span></button>
+              </div>
+            </div>
+            <br class="visible-xs visible-sm">
+            <div class="col-md-6 text-center">
+              <div class="btn-group">
+                <label class="btn btn-primary" ng-model="vm.calendarView" uib-btn-radio="'year'" ng-click="vm.cellIsOpen = false">Ano</label>
+                <label class="btn btn-primary" ng-model="vm.calendarView" uib-btn-radio="'month'" ng-click="vm.cellIsOpen = false">Mês</label>
+                <label class="btn btn-primary" ng-model="vm.calendarView" uib-btn-radio="'week'" ng-click="vm.cellIsOpen = false">Semana</label>
+                <label class="btn btn-primary" ng-model="vm.calendarView" uib-btn-radio="'day'" ng-click="vm.cellIsOpen = false">Dia</label>
+              </div>
+            </div>
+            <br class="visible-xs visible-sm">
+            <div class="col-md-3 text-center">
+              <div class="btn-group">
+                <a class="btn btn-primary"><span class="fa fa-plus"></span>&nbsp;Novo Agendamento</a>
+              </div>
+            </div>
+          </div>
+          <div class="wrapper-agenda">
+            <mwl-calendar view="vm.calendarView" view-date="vm.viewDate" events="vm.agendamentos" view-title="vm.calendarTitle" on-event-click="eventClicked(calendarEvent)" on-event-times-changed="calendarEvent.startsAt = calendarNewEventStart; calendarEvent.endsAt = calendarNewEventEnd"
+              cell-is-open="true" day-view-start="06:00" day-view-end="22:59" day-view-split="15">
+            </mwl-calendar>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

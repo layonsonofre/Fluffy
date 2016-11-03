@@ -31,6 +31,7 @@
       PermissaoFactory.get()
         .then(function(response) {
           vm.permissoes = response.data.result;
+          console.log(vm.permissoes);
         }, function(response) {
           vm.status = response.message
         });
@@ -39,6 +40,7 @@
     function add() {
       PermissaoFactory.add(vm.form)
         .then(function(response) {
+          vm.form = null;
           get();
         }, function(response) {
           vm.status = response.message
@@ -141,7 +143,9 @@
     function del(id) {
       return $http({
           url: _url + '/permissao',
-          data: id,
+          data: {
+            id: id
+          },
           method: 'DELETE'
         })
         .then(success)

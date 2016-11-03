@@ -46,11 +46,10 @@
     }
 
     function del(id) {
-      console.log(JSON.stringify(id));
       LembreteFactory.del(id).then(function(response) {
-        console.log(response);
+        get();
       }, function(response) {
-        console.error(response)
+        vm.status = response.message;
       });
     }
 
@@ -142,7 +141,6 @@
     }
 
     function del(id) {
-      console.log(JSON.stringify(id));
       return $http({
           method: 'DELETE',
           url: _url + '/lembrete',

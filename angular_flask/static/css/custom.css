@@ -26,6 +26,37 @@ textarea:focus, input:focus, input[type]:focus, .uneditable-input:focus, select:
     box-shadow: inset 0px -1px 0px 0px rgba(241, 156, 187, 0.075), inset 0px -2px 0px 0px rgba(241, 156, 187, 0.80)!important;
     outline: 0 none;
 }
+
+.pagination > li > a,
+.pagination > li > span {
+  color: rgba(210, 210, 210, 1);
+  border-color: rgba(210, 210, 210, 0.8);
+  outline: 0 none;
+}
+
+
+.pagination > li > a:hover,
+.pagination > li > span:hover {
+  color: rgba(210, 210, 210, 1);
+  border-color: rgba(210, 210, 210, 0.8);
+  background-color: rgba(210, 210, 210, 0.2);
+  box-shadow: inset 0px -1px 0px 0px rgba(210, 210, 210, 0.075), inset 0px -2px 0px 0px rgba(210, 210, 210, 0.80)!important;
+}
+.pagination > li > a:focus,
+.pagination > li > span:focus {
+  color: rgba(210, 210, 210, 1);
+  border-color: rgba(210, 210, 210, 0.8);
+  background-color: rgba(210, 210, 210, 0.2);
+}
+.pagination > .active > a, .pagination > .active > span, .pagination > .active > a:hover, .pagination > .active > span:hover, .pagination > .active > a:focus, .pagination > .active > span:focus {
+    background-color: rgba(210, 210, 210, 1);
+    border-color: rgba(210, 210, 210, 0.8);
+    color: #fff;
+    box-shadow: inset 0px -1px 0px 0px rgba(210, 210, 210, 0.075), inset 0px -2px 0px 0px rgba(210, 210, 210, 0.80)!important;
+}
+
+
+
 .card {
     position: relative;
     display: block;

@@ -1,181 +1,195 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" ng-app="Fluffy">
 
-   <head>
-      <meta charset="utf-8"/>
-      <base href="/#">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-      <title>CHARME E FOFURA</title>
+<head>
+  <meta charset="utf-8" />
+  <base href="/#">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CHARME E FOFURA</title>
 
-      <link href="static/css/bootstrap.css" rel="stylesheet"/>
-      <link href="static/css/font-awesome.min.css" rel="stylesheet"/>
-      <link href="static/css/xeditable.min.css" rel="stylesheet"/>
-      <link href="static/css/angular-bootstrap-calendar.css" rel="stylesheet"/>
+  <link href="static/css/bootstrap.css" rel="stylesheet" />
+  <link href="static/css/font-awesome.min.css" rel="stylesheet" />
+  <link href="static/css/xeditable.min.css" rel="stylesheet" />
+  <link href="static/css/select.min.css" rel="stylesheet" />
+  <link href="static/css/angular-bootstrap-calendar.css" rel="stylesheet" />
 
-      <link href="static/css/cards.css" rel="stylesheet"/>
+  <link href="static/css/custom.css" rel="stylesheet" />
 
-      <script src="static/lib/jquery/jquery.min.js"></script>
-      <script src="static/lib/jquery/jquery-ui.min.js"></script>
-      <script src="static/lib/jquery/moment-with-locales.min.js"></script>
-      <script src="static/lib/angular/angular.min.js"></script>
-      <script src="static/lib/angular/angular-locale_pt-br.js"></script>
-      <script src="static/lib/angular/angular-route.min.js"></script>
-      <script src="static/lib/angular/angular-storage.min.js"></script>
-      <script src="static/lib/angular/angular-resource.min.js"></script>
-      <script src="static/lib/angular/angular-moment.min.js"></script>
-      <script src="static/lib/angular/ui-bootstrap-tpls.min.js"></script>
-      <script src="static/lib/angular/xeditable.min.js"></script>
-      <script src="static/lib/angular/angular-dragdrop.js"></script>
-      <script src="static/lib/angular/angular-bootstrap-calendar-tpls.min.js"></script>
-      <script src="static/lib/bootstrap/bootstrap.min.js"></script>
+  <script src="static/lib/jquery/jquery.min.js"></script>
+  <script src="static/lib/jquery/jquery-ui.min.js"></script>
+  <script src="static/lib/jquery/moment-with-locales.min.js"></script>
+  <script src="static/lib/angular/angular.min.js"></script>
+  <script src="static/lib/angular/angular-locale_pt-br.js"></script>
+  <script src="static/lib/angular/angular-route.min.js"></script>
+  <script src="static/lib/angular/angular-storage.min.js"></script>
+  <script src="static/lib/angular/angular-resource.min.js"></script>
+  <script src="static/lib/angular/angular-moment.min.js"></script>
+  <script src="static/lib/angular/ui-bootstrap-tpls.min.js"></script>
+  <script src="static/lib/angular/xeditable.min.js"></script>
+  <script src="static/lib/angular/select.min.js"></script>
+  <script src="static/lib/angular/angular-dragdrop.js"></script>
+  <script src="static/lib/angular/angular-bootstrap-calendar-tpls.min.js"></script>
+  <script src="static/lib/angular/dirPagination.js"></script>
+  <script src="static/lib/bootstrap/bootstrap.min.js"></script>
 
-      <script src="static/js/app.js"></script>
-      <script src="static/js/app.provider.js"></script>
-      <script src="static/js/services/authentication.js"></script>
-      <script src="static/js/services/modalService.js"></script>
-      <script src="static/js/services/dataStorage.js"></script>
-      <script src="static/js/controllers/erro.js"></script>
-      <script src="static/js/controllers/login.js"></script>
-      <script src="static/js/controllers/index.js"></script>
-      <script src="static/js/controllers/servico.js"></script>
-      <script src="static/js/controllers/redeSocial.js"></script>
-      <script src="static/js/controllers/porte.js"></script>
-      <script src="static/js/controllers/especie.js"></script>
-      <script src="static/js/controllers/raca.js"></script>
-      <script src="static/js/controllers/restricao.js"></script>
-      <script src="static/js/controllers/cliente.js"></script>
-      <script src="static/js/controllers/funcao.js"></script>
-      <script src="static/js/controllers/permissao.js"></script>
-      <script src="static/js/controllers/grupoItem.js"></script>
-      <script src="static/js/controllers/lembrete.js"></script>
-      <script src="static/js/controllers/estoque.js"></script>
-      <script src="static/js/controllers/consulta.js"></script>
-      <script src="static/js/controllers/venda.js"></script>
-      <script src="static/js/controllers/estatisticas.js"></script>
-      <script src="static/js/controllers/configuracao.js"></script>
-      <script src="static/js/controllers/vacina.js"></script>
+  <script src="../static/js/app.js"></script>
+  <script src="../static/js/app.provider.js"></script>
+  <script src="../static/js/services/authentication.js"></script>
+  <script src="../static/js/services/modalService.js"></script>
+  <script src="../static/js/services/dataStorage.js"></script>
+  <script src="../static/js/controllers/erro.js"></script>
+  <script src="../static/js/controllers/login.js"></script>
+  <script src="../static/js/controllers/index.js"></script>
+  <script src="../static/js/controllers/servico.js"></script>
+  <script src="../static/js/controllers/agenda.js"></script>
+  <script src="../static/js/controllers/agendamento.js"></script>
+  <script src="../static/js/controllers/redeSocial.js"></script>
+  <script src="../static/js/controllers/porte.js"></script>
+  <script src="../static/js/controllers/especie.js"></script>
+  <script src="../static/js/controllers/raca.js"></script>
+  <script src="../static/js/controllers/restricao.js"></script>
+  <script src="../static/js/controllers/pessoa.js"></script>
+  <script src="../static/js/controllers/funcao.js"></script>
+  <script src="../static/js/controllers/permissao.js"></script>
+  <script src="../static/js/controllers/grupoItem.js"></script>
+  <script src="../static/js/controllers/lembrete.js"></script>
+  <script src="../static/js/controllers/estoque.js"></script>
+  <script src="../static/js/controllers/consulta.js"></script>
+  <script src="../static/js/controllers/venda.js"></script>
+  <script src="../static/js/controllers/estatisticas.js"></script>
+  <script src="../static/js/controllers/configuracao.js"></script>
+  <script src="../static/js/controllers/lote.js"></script>
+  <script src="../static/js/controllers/vacina.js"></script>
+  <script src="../static/js/controllers/anamnese.js"></script>
+</head>
 
-   </head>
-
-   <body class="{{bodyBackground}}">
-      <nav class="navbar navbar-default navbar-fixed-top" ng-hide="hideMenu">
-         <div class="container">
-            <div class="navbar-header page-scroll">
-               <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                  <span class="sr-only">Toggle navigation</span>
-                  <span class="icon-bar"></span>
-                  <span class="icon-bar"></span>
-                  <span class="icon-bar"></span>
-               </button>
-               <a class="navbar-brand page-scroll" href="/overview"><img src="static/img/logo.jpg">&nbsp;&nbsp;Charme e Fofura Pet Boutique</a>
-            </div>
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-               <ul class="nav navbar-nav navbar-right">
-                  <li class="hidden">
-                     <a href="#page-top"></a>
-                  </li>
-                  <li class="dropdown">
-                     <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Cliente
+<body class="{{bodyBackground}}">
+  <nav class="navbar navbar-default navbar-fixed-top" ng-hide="hideMenu">
+    <div class="container">
+      <div class="navbar-header page-scroll">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand page-scroll" href="#/overview"><img src="static/img/logo.jpg">&nbsp;&nbsp;Charme e Fofura Pet Boutique</a>
+      </div>
+      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav navbar-right">
+          <li class="hidden">
+            <a href="#page-top"></a>
+          </li>
+          <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Pessoa
                         <span class="caret"></span>
                      </a>
-                     <ul class="dropdown-menu" role="menu">
-                        <li>
-                           <a href="#/cliente/cadastro">Novo Cliente</a>
-                        </li>
-                        <li>
-                           <a href="#/cliente/pet">Novo Pet</a>
-                        </li>
-                        <li>
-                           <a href="#/cliente/busca">Buscar</a>
-                        </li>
-                     </ul>
-                  </li>
-                  <li class="dropdown">
-                     <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Serviço
+            <ul class="dropdown-menu" role="menu">
+              <li>
+                <a href="#/pessoa/cliente">Novo Cliente</a>
+              </li>
+              <li>
+                <a href="#/pessoa/pet">Incluir Pet</a>
+              </li>
+              <li>
+                <a href="#/pessoa/busca">Buscar</a>
+              </li>
+              <li>
+                <a href="#/pessoa/funcionario">Novo Funcionário</a>
+              </li>
+            </ul>
+          </li>
+          <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Serviço
                         <span class="caret"></span>
                      </a>
-                     <ul class="dropdown-menu" role="menu">
-                        <li>
-                           <a href="#/servico/agendar">Agendar</a>
-                        </li>
-                        <li>
-                           <a href="#/servico/cadastro">Cadastrar</a>
-                        </li>
-                     </ul>
-                  </li>
-                  <li class="dropdown">
-                     <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Estoque
+            <ul class="dropdown-menu" role="menu">
+              <li>
+                <a href="#/servico/agenda">Agenda</a>
+              </li>
+              <li>
+                <a href="#/servico/agendamento">Agendamento</a>
+              </li>
+              <li>
+                <a href="#/servico/cadastro">Cadastrar</a>
+              </li>
+            </ul>
+          </li>
+          <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Estoque
                         <span class="caret"></span>
                      </a>
-                     <ul class="dropdown-menu" role="menu">
-                        <li>
-                           <a href="#/estoque/controle">Controle</a>
-                        </li>
-                        <li>
-                           <a href="#/estoque/grupoItem">Grupo de Ítens</a>
-                        </li>
-                     </ul>
-                  </li>
-                  <li class="dropdown">
-                     <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Venda
+            <ul class="dropdown-menu" role="menu">
+              <li>
+                <a href="#/estoque/vacina">Vacinas</a>
+              </li>
+              <li>
+                <a href="#/estoque/controle">Produtos</a>
+              </li>
+              <li>
+                <a href="#/estoque/grupoItem">Grupo de Ítens</a>
+              </li>
+            </ul>
+          </li>
+          <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Venda
                         <span class="caret"></span>
                      </a>
-                     <ul class="dropdown-menu" role="menu">
-                        <li>
-                           <a href="#/venda/nova">Nova</a>
-                        </li>
-                     </ul>
-                  </li>
-                  <li>
-                     <a href="#/estatisticas">Estatísticas</a>
-                  </li>
-                  <li class="dropdown">
-                     <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Avançado
+            <ul class="dropdown-menu" role="menu">
+              <li>
+                <a href="#/venda/nova">Nova</a>
+              </li>
+            </ul>
+          </li>
+          <li>
+            <a href="#/estatisticas">Estatísticas</a>
+          </li>
+          <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Avançado
                         <span class="caret"></span>
                      </a>
-                     <ul class="dropdown-menu" role="menu">
-                        <li>
-                           <a href="#/configuracao">Configuração</a>
-                        </li>
-                        <li>
-                           <a href="#/funcao">Funções</a>
-                        </li>
-                        <li>
-                           <a href="#/permissao">Permissões</a>
-                        </li>
-                        <li>
-                           <a href="#/redesSociais">Redes Sociais</a>
-                        </li>
-                     </ul>
-                  </li>
-                  <li class="dropdown">
-                     <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Opções
+            <ul class="dropdown-menu" role="menu">
+              <li>
+                <a href="#/configuracao">Configuração</a>
+              </li>
+              <li>
+                <a href="#/funcao">Funções</a>
+              </li>
+              <li>
+                <a href="#/permissao">Permissões</a>
+              </li>
+              <li>
+                <a href="#/redesSociais">Redes Sociais</a>
+              </li>
+            </ul>
+          </li>
+          <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Opções
                         <span class="caret"></span>
                      </a>
-                     <ul class="dropdown-menu" role="menu">
-                        <li>
-                           <a href="#/login">Sair</a>
-                        </li>
-                     </ul>
-                  </li>
-               </ul>
-            </div>
-         </div>
-      </nav>
-      <section>
-         <div class="container">
-            <div id="content" ng-view></div>
-         </div>
-      </section>
-      <footer ng-hide="hideMenu">
-         <div class="container">
-            <div class="text-center">
-               Made with
-               <i class="fa fa-heart"></i>
-               by André Cadamuro Garcia e Layon de Souza Onofre
-            </div>
-         </div>
-      </footer>
-   </body>
+            <ul class="dropdown-menu" role="menu">
+              <li>
+                <a href="#/login">Sair</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <section>
+    <div class="container">
+      <div id="content" ng-view></div>
+    </div>
+  </section>
+  <footer ng-hide="hideMenu">
+    <div class="container">
+      <div class="text-center">
+        Made with
+        <i class="fa fa-heart"></i> by André Cadamuro Garcia e Layon de Souza Onofre
+      </div>
+    </div>
+  </footer>
+</body>
 
 </html>

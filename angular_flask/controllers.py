@@ -14,7 +14,7 @@ from angular_flask.core import mysql
 from angular_flask.models import *
 
 # routing for basic pages (pass routing onto the Angular app)
-@app.route('/#/<path>')
+@app.route('/')
 @cross_origin()
 def basic_pages(**kwargs):
     return make_response(open('angular_flask/templates/index.html').read())
@@ -114,7 +114,6 @@ def login():
 def favicon():
     return send_from_directory(os.path.join(app.root_path, 'static'),
                                'img/favicon.ico')
-
 
 @app.errorhandler(404)
 def page_not_found(e):
