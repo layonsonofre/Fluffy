@@ -3,11 +3,12 @@
 
   angular
     .module('Fluffy', ['ngResource', 'ngRoute', 'angular-storage', 'xeditable', 'ui.select',
-      'ngDragDrop', 'angularMoment', 'mwl.calendar', 'ui.bootstrap', 'Index', 'Cliente',
-      'Funcao', 'Permissao', 'RedeSocial', 'GrupoItem', 'Servico', 'Consulta', 'Lembrete',
+      'ngDragDrop', 'angularMoment', 'mwl.calendar', 'ui.bootstrap', 'Index', 'Pessoa',
+      'Funcao', 'Permissao', 'RedeSocial', 'GrupoItem', 'Servico', 'Agenda', 'Agendamento',
+      'Consulta', 'Lembrete',
       'Estoque', 'Venda', 'Estatisticas', 'modalServiceModule', 'dataStorageService',
       'Authentication', 'Login', 'Raca', 'Porte', 'Especie', 'Restricao', 'Configuracao',
-      'Lote', 'Vacina', 'angularUtils.directives.dirPagination'
+      'Lote', 'Vacina', 'angularUtils.directives.dirPagination', 'Anamnese'
     ])
     .config(['$routeProvider', '$locationProvider', '$httpProvider', 'calendarConfig', 'uibDatepickerPopupConfig',
       function($routeProvider, $locationProvider, $httpProvider, calendarConfig, uibDatepickerPopupConfig) {
@@ -15,7 +16,9 @@
         $locationProvider.html5Mode(false);
         $httpProvider.defaults.headers.post["Content-Type"] = "application/json";
         $httpProvider.defaults.headers.put["Content-Type"] = "application/json";
-        $httpProvider.defaults.headers.delete = {'Content-Type': 'application/json'};
+        $httpProvider.defaults.headers.delete = {
+          'Content-Type': 'application/json'
+        };
         $routeProvider
           .when('/login', {
             templateUrl: '../static/partials/login.html',
@@ -58,12 +61,6 @@
           $location.path('/login');
         }
       });
-    })
-
-    .filter('uppercase', function() {
-      return function(input) {
-        return input.toUpperCase();
-      }
     })
     .filter('capitalize', function() {
       // Create the return function and set the required parameter as well as an optional paramater

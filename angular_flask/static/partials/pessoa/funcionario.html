@@ -1,0 +1,333 @@
+<div>
+  <div class="row">
+    <div class="col-xs-12">
+      <h1 class="page-head-line">Cadastrar Funcionário</h1>
+      <h1 class="page-subhead-line">Insira os dados dos funcionários e de suas permissões e funções no sistema</h1>
+      <a ng-click="vm.helpActive = !vm.helpActive" class="btn btn-link pull-right"><span class="fa fa-info"></span></a>
+      <p class="text-muted">Os campos marcados com * são obrigatórios</p>
+
+      <div ng-show="vm.status" class="alert alert-info">{{vm.status}}</div>
+    </div>
+  </div>
+
+  <!-- MODAL DE NOVA REDE SOCIAL -->
+  <div id="novaRedeSocial" class="modal fade" role="dialog" aria-labelledby="redeSocial">
+    <div class="modal-dialog modal-md" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title">Nova Rede Social</h4>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-xs-12">
+              <div class="form-group">
+                <label>Nome *</label>
+                <input class="form-control" type="text" ng-model="vm.form.nomeRedeSocial">
+                <p class="help-block" ng-show="vm.helpActive">Insira o nome da rede social</p>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-12">
+              <label>Redes Sociais Cadastradas</label>
+              <div class="table-wrapper">
+                <table class="table table-striped table-hover">
+                  <thead>
+                    <tr>
+                      <th class="col-xs-12">Nome</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr ng-repeat="entry in vm.tiposRedesSociais">
+                      <td>{{entry.nome}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-success" ng-click="vm.addRedeSocial()">Confirmar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FORM DE CADASTRO -->
+  <div class="row">
+    <div class="col-xs-12 ">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          Dados do Funcionário
+        </div>
+        <div class="panel-body">
+          <form ng-submit="vm.add()">
+            <div class="row">
+              <div class="col-xs-7">
+                <div class="form-group">
+                  <label>Nome *</label>
+                  <input class="form-control" type="text" data-ng-model="vm.form.pessoa.nome" name="nome">
+                  <p class="help-block" ng-show="vm.helpActive">Insira o nome completo do funcionário</p>
+                </div>
+              </div>
+              <div class="col-xs-5">
+                <div class="form-group">
+                  <label>Email *</label>
+                  <input class="form-control" type="text" data-ng-model="vm.form.pessoa.email">
+                  <p class="help-block" ng-show="vm.helpActive">Insira o email do funcionário no formato:
+                    <i>email@exemplo.com</i>
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xs-6">
+                <div class="form-group">
+                  <label>CPF/CNPJ *</label>
+                  <input class="form-control" type="text" data-ng-model="vm.form.pessoa.cpf_cnpj">
+                  <p class="help-block" ng-show="vm.helpActive">Insira o CPF ou CNPJ do cliente</p>
+                </div>
+              </div>
+              <div class="col-xs-6">
+                <div class="form-group">
+                  <label>RG/Insc. Estadual *</label>
+                  <input class="form-control" type="text" data-ng-model="vm.form.pessoa.rg_inscEstadual">
+                  <p class="help-block" ng-show="vm.helpActive">Insira o número do RG ou Inscrição Estadual</p>
+                </div>
+              </div>
+            </div>
+
+            <hr>
+            <!-- ENDERECO -->
+
+            <div class="row">
+              <div class="col-xs-2">
+                <div class="form-group">
+                  <label>CEP *</label>
+                  <input class="form-control" type="text" data-ng-model="vm.form.pessoa.cep">
+                  <p class="help-block" ng-show="vm.helpActive">CEP da localidade do funcionário</p>
+                </div>
+              </div>
+              <div class="col-xs-1">
+                <div class="form-group">
+                  <label>Buscar</label>
+                  <a class="form-control btn btn-link" ng-click="vm.search_zip_code()" data-toggle="tooltip" data-placement="top" title="" data-title="Auto-completar endereço a partir do CEP">
+                    <span class="fa fa-search"></span>
+                  </a>
+                  <p class="help-block" ng-show="vm.helpActive"></p>
+                </div>
+              </div>
+              <div class="col-xs-5">
+                <div class="form-group">
+                  <label>Logradouro *</label>
+                  <input class="form-control" type="text" data-ng-model="vm.form.pessoa.logradouro">
+                  <p class="help-block" ng-show="vm.helpActive">Nome da rua</p>
+                </div>
+              </div>
+              <div class="col-xs-1">
+                <div class="form-group">
+                  <label>Número *</label>
+                  <input class="form-control" type="text" data-ng-model="vm.form.pessoa.numero">
+                  <p class="help-block" ng-show="vm.helpActive">No. da residência</p>
+                </div>
+              </div>
+              <div class="col-xs-3">
+                <div class="form-group">
+                  <label>Complemento</label>
+                  <input class="form-control" type="text" data-ng-model="vm.form.pessoa.complemento">
+                  <p class="help-block" ng-show="vm.helpActive">Informações adicionais</p>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xs-3">
+                <div class="form-group">
+                  <label>Ponto de Referência</label>
+                  <input class="form-control" type="text" data-ng-model="vm.form.pessoa.pontoDeReferencia">
+                  <p class="help-block" ng-show="vm.helpActive">Insira uma localidade próxima conhecida</p>
+                </div>
+              </div>
+              <div class="col-xs-5">
+                <div class="form-group">
+                  <label>Cidade *</label>
+                  <input class="form-control" type="text" data-ng-model="vm.form.pessoa.cidade">
+                  <p class="help-block" ng-show="vm.helpActive">Insira a cidade do cliente</p>
+                </div>
+              </div>
+              <div class="col-xs-2">
+                <div class="form-group">
+                  <label>Estado (UF) *</label>
+                  <input class="form-control" type="text" data-ng-model="vm.form.pessoa.estado">
+                  <p class="help-block" ng-show="vm.helpActive">Uni. Federativa. Ex.:
+                    <i>PR</i>
+                  </p>
+                </div>
+              </div>
+              <div class="col-xs-2">
+                <div class="form-group">
+                  <label>País *</label>
+                  <input class="form-control" type="text" data-ng-model="vm.form.pessoa.pais">
+                  <p class="help-block" ng-show="vm.helpActive">Ex.:
+                    <i>Brasil</i>
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- FIM ENDERECO -->
+            <hr>
+
+            <!-- CONTATO -->
+            <div class="row">
+              <!-- INICIO BLOCO TELEFONES -->
+              <div class="col-lg-6 col-xs-12">
+                <div class="row">
+                  <div class="col-xs-12">
+                    <div class="form-group">
+                      <label>Telefones</label>
+                      <a class="form-control btn btn-link" ng-click="vm.incluirTelefone()" data-toggle="tooltip" data-placement="top" title="Adicionar mais um telefone para contato">
+                        <span class="fa fa-plus"></span>&nbsp;<span class="fa fa-phone"></span>&nbsp;
+                        <b>Adicionar Telefone</b>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <fieldset data-ng-repeat="telefone in vm.form.telefones">
+                    <div class="col-xs-2">
+                      <div class="form-group">
+                        <label>Cód. País *</label>
+                        <input class="form-control" type="text" data-ng-model="telefone.codigo_pais">
+                        <p class="help-block" ng-show="vm.helpActive">Brasil:
+                          <i>+55</i>
+                        </p>
+                      </div>
+                    </div>
+                    <div class="col-xs-2">
+                      <div class="form-group">
+                        <label>Cód. Área*</label>
+                        <input class="form-control" type="text" data-ng-model="telefone.codigo_area">
+                        <p class="help-block" ng-show="vm.helpActive">Ponta Grossa:
+                          <i>42</i>
+                        </p>
+                      </div>
+                    </div>
+                    <div class="col-xs-4">
+                      <div class="form-group">
+                        <label>Telefone *</label>
+                        <input class="form-control" type="text" data-ng-model="telefone.numero">
+                        <p class="help-block" ng-show="vm.helpActive">Insira o número do telefone</p>
+                      </div>
+                    </div>
+                    <div class="col-xs-2">
+                      <div class="form-group">
+                        <label>Whatsapp</label>
+                        <div class="checkbox">
+                          <label>
+                            <input type="checkbox" data-ng-model="telefone.whatsapp">&nbsp;&nbsp; Sim
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-xs-2">
+                      <div class="form-group" ng-hide="$first">
+                        <label>Remover</label>
+                        <a class="form-control btn btn-link" ng-click="vm.removeTelefone(telefone)" data-toggle="tooltip" data-placement="top" title="" data-title="Auto-completar endereço a partir do CEP">
+                          <i class="fa fa-minus"></i>&nbsp;<i class="fa fa-phone"></i>
+                        </a>
+                      </div>
+                    </div>
+                  </fieldset>
+                </div>
+              </div>
+              <!-- FIM BLOCO TELEFONES -->
+
+              <!-- INICIO BLOCO REDES SOCIAIS -->
+              <div class="col-lg-6 col-xs-12">
+                <div class="row">
+                  <div class="col-xs-9">
+                    <div class="form-group">
+                      <label>Redes Sociais</label>
+                      <a class="form-control btn btn-link" ng-click="vm.incluirPessoaRedeSocial()" data-toggle="tooltip" data-placement="top" title="Informar um meio de contato">
+                        <span class="fa fa-plus"></span>&nbsp;<i class="fa fa-user"></i>&nbsp;&nbsp;<b>Adicionar Contato</b>
+                      </a>
+                    </div>
+                  </div>
+                  <div class="col-xs-3">
+                    <div class="form-group">
+                      <label>Nova Rede Social</label>
+                      <a class="form-control btn btn-link" data-toggle="modal" data-target="#novaRedeSocial" data-toggle="tooltip" data-placement="top" title="Cadastrar uma nova rede social">
+                        <span class="fa fa-plus"></span>&nbsp;<i class="fa fa-facebook"></i>&nbsp;&nbsp;<b>Nova</b>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <fieldset data-ng-repeat="social in vm.form.redesSociais">
+                    <div class="col-xs-3">
+                      <div class="form-group">
+                        <label>Rede Social *</label>
+                        <select class="form-control" ng-model="social.redeSocial" ng-options="tipo.id as tipo.nome for tipo in vm.tiposRedesSociais track by tipo.id"></select>
+                      </div>
+                    </div>
+                    <div class="col-xs-7">
+                      <div class="form-group">
+                        <label>Perfil/Endereço *</label>
+                        <input class="form-control" type="text" data-ng-model="social.perfil">
+                        <p class="help-block" ng-show="vm.helpActive">Insira o perfil ou endereço para encontrar a pessoa na rede social</p>
+                      </div>
+                    </div>
+                    <div class="col-xs-2">
+                      <div class="form-group" ng-hide="$first">
+                        <label>Remover</label>
+                        <a class="form-control btn btn-link" ng-click="vm.removeRedeSocial(item)" data-toggle="tooltip" data-placement="top" title="Remover meio de contato">
+                          <i class="fa fa-minus"></i>
+                        </a>
+                        <p class="help-block" ng-show="vm.helpActive"></p>
+                      </div>
+                    </div>
+                  </fieldset>
+                </div>
+              </div>
+            </div>
+
+            <hr>
+            <!-- FUNCOES/PERMISSOES -->
+            <div class="row">
+              <div class="col-xs-6">
+                <div class="form-group">
+                  <label>Função *</label>
+                  <div class="radio" ng-repeat="f in vm.funcoes | orderBy:'nome'">
+                    <label><input type="radio" value="{{f.id}}" ng-model="vm.form.funcao">&nbsp;&nbsp; {{f.nome|capitalize}}</label>
+                  </div>
+                </div>
+              </div>
+              <div class="col-xs-6">
+                <div class="form-group">
+                  <label>Permissões *</label>
+                  <div class="checkbox" ng-repeat="p in vm.permissoes | orderBy:'modulo'">
+                    <label><input type="checkbox" ng-model="p.checked" ng-change="vm.selecionarPermissao()">&nbsp;&nbsp; {{p.modulo|capitalize}}</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- FUNCOES/PERMISSOES -->
+
+            <div class="row">
+              <div class="col-xs-12">
+                <hr>
+                <a ng-click="vm.add()" class="btn btn-link" data-toggle="tooltip" data-placement="top" title="Armazena as informações inseridas acima">
+                  <span class="fa fa-check"></span>&nbsp;&nbsp;
+                  <b>Salvar</b>
+                </a>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

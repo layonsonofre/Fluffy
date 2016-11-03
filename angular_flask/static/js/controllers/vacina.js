@@ -18,7 +18,7 @@
 
   function VacinaController(VacinaFactory, LoteFactory, modalService) {
     var vm = this;
-    vm.form = null;
+    vm.form = {};
 
     vm.get = get;
     vm.add = add;
@@ -29,6 +29,8 @@
     vm.addLote = addLote;
     vm.altLote = altLote;
     vm.delLote = delLote;
+
+    vm.incluirLote = incluirLote;
 
     get();
 
@@ -76,15 +78,13 @@
         });
     }
 
-
-
-    function get() {
-      LoteFactory.get(vm.form.vacina_id)
-        .then(function(response) {
-          vm.lotes = response.data.result;
-        }, function(response) {
-          vm.status = response.message
-        });
+    function incluirLote() {
+      if (!vm.form.lotes) {
+        vm.form.lotes = [];
+      }
+      vm.form.lotes.push({
+        id: null
+      });
     }
 
     function addLote() {
@@ -105,21 +105,46 @@
         });
     }
 
-    function delLote(entry) {
-      var modalOptions = {
-        closeButtonText: 'Cancelar',
-        actionButtonText: 'Excluir',
-        actionButtonClass: 'btn btn-danger'
-      };
-      modalService.showModal({}, modalOptions)
-        .then(function(result) {
-          LoteFactory.del(entry.id)
-            .then(function(response) {
-              getLote();
-            }, function(response) {
-              vm.status = response.message
-            });
-        });
+    function delLote(item) {
+      if (item.id === null) {
+        vm.form.lotes = vm.form.lotes.splice(vm.form.lotes.indexOf(item), 1)
+      } else {
+        var modalOptions = {
+          closeButtonText: 'Cancelar',
+          actionButtonText: 'Excluir',
+          actionButtonClass: 'btn btn-danger'
+        };
+        modalService.showModal({}, modalOptions)
+          .then(function(result) {
+            LoteFactory.del(entry.id)
+              .then(function(response) {
+                getLote();
+              }, function(response) {
+                vm.status = response.message
+              });
+          });
+      }
+    }
+    
+    function getLote(entry) {
+      vm.form.lotes = {};
+      if (entry.checked) {
+        LoteFactory.getLotesVacina(entry.id)
+          .then(function(response) {
+            vm.form.lotes = response;
+            console.log(vm.form.lotes);
+          }, function(response) {
+            vm.status = 'Failed to load: ' + error.message;
+          });
+      }
+    }
+
+    function updateSelection(position, entities) {
+      angular.forEach(entities, function(subscription, index) {
+        if (position != index) {
+          subscription.checked = false;
+        }
+      });
     }
   }
 

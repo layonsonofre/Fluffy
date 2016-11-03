@@ -2,7 +2,7 @@
   <div class="row">
     <div class="col-xs-12">
       <h1 class="page-head-line">Novo Pet</h1>
-      <h1 class="page-subhead-line">Selecione o cliente e cadastre novos pets</h1>
+      <h1 class="page-subhead-line">Selecione a pessoa e cadastre novos pets</h1>
       <a ng-click="vm.helpActive = !vm.helpActive" class="btn btn-link pull-right"><span class="fa fa-info"></span></a>
 
       <div ng-show="vm.status" class="alert alert-info">{{vm.status}}</div>
@@ -21,7 +21,7 @@
               <div class="form-group">
                 <label>Insira os parâmetros da busca</label>
                 <input class="form-control" type="text" ng-model="vm.filtro">
-                <p class="help-block" ng-show="vm.helpActive">Você pode pesquisar por qualquer dado do cliente ou animal</p>
+                <p class="help-block" ng-show="vm.helpActive">Você pode pesquisar por qualquer dado da pessoa ou animal</p>
               </div>
             </div>
           </div>
@@ -39,24 +39,24 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr dir-pagination="entry in vm.clientes | filter:vm.filtro" pagination-id="pessoa">
+                  <tr dir-pagination="entry in vm.pessoas | filter:vm.filtro" pagination-id="pessoa">
                     <td>
-                      <input type="checkbox" ng-model="entry.checked" ng-click="vm.updateSelection($index, vm.clientes); vm.getAnimais(entry)">
+                      <input type="checkbox" ng-model="entry.checked" ng-click="vm.updateSelection($index, vm.pessoas); vm.getAnimais(entry)">
                     </td>
                     <td>{{entry.nome}}</td>
                     <td>{{entry.email}}</td>
                     <td>{{entry.telefone}}</td>
                     <td>{{entry.endereco}}</td>
                     <td>
-                      <button class="btn btn-link" ng-click="vm.detalhes_cliente(entry)" data-toggle="tooltip" data-placement="top" title="Ver informações detalhadas">
+                      <a class="btn btn-link" ng-click="vm.detalhes_pessoa(entry)" data-toggle="tooltip" data-placement="top" title="Ver informações detalhadas">
                         <span class="fa fa-plus"></span>
-                      </button>
-                      <button class="btn btn-link" ng-click="vm.editar_cliente(entry)" data-toggle="tooltip" data-placement="top" title="Editar estas informações">
+                      </a>
+                      <a class="btn btn-link" ng-click="vm.editar_pessoa(entry)" data-toggle="tooltip" data-placement="top" title="Editar estas informações">
                         <span class="fa fa-pencil"></span>
-                      </button>
-                      <button class="btn btn-link" ng-click="vm.excluir_cliente(entry)" data-toggle="tooltip" data-placement="top" title="Excluir este registro">
+                      </a>
+                      <a class="btn btn-link" ng-click="vm.excluir_pessoa(entry)" data-toggle="tooltip" data-placement="top" title="Excluir este registro">
                         <span class="fa fa-trash"></span>
-                      </button>
+                      </a>
                     </td>
                   </tr>
                 </tbody>
@@ -167,7 +167,7 @@
           </div>
           <div class="row">
             <div class="col-xs-12">
-              <button class="btn btn-success" ng-click="vm.addPet()" data-toggle="tooltip" data-placement="top" title="Adicionar um animal do cliente"><span class="fa fa-plus"></span>&nbsp;<span class="fa fa-bug"></span>&nbsp; <b>Confirmar</b></button>
+              <button class="btn btn-success" ng-click="vm.addPet()" data-toggle="tooltip" data-placement="top" title="Adicionar um animal da pessoa"><span class="fa fa-plus"></span>&nbsp;<span class="fa fa-bug"></span>&nbsp; <b>Confirmar</b></button>
             </div>
             <br>
           </div>

@@ -2,38 +2,43 @@
   'use strict';
 
   angular
-    .module('Cliente', [])
+    .module('Pessoa', [])
     .config(['$routeProvider', function($routeProvider) {
       $routeProvider
-        .when('/cliente/cadastro', {
-          templateUrl: '../static/partials/cliente/cadastro.html',
-          controller: 'ClienteController',
+        .when('/pessoa/cliente', {
+          templateUrl: '../static/partials/pessoa/cliente.html',
+          controller: 'PessoaController',
           controllerAs: 'vm'
         })
-        .when('/cliente/pet', {
-          templateUrl: '../static/partials/cliente/pet.html',
-          controller: 'ClienteController',
+        .when('/pessoa/funcionario', {
+          templateUrl: '../static/partials/pessoa/funcionario.html',
+          controller: 'PessoaController',
           controllerAs: 'vm'
         })
-        .when('/cliente/busca', {
-          templateUrl: '../static/partials/cliente/busca.html',
-          controller: 'ClienteController',
+        .when('/pessoa/pet', {
+          templateUrl: '../static/partials/pessoa/pet.html',
+          controller: 'PessoaController',
+          controllerAs: 'vm'
+        })
+        .when('/pessoa/busca', {
+          templateUrl: '../static/partials/pessoa/busca.html',
+          controller: 'PessoaController',
           controllerAs: 'vm'
         })
     }])
-    .controller('ClienteController', ClienteController)
-    .factory('ClienteFactory', ClienteFactory);
+    .controller('PessoaController', PessoaController)
+    .factory('PessoaFactory', PessoaFactory);
 
-  ClienteController.$inject = ['ClienteFactory', '$http', 'RedeSocialFactory', 'ServicoFactory', 'PorteFactory', 'RacaFactory', 'EspecieFactory', 'RestricaoFactory', 'modalService', 'dataStorage', '$location', 'calendarConfig'];
+  PessoaController.$inject = ['PessoaFactory', '$http', 'RedeSocialFactory', 'ServicoFactory', 'PorteFactory', 'RacaFactory', 'EspecieFactory', 'RestricaoFactory', 'modalService', 'dataStorage', '$location', 'calendarConfig', 'FuncaoFactory', 'PermissaoFactory', '$filter'];
 
-  function ClienteController(ClienteFactory, $http, RedeSocialFactory, ServicoFactory, PorteFactory, RacaFactory, EspecieFactory, RestricaoFactory, modalService, dataStorage, $location, calendarConfig) {
+  function PessoaController(PessoaFactory, $http, RedeSocialFactory, ServicoFactory, PorteFactory, RacaFactory, EspecieFactory, RestricaoFactory, modalService, dataStorage, $location, calendarConfig, FuncaoFactory, PermissaoFactory, $filter) {
     var vm = this;
 
     vm.form = dataStorage.getPessoa();
 
     vm.add = add;
     vm.alt = alt;
-    vm.excluir_cliente = excluir_cliente;
+    vm.excluir_pessoa = excluir_pessoa;
     vm.gotoAddPet = gotoAddPet;
 
     vm.removeTelefone = removeTelefone;
@@ -46,7 +51,7 @@
     vm.incluirPessoaRedeSocial = incluirPessoaRedeSocial;
     vm.addRedeSocial = addRedeSocial;
 
-    vm.getClientes = getClientes;
+    vm.getPessoas = getPessoas;
     vm.getAnimais = getAnimais;
     vm.getHistorico = getHistorico;
     vm.selectAnimal = selectAnimal;
@@ -59,54 +64,76 @@
     vm.getRacas = getRacas;
 
     vm.adicionarAnimal = false;
-    vm.form.pais = "Brasil";
-    vm.form.estado = "PR";
-    vm.form.cidade = "Ponta Grossa";
+
     vm.showAdicionarTelefone = false;
     vm.showAdicionarAnimal = showAdicionarAnimal;
     vm.search_zip_code = search_zip_code;
 
+    vm.getFuncoes = getFuncoes;
+    vm.getPermissoes = getPermissoes;
+
     getTiposRedesSociais();
-    getClientes();
+    getPessoas();
     vm.status = null;
     vm.filtro = vm.form.nome;
-
-    function setPage(page) {
-      vm.currentPage = page;
-    }
 
     getPortes();
     getEspecies();
     getRestricoes();
     getRacas();
 
+    incluirTelefone();
+    incluirPessoaRedeSocial();
+
+    getFuncoes();
+    getPermissoes();
+
     function incluirTelefone() {
+      vm.form.pessoa_id = null;
       getTelefones(true);
     }
 
     function removeTelefone(item) {
-      if (id === null) {
+      if (item.id === null) {
         vm.form.telefones = vm.form.telefones.splice(vm.form.telefones.indexOf(item), 1)
       } else {
-        ClienteFactory.delTelefone(id)
-          .then(function(response) {
-            alert("MISSING BACKEND CALL");
-          }, function(response) {
-            vm.status = 'Falha na tentativa de remover o telefone.\n' + error.message;
+        var modalOptions = {
+          closeButtonText: 'Cancelar',
+          actionButtonText: 'Excluir',
+          actionButtonClass: 'btn btn-danger'
+        };
+        modalService.showModal({}, modalOptions)
+          .then(function(result) {
+            PessoaFactory.delTelefone(item.id)
+              .then(function(response) {
+                getTelefones();
+              }, function(response) {
+                vm.status = 'Falha na tentativa de remover o telefone.\n' + error.message;
+              });
           });
       }
     }
 
     function getTelefones(append) {
-      ClienteFactory.getTelefones(vm.form.pessoa_id)
-        .then(function(response) {
-          vm.form.telefones = response;
-          if (append) {
-            vm.form.telefones.push({});
+      if (vm.form.pessoa_id) {
+        PessoaFactory.getTelefones(vm.form.pessoa_id)
+          .then(function(response) {
+            vm.form.telefones = response;
+          }, function(response) {
+            vm.status = 'Failed to load telefones: ' + error.message;
+          });
+      } else {
+        if (append) {
+          if (!vm.form.telefones) {
+            vm.form.telefones = [];
           }
-        }, function(response) {
-          vm.status = 'Failed to load telefones: ' + error.message;
-        });
+          vm.form.telefones.push({
+            id: null,
+            codigo_pais: '055',
+            codigo_area: '42'
+          });
+        }
+      }
     }
 
     function incluirPessoaRedeSocial() {
@@ -114,24 +141,32 @@
     }
 
     function getPessoaRedesSociais(append) {
-      ClienteFactory.getPessoaRedesSociais()
-        .then(function(response) {
-          vm.form.redesSociais = response;
-          if (append) {
-            vm.form.redesSociais.push({});
+      if (vm.form.pessoa_id) {
+        PessoaFactory.getPessoaRedesSociais(vm.form.pessoa_id)
+          .then(function(response) {
+            vm.form.redesSociais = response;
+          }, function(response) {
+            vm.status = 'Failed to load: ' + error.message;
+          });
+      } else {
+        if (append) {
+          if (!vm.form.redesSociais) {
+            vm.form.redesSociais = [];
           }
-        }, function(response) {
-          vm.status = 'Failed to load socials networks: ' + error.message;
-        });
+          vm.form.redesSociais.push({
+            id: null
+          });
+        }
+      }
     }
 
     function removeRedeSocial(item) {
-      if (id === null) {
+      if (item.id === null) {
         vm.form.redesSociais = vm.form.redesSociais.splice(vm.form.redesSociais.indexOf(item), 1)
       } else {
-        ClienteFactory.delPessoaSocial(id)
+        PessoaFactory.delPessoaSocial(item.id)
           .then(function(response) {
-            alert("MISSING BACKEND CALL");
+            getRedesSociais();
           }, function(response) {
             vm.status = 'Falha na tentativa de remover a rede social.\n' + error.message;
           });
@@ -141,39 +176,38 @@
     function getTiposRedesSociais() {
       RedeSocialFactory.get()
         .then(function(response) {
-          vm.form.tiposRedesSociais = response;
-          console.log(vm.form.tiposRedesSociais);
+          vm.tiposRedesSociais = response;
         }, function(response) {
           vm.status = 'Failed to load socials networks: ' + error.message;
         });
     }
 
     function addRedeSocial() {
-      RedeSocial.add(vm.form.redeSocial)
+      RedeSocial.add(vm.form.nomeRedeSocial)
         .then(function(response) {
-          console.log(response);
+          getTiposRedesSociais();
         }, function(response) {
           vm.status = 'Failed ' + error.message;
         })
     }
 
-    function getClientes() {
-      ClienteFactory.getClientes()
+    function getPessoas() {
+      PessoaFactory.getPessoas()
         .then(function(response) {
-          vm.clientes = response;
+          vm.pessoas = response;
         }, function(response) {
-          vm.status = 'Failed to load clientes: ' + error.message;
+          vm.status = 'Failed to load: ' + error.message;
         });
     }
 
     function getAnimais(entry) {
       vm.animais = {};
       if (entry.checked) {
-        ClienteFactory.getAnimais(entry.id)
+        PessoaFactory.getAnimais(entry.id)
           .then(function(response) {
             vm.animais = response;
           }, function(response) {
-            vm.status = 'Failed to load clientes: ' + error.message;
+            vm.status = 'Failed to load: ' + error.message;
           });
       }
     }
@@ -186,7 +220,7 @@
     function getHistorico(entry) {
       vm.historico = {};
       if (entry.checked) {
-        ServicoFactory.getServicosAgendados(entry.id)
+        ServicoFactory.getAgendados(entry.id)
           .then(function(response) {
             vm.historico = response;
           }, function(response) {
@@ -200,33 +234,46 @@
     }
 
     function search_zip_code() {
-      $http.get("http://cep.republicavirtual.com.br/web_cep.php?cep=" + vm.form.cep + "&formato=json")
+      $http({
+          url: "http://cep.republicavirtual.com.br/web_cep.php?cep=" + vm.form.pessoa.cep + "&formato=json",
+          method: "GET",
+          headers: {
+            'Authorization': undefined
+          }
+        })
         .then(function(response) {
-          console.log(response);
-          vm.form.pais = "Brasil";
-          vm.form.estado = response.data["uf"];
-          vm.form.cidade = response.data["cidade"];
-          vm.form.rua = response.data["tipo_logradouro"] + " " + response.data["logradouro"];
+          vm.form.pessoa.pais = "Brasil";
+          vm.form.pessoa.estado = response.data["uf"];
+          vm.form.pessoa.cidade = response.data["cidade"];
+          vm.form.pessoa.logradouro = response.data["tipo_logradouro"] + " " + response.data["logradouro"];
         });
+    }
+
+    function validarPessoa() {
+      return true;
     }
 
 
     function add() {
-      console.log("SAVING: " + JSON.stringify(vm.form));
-      ClienteFactory.add(vm.form)
-        .then(function(response) {
-          console.log(response);
-        }, function(response) {
-          console.error(response)
-        });
+      if (validarPessoa()) {
+        PessoaFactory.add(vm.form.pessoa)
+          .then(function(response) {
+            console.log(response);
+          }, function(response) {
+            console.error(response)
+          });
+      }
+      console.log("SAVING: " + JSON.stringify(vm.form.pessoa));
+      console.log("SAVING: " + JSON.stringify(vm.form.redesSociais));
+      console.log("SAVING: " + JSON.stringify(vm.form.telefones));
     }
 
     function alt() {
       alert('alt');
     }
 
-    function excluir_cliente(data) {
-      vm.form = data;
+    function excluir_pessoa(data) {
+      vm.form.pessoa = data;
       var modalOptions = {
         closeButtonText: 'Cancelar',
         actionButtonText: 'Excluir',
@@ -234,7 +281,7 @@
       };
       modalService.showModal({}, modalOptions)
         .then(function(result) {
-          ClienteFactory.del(vm.form.id)
+          PessoaFactory.del(vm.form.pessoa.id)
             .then(function(response) {
               console.log(response);
             }, function(response) {
@@ -248,8 +295,8 @@
     }
 
     function gotoAddPet() {
-      dataStorage.addPessoa(vm.form);
-      $location.path('/cliente/pet');
+      dataStorage.addPessoa(vm.form.pessoa);
+      $location.path('/pessoa/pet');
     }
 
     function updateSelection(position, entities) {
@@ -280,7 +327,6 @@
       PorteFactory.get()
         .then(function(response) {
           vm.portes = response;
-          console.log(vm.portes);
         }, function(response) {
           vm.status = 'Failed to load: ' + error.message;
         });
@@ -290,7 +336,6 @@
       RacaFactory.get()
         .then(function(response) {
           vm.racas = response;
-          console.log(vm.racas);
         }, function(response) {
           vm.status = 'Failed to load: ' + error.message;
         });
@@ -300,7 +345,6 @@
       EspecieFactory.get()
         .then(function(response) {
           vm.especies = response;
-          console.log(vm.especies);
         }, function(response) {
           vm.status = 'Failed to load: ' + error.message;
         });
@@ -310,21 +354,45 @@
       RestricaoFactory.get()
         .then(function(response) {
           vm.restricoes = response;
-          console.log(vm.restricoes);
         }, function(response) {
           vm.status = 'Failed to load: ' + error.message;
         });
     }
+
+
+
+    function getFuncoes() {
+      FuncaoFactory.get()
+        .then(function(response) {
+          vm.funcoes = response;
+        }, function(response) {
+          vm.status = 'Failed to load: ' + error.message;
+        });
+    }
+
+    function getPermissoes() {
+      PermissaoFactory.get()
+        .then(function(response) {
+          vm.permissoes = response.data.result;
+        }, function(response) {
+          vm.status = 'Failed to load: ' + error.message;
+        });
+    }
+
+    vm.selecionarPermissao = function() {
+      vm.form.permissoesFuncionario = $filter('filter')(vm.permissoes, {checked: true});
+      console.log(vm.form.permissoesFuncionario);
+    };
   }
 
-  ClienteFactory.$inject = ['$http', 'Fluffy'];
+  PessoaFactory.$inject = ['$http', 'Fluffy'];
 
-  function ClienteFactory($http, Fluffy) {
+  function PessoaFactory($http, Fluffy) {
     var _url = Fluffy.urlBase;
-    var ClienteFactory = {
+    var PessoaFactory = {
       getRedesSociais: getRedesSociais,
       getTelefones: getTelefones,
-      getClientes: getClientes,
+      getPessoas: getPessoas,
       getAnimais: getAnimais,
       getHistorico: getHistorico,
       getServicosAgendados: getServicosAgendados,
@@ -333,7 +401,7 @@
       del: del,
       getPessoaRedesSociais: getPessoaRedesSociais
     };
-    return ClienteFactory;
+    return PessoaFactory;
 
     function getRedesSociais() {
       return $http.get(_url + '/redeSocial')
@@ -341,7 +409,6 @@
         .catch(failed);
 
       function success(response) {
-        console.log(response.data);
         return response.data.result;
       }
 
@@ -351,14 +418,17 @@
     }
 
     function getTelefones(id) {
-      return $http.get(_url + '/telefone', {
-          pessoa_id: id
+      return $http({
+          url: _url + '/telefone',
+          data: {
+            pessoa_id: id
+          },
+          method: 'GET'
         })
         .then(success)
         .catch(failed);
 
       function success(response) {
-        console.log(response.data.result);
         return response.data.result;
       }
 
@@ -367,13 +437,12 @@
       }
     }
 
-    function getClientes() {
+    function getPessoas() {
       return $http.get(_url + '/pessoa')
         .then(success)
         .catch(failed);
 
       function success(response) {
-        console.log(response.data.result);
         return response.data.result;
       }
 
@@ -390,7 +459,6 @@
         .catch(failed);
 
       function success(response) {
-        console.log(response.data.result);
         return response.data.result;
       }
 
@@ -407,7 +475,6 @@
         .catch(failed);
 
       function success(response) {
-        console.log(response.data.result);
         return response.data.result;
       }
 
@@ -425,7 +492,6 @@
         .catch(failed);
 
       function success(response) {
-        console.log('SERVICOS: ' + response.data.result);
         return response.data.result;
       }
 
@@ -435,15 +501,17 @@
     }
 
     function getPessoaRedesSociais(id) {
-      return $http.get(
-          _url + '/pessoaTemRedeSocial', {
+      return $http({
+          url: _url + '/pessoaTemRedeSocial',
+          data: {
             pessoa_id: id
-          })
+          },
+          method: 'GET'
+        })
         .then(success)
         .catch(failed);
 
       function success(response) {
-        console.log(response.data.result);
         return response.data.result;
       }
 
@@ -452,9 +520,7 @@
       }
     }
 
-
     function add(data) {
-      console.log('SAVING: ' + JSON.stringify(data));
       return $http({
           method: 'POST',
           url: _url + '/pessoa',
@@ -472,11 +538,9 @@
       }
     }
 
-
-
     function del(id) {
       return $http({
-          url: _url + '/cliente',
+          url: _url + '/pessoa',
           data: {
             id: id
           },
@@ -495,7 +559,6 @@
     }
 
     function delTelefone(id) {
-      console.log(JSON.stringify(id));
       return $http({
           method: 'DELETE',
           url: _url + '/telefone',
@@ -507,7 +570,6 @@
         .catch(failed);
 
       function success(response) {
-        console.log(response);
         return response;
       }
 

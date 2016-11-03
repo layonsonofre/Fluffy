@@ -30,7 +30,7 @@
     function get() {
       RedeSocialFactory.get()
         .then(function(response) {
-          vm.redesSociais = response.data.result;
+          vm.redesSociais = response;
         }, function(response) {
           vm.status = response.message
         });
@@ -93,8 +93,7 @@
         .catch(failed);
 
       function success(response) {
-        console.log(response);
-        return response;
+        return response.data.result;
       }
 
       function failed(response) {
@@ -121,7 +120,6 @@
     }
 
     function alt(data) {
-      console.log('UPDATING: ' + JSON.stringify(data));
       return $http({
           url: _url + '/redeSocial',
           data: data,

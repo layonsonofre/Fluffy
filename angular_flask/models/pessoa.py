@@ -44,4 +44,3 @@ class Pessoa():
 
 	def fromJSON():
 		print("")
-	

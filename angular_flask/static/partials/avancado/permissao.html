@@ -43,7 +43,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr dir-paginate="entry in vm.permissoes | orderBy:'nome' | itemsPerPage: 10" pagination-id="permissao">
+                  <tr dir-paginate="entry in vm.permissoes | orderBy:'modulo' | itemsPerPage: 10" pagination-id="permissao">
                     <td>
                       <span data-ng-hide="editMode">{{entry.modulo | capitalize}}</span>
                       <input type="text" data-ng-show="editMode" data-ng-model="entry.modulo" data-ng-required>
