@@ -5,10 +5,8 @@ from anamnese import Anamnese
 from animal import Animal
 from animalTemRestricao import AnimalTemRestricao
 from aplicacao import Aplicacao
-from cidade import Cidade
 from configuracao import Configuracao
 from especie import Especie
-from estado import Estado
 from funcao import Funcao
 from grupoDeItem import GrupoDeItem
 from item import Item
@@ -16,7 +14,6 @@ from itemDeVenda import ItemDeVenda
 from lembrete import Lembrete
 from lote import Lote
 from oAuth import OAuth
-from pais import Pais
 from pedido import Pedido
 from permissao import Permissao
 from pessoa import Pessoa
