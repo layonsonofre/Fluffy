@@ -32,7 +32,15 @@ def get_modelo(modelo=None):
 		data = Util.getData("get"+modelo[0].upper()+modelo[1:], args)
 		print(data)
 	except Exception as e:
-		return jsonify(success=False, result=[], message=e.__str__())
+		message = e.__str__()
+		table = modelo
+		json = request.json
+		method = request.method
+
+		data = Util.postData("insLog", [message, json, table, method])
+		print(messages)
+		#return jsonify(success=False, result={}, codigo=code,message=error_message.decode('cp1251').encode('utf8'))
+		return jsonify(success=False, result={}, mensagem=message, tabela=table, json = json, metodo=method)
 
 	class_name = globals()[modelo[0].upper()+modelo[1:]]
 
@@ -73,12 +81,20 @@ def form_modelo(modelo = None):
 		data = Util.postData(proc, args)
 		return jsonify(success=True, result={"id":data[0]}, message="")
 	except Exception as e:
-		messages = e.__str__()#.split(', ')
-		#code = int(messages[0].split("(")[1])
-		#error_message = unicode((messages[1].split(")")[0]), "utf-8")
-		print(messages)
+
+		message = e.__str__()
+		table = modelo
+		json = str(request.json)
+		method = request.method
+
+		print(message)
+		print(table)
+		print(json)
+		print(method)
+
+		data = Util.postData("insLog", [message, json, table, method])
 		#return jsonify(success=False, result={}, codigo=code,message=error_message.decode('cp1251').encode('utf8'))
-		return jsonify(success=False, result={}, message=messages)
+		return jsonify(success=False, result={}, mensagem=message, tabela=table, json = json, metodo=method)
 
 @app.route('/api/login/', methods=['POST'])
 def login():
