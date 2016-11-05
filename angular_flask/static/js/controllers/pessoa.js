@@ -29,12 +29,21 @@
     .controller('PessoaController', PessoaController)
     .factory('PessoaFactory', PessoaFactory);
 
-  PessoaController.$inject = ['PessoaFactory', '$http', 'RedeSocialFactory', 'ServicoFactory', 'PorteFactory', 'RacaFactory', 'EspecieFactory', 'RestricaoFactory', 'modalService', 'dataStorage', '$location', 'calendarConfig', 'FuncaoFactory', 'PermissaoFactory', '$filter'];
+  PessoaController.$inject = ['PessoaFactory', '$http', 'RedeSocialFactory', 'ServicoFactory',
+    'PorteFactory', 'RacaFactory', 'EspecieFactory', 'RestricaoFactory', 'modalService',
+    'dataStorage', '$location', 'calendarConfig', 'FuncaoFactory', 'PermissaoFactory',
+    'PessoaTemFuncaoFactory', 'PessoaTemRedeSocialFactory', 'TelefoneFactory', '$filter'
+  ];
 
-  function PessoaController(PessoaFactory, $http, RedeSocialFactory, ServicoFactory, PorteFactory, RacaFactory, EspecieFactory, RestricaoFactory, modalService, dataStorage, $location, calendarConfig, FuncaoFactory, PermissaoFactory, $filter) {
+  function PessoaController(PessoaFactory, $http, RedeSocialFactory, ServicoFactory,
+    PorteFactory, RacaFactory, EspecieFactory, RestricaoFactory, modalService,
+    dataStorage, $location, calendarConfig, FuncaoFactory, PermissaoFactory,
+    PessoaTemFuncaoFactory, PessoaTemRedeSocialFactory, TelefoneFactory, $filter) {
     var vm = this;
 
-    vm.form = dataStorage.getPessoa();
+    vm.form = {};
+    vm.form.pessoa = dataStorage.getPessoa();
+    vm.form.pessoa.funcao = "";
 
     vm.add = add;
     vm.alt = alt;
@@ -51,7 +60,7 @@
     vm.incluirPessoaRedeSocial = incluirPessoaRedeSocial;
     vm.addRedeSocial = addRedeSocial;
 
-    vm.getPessoas = getPessoas;
+    vm.get = get;
     vm.getAnimais = getAnimais;
     vm.getHistorico = getHistorico;
     vm.selectAnimal = selectAnimal;
@@ -72,10 +81,13 @@
     vm.getFuncoes = getFuncoes;
     vm.getPermissoes = getPermissoes;
 
+    vm.selectEstado = selectEstado;
+    vm.getWhatsappId = getWhatsappId;
+
     getTiposRedesSociais();
-    getPessoas();
+    get();
     vm.status = null;
-    vm.filtro = vm.form.nome;
+    vm.filtro = vm.form.pessoa.nome;
 
     getPortes();
     getEspecies();
@@ -88,8 +100,10 @@
     getFuncoes();
     getPermissoes();
 
+    vm.whatsapp_id = {};
+    getWhatsappId();
+
     function incluirTelefone() {
-      vm.form.pessoa_id = null;
       getTelefones(true);
     }
 
@@ -104,7 +118,7 @@
         };
         modalService.showModal({}, modalOptions)
           .then(function(result) {
-            PessoaFactory.delTelefone(item.id)
+            TelefoneFactory.del(item.id)
               .then(function(response) {
                 getTelefones();
               }, function(response) {
@@ -115,8 +129,10 @@
     }
 
     function getTelefones(append) {
-      if (vm.form.pessoa_id) {
-        PessoaFactory.getTelefones(vm.form.pessoa_id)
+      if (vm.form.pessoa.id) {
+        TelefoneFactory.get({
+            pessoa_id: vm.form.pessoa.id
+          })
           .then(function(response) {
             vm.form.telefones = response;
           }, function(response) {
@@ -141,8 +157,10 @@
     }
 
     function getPessoaRedesSociais(append) {
-      if (vm.form.pessoa_id) {
-        PessoaFactory.getPessoaRedesSociais(vm.form.pessoa_id)
+      if (vm.form.pessoa.id) {
+        PessoaTemRedeSocialFactory.get({
+            pessoa_id: vm.form.pessoa.id
+          })
           .then(function(response) {
             vm.form.redesSociais = response;
           }, function(response) {
@@ -164,9 +182,11 @@
       if (item.id === null) {
         vm.form.redesSociais = vm.form.redesSociais.splice(vm.form.redesSociais.indexOf(item), 1)
       } else {
-        PessoaFactory.delPessoaSocial(item.id)
+        PessoaTemRedeSocialFactory.del(item.id)
           .then(function(response) {
-            getRedesSociais();
+            PessoaTemRedeSocialFactory.get({
+              pessoa_id: vm.form.pessoa.id
+            });
           }, function(response) {
             vm.status = 'Falha na tentativa de remover a rede social.\n' + error.message;
           });
@@ -191,8 +211,8 @@
         })
     }
 
-    function getPessoas() {
-      PessoaFactory.getPessoas()
+    function get() {
+      PessoaFactory.get()
         .then(function(response) {
           vm.pessoas = response;
         }, function(response) {
@@ -243,29 +263,177 @@
         })
         .then(function(response) {
           vm.form.pessoa.pais = "Brasil";
-          vm.form.pessoa.estado = response.data["uf"];
+          vm.form.pessoa.uf = response.data["uf"];
           vm.form.pessoa.cidade = response.data["cidade"];
           vm.form.pessoa.logradouro = response.data["tipo_logradouro"] + " " + response.data["logradouro"];
         });
     }
 
+    function selectEstado() {
+      var uf = vm.form.pessoa.uf;
+      if (uf == 'AC') {
+        vm.form.pessoa.estado = 'Acre';
+      } else if (uf == 'AL') {
+        vm.form.pessoa.estado = 'Alagoas';
+      } else if (uf == 'AP') {
+        vm.form.pessoa.estado = 'Amapá';
+      } else if (uf == 'AM') {
+        vm.form.pessoa.estado = 'Amazonas';
+      } else if (uf == 'BA') {
+        vm.form.pessoa.estado = 'Bahia';
+      } else if (uf == 'CE') {
+        vm.form.pessoa.estado = 'Ceará';
+      } else if (uf == 'DF') {
+        vm.form.pessoa.estado = 'Distrito Federal';
+      } else if (uf == 'ES') {
+        vm.form.pessoa.estado = 'Espírito Santo';
+      } else if (uf == 'GO') {
+        vm.form.pessoa.estado = 'Goiás';
+      } else if (uf == 'MA') {
+        vm.form.pessoa.estado = 'Maranhão';
+      } else if (uf == 'MT') {
+        vm.form.pessoa.estado = 'Mato Grosso';
+      } else if (uf == 'MS') {
+        vm.form.pessoa.estado = 'Mato Grosso do Sul';
+      } else if (uf == 'MG') {
+        vm.form.pessoa.estado = 'Minas Gerais';
+      } else if (uf == 'PA') {
+        vm.form.pessoa.estado = 'Pará';
+      } else if (uf == 'PB') {
+        vm.form.pessoa.estado = 'Paraíba';
+      } else if (uf == 'PR') {
+        vm.form.pessoa.estado = 'Paraná';
+      } else if (uf == 'PE') {
+        vm.form.pessoa.estado = 'Pernambuco';
+      } else if (uf == 'PI') {
+        vm.form.pessoa.estado = 'Piauí';
+      } else if (uf == 'RJ') {
+        vm.form.pessoa.estado = 'Rio de Janeiro';
+      } else if (uf == 'RN') {
+        vm.form.pessoa.estado = 'Rio Grande do Norte';
+      } else if (uf == 'RS') {
+        vm.form.pessoa.estado = 'Rio Grande do Sul';
+      } else if (uf == 'RO') {
+        vm.form.pessoa.estado = 'Rondônia';
+      } else if (uf == 'RR') {
+        vm.form.pessoa.estado = 'Roraima';
+      } else if (uf == 'SC') {
+        vm.form.pessoa.estado = 'Santa Catarina';
+      } else if (uf == 'SP') {
+        vm.form.pessoa.estado = 'São Paulo';
+      } else if (uf == 'SE') {
+        vm.form.pessoa.estado = 'Sergipe';
+      } else if (uf == 'TO') {
+        vm.form.pessoa.estado = 'Tocantins';
+      }
+    }
+
     function validarPessoa() {
+      console.log(vm.form);
       return true;
     }
 
+    function handleResponse(response) {
+      console.log(response);
+    }
+
+    vm.setFuncao = function(funcao) {
+      vm.form.pessoa.funcao = funcao;
+    }
+
+    function getWhatsappId() {
+      RedeSocialFactory.get({
+          nome: 'whatsapp'
+        })
+        .then(function(response) {
+          vm.whatsapp_id = response.id;
+        }, function(response) {
+          console.log(response);
+        });
+    }
 
     function add() {
       if (validarPessoa()) {
+
+        // adicionando a pessoa
+        selectEstado();
         PessoaFactory.add(vm.form.pessoa)
           .then(function(response) {
             console.log(response);
+            if (response.data.result.id) {
+              console.log('pessoa cadastrada');
+              vm.status = 'Pessoa cadastrada com sucesso';
+              vm.form.pessoa.id = response.data.result.id;
+
+              // adicionando telefones
+              angular.forEach(vm.form.telefones, function(value, key) {
+                value.pessoa_id = vm.form.pessoa.id;
+
+                TelefoneFactory.add(value)
+                  .then(function(response) {
+                    vm.status = 'Telefone cadastrado com sucesso';
+                  }, function(response) {
+                    handleResponse(response)
+                  });
+
+                if (value.whatsapp) {
+                  var temp = {};
+                  temp.perfil = value.codigo_pais + '' + value.codigo_area + '' + value.numero;
+                  temp.pessoa_id = value.pessoa_id;
+                  temp.rede_social_id = vm.whatsapp_id;
+                  PessoaTemRedeSocialFactory.add(temp)
+                    .then(function(response) {
+                      vm.status = 'Whatsapp inserido';
+                    });
+                }
+              });
+
+              //adicionando redes sociais
+              angular.forEach(vm.form.redesSociais, function(value, key) {
+                value.pessoa_id = vm.form.pessoa.id;
+
+                PessoaTemRedeSocialFactory.add(value)
+                  .then(function(response) {
+                    vm.status = 'Rede social cadastrado com sucesso';
+                  }, function(response) {
+                    handleResponse(response)
+                  });
+              });
+
+
+              var nome_funcao = "";
+              var funcao_id = 0;
+              if (vm.form.pessoa.clienteEspecial) {
+                nome_funcao = 'cliente-especial';
+              } else {
+                nome_funcao = vm.form.pessoa.funcao;
+              }
+              FuncaoFactory.get({
+                  nome: nome_funcao
+                })
+                .then(function(response) {
+                  funcao_id = response.id;
+
+                  //adicionando pessoa função
+                  var temp = {};
+                  temp.pessoa_id = vm.form.pessoa.id;
+                  temp.funcao_id = funcao_id;
+
+                  PessoaTemFuncaoFactory.add(temp)
+                    .then(function(response) {
+                      vm.status = 'Pessoa função adicionada com sucesso';
+                    }, function(response) {
+                      console.log('erro pessoa funcao');
+                      handleResponse(response)
+                    });
+                });
+
+            }
           }, function(response) {
-            console.error(response)
+            console.log('erro pessoa');
+            handleResponse(response);
           });
       }
-      console.log("SAVING: " + JSON.stringify(vm.form.pessoa));
-      console.log("SAVING: " + JSON.stringify(vm.form.redesSociais));
-      console.log("SAVING: " + JSON.stringify(vm.form.telefones));
     }
 
     function alt() {
@@ -380,7 +548,9 @@
     }
 
     vm.selecionarPermissao = function() {
-      vm.form.permissoesFuncionario = $filter('filter')(vm.permissoes, {checked: true});
+      vm.form.permissoesFuncionario = $filter('filter')(vm.permissoes, {
+        checked: true
+      });
       console.log(vm.form.permissoesFuncionario);
     };
   }
@@ -390,59 +560,22 @@
   function PessoaFactory($http, Fluffy) {
     var _url = Fluffy.urlBase;
     var PessoaFactory = {
-      getRedesSociais: getRedesSociais,
-      getTelefones: getTelefones,
-      getPessoas: getPessoas,
+      get: get,
       getAnimais: getAnimais,
       getHistorico: getHistorico,
-      getServicosAgendados: getServicosAgendados,
       add: add,
-      delTelefone: delTelefone,
       del: del,
-      getPessoaRedesSociais: getPessoaRedesSociais
+      alt: alt
     };
     return PessoaFactory;
 
-    function getRedesSociais() {
-      return $http.get(_url + '/redeSocial')
-        .then(success)
-        .catch(failed);
-
-      function success(response) {
-        return response.data.result;
-      }
-
-      function failed(error) {
-        console.error('Failed getRedesSociais: ' + error.data);
-      }
-    }
-
-    function getTelefones(id) {
-      return $http({
-          url: _url + '/telefone',
-          data: {
-            pessoa_id: id
-          },
-          method: 'GET'
-        })
-        .then(success)
-        .catch(failed);
-
-      function success(response) {
-        return response.data.result;
-      }
-
-      function failed(error) {
-        console.error('Failed getTelefones: ' + error.data);
-      }
-    }
-
-    function getPessoas() {
+    function get() {
       return $http.get(_url + '/pessoa')
         .then(success)
         .catch(failed);
 
       function success(response) {
+        console.log(response.data.result);
         return response.data.result;
       }
 
@@ -483,48 +616,32 @@
       }
     }
 
-    function getServicosAgendados(id) {
-      return $http.get(
-          _url + '/servicoAgendado', {
-            pessoa_id: id
-          })
-        .then(success)
-        .catch(failed);
-
-      function success(response) {
-        return response.data.result;
-      }
-
-      function failed(error) {
-        console.error('Failed getServicosAgendados: ' + error.data);
-      }
-    }
-
-    function getPessoaRedesSociais(id) {
+    function add(data) {
+      console.log('pessoa');
+      console.log(JSON.stringify(data));
       return $http({
-          url: _url + '/pessoaTemRedeSocial',
-          data: {
-            pessoa_id: id
-          },
-          method: 'GET'
+          method: 'POST',
+          url: _url + '/pessoa',
+          data: data
         })
         .then(success)
         .catch(failed);
 
       function success(response) {
-        return response.data.result;
+        return response;
       }
 
-      function failed(error) {
-        console.error('Failed getPessoaRedesSociais: ' + error.data);
+      function failed(response) {
+        console.error('Failed: ' + JSON.stringify(response));
       }
     }
 
-    function add(data) {
+    function alt(data) {
+      console.log('UPDATING: ' + JSON.stringify(data));
       return $http({
-          method: 'POST',
           url: _url + '/pessoa',
-          data: data
+          data: data,
+          method: 'PUT'
         })
         .then(success)
         .catch(failed);
@@ -545,26 +662,6 @@
             id: id
           },
           method: 'DELETE'
-        })
-        .then(success)
-        .catch(failed);
-
-      function success(response) {
-        return response;
-      }
-
-      function failed(response) {
-        console.error('Failed: ' + JSON.stringify(response));
-      }
-    }
-
-    function delTelefone(id) {
-      return $http({
-          method: 'DELETE',
-          url: _url + '/telefone',
-          data: {
-            id: id
-          }
         })
         .then(success)
         .catch(failed);

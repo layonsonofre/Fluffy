@@ -5,7 +5,7 @@
     .module('Fluffy', ['ngResource', 'ngRoute', 'angular-storage', 'xeditable', 'ui.select',
       'ngDragDrop', 'angularMoment', 'mwl.calendar', 'ui.bootstrap', 'Index', 'Pessoa',
       'Funcao', 'Permissao', 'RedeSocial', 'GrupoItem', 'Servico', 'Agenda', 'Agendamento',
-      'Consulta', 'Lembrete',
+      'Consulta', 'Lembrete', 'PessoaTemFuncao', 'PessoaTemRedeSocial', 'Telefone',
       'Estoque', 'Venda', 'Estatisticas', 'modalServiceModule', 'dataStorageService',
       'Authentication', 'Login', 'Raca', 'Porte', 'Especie', 'Restricao', 'Configuracao',
       'Lote', 'Vacina', 'angularUtils.directives.dirPagination', 'Anamnese'
@@ -14,10 +14,13 @@
       function($routeProvider, $locationProvider, $httpProvider, calendarConfig, uibDatepickerPopupConfig) {
         $httpProvider.defaults.cache = false;
         $locationProvider.html5Mode(false);
-        $httpProvider.defaults.headers.post["Content-Type"] = "application/json";
-        $httpProvider.defaults.headers.put["Content-Type"] = "application/json";
+        $httpProvider.defaults.headers.post["Content-Type"] = "application/json;charset=UTF-8";
+        $httpProvider.defaults.headers.put["Content-Type"] = "application/json;charset=UTF-8";
         $httpProvider.defaults.headers.delete = {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json;charset=UTF-8'
+        };
+        $httpProvider.defaults.headers.get = {
+          'Content-Type': 'application/json;charset=UTF-8'
         };
         $routeProvider
           .when('/login', {

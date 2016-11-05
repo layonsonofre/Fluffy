@@ -85,10 +85,13 @@
     };
     return RedeSocialFactory;
 
-    function get() {
-      return $http.get(
-          _url + '/redeSocial'
-        )
+    function get(data) {
+      data = data || null;
+      return $http({
+          url: _url + '/redeSocial',
+          method: 'GET',
+          params: data
+        })
         .then(success)
         .catch(failed);
 
