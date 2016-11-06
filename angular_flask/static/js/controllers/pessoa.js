@@ -15,30 +15,27 @@
           controller: 'PessoaController',
           controllerAs: 'vm'
         })
-        .when('/pessoa/pet', {
-          templateUrl: '../static/partials/pessoa/pet.html',
-          controller: 'PessoaController',
-          controllerAs: 'vm'
-        })
         .when('/pessoa/busca', {
           templateUrl: '../static/partials/pessoa/busca.html',
           controller: 'PessoaController',
           controllerAs: 'vm'
-        })
+        });
     }])
     .controller('PessoaController', PessoaController)
     .factory('PessoaFactory', PessoaFactory);
 
-  PessoaController.$inject = ['PessoaFactory', '$http', 'RedeSocialFactory', 'ServicoFactory',
+  PessoaController.$inject = ['PessoaFactory', '$http', 'RedeSocialFactory', 'AgendaFactory',
     'PorteFactory', 'RacaFactory', 'EspecieFactory', 'RestricaoFactory', 'modalService',
     'dataStorage', '$location', 'calendarConfig', 'FuncaoFactory', 'PermissaoFactory',
-    'PessoaTemFuncaoFactory', 'PessoaTemRedeSocialFactory', 'TelefoneFactory', '$filter'
+    'PessoaTemFuncaoFactory', 'PessoaTemRedeSocialFactory', 'TelefoneFactory', 'AnimalFactory',
+    '$filter'
   ];
 
-  function PessoaController(PessoaFactory, $http, RedeSocialFactory, ServicoFactory,
+  function PessoaController(PessoaFactory, $http, RedeSocialFactory, AgendaFactory,
     PorteFactory, RacaFactory, EspecieFactory, RestricaoFactory, modalService,
     dataStorage, $location, calendarConfig, FuncaoFactory, PermissaoFactory,
-    PessoaTemFuncaoFactory, PessoaTemRedeSocialFactory, TelefoneFactory, $filter) {
+    PessoaTemFuncaoFactory, PessoaTemRedeSocialFactory, TelefoneFactory, AnimalFactory,
+    $filter) {
     var vm = this;
 
     vm.form = {};
@@ -47,7 +44,13 @@
 
     vm.add = add;
     vm.alt = alt;
+    vm.get = get;
+    vm.del = del;
+    vm.cancel = cancel;
+    vm.set = set;
     vm.excluir_pessoa = excluir_pessoa;
+    vm.detalhes_pessoa = detalhes_pessoa;
+    vm.editar_pessoa = editar_pessoa;
     vm.gotoAddPet = gotoAddPet;
 
     vm.removeTelefone = removeTelefone;
@@ -60,22 +63,6 @@
     vm.incluirPessoaRedeSocial = incluirPessoaRedeSocial;
     vm.addRedeSocial = addRedeSocial;
 
-    vm.get = get;
-    vm.getAnimais = getAnimais;
-    vm.getHistorico = getHistorico;
-    vm.selectAnimal = selectAnimal;
-    vm.novoServico = novoServico;
-    vm.updateSelection = updateSelection;
-
-    vm.getPortes = getPortes;
-    vm.getEspecies = getEspecies;
-    vm.getRestricoes = getRestricoes;
-    vm.getRacas = getRacas;
-
-    vm.adicionarAnimal = false;
-
-    vm.showAdicionarTelefone = false;
-    vm.showAdicionarAnimal = showAdicionarAnimal;
     vm.search_zip_code = search_zip_code;
 
     vm.getFuncoes = getFuncoes;
@@ -83,16 +70,141 @@
 
     vm.selectEstado = selectEstado;
     vm.getWhatsappId = getWhatsappId;
+    vm.getAnimais = getAnimais;
+    vm.getHistorico = getHistorico;
+    vm.selectAnimal = selectAnimal;
+    vm.novoServico = novoServico;
+
+    get();
+
+    function get() {
+      PessoaFactory.get()
+        .then(function(response) {
+          vm.pessoas = response;
+          console.log(response);
+        }, function(response) {
+          vm.status = 'Failed to load: ' + response.message;
+        });
+    }
+
+    function updateSelection(position, entities) {
+      cancel();
+      angular.forEach(entities, function(subscription, index) {
+        if (position != subscription.id) {
+          subscription.checked = false;
+        }
+      });
+    }
+
+    function del(data) {
+      vm.form.pessoa = data;
+      var modalOptions = {
+        closeButtonText: 'Cancelar',
+        actionButtonText: 'Excluir',
+        actionButtonClass: 'btn btn-danger'
+      };
+      modalService.showModal({}, modalOptions)
+        .then(function(result) {
+          PessoaFactory.del(vm.form.pessoa.id)
+            .then(function(response) {
+              console.log(response);
+            }, function(response) {
+              console.error(response);
+            });
+        });
+    }
+
+    function cancel() {
+      vm.form.pessoa = {};
+      vm.alterando = false;
+    }
+
+    function set(entry) {
+      vm.alterando = true;
+      vm.form.pessoa = entry;
+
+      // AnimalTemRestricaoFactory.get({
+      //   animal_id: entry.id
+      // }).then(function(response) {
+      //   console.log('restricoes', response);
+      //   vm.form.animal.restricoes = [];
+      //   angular.forEach(response.restricao, function(value, key) {
+      //     vm.form.animal.restricoes.push(value);
+      //   })
+      // });
+      console.log('pessoa', vm.form.pessoa);
+    }
+
+    function getAnimais(entry) {
+      vm.animais = {};
+      if (entry.checked) {
+        AnimalFactory.get({
+            pessoa_id: entry.id
+          })
+          .then(function(response) {
+            if (!angular.isArray(response)) {
+              vm.animais = [];
+              vm.animais.push(response);
+            } else {
+              vm.animais = response;
+            }
+            console.log('animais', vm.animais);
+          }, function(response) {
+            vm.status = 'Failed to load: ' + error.message;
+          });
+      }
+    }
+
+    function selectAnimal(entry) {
+      dataStorage.animal = entry;
+      getHistorico(entry);
+    }
+
+    function getHistorico(entry) {
+      vm.historico = {};
+      if (entry.checked) {
+        AgendaFactory.getAgendados({animal_id: entry.id})
+          .then(function(response) {
+            if (!angular.isArray(response.data.result)) {
+              vm.historico = [];
+              vm.historico.push(response.data.result);
+            } else {
+              vm.historico = response.data.result;
+            }
+            console.log('historico', vm.historico);
+          }, function(response) {
+            vm.status = 'Failed to load historico: ' + error.message;
+          });
+      }
+    }
+
+    function detalhes_pessoa(entry) {
+      vm.form.pessoa = {};
+      vm.form.pessoa = entry;
+      TelefoneFactory.get({pessoa_id: entry.id}).then(function(response) {
+        console.log(response);
+        var temp = '';
+        angular.forEach(response, function(value, key) {
+          temp += '(' + value.codigo_area + ') '+ value.numero + '   '
+        });
+        vm.form.pessoa.telefone = temp;
+      });
+      console.log('pessoa', vm.form.pessoa);
+    }
+
+    function editar_pessoa(entry) {
+      vm.form.pessoa = {};
+      vm.form.pessoa = entry;
+      dataStorage.addPessoa(vm.form.pessoa);
+      $location.path('/pessoa/cadastro');
+    }
+
+    function novoServico() {
+      $location.path("/servico/agendamento");
+    }
 
     getTiposRedesSociais();
-    get();
     vm.status = null;
-    vm.filtro = vm.form.pessoa.nome;
-
-    getPortes();
-    getEspecies();
-    getRestricoes();
-    getRacas();
 
     incluirTelefone();
     incluirPessoaRedeSocial();
@@ -209,48 +321,6 @@
         }, function(response) {
           vm.status = 'Failed ' + error.message;
         })
-    }
-
-    function get() {
-      PessoaFactory.get()
-        .then(function(response) {
-          vm.pessoas = response;
-        }, function(response) {
-          vm.status = 'Failed to load: ' + error.message;
-        });
-    }
-
-    function getAnimais(entry) {
-      vm.animais = {};
-      if (entry.checked) {
-        PessoaFactory.getAnimais(entry.id)
-          .then(function(response) {
-            vm.animais = response;
-          }, function(response) {
-            vm.status = 'Failed to load: ' + error.message;
-          });
-      }
-    }
-
-    function selectAnimal(entry) {
-      dataStorage.animal = entry;
-      getHistorico(entry);
-    }
-
-    function getHistorico(entry) {
-      vm.historico = {};
-      if (entry.checked) {
-        ServicoFactory.getAgendados(entry.id)
-          .then(function(response) {
-            vm.historico = response;
-          }, function(response) {
-            vm.status = 'Failed to load historico: ' + error.message;
-          });
-      }
-    }
-
-    function showAdicionarAnimal() {
-      vm.adicionarAnimal = (vm.adicionarAnimal == true) ? false : true;
     }
 
     function search_zip_code() {
@@ -422,6 +492,7 @@
                   PessoaTemFuncaoFactory.add(temp)
                     .then(function(response) {
                       vm.status = 'Pessoa função adicionada com sucesso';
+                      vm.form.pessoa.pessoa_funcao_id = response.data.result.id;
                     }, function(response) {
                       console.log('erro pessoa funcao');
                       handleResponse(response)
@@ -458,76 +529,11 @@
         });
     }
 
-    function novoServico() {
-      $location.path("/servico");
-    }
-
     function gotoAddPet() {
+      add();
       dataStorage.addPessoa(vm.form.pessoa);
       $location.path('/pessoa/pet');
     }
-
-    function updateSelection(position, entities) {
-      angular.forEach(entities, function(subscription, index) {
-        if (position != index) {
-          subscription.checked = false;
-        }
-      });
-    }
-
-
-    vm.openNascimento = function() {
-      vm.popupNascimento = true;
-    }
-
-    vm.formats = ['dd/MM/yyyy', 'dd-MMMM-yyyy', 'shortDate'];
-    vm.format = vm.formats[0];
-    vm.altInputFormats = ['d!/M!/yyyy'];
-
-    vm.popupNascimento = false;
-    vm.setDateNascimento = setDateNascimento;
-
-    function setDateNascimento(year, month, day) {
-      vm.form.animal.data_nascimento = new Date(year, month, day);
-    }
-
-    function getPortes() {
-      PorteFactory.get()
-        .then(function(response) {
-          vm.portes = response;
-        }, function(response) {
-          vm.status = 'Failed to load: ' + error.message;
-        });
-    }
-
-    function getRacas() {
-      RacaFactory.get()
-        .then(function(response) {
-          vm.racas = response;
-        }, function(response) {
-          vm.status = 'Failed to load: ' + error.message;
-        });
-    }
-
-    function getEspecies() {
-      EspecieFactory.get()
-        .then(function(response) {
-          vm.especies = response;
-        }, function(response) {
-          vm.status = 'Failed to load: ' + error.message;
-        });
-    }
-
-    function getRestricoes() {
-      RestricaoFactory.get()
-        .then(function(response) {
-          vm.restricoes = response;
-        }, function(response) {
-          vm.status = 'Failed to load: ' + error.message;
-        });
-    }
-
-
 
     function getFuncoes() {
       FuncaoFactory.get()
@@ -561,8 +567,6 @@
     var _url = Fluffy.urlBase;
     var PessoaFactory = {
       get: get,
-      getAnimais: getAnimais,
-      getHistorico: getHistorico,
       add: add,
       del: del,
       alt: alt
@@ -581,38 +585,6 @@
 
       function failed(error) {
         console.error('Failed getTelefones: ' + error.data);
-      }
-    }
-
-    function getAnimais(id) {
-      return $http.get(_url + '/animal', {
-          pessoa_id: id
-        })
-        .then(success)
-        .catch(failed);
-
-      function success(response) {
-        return response.data.result;
-      }
-
-      function failed(error) {
-        console.error('Failed getRedesSociais: ' + error.data);
-      }
-    }
-
-    function getHistorico(id) {
-      return $http.get(_url + '/servicoAgendado', {
-          animal_id: id
-        })
-        .then(success)
-        .catch(failed);
-
-      function success(response) {
-        return response.data.result;
-      }
-
-      function failed(error) {
-        console.error('Failed getRedesSociais: ' + error.data);
       }
     }
 

@@ -125,7 +125,7 @@
                   <tbody>
                     <tr dir-paginate="entry in vm.vacinas | filter:vm.filtroVacina | orderBy: 'nome' | itemsPerPage: 10" pagination-id="vacina">
                       <td>
-                        <input type="checkbox" ng-model="entry.checked" ng-click="vm.updateSelection($index, vm.vacinas); vm.getLote(entry)">
+                        <input type="checkbox" ng-model="entry.checked" ng-click="vm.updateSelection(entry.id, vm.vacinas); vm.getLote(entry)">
                       </td>
                       <td>
                         <span data-ng-hide="editMode">{{entry.nome}}</span>

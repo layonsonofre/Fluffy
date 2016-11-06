@@ -34,7 +34,7 @@
       if ($window.localStorage.currentPessoa) {
         return JSON.parse($window.localStorage.currentPessoa);
       }
-      return {};
+      return null;
     }
 
     //agendamento
@@ -46,7 +46,7 @@
       if ($window.localStorage.currentAgendamento) {
         return JSON.parse($window.localStorage.currentAgendamento);
       }
-      return {};
+      return null;
     }
 
   }
