@@ -28,14 +28,15 @@
     'PorteFactory', 'RacaFactory', 'EspecieFactory', 'RestricaoFactory', 'modalService',
     'dataStorage', '$location', 'calendarConfig', 'FuncaoFactory', 'PermissaoFactory',
     'PessoaTemFuncaoFactory', 'PessoaTemRedeSocialFactory', 'TelefoneFactory', 'AnimalFactory',
-    '$filter'
+    'AnimalTemRestricaoFactory', '$filter'
   ];
 
   function PessoaController(PessoaFactory, $http, RedeSocialFactory, AgendaFactory,
     PorteFactory, RacaFactory, EspecieFactory, RestricaoFactory, modalService,
     dataStorage, $location, calendarConfig, FuncaoFactory, PermissaoFactory,
     PessoaTemFuncaoFactory, PessoaTemRedeSocialFactory, TelefoneFactory, AnimalFactory,
-    $filter) {
+    AnimalTemRestricaoFactory, $filter
+  ) {
     var vm = this;
 
     vm.form = {};
@@ -52,6 +53,10 @@
     vm.detalhes_pessoa = detalhes_pessoa;
     vm.editar_pessoa = editar_pessoa;
     vm.gotoAddPet = gotoAddPet;
+
+    vm.excluir_animal = excluir_animal;
+    vm.detalhes_animal = detalhes_animal;
+    vm.editar_animal = editar_animal;
 
     vm.removeTelefone = removeTelefone;
     vm.incluirTelefone = incluirTelefone;
@@ -196,7 +201,24 @@
       vm.form.pessoa = {};
       vm.form.pessoa = entry;
       dataStorage.addPessoa(vm.form.pessoa);
-      $location.path('/pessoa/cadastro');
+      $location.path('/pessoa/cliente');
+    }
+
+    function detalhes_animal(entry) {
+      vm.form.animal = {};
+      vm.form.animal = entry;
+      AnimalTemRestricaoFactory.get({animal_id: entry.id}).then(function(response) {
+        vm.form.animal.restricoes = response;
+      });
+      console.log('animal', vm.form.animal);
+    }
+
+    function editar_animal(entry) {
+      vm.form.animal = {};
+      vm.form.animal = entry;
+      dataStorage.addPessoa(vm.form.pessoa);
+      dataStorage.addAnimal(vm.form.animal);
+      $location.path('/pessoa/pet');
     }
 
     function novoServico() {
@@ -521,6 +543,24 @@
       modalService.showModal({}, modalOptions)
         .then(function(result) {
           PessoaFactory.del(vm.form.pessoa.id)
+            .then(function(response) {
+              console.log(response);
+            }, function(response) {
+              console.error(response);
+            });
+        });
+    }
+
+    function excluir_animal(data) {
+      vm.form.pessoa = data;
+      var modalOptions = {
+        closeButtonText: 'Cancelar',
+        actionButtonText: 'Excluir',
+        actionButtonClass: 'btn btn-danger'
+      };
+      modalService.showModal({}, modalOptions)
+        .then(function(result) {
+          AnimalFactory.del(vm.form.animal.id)
             .then(function(response) {
               console.log(response);
             }, function(response) {

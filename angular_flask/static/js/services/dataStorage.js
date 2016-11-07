@@ -15,6 +15,9 @@
     dataStorage.addPessoa = addPessoa;
     dataStorage.getPessoa = getPessoa;
 
+    dataStorage.addAnimal = addAnimal;
+    dataStorage.getAnimal = getAnimal;
+
     dataStorage.addAgendamento = addAgendamento;
     dataStorage.getAgendamento = getAgendamento;
 
@@ -23,6 +26,7 @@
     function cleanUp() {
       $window.localStorage.currentPessoa = JSON.stringify({});
       $window.localStorage.currentAgendamento = JSON.stringify({});
+      $window.localStorage.currentAnimal = JSON.stringify({});
     }
 
     //pessoa
@@ -33,6 +37,18 @@
     function getPessoa() {
       if ($window.localStorage.currentPessoa) {
         return JSON.parse($window.localStorage.currentPessoa);
+      }
+      return null;
+    }
+
+    //animal
+    function addAnimal(entry) {
+      $window.localStorage.currentAnimal = JSON.stringify(entry);
+    }
+
+    function getAnimal() {
+      if ($window.localStorage.currentAnimal) {
+        return JSON.parse($window.localStorage.currentAnimal);
       }
       return null;
     }
