@@ -5,19 +5,22 @@
     .module('Fluffy', ['ngResource', 'ngRoute', 'angular-storage', 'xeditable', 'ui.select',
       'ngDragDrop', 'angularMoment', 'mwl.calendar', 'ui.bootstrap', 'Index', 'Pessoa',
       'Funcao', 'Permissao', 'RedeSocial', 'GrupoItem', 'Servico', 'Agenda', 'Agendamento',
-      'Consulta', 'Lembrete',
+      'Consulta', 'Lembrete', 'PessoaTemFuncao', 'PessoaTemRedeSocial', 'Telefone', 'Animal',
       'Estoque', 'Venda', 'Estatisticas', 'modalServiceModule', 'dataStorageService',
       'Authentication', 'Login', 'Raca', 'Porte', 'Especie', 'Restricao', 'Configuracao',
-      'Lote', 'Vacina', 'angularUtils.directives.dirPagination', 'Anamnese'
+      'Lote', 'Vacina', 'angularUtils.directives.dirPagination', 'Anamnese', 'AnimalTemRestricao'
     ])
     .config(['$routeProvider', '$locationProvider', '$httpProvider', 'calendarConfig', 'uibDatepickerPopupConfig',
       function($routeProvider, $locationProvider, $httpProvider, calendarConfig, uibDatepickerPopupConfig) {
         $httpProvider.defaults.cache = false;
         $locationProvider.html5Mode(false);
-        $httpProvider.defaults.headers.post["Content-Type"] = "application/json";
-        $httpProvider.defaults.headers.put["Content-Type"] = "application/json";
+        $httpProvider.defaults.headers.post["Content-Type"] = "application/json;charset=UTF-8";
+        $httpProvider.defaults.headers.put["Content-Type"] = "application/json;charset=UTF-8";
         $httpProvider.defaults.headers.delete = {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json;charset=UTF-8'
+        };
+        $httpProvider.defaults.headers.get = {
+          'Content-Type': 'application/json;charset=UTF-8'
         };
         $routeProvider
           .when('/login', {
@@ -35,7 +38,7 @@
             controller: 'IndexController',
             controllerAs: 'vm'
           })
-          .otherwise('/login');
+          .otherwise('/erro');
         uibDatepickerPopupConfig.startingDay = 1;
         uibDatepickerPopupConfig.showWeeks = true;
         uibDatepickerPopupConfig.currentText = "Hoje";
@@ -89,6 +92,12 @@
           return input;
         }
 
+      }
+    })
+    .filter('dateToISO', function() {
+      return function(badTime) {
+        var goodTime = badTime.replace(/(.+) (.+)/, "$1T$2Z");
+        return goodTime;
       }
     });
 })()

@@ -15,8 +15,9 @@
     };
     return RacaFactory;
 
-    function get() {
-      return $http.get(_url + '/raca')
+    function get(data) {
+      data = data || null;
+      return $http({url:_url + '/raca', method: 'GET', params: data})
         .then(success)
         .catch(failed);
 

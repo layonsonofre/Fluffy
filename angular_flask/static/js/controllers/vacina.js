@@ -125,7 +125,7 @@
           });
       }
     }
-    
+
     function getLote(entry) {
       vm.form.lotes = {};
       if (entry.checked) {
@@ -141,7 +141,7 @@
 
     function updateSelection(position, entities) {
       angular.forEach(entities, function(subscription, index) {
-        if (position != index) {
+        if (position != subscription.id) {
           subscription.checked = false;
         }
       });

@@ -85,12 +85,18 @@
     };
     return FuncaoFactory;
 
-    function get() {
-      return $http.get(_url + '/funcao')
+    function get(data) {
+      data = data || null;
+      return $http({
+        url: _url + '/funcao',
+        method: 'GET',
+        params: data
+      })
         .then(success)
         .catch(failed);
 
       function success(response) {
+        console.log(response.data.result);
         return response.data.result;
       }
 
@@ -155,5 +161,6 @@
         console.error('Failed: ' + JSON.stringify(response));
       }
     }
+
   }
 })()

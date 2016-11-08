@@ -203,7 +203,7 @@
               <tbody>
                 <tr ng-repeat="entry in vm.clientes | filter:vm.filtro">
                   <th>
-                    <input type="checkbox" ng-model="entry.checked" ng-change="vm.updateSelection($index, vm.clientes); vm.selecionarCliente(entry)">
+                    <input type="checkbox" ng-model="entry.checked" ng-change="vm.updateSelection(entry.id, vm.clientes); vm.selecionarCliente(entry)">
                   </th>
                   <td>{{entry.nome}}</td>
                   <td>{{entry.email}}</td>
