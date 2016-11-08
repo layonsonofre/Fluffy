@@ -18,6 +18,8 @@ class Pessoa():
 		self.pais = data[13]
 		self.rg = data[14]
 		self.inscricao = data[15]
+		self.orgao = data[16]
+		self.bairro = data[17]
 
 	def toJSON(self):
 		return {
@@ -36,7 +38,9 @@ class Pessoa():
 			"uf": self.uf,
 			"pais": self.pais,
 			"rg": self.rg,
-			"inscricao_estadual": self.inscricao
+			"inscricao_estadual": self.inscricao,
+			"orgao_expedidor": self.orgao,
+			"bairro": self.bairro
 		}
 
 	def fromJSON():

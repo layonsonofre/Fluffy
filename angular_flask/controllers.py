@@ -12,6 +12,7 @@ from angular_flask import app
 from util import *
 from angular_flask.core import mysql
 from angular_flask.models import *
+from views import *
 
 # routing for basic pages (pass routing onto the Angular app)
 @app.route('/')
