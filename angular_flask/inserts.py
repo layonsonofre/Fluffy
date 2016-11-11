@@ -46,7 +46,7 @@ def insertServicoAgendado() :
 	return jsonify(result="OK")
 
 @app.route('/api/insertPedido', methods=['POST'])
-def insertServicoAgendado() :
+def insertPedido() :
 
 	json = request.json
 
