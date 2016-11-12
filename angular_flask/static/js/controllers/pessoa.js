@@ -41,6 +41,7 @@
 
     vm.form = {};
     vm.form.pessoa = dataStorage.getPessoa();
+    console.log('pessoa init', vm.form.pessoa);
     vm.form.pessoa.funcao = "";
 
     vm.add = add;
@@ -80,13 +81,15 @@
     vm.selectAnimal = selectAnimal;
     vm.novoServico = novoServico;
 
-    get();
+    if (!vm.form.pessoa.id) {
+      get();
+    }
 
     function get() {
       PessoaFactory.get()
         .then(function(response) {
           vm.pessoas = response;
-          console.log(response);
+          console.log('get pessoas contrl', response);
         }, function(response) {
           vm.status = 'Failed to load: ' + response.message;
         });
@@ -112,7 +115,7 @@
         .then(function(result) {
           PessoaFactory.del(vm.form.pessoa.id)
             .then(function(response) {
-              console.log(response);
+              console.log('del pessoa', response);
             }, function(response) {
               console.error(response);
             });
@@ -272,17 +275,16 @@
           }, function(response) {
             vm.status = 'Failed to load telefones: ' + error.message;
           });
-      } else {
-        if (append) {
-          if (!vm.form.telefones) {
-            vm.form.telefones = [];
-          }
-          vm.form.telefones.push({
-            id: null,
-            codigo_pais: '055',
-            codigo_area: '42'
-          });
+      }
+      if (append) {
+        if (!vm.form.telefones) {
+          vm.form.telefones = [];
         }
+        vm.form.telefones.push({
+          id: null,
+          codigo_pais: '055',
+          codigo_area: '42'
+        });
       }
     }
 
@@ -297,18 +299,18 @@
           })
           .then(function(response) {
             vm.form.redesSociais = response;
+            if (append) {
+              vm.form.redesSociais.push({ id: null });
+            }
           }, function(response) {
             vm.status = 'Failed to load: ' + error.message;
           });
-      } else {
-        if (append) {
-          if (!vm.form.redesSociais) {
-            vm.form.redesSociais = [];
-          }
-          vm.form.redesSociais.push({
-            id: null
-          });
+      }
+      if (append) {
+        if (!vm.form.redesSociais) {
+          vm.form.redesSociais = [];
         }
+        vm.form.redesSociais.push({ id: null });
       }
     }
 
@@ -440,7 +442,7 @@
         .then(function(response) {
           vm.whatsapp_id = response.id;
         }, function(response) {
-          console.log(response);
+          console.log('getWhatsappId', response);
         });
     }
 
@@ -451,7 +453,7 @@
         selectEstado();
         PessoaFactory.add(vm.form.pessoa)
           .then(function(response) {
-            console.log(response);
+            console.log('adicionando pessoa', response);
             if (response.data.result.id) {
               console.log('pessoa cadastrada');
               vm.status = 'Pessoa cadastrada com sucesso';
@@ -544,7 +546,7 @@
         .then(function(result) {
           PessoaFactory.del(vm.form.pessoa.id)
             .then(function(response) {
-              console.log(response);
+              console.log('del pessoa', response);
             }, function(response) {
               console.error(response);
             });
@@ -562,7 +564,7 @@
         .then(function(result) {
           AnimalFactory.del(vm.form.animal.id)
             .then(function(response) {
-              console.log(response);
+              console.log('del animal', response);
             }, function(response) {
               console.error(response);
             });
@@ -597,7 +599,7 @@
       vm.form.permissoesFuncionario = $filter('filter')(vm.permissoes, {
         checked: true
       });
-      console.log(vm.form.permissoesFuncionario);
+      console.log('selecionando permissao', vm.form.permissoesFuncionario);
     };
   }
 
@@ -619,7 +621,7 @@
         .catch(failed);
 
       function success(response) {
-        console.log(response.data.result);
+        console.log('get ésspa', response.data.result);
         return response.data.result;
       }
 

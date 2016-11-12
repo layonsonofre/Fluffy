@@ -6,31 +6,35 @@
     .controller('LembreteController', LembreteController)
     .factory('LembreteFactory', LembreteFactory);
 
-  LembreteController.$inject = ['$scope', '$http', 'LembreteFactory'];
+  LembreteController.$inject = ['LembreteFactory', 'modalService'];
 
-  function LembreteController($scope, $http, LembreteFactory) {
+  function LembreteController(LembreteFactory, modalService) {
     var vm = this;
 
     vm.form = {};
     vm.form.visualizado = false;
     vm.form.pessoa_id = 3;
 
+    vm.get = get;
     vm.add = add;
     vm.alt = alt;
     vm.del = del;
-    vm.cancel = cancel;
 
-    LembreteFactory.get()
-      .then(function(response) {
-        vm.lembretes = response.data.result;
-      }, function(response) {
-        console.error(response);
-      });
+    get();
+
+    function get() {
+      LembreteFactory.get()
+        .then(function(response) {
+          vm.lembretes = response.data.result;
+        }, function(response) {
+          console.error(response);
+        });
+    }
 
     function add() {
       LembreteFactory.add(vm.form)
         .then(function(response) {
-          console.log(response);
+          get();
         }, function(response) {
           console.error(response)
         });
@@ -39,25 +43,43 @@
     function alt(data) {
       LembreteFactory.alt(data)
         .then(function(response) {
-          console.log(response);
+          get();
         }, function(response) {
           console.error(response)
         });
     }
 
-    function del(id) {
-      LembreteFactory.del(id).then(function(response) {
-        get();
-      }, function(response) {
-        vm.status = response.message;
-      });
+
+    function del(entry) {
+      var modalOptions = {
+        closeButtonText: 'Cancelar',
+        actionButtonText: 'Excluir',
+        actionButtonClass: 'btn btn-danger'
+      };
+      modalService.showModal({}, modalOptions)
+        .then(function(result) {
+          LembreteFactory.del(entry.id)
+            .then(function(response) {
+              get();
+            }, function(response) {
+              vm.status = response.message
+            });
+        });
     }
 
-    function cancel() {
-      console.log('Discarding changes...');
-      vm.descricao = null;
-      vm.data_hora = null;
-      vm.visualizado = null;
+    vm.openData = function() {
+      vm.popupData = true;
+    }
+
+    vm.formats = ['dd/MM/yyyy', 'dd-MMMM-yyyy', 'shortDate'];
+    vm.format = vm.formats[0];
+    vm.altInputFormats = ['d!/M!/yyyy'];
+
+    vm.popupData = false;
+    vm.setDate = setDate;
+
+    function setDate(year, month, day) {
+      vm.form.data_hora = new Date(year, month, day);
     }
   }
 
@@ -94,11 +116,7 @@
       return $http({
           method: 'POST',
           url: _url + '/lembrete',
-          data: {
-            descricao: data.descricao,
-            data_hora: data.data_hora,
-            visualizado: data.visualizado
-          }
+          data: data
         })
         .then(success)
         .catch(failed);
@@ -114,19 +132,10 @@
 
     function alt(data) {
       console.log('UPDATING: ' + JSON.stringify(data));
-      console.log(JSON.stringify({
-        visualizado: data.visualizado === false ? 0 : 1
-      }))
       return $http({
           method: 'PUT',
           url: _url + '/lembrete',
-          data: {
-            id: data.id,
-            descricao: data.descricao,
-            pessoa_id: data.pessoa.id,
-            visualizado: data.visualizado === false ? 0 : 1,
-            data_hora: data.data_hora
-          }
+          data: data
         })
         .then(success)
         .catch(failed);
