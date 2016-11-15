@@ -372,7 +372,6 @@
         .catch(failed);
 
       function success(response) {
-        console.log('response', response.data.result);
         return response.data.result;
       }
 

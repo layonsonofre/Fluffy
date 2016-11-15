@@ -33,7 +33,7 @@
             <br class="visible-xs visible-sm">
             <div class="col-md-3 text-center">
               <div class="btn-group">
-                <a class="btn btn-primary"><span class="fa fa-plus"></span>&nbsp;Novo Agendamento</a>
+                <a class="btn btn-primary" ng-click="vm.gotoAgendamento()"><span class="fa fa-plus"></span>&nbsp;Novo Agendamento</a>
               </div>
             </div>
           </div>
@@ -42,6 +42,53 @@
               cell-is-open="true" day-view-start="06:00" day-view-end="22:59" day-view-split="15">
             </mwl-calendar>
           </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL DE DETALHES DO SERVIÇO -->
+  <div id="detalhesServico" class="modal fade" role="dialog" aria-labelledby="detalhes">
+    <div class="modal-dialog modal-sm" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title">Detalhes</h4>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-xs-12">
+              <div class="form-group">
+                <label>Animal</label>
+                <input class="form-control" type="text" ng-model="vm.form.animal.nome" ng-readonly="true">
+                <p class="help-block" ng-show="vm.helpActive">Nome do animal</p>
+              </div>
+            </div>
+            <div class="col-xs-12">
+              <div class="form-group">
+                <label>Serviço</label>
+                <input class="form-control" type="text" ng-model="vm.form.servico_tem_porte.servico.nome" ng-readonly="true">
+                <p class="help-block" ng-show="vm.helpActive">Serviço agendado</p>
+              </div>
+            </div>
+            <div class="col-xs-12">
+              <div class="form-group">
+                <label>Preço (R$)</label>
+                <input class="form-control" type="text" ng-model="vm.form.servico_tem_porte.preco" ng-readonly="true">
+                <p class="help-block" ng-show="vm.helpActive">Preço</p>
+              </div>
+            </div>
+            <div class="col-xs-12">
+              <div class="form-group">
+                <label>Observação</label>
+                <input class="form-control" type="text" ng-model="vm.form.observacao" ng-readonly="true">
+                <p class="help-block" ng-show="vm.helpActive">Detalhes sobre o agendamento</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
         </div>
       </div>
     </div>

@@ -5,56 +5,69 @@
     .module('Authentication', [])
     .factory('AuthService', AuthService);
 
-  AuthService.$inject = ['$http', '$window'];
+  AuthService.$inject = ['$rootScope', '$location', '$http', '$window', 'Fluffy'];
 
-  function AuthService($http, $window) {
+  function AuthService($rootScope, $location, $http, $window, Fluffy) {
+
+    var _url = Fluffy.urlBase;
     var authService = {};
     authService.login = login;
     authService.logout = logout;
     authService.isAuthenticated = isAuthenticated;
 
+    $rootScope.$on('$locationChangeStart', function(event, next, current) {
+      var publicPages = ['/login'];
+      var restrictedPage = publicPages.indexOf($location.path()) === -1;
+      if (restrictedPage && !$window.localStorage.currentUser) {
+        $location.path('/login');
+      }
+    });
+
     return authService;
 
     function login(username, password, callback) {
       //SUBSTITUIR PELO CÓDIGO ABAIXO
-      if (username === 'teste' && password === 'teste') {
-        $window.localStorage.currentUser = {
-          username: username,
-          token: 'myToken'
-        }
-        $http.defaults.headers.common.Authorization = 'Bearer ' + 'myToken';
-        callback(true);
-      } else {
-        callback(false);
-      }
-
-      // $http.post('/login', {
+      // if (username === 'teste' && password === 'teste') {
+      //   $window.localStorage.currentUser = {
       //     username: username,
-      //     password: password
-      //   })
-      //   .success(function(response) {
-      //     // login successful if there's a token in the response
-      //     if (response.token) {
-      //       // store username and token in local storage to keep user logged in between page refreshes
-      //       $window.localStorage.currentUser = {
-      //         username: username,
-      //         token: response.token
-      //       };
-      //
-      //       // add jwt token to auth header for all requests made by the $http service
-      //       $http.defaults.headers.common.Authorization = 'Bearer ' + response.token;
-      //
-      //       // execute callback with true to indicate successful login
-      //       callback(true);
-      //     } else {
-      //       // execute callback with false to indicate failed login
-      //       callback(false);
-      //     }
-      //   });
+      //     token: 'myToken'
+      //   }
+      //   $http.defaults.headers.common.Authorization = 'Bearer ' + 'myToken';
+      //   callback(true);
+      // } else {
+      //   callback(false);
+      // }
+      $http({
+          url: _url + '/login',
+          data: {
+            usuario: username,
+            senha: null,
+            client_id: Fluffy.clientId
+          },
+          method: 'POST'
+        })
+        .then(function(response) {
+          if (response.data.result.token) {
+            var _token = response.data.result.token;
+
+            $window.localStorage.currentUser = JSON.stringify({
+              username: username,
+              token: _token
+            });
+
+            $http.defaults.headers.common.Authorization = _token;
+            callback(_token);
+          } else {
+            callback(false);
+          }
+        })
+        .catch(function(response){
+          console.log('failed login', response);
+          callback(false);
+        });
     }
 
     function logout() {
-      // remove user from local storage and clear http auth header
       delete $window.localStorage.currentUser;
       $http.defaults.headers.common.Authorization = '';
     }

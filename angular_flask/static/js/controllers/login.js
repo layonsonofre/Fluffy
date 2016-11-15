@@ -5,9 +5,9 @@
     .module('Login', [])
     .controller('LoginController', LoginController);
 
-  LoginController.$inject = ['AuthService', '$location', '$rootScope', 'dataStorage'];
+  LoginController.$inject = ['AuthService', '$location', '$rootScope', 'dataStorage', 'PessoaTemFuncaoFactory', 'PermissaoFactory'];
 
-  function LoginController(AuthService, $location, $rootScope, dataStorage) {
+  function LoginController(AuthService, $location, $rootScope, dataStorage, PessoaTemFuncaoFactory, PermissaoFactory) {
     var vm = this;
     vm.login = login;
     vm.logout = logout;
@@ -26,10 +26,18 @@
     function login() {
       vm.loading = true;
       AuthService.login(vm.email, vm.senha, function(result) {
-        if (result === true) {
-          $location.path('/overview');
+        if (result != false) {
+          console.log('SUBSTITUIR QUANDO LOGIN TIVER OK');
+          // PessoaTemFuncaoFactory.get({oauth_token: result}).then(function(response) {
+          //   dataStorage.addPermissoes(response);
+          //   $location.path('/overview');
+          // });
+          PermissaoFactory.get().then(function(response) {
+            dataStorage.addPermissoes(response.data.result);
+            $location.path('/overview');
+          })
         } else {
-          vm.error = 'Credenciais incorretas.';
+          vm.error = 'Falha ao realizar conexão, verifique se suas credenciais estão corretas.';
           vm.loading = false;
         }
       });

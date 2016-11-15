@@ -17,6 +17,8 @@ class Util:
 
     @staticmethod
     def postData(proc, args):
+        print proc
+        print args
         try:
            conn = mysql.connect()
            cursor = conn.cursor()

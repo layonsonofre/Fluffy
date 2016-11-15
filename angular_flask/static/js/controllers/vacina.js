@@ -24,6 +24,7 @@
     vm.add = add;
     vm.alt = alt;
     vm.del = del;
+    vm.cancel = cancel;
 
     vm.getLote = getLote;
     vm.addLote = addLote;
@@ -31,6 +32,7 @@
     vm.delLote = delLote;
 
     vm.incluirLote = incluirLote;
+    vm.updateSelection = updateSelection;
 
     get();
 
@@ -127,11 +129,19 @@
     }
 
     function getLote(entry) {
-      vm.form.lotes = {};
       if (entry.checked) {
-        LoteFactory.getLotesVacina(entry.id)
+        vm.form.lotes = [];
+        LoteFactory.getLotesVacina({vacina_id: entry.id})
           .then(function(response) {
-            vm.form.lotes = response;
+            if (!angular.isArray(response)) {
+              vm.form.lotes = [];
+              vm.form.lotes.push(response);
+            } else {
+              vm.form.lotes = response;
+            }
+            // angular.forEach(vm.form.lotes, function(value, key){
+            //   value.lote.vencimento = new Date(value.lote.vencimento);
+            // });
             console.log(vm.form.lotes);
           }, function(response) {
             vm.status = 'Failed to load: ' + error.message;
@@ -145,6 +155,10 @@
           subscription.checked = false;
         }
       });
+    }
+
+    function cancel() {
+      vm.form.lotes = {};
     }
   }
 

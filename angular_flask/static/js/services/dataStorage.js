@@ -18,8 +18,14 @@
     dataStorage.addAnimal = addAnimal;
     dataStorage.getAnimal = getAnimal;
 
-    dataStorage.addAgendamento = addAgendamento;
-    dataStorage.getAgendamento = getAgendamento;
+    dataStorage.addContrato = addContrato;
+    dataStorage.getContrato = getContrato;
+
+    dataStorage.getUser = getUser;
+
+    dataStorage.addPermissoes = addPermissoes;
+    dataStorage.getPermissoes = getPermissoes;
+    dataStorage.checkPermission = checkPermission;
 
     return dataStorage;
 
@@ -27,6 +33,7 @@
       $window.localStorage.currentPessoa = JSON.stringify({});
       $window.localStorage.currentAgendamento = JSON.stringify({});
       $window.localStorage.currentAnimal = JSON.stringify({});
+      $window.localStorage.currentContrato = JSON.stringify({});
     }
 
     //pessoa
@@ -54,15 +61,45 @@
     }
 
     //agendamento
-    function addAgendamento(entry) {
-      $window.localStorage.currentAgendamento = JSON.stringify(entry);
+    function addContrato(entry) {
+      $window.localStorage.currentContrato = entry;
     }
 
-    function getAgendamento() {
-      if ($window.localStorage.currentAgendamento) {
-        return JSON.parse($window.localStorage.currentAgendamento);
+    function getContrato() {
+      if ($window.localStorage.currentContrato) {
+        return JSON.parse($window.localStorage.currentContrato);
       }
       return null;
+    }
+
+    //user
+    function getUser() {
+      if ($window.localStorage.currentUser) {
+        return JSON.parse($window.localStorage.currentUser);
+      }
+      return null;
+    }
+
+    //permissoes
+    function addPermissoes(entry) {
+      $window.localStorage.currentPermissoes = JSON.stringify(entry);
+    }
+
+    function getPermissoes() {
+      if ($window.localStorage.currentPermissoes) {
+        return JSON.parse($window.localStorage.currentPermissoes);
+      }
+      return null;
+    }
+
+    function checkPermission(desired) {
+      var available = false;
+      angular.forEach(getPermissoes(), function(value, key) {
+        if (value.modulo === desired) {
+          available = true;
+        }
+      });
+      return available;
     }
 
   }

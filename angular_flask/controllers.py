@@ -98,34 +98,34 @@ def form_modelo(modelo = None):
 		#return jsonify(success=False, result={}, codigo=code,message=error_message.decode('cp1251').encode('utf8'))
 		return jsonify(success=False, result={}, mensagem=message, tabela=table, json = json, metodo=method)
 
-@app.route('/api/login/', methods=['POST'])
+@app.route('/api/login', methods=['POST'])
 def login():
+    CLIENT_ID = "FLUFFY_1234"
+    CLIENT_SECRET = ""
 
-
-	CLIENT_ID = "FLUFFY_1234"
-	CLIENT_SECRET = ""
-
-	json = request.json
-	username = json['usuario']
-	passwd = json['senha']
-	client_id = json['client-id']
-	try:
-		data = Util.getData('getPessoaTemFuncao', [None,None,None, username, None, passwd, None, None])
-		ptf = PessoaTemFuncao(data[0])
-		if len(data) == 1 and client_id == CLIENT_ID:
-			token = str(uuid4())
-			refresh_token = str(uuid4())
-			print([token, refresh_token])
-			id = Util.postData('insOAuth',[token, refresh_token])
-			print(id[0])
-			print(ptf.id)
-			result = Util.postData('altPessoaTemFuncao', [ptf.id, ptf.pessoa[0], ptf.funcao[0], None, id[0]])
-			print(result)
-			return jsonify(success=True, result={"token":token, "refresh_token":refresh_token}, message="")
-		else:
-			return jsonify(success=False, result={}, message="Usuario e/ou Senha incorretos")
-	except Exception as e:
-		return jsonify(success=False, result={}, message=e.__str__())
+    json = request.json
+    username = json['usuario']
+    passwd = json['senha']
+    client_id = json['client_id']
+    try:
+    	data = Util.getData('getPessoaTemFuncao', [None, None, None, None, username, passwd, None, None])
+        # print data
+    	if len(data) == 1 and client_id == CLIENT_ID:
+            ptf = PessoaTemFuncao(data[0])
+            token = str(uuid4())
+            refresh_token = str(uuid4())
+            # print([token, refresh_token])
+            id = Util.postData('insOAuth',[token, refresh_token])
+            # print(id[0])
+            # print(ptf.id)
+            print '\n\nDESCOMENTAR A LINHA ABAIXO NO CONTROLLERS.PY QUANDO AJEITAR A TRIGGER NO UPDATE PESSOA TEM FUNCAO\n\n'
+            # result = Util.postData('altPessoaTemFuncao', [ptf.id, ptf.pessoa[0], ptf.funcao[0], None, id[0]])
+            # print(result)
+            return jsonify(success=True, result={"token":token, "refresh_token":refresh_token}, message="")
+    	else:
+    		return jsonify(success=False, result={}, message="Usuario e/ou Senha incorretos")
+    except Exception as e:
+    	return jsonify(success=False, result={}, message=e.__str__())
 
 # special file handlers and error handlers
 @app.route('/favicon.ico')

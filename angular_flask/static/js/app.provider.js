@@ -8,6 +8,7 @@
   function FluffyProvider() {
     // var _url = 'http://ec2-52-67-160-63.sa-east-1.compute.amazonaws.com:5000';
     var _url = 'http://localhost:5000/api';
+    var clientId = 'FLUFFY_1234';
 
     this.setUrl = function(url) {
       if (typeof url == 'string')
@@ -17,6 +18,7 @@
     this.$get = function() {
       return {
         urlBase: _url,
+        clientId: clientId,
         producao: true
       }
     }

@@ -50,32 +50,32 @@
               </div>
             </div>
             <div class="row">
-              <fieldset data-ng-repeat="lote in vm.form.lotes">
+              <fieldset data-ng-repeat="entry in vm.form.lotes">
                 <div class="col-xs-5">
                   <div class="form-group">
                     <label>Número *</label>
-                    <input class="form-control" type="text" data-ng-model="lote.numero">
+                    <input class="form-control" type="text" data-ng-model="entry.lote.numero">
                     <p class="help-block" ng-show="vm.helpActive">Identificação do lote</p>
                   </div>
                 </div>
                 <div class="col-xs-3">
                   <div class="form-group">
                     <label>Vencimento *</label>
-                    <input class="form-control" type="text" data-ng-model="lote.vencimento">
+                    <input class="form-control" type="text" data-ng-model="entry.lote.vencimento">
                     <p class="help-block" ng-show="vm.helpActive">Data de vencimento</p>
                   </div>
                 </div>
                 <div class="col-xs-2">
                   <div class="form-group">
                     <label>Preço (R$) *</label>
-                    <input class="form-control" type="text" data-ng-model="lote.preco">
+                    <input class="form-control" type="text" data-ng-model="entry.lote.preco">
                     <p class="help-block" ng-show="vm.helpActive">Preço da vacina</p>
                   </div>
                 </div>
                 <div class="col-xs-2">
                   <div class="form-group" ng-hide="$first">
                     <label>Remover</label>
-                    <a class="form-control btn btn-link" ng-click="vm.delLote(lote)" data-toggle="tooltip" data-placement="top" title="" data-title="Remover este lote">
+                    <a class="form-control btn btn-link" ng-click="vm.delLote(entry.lote)" data-toggle="tooltip" data-placement="top" title="" data-title="Remover este lote">
                       <i class="fa fa-minus"></i>&nbsp;<i class="fa fa-barcode"></i>
                     </a>
                   </div>
@@ -188,18 +188,18 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr dir-paginate="entry in vm.form.lotes.lote | filter:vm.filtroLote | orderBy: 'vencimento' : reverse | itemsPerPage: 10" pagination-id="lote">
+                    <tr dir-paginate="entry in vm.form.lotes | filter:vm.filtroLote | orderBy: 'vencimento' : reverse | itemsPerPage: 10" pagination-id="lote">
                       <td>
-                        <span data-ng-hide="editMode">{{entry.numero}}</span>
-                        <input type="text" data-ng-show="editMode" data-ng-model="entry.numero" data-ng-required>
+                        <span data-ng-hide="editMode">{{entry.lote.numero}}</span>
+                        <input type="text" data-ng-show="editMode" data-ng-model="entry.lote.numero" data-ng-required>
                       </td>
                       <td>
-                        <span data-ng-hide="editMode">{{entry.vencimento}}</span>
-                        <input type="text" data-ng-show="editMode" data-ng-model="entry.vencimento" data-ng-required>
+                        <span data-ng-hide="editMode">{{entry.lote.vencimento}}</span>
+                        <input type="text" data-ng-show="editMode" data-ng-model="entry.lote.vencimento" data-ng-required>
                       </td>
                       <td>
-                        <span data-ng-hide="editMode">{{entry.preco}}</span>
-                        <input type="text" data-ng-show="editMode" data-ng-model="entry.preco" data-ng-required>
+                        <span data-ng-hide="editMode">{{entry.lote.preco}}</span>
+                        <input type="text" data-ng-show="editMode" data-ng-model="entry.lote.preco" data-ng-required>
                       </td>
                       <td>
                         <a class="btn btn-link" data-ng-hide="editMode" data-ng-click="editMode = true" data-toggle="tooltip" data-placement="top" title="Alterar dados cadastrados"><span class="fa fa-pencil"></span></a>

@@ -5,10 +5,26 @@
     .module('Index', [])
     .controller('IndexController', IndexController);
 
-  IndexController.$inject = ['$rootScope'];
+  IndexController.$inject = ['$rootScope', 'dataStorage'];
 
-  function IndexController($rootScope) {
+  function IndexController($rootScope, dataStorage) {
     $rootScope.hideMenu = false;
     $rootScope.bodyBackground = '';
+
+    $rootScope.permissoes = {};
+    angular.forEach(dataStorage.getPermissoes(), function(value, key) {
+      if (value.modulo === 'Cadastro') {
+        $rootScope.permissoes.cadastro = true;
+      }
+      if (value.modulo === 'Venda') {
+        $rootScope.permissoes.venda = true;
+      }
+      if (value.modulo === 'Servico') {
+        $rootScope.permissoes.servico = true;
+      }
+      if (value.modulo === 'Consulta') {
+        $rootScope.permissoes.consulta = true;
+      }
+    });
   }
 })()
