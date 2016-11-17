@@ -2,42 +2,44 @@
   'use strict';
 
   angular
-    .module('Lote', [])
-    .factory('LoteFactory', LoteFactory);
+    .module('ServicoTemPorte', [])
+    .factory('ServicoTemPorteFactory', ServicoTemPorteFactory);
 
-  LoteFactory.$inject = ['$http', 'Fluffy'];
+  ServicoTemPorteFactory.$inject = ['$http', 'Fluffy'];
 
-  function LoteFactory($http, Fluffy) {
+  function ServicoTemPorteFactory($http, Fluffy) {
     var _url = Fluffy.urlBase;
-    var LoteFactory = {
+    var ServicoTemPorteFactory = {
       get: get,
       add: add,
       alt: alt,
-      del: del,
-      getLotesVacina: getLotesVacina
+      del: del
     };
-    return LoteFactory;
+    return ServicoTemPorteFactory;
 
-    function get() {
-      return $http.get(
-          _url + '/lote'
-        )
+    function get(data) {
+      data = data || null;
+      return $http({
+        url: _url + '/servicoTemPorte',
+        method: 'GET',
+        params: data
+      })
         .then(success)
         .catch(failed);
 
       function success(response) {
-        console.log(response);
         return response.data.result;
       }
 
-      function failed(response) {
-        console.error('Failed: ' + JSON.stringify(response));
+      function failed(error) {
+        console.error('Failed funcoes: ' + error.data);
       }
     }
 
     function add(data) {
+      console.log(JSON.stringify(data));
       return $http({
-          url: _url + '/lote',
+          url: _url + '/servicoTemPorte',
           data: data,
           method: 'POST'
         })
@@ -56,7 +58,7 @@
     function alt(data) {
       console.log('UPDATING: ' + JSON.stringify(data));
       return $http({
-          url: _url + '/lote',
+          url: _url + '/servicoTemPorte',
           data: data,
           method: 'PUT'
         })
@@ -74,7 +76,7 @@
 
     function del(id) {
       return $http({
-          url: _url + '/lote',
+          url: _url + '/servicoTemPorte',
           data: {
             id: id
           },
@@ -92,25 +94,5 @@
       }
     }
 
-
-    function getLotesVacina(data) {
-      data = data || null;
-      return $http({
-          url: _url + '/vacinaTemLote',
-          data: data,
-          method: 'GET'
-        })
-        .then(success)
-        .catch(failed);
-
-      function success(response) {
-        return response.data.result;
-      }
-
-      function failed(response) {
-        console.error('Failed: ' + JSON.stringify(response));
-      }
-    }
   }
-
 })()

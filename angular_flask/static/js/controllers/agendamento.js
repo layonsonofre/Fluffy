@@ -15,49 +15,67 @@
     .factory('AgendamentoFactory', AgendamentoFactory);
 
   AgendamentoController.$inject = ['AgendamentoFactory', 'calendarConfig', 'modalService',
-                                '$filter', 'PessoaFactory'];
+    '$filter', 'PessoaFactory', 'AnimalFactory', 'AnimalTemRestricaoFactory', 'PessoaTemFuncaoFactory',
+    'ServicoTemPorteFactory', '$window', 'dataStorage', 'ServicoFactory'
+  ];
 
-  function AgendamentoController(AgendamentoFactory, calendarConfig,
-                                modalService, $filter, PessoaFactory) {
+  function AgendamentoController(AgendamentoFactory, calendarConfig, modalService,
+    $filter, PessoaFactory, AnimalFactory, AnimalTemRestricaoFactory, PessoaTemFuncaoFactory,
+    ServicoTemPorteFactory, $window, dataStorage, ServicoFactory
+  ) {
     var vm = this;
 
-    vm.form = {};
+    if (!dataStorage.checkPermission('Servico')) {
+      $window.history.back();
+    }
 
-    vm.get = get;
+    vm.form = {};
+    vm.alterando = false;
     vm.add = add;
     vm.del = del;
     vm.alt = alt;
     vm.getClientes = getClientes;
     vm.updateSelection = updateSelection;
     vm.selectCliente = selectCliente;
+    vm.cancelCliente = cancelCliente;
     vm.selectAnimal = selectAnimal;
+    vm.calcularPreco = calcularPreco;
+    vm.detalhes_animal = detalhes_animal;
+    vm.incluirAgendamento = incluirAgendamento;
+    vm.removeAgendamento = removeAgendamento;
+    vm.getAgendamentos = getAgendamentos;
 
-    vm.agendamentos = [];
+    vm.form.servicos_agendados = [];
+    var contrato = dataStorage.getContrato();
+    if (contrato != null) {
+      vm.alterando = true;
+      vm.form.contrato = contrato;
+      getAgendamentos(false);
+    }
 
-    get();
+    getServicos();
     getClientes();
+    if (contrato == null) {
+      incluirAgendamento();
+    }
 
     // INIT TIME PICKER
-    vm.todayInicio = function() {
-      vm.inicio = new Date();
+    vm.today = function(agendamento) {
+      agendamento.data_hora = new Date();
     }
-    vm.clearInicio = function() {
-      vm.inicio = null;
+    vm.clearDate = function(agendamento) {
+      agendamento.data_hora = null;
     }
     vm.disabled = disabled;
     vm.toggleMin = toggleMin;
-    vm.openInicio = function() {
-      vm.popupInicio = true;
+    vm.openDate = function(agendamento) {
+      agendamento.popup = true;
     }
-    vm.setDateInicio = setDateInicio;
-
-    vm.todayInicio();
+    vm.setDate = setDate;
 
     vm.formats = ['dd/MM/yyyy', 'dd-MMMM-yyyy', 'shortDate'];
     vm.format = vm.formats[0];
     vm.altInputFormats = ['d!/M!/yyyy'];
-
-    vm.popupInicio = false;
 
     vm.inlineOptions = {
       customClass: getDayClass,
@@ -93,8 +111,8 @@
 
     vm.toggleMin();
 
-    function setDateInicio(year, month, day) {
-      vm.inicio = new Date(year, month, day);
+    function setDate(agendamento, year, month, day) {
+      agendamento.data_hora = new Date(year, month, day);
     }
 
     function getDayClass(data) {
@@ -114,8 +132,8 @@
       return '';
     }
 
-    function get() {
-      AgendamentoFactory.get()
+    function getServicos() {
+      ServicoFactory.get()
         .then(function(response) {
           vm.servicos = response.data.result;
         }, function(response) {
@@ -124,10 +142,14 @@
     }
 
     function add() {
+      vm.form.pessoa_tem_funcao_funcionario_id = 3;
+      angular.forEach(vm.form.servicos_agendados, function(value, key) {
+        value.data_hora = new Date(value.data_hora).toISOString().substring(0, 19).replace('T', ' ');
+      });
       AgendamentoFactory.add(vm.form)
         .then(function(response) {
-          vm.form.nome = null;
-          get();
+          console.log(response);
+          // get();
         }, function(response) {
           vm.status = response.message
         });
@@ -160,29 +182,65 @@
     }
 
     function getClientes() {
-      PessoaFactory.getPessoas()
+      PessoaTemFuncaoFactory.get()
         .then(function(response) {
           vm.clientes = response;
+          console.log('clientes', response);
         }, function(response) {
           console.error(response);
         });
     }
 
     function selectCliente(entry) {
-      vm.form.cliente = entry;
+      console.log('entry', entry);
+      vm.form.pessoa_tem_funcao = entry;
       vm.animais = {};
-      if (entry.checked) {
-        PessoaFactory.getAnimais(entry.id)
-          .then(function(response) {
+      AnimalFactory.get({
+          pessoa_id: entry.id
+        })
+        .then(function(response) {
+          if (!angular.isArray(response)) {
+            vm.animais = [];
+            vm.animais.push(response);
+          } else {
             vm.animais = response;
-          }, function(response) {
-            vm.status = 'Failed to load: ' + error.message;
-          });
-      }
+          }
+          console.log('animais', response);
+        }, function(response) {
+          vm.status = 'Failed to load: ' + error.message;
+        });
     }
 
-    function selectAnimal(entry) {
+    function cancelCliente() {
+      vm.form.pessoa_tem_funcao = {};
+    }
+
+    function selectAnimal(agendamento, entry) {
       vm.form.animal = entry;
+      agendamento.animal_id = entry.id;
+    }
+
+    function detalhes_animal(animal_id) {
+      AnimalFactory.get({
+        id: animal_id
+      }).then(function(response) {
+        vm.form.animal = response;
+        AnimalTemRestricaoFactory.get({
+          animal_id: animal_id
+        }).then(function(response) {
+          vm.form.animal.restricoes = response;
+        });
+      });
+    }
+
+    function calcularPreco(agendamento) {
+      ServicoTemPorteFactory.get({
+          porte_id: vm.form.animal.porte.id,
+          servico_id: agendamento.servico_id
+        })
+        .then(function(response) {
+          agendamento.preco = response.preco;
+        });
     }
 
     function updateSelection(position, entities) {
@@ -191,6 +249,69 @@
           subscription.checked = false;
         }
       });
+    }
+
+    function incluirAgendamento() {
+      getAgendamentos(true);
+    }
+
+    function removeAgendamento(item) {
+      if (item.new === true) {
+        vm.form.servicos_agendados = vm.form.servicos_agendados.splice(vm.form.servicos_agendados.indexOf(item), 1)
+      } else {
+        var modalOptions = {
+          closeButtonText: 'Cancelar',
+          actionButtonText: 'Excluir',
+          actionButtonClass: 'btn btn-danger'
+        };
+        modalService.showModal({}, modalOptions)
+          .then(function(result) {
+            AgendamentoFactory.del(item.id)
+              .then(function(response) {
+                getAgendamentos(false);
+              }, function(response) {
+                vm.status = 'Falha na tentativa de remover o agendamento.\n' + error.message;
+              });
+          });
+      }
+    }
+
+    function getAgendamentos(append) {
+      if (vm.form.contrato) {
+        AgendamentoFactory.get({servico_contratado_id: vm.form.contrato})
+          .then(function(response) {
+            console.log('getAgendamentos', response);
+            if (!angular.isArray(response)) {
+              vm.form.servicos_agendados = [];
+              vm.form.servicos_agendados.push(response);
+            } else {
+              vm.form.servicos_agendados = response;
+            }
+            angular.forEach(vm.form.servicos_agendados, function(value, key){
+              value.data_hora = new Date(value.data_hora);
+              value.preco = value.servico_tem_porte.preco;
+              console.log(value);
+            });
+            AgendamentoFactory.getContrato({id: vm.form.contrato})
+              .then(function(response) {
+                vm.form.pessoa_tem_funcao = response.pessoa_tem_funcao
+                vm.form.preco = response.preco;
+                vm.form.transacao_id = response.transacao_id;
+                console.log('contrato', response);
+              })
+          }, function(response) {
+            vm.status = 'Failed to load: ' + error.message;
+          });
+      }
+      if (append) {
+        if (!vm.form.servicos_agendados) {
+          vm.form.servicos_agendados = [];
+        }
+        vm.form.servicos_agendados.push({
+          id: vm.form.servicos_agendados.length,
+          new: true
+        });
+      }
     }
   }
 
@@ -202,20 +323,23 @@
       get: get,
       add: add,
       alt: alt,
-      del: del
+      del: del,
+      getContrato
     };
     return AgendamentoFactory;
 
-    function get() {
-      return $http.get(
-          _url + '/servico'
-        )
+    function get(data) {
+      data = data || null;
+      return $http({
+          url: _url + '/servicoAgendado',
+          params: data,
+          method: 'GET'
+        })
         .then(success)
         .catch(failed);
 
       function success(response) {
-        console.log(response);
-        return response;
+        return response.data.result;
       }
 
       function failed(response) {
@@ -224,8 +348,9 @@
     }
 
     function add(data) {
+      console.log('insert', data);
       return $http({
-          url: _url + '/servico',
+          url: _url + '/insertServicoAgendado',
           data: data,
           method: 'POST'
         })
@@ -290,6 +415,25 @@
 
       function success(response) {
         return response;
+      }
+
+      function failed(response) {
+        console.error('Failed: ' + JSON.stringify(response));
+      }
+    }
+
+    function getContrato(data) {
+      data = data || null;
+      return $http({
+          url: _url + '/servicoContratado',
+          params: data,
+          method: 'GET'
+        })
+        .then(success)
+        .catch(failed);
+
+      function success(response) {
+        return response.data.result;
       }
 
       function failed(response) {

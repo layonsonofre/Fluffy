@@ -1,199 +1,201 @@
 <div class="row">
-   <div class="col-md-12">
-      <h1 class="page-head-line">Visão Geral</h1>
-      <h1 class="page-subhead-line">Veja informações rápidas e avisos sobre a situação da empresa</h1>
-   </div>
+  <div class="col-md-12">
+    <h1 class="page-head-line">Visão Geral</h1>
+    <h1 class="page-subhead-line">Veja informações rápidas e avisos sobre a situação da empresa</h1>
+    <a ng-click="vm.helpActive = !vm.helpActive" class="btn btn-link pull-right"><span class="fa fa-info"></span></a>
+
+    <div ng-show="vm.status" class="alert alert-info">{{vm.status}}</div>
+  </div>
 </div>
 <div class="row">
-   <div class="col-lg-12">
-      <div class="panel panel-default">
-         <div class="panel-heading">
-            Lembretes
-         </div>
-         <div class="panel-body" ng-controller="LembreteController as vm">
-            <div class="row">
-               <div class="col-lg-12">
-                  <button type="button" class="btn btn-default pull-right" ng-click="adicionar = !adicionar" data-toggle="tooltip" data-placement="top" title="Excluir">
-                     <span class="fa fa-plus"></span>&nbsp;&nbsp;Novo Lembrete
-                  </button>
-               </div>
-            </div>
-            <form role="form" ng-show="adicionar">
-               <div class="row">
-                  <div class="col-md-4">
-                     <div class="form-group">
-                        <label>Descrição *</label>
-                        <input class="form-control" type="text" ng-model="vm.form.descricao">
-                     </div>
-                  </div>
-                  <div class="col-md-2">
-                     <div class="form-group">
-                        <label>Data *</label>
-                        <input class="form-control" type="date" ng-model="vm.form.data_hora">
-                     </div>
-                  </div>
-                  <div class="col-lg-2">
-                     <div class="form-group">
-                        <label>Situação *</label>
-                        <div class="checkbox">
-                           <label>
-                              <input type="checkbox" ng-model="vm.form.visualizado">&nbsp;&nbsp; Executado
-                           </label>
-                        </div>
-                     </div>
-                  </div>
-                  <div class="col-lg-2">
-                     <div class="buttons">
-                        <button type="submit" class="btn btn-success" data-ng-click="vm.add()" data-toggle="tooltip" data-placement="top" title="Salvar cadastro">
-                           <span class="fa fa-check"></span>
-                        </button>
-                        <button type="button" class="btn btn-default" data-ng-click="vm.cancel(); adicionar = false" data-toggle="tooltip" data-placement="top" title="Cancelar">
-                           <span class="fa fa-trash"></span>
-                        </button>
-                     </div>
-                  </div>
-               </div>
-            </form>
-            <table class="table table-striped table-hover">
-               <thead>
-                  <tr>
-                     <th>Lembrete</th>
-                     <th>Data</th>
-                     <th>Executado</th>
-                     <th>Ações</th>
-                  </tr>
-               </thead>
-               <tbody>
-                  <tr dir-paginate="entry in vm.lembretes | itemsPerPage: 10" pagination-id="lembrete">
-                     <td>
-                        <span editable-text="entry.descricao" e-name="descricao" e-form="form" e-required>
-                           {{ entry.descricao || '' }}
-                        </td>
-                        <td>
-                           <a editable-bsdate="entry.data_hora" e-datepicker-popup="dd-MMMM-yyyy hh:mm:ss">
-                              {{ entry.data_hora | date: "dd-MMMM-yyyy hh:mm:ss" || 'Não informada'}}
-                           </a>
-                        </td>
-                        <td>
-                           <a editable-checkbox="entry.visualizado" e-title="Executado?">
-                              {{ entry.visualizado && "Executado" || "Não executado" }}
-                           </a>
-                        </td>
-                        <td>
-                           <form editable-form name="form" ng-show="form.$visible" onbeforesave="vm.alt(entry)" class="form-buttons form-inline" shown="inserted == entry">
-                              <button type="submit" class="btn btn-success" ng-disabled="form.$waiting" data-toggle="tooltip" data-placement="top" title="Salvar">
-                                 <span class="fa fa-check"></span>
-                              </button>
-                              <button type="button" class="btn btn-default" ng-disabled="form.$waiting" ng-click="form.$cancel()" data-toggle="tooltip" data-placement="top" title="Cancelar">
-                                 <span class="fa fa-close"></span>
-                              </button>
-                           </form>
-                           <div class="buttons" ng-show="!form.$visible">
-                              <button type="button" class="btn btn-primary" ng-click="form.$show()" data-toggle="tooltip" data-placement="top" title="Editar">
-                                 <span class="fa fa-pencil"></span>
-                              </button>
-                              <button type="button" class="btn btn-danger" ng-click="vm.del(entry.id)" data-toggle="tooltip" data-placement="top" title="Excluir">
-                                 <span class="fa fa-trash"></span>
-                              </button>
-                           </div>
-                        </td>
-                     </tr>
-                  </tbody>
-               </table>
-               <div class="row">
-                 <div class="col-xs-12 text-center">
-                   <dir-pagination-controls pagination-id="lembrete"></dir-pagination-controls>
-                 </div>
-               </div>
-            </div>
-         </div>
-
-         <div class="panel panel-primary">
-            <div class="panel-heading">
-               Serviços de hoje
-            </div>
-            <div class="panel-body" ng-controller="ServicoController as vm">
-               <div class="row">
-                  <div class="col-md-12">
-                     <button class="btn btn-primary pull-right">
-                        <span class="fa fa-plus"></span>
-                     </button>
-                  </div>
-               </div>
-               <table class="table table-striped table-hover">
-                  <thead>
-                     <tr>
-                        <th>Animal</th>
-                        <th>Serviço</th>
-                        <th>Horário</th>
-                        <th>Observação</th>
-                        <th>Ações</th>
-                     </tr>
-                  </thead>
-                  <tbody>
-                     <tr dir-paginate="entry in vm.agendados | itemsPerPage: 10" pagination-id="servicosAgendados">
-                        <td>
-                           <span>{{ entry.nome_animal }}</span>
-                        </td>
-                        <td>
-                           <span>{{ entry.nome_servico }}</span>
-                        </td>
-                        <td>
-                           <span>{{ entry.data_hora }}</span>
-                        </td>
-                        <td>
-                           <span>{{ entry.observacao }}</span>
-                        </td>
-                        <td>
-                           <a class="btn btn-info" ng-click="get(entry.id)" data-toggle="tooltip" data-placement="top" title="Detalhes">
-                              <span class="fa fa-check"></span>
-                           </a>
-                        </td>
-                     </tr>
-                  </tbody>
-               </table>
-
-               <div class="row">
-                 <div class="col-xs-12 text-center">
-                   <dir-pagination-controls pagination-id="servicosAgendados"></dir-pagination-controls>
-                 </div>
-               </div>
-            </div>
-         </div>
-
-         <div class="panel panel-info">
-            <div class="panel-heading">
-               Próximos retornos
-            </div>
-            <div class="panel-body">
-               <div class="row">
-                  <div class="col-md-12">
-                     <button class="btn btn-success pull-right" ng-click="adicionar = !adicionar">
-                        <span class="fa fa-plus"></span>
-                     </button>
-                  </div>
-               </div>
-               <table class="table table-striped table-hover">
-                  <thead>
-                     <tr>
-                        <th>Descrição</th>
-                     </tr>
-                  </thead>
-                  <tbody>
-                     <tr dir-paginate="entry in fields | itemsPerPage: 10" pagination-id="servicosRetorno">
-                        <td>
-                           <span>{{entry.nome}}</span>
-                        </td>
-                     </tr>
-                  </tbody>
-               </table>
-
-               <div class="row">
-                 <div class="col-xs-12 text-center">
-                   <dir-pagination-controls pagination-id="servicosRetorno"></dir-pagination-controls>
-                 </div>
-               </div>
-            </div>
-         </div>
+  <div class="col-xs-12">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        Lembretes
       </div>
-   </div>
+      <div class="panel-body" ng-controller="LembreteController as vm">
+        <form ng-submit="vm.add()">
+          <div class="row">
+            <div class="col-xs-5">
+              <div class="form-group">
+                <label>Descrição *</label>
+                <input class="form-control" type="text" ng-model="vm.form.descricao">
+              </div>
+            </div>
+            <div class="col-xs-3">
+              <div class="form-group">
+                <label>Data *</label>
+                <p class="input-group">
+                  <input type="text" class="form-control" uib-datepicker-popup="{{vm.format}}" ng-model="vm.form.data_hora" ng-required="true" is-open="vm.popupData" datepicker-options="dateOptions" altInputFormats="altInputFormats" close-text="Fechar">
+                  <span class="input-group-btn">
+                      <a type="a" class="btn btn-default" ng-click="vm.openData()">
+                        <span class="fa fa-calendar"></span>
+                  </a>
+                  </span>
+                </p>
+              </div>
+            </div>
+            <div class="col-xs-2">
+              <div class="form-group">
+                <label>Situação *</label>
+                <div class="checkbox">
+                  <label>
+                    <input type="checkbox" ng-model="vm.form.executado">&nbsp;&nbsp; Executado
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div class="col-xs-2">
+              <label>Ações</label>
+              <div class="buttons">
+                <a type="submit" class="btn btn-link" data-ng-click="vm.add()" data-toggle="tooltip" data-placement="top" title="Salvar cadastro">
+                  <span class="fa fa-check"></span>
+                </a>
+                <a class="btn btn-link" data-ng-click="vm.cancel()" data-toggle="tooltip" data-placement="top" title="Cancelar">
+                  <span class="fa fa-trash"></span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </form>
+        <div class="row">
+          <div class="col-xs-12">
+            <div class="table-wrapper">
+              <table class="table table-striped table-hover">
+                <thead>
+                  <tr>
+                    <th class="col-xs-5">Lembrete</th>
+                    <th class="col-xs-3">Data</th>
+                    <th class="col-xs-2">Executado</th>
+                    <th class="col-xs-2">Ações</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr dir-paginate="entry in vm.lembretes | orderBy:'data_hora' | itemsPerPage: 10" pagination-id="lembrete">
+                    <td>
+                      <span data-ng-hide="editMode">{{entry.descricao | capitalize}}</span>
+                      <input type="text" data-ng-show="editMode" data-ng-model="entry.descricao" data-ng-required>
+                    </td>
+                    <td>
+                      <span data-ng-hide="editMode">{{entry.data_hora | capitalize}}</span>
+                      <input type="text" data-ng-show="editMode" data-ng-model="entry.data_hora" data-ng-required>
+                    </td>
+                    <td>
+                      <span data-ng-hide="editMode"><input class="form-control" type="checkbox" ng-checked="entry.executado" ng-disabled="true"></span>
+                      <input type="checkbox" data-ng-show="editMode" data-ng-model="entry.executado" data-ng-required>
+                    </td>
+                    <td>
+                      <button class="btn btn-link" data-ng-hide="editMode" data-ng-click="editMode = true" data-toggle="tooltip" data-placement="top" title="Alterar dados cadastrados"><span class="fa fa-pencil"></span></button>
+                      <button class="btn btn-link" data-ng-show="editMode" data-ng-click="vm.alt(entry); editMode = false" data-toggle="tooltip" data-placement="top" title="Salvar alterações"><span class="fa fa-check"></span></button>
+                      <button class="btn btn-link" data-ng-show="editMode" data-ng-click="editMode = false" data-toggle="tooltip" data-placement="top" title="Cancelar alterações"><span class="fa fa-close"></span></button>
+                      <button class="btn btn-link pull-right" ng-click="vm.del(entry)" data-toggle="tooltip" data-placement="top" title="Excluir cadastro"><span class="fa fa-trash"></span></button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs-12 text-center">
+            <dir-pagination-controls pagination-id="lembrete"></dir-pagination-controls>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-xs-12">
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        Serviços de hoje
+      </div>
+      <div class="panel-body" ng-controller="ServicoController as vm">
+        <div class="row">
+          <div class="col-md-12">
+            <button class="btn btn-primary pull-right">
+              <span class="fa fa-plus"></span>
+            </button>
+          </div>
+        </div>
+        <table class="table table-striped table-hover">
+          <thead>
+            <tr>
+              <th>Animal</th>
+              <th>Serviço</th>
+              <th>Horário</th>
+              <th>Observação</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr dir-paginate="entry in vm.agendados | itemsPerPage: 10" pagination-id="servicosAgendados">
+              <td>
+                <span>{{ entry.nome_animal }}</span>
+              </td>
+              <td>
+                <span>{{ entry.nome_servico }}</span>
+              </td>
+              <td>
+                <span>{{ entry.data_hora }}</span>
+              </td>
+              <td>
+                <span>{{ entry.observacao }}</span>
+              </td>
+              <td>
+                <a class="btn btn-info" ng-click="get(entry.id)" data-toggle="tooltip" data-placement="top" title="Detalhes">
+                  <span class="fa fa-check"></span>
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="row">
+          <div class="col-xs-12 text-center">
+            <dir-pagination-controls pagination-id="servicosAgendados"></dir-pagination-controls>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-xs-12">
+    <div class="panel panel-info">
+      <div class="panel-heading">
+        Próximos retornos
+      </div>
+      <div class="panel-body">
+        <div class="row">
+          <div class="col-md-12">
+            <button class="btn btn-success pull-right" ng-click="adicionar = !adicionar">
+              <span class="fa fa-plus"></span>
+            </button>
+          </div>
+        </div>
+        <table class="table table-striped table-hover">
+          <thead>
+            <tr>
+              <th>Descrição</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr dir-paginate="entry in fields | itemsPerPage: 10" pagination-id="servicosRetorno">
+              <td>
+                <span>{{entry.nome}}</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="row">
+          <div class="col-xs-12 text-center">
+            <dir-pagination-controls pagination-id="servicosRetorno"></dir-pagination-controls>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

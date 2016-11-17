@@ -18,150 +18,174 @@
         <div class="panel-body">
           <form ng-submit="vm.add()">
             <div class="row">
-              <div class="col-xs-12">
-                <div class="row">
-                  <div class="col-lg-9">
-                    <div class="form-group">
-                      <label>Cliente *</label>
-                      <input class="form-control" type="text" ng-model="vm.form.cliente.nome" ng-readonly="true" data-toggle="modal" data-target="#selecionarCliente">
-                      <p class="help-block" ng-show="vm.helpActive">Selecione um cliente</p>
-                    </div>
-                  </div>
-                  <div class="col-xs-3">
-                    <div class="form-group">
-                      <label>Selecionar Cliente</label>
-                      <a class="form-control btn btn-link" data-toggle="modal" data-target="#selecionarCliente" data-toggle="tooltip" data-placement="top" title="Busque por um cliente para realizar o agendamento">
-                        <i class="fa fa-user"></i>&nbsp;&nbsp;<b>Buscar</b>
-                      </a>
-                    </div>
-                  </div>
+              <div class="col-xs-9">
+                <div class="form-group">
+                  <label>Cliente *</label>
+                  <input class="form-control" type="text" ng-model="vm.form.pessoa_tem_funcao.nome" ng-readonly="true" data-toggle="modal" data-target="#selecionarCliente">
+                  <p class="help-block" ng-show="vm.helpActive">Selecione um cliente</p>
                 </div>
-                <div id="agendamentos">
-                  <hr>
-                  <div class="row">
-                    <div class="col-xs-3">
-                      <div class="row">
-                        <div class="col-xs-12">
-                          <label>Data *</label>
-                          <div class="form-group">
-                            <p class="input-group">
-                              <input type="text" class="form-control" uib-datepicker-popup="{{vm.format}}" ng-model="vm.form.inicio" ng-required="true" is-open="vm.popupInicio" datepicker-options="dateOptions" altInputFormats="altInputFormats" close-text="Fechar">
-                              <span class="input-group-btn">
-                                    <a type="button" class="btn btn-default" ng-click="vm.openInicio()"><span class="fa fa-calendar"></span></a>
-                              </span>
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="col-xs-12">
-                          <!-- <label>Hora *</label> -->
-                          <div class="form-group">
-                            <div uib-timepicker hour-step="1" minute-step="5" show-meridian="true" ng-model="vm.inicio"></div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-xs-9">
-                      <div class="row">
-                        <div class="col-xs-12">
-                          <div class="row">
-                            <div class="col-xs-5">
-                              <label>Serviço *</label>
-                              <div class="form-group">
-                                <select class="form-control" ng-model="vm.form.servico_id" ng-options="servico.id as servico.nome for servico in vm.servicos track by servico.id"></select>
-                              </div>
-                            </div>
-                            <div class="col-xs-5">
-                              <label>Animal *</label>
-                              <div class="form-group">
-                                <select class="form-control" ng-model="vm.form.animal.id" ng-options="animal.id as animal.nome for animal in vm.animais track by animal.id" ng-change="vm.selectAnimal(animal)"></select>
-                              </div>
-                            </div>
-                            <div class="col-xs-2">
-                              <div class="form-group">
-                                <label>Detalhes</label>
-                                <a class="form-control btn btn-link" data-toggle="modal" data-target="#detalhesAnimal" data-toggle="tooltip" data-placement="top" title="Ver detalhes do animal"><span class="fa fa-search-plus"></span></a>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="col-xs-12">
-                          <br>
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="col-xs-12">
-                          <div class="row">
-                            <div class="col-xs-2">
-                              <div class="form-group">
-                                <label>Preço *</label>
-                                <input class="form-control" type="text" ng-model="vm.form.preco">
-                                <p class="help-block" ng-show="vm.helpActive">Insira o valor do serviço</p>
-                              </div>
-                            </div>
-                            <div class="col-xs-4">
-                              <div class="form-group">
-                                <label>Observações *</label>
-                                <input class="form-control" type="text" ng-model="vm.form.observacoes">
-                                <p class="help-block" ng-show="vm.helpActive">Informações sobre este serviço</p>
-                              </div>
-                            </div>
-                            <div class="col-xs-2">
-                              <div class="form-group">
-                                <label>
-                                  <br>
-                                </label>
-                                <div class="checkbox">
-                                  <label>
-                                    <input type="checkbox" data-ng-model="vm.form.recorrente">&nbsp;&nbsp; Recorrente
-                                  </label>
-                                </div>
-                                <p class="help-block" ng-show="vm.helpActive">Marque esta opção se o serviço acontece regularmente</p>
-                              </div>
-                            </div>
-                            <div class="col-xs-2">
-                              <div class="form-group">
-                                <label>
-                                  <br>
-                                </label>
-                                <div class="checkbox">
-                                  <label>
-                                    <input type="checkbox" data-ng-model="vm.form.executado">&nbsp;&nbsp; Executado
-                                  </label>
-                                </div>
-                                <p class="help-block" ng-show="vm.helpActive">Marque esta opção se o serviço foi realizado</p>
-                              </div>
-                            </div>
-                            <div class="col-xs-2">
-                              <div class="form-group">
-                                <label>
-                                  <br>
-                                </label>
-                                <div class="checkbox">
-                                  <label>
-                                    <input type="checkbox" data-ng-model="vm.form.pago">&nbsp;&nbsp; Pago
-                                  </label>
-                                </div>
-                                <p class="help-block" ng-show="vm.helpActive">Marque esta opção se o serviço teve o pagamento efetuado</p>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+              </div>
+              <div class="col-xs-3">
+                <div class="form-group">
+                  <label>Selecionar Cliente</label>
+                  <a class="form-control btn btn-link" data-toggle="modal" data-target="#selecionarCliente" data-toggle="tooltip" data-placement="top" title="Busque por um cliente para realizar o agendamento">
+                    <i class="fa fa-user"></i>&nbsp;&nbsp;<b>Buscar</b>
+                  </a>
                 </div>
               </div>
             </div>
-            <div class="row">
+            <div class="row" ng-show="vm.alterando">
               <div class="col-xs-6">
-                <button class="btn btn-link" data-ng-click="vm.add()" data-toggle="tooltip" data-placement="top" title="Confirmar agendamento"><span class="fa fa-check"></span><b>&nbsp;&nbsp; Confirmar Agendamento</b></button>
+                <div class="form-group">
+                  <label>Valor total (R$)</label>
+                  <input class="form-control" type="text" ng-model="vm.form.preco">
+                  <p class="help-block" ng-show="vm.helpActive">Valor total do contrato</p>
+                </div>
               </div>
               <div class="col-xs-6">
-                <button class="btn btn-link pull-right" data-ng-click="vm.incluirAgendamento()" data-toggle="tooltip" data-placement="top" title="Adicionar Serviço"><span class="fa fa-plus"></span><b>&nbsp;&nbsp; Adicionar Serviço</b></button>
+                <div class="form-group">
+                  <label>Transação</label>
+                  <input class="form-control" type="text" ng-model="vm.form.transacao_id">
+                  <p class="help-block" ng-show="vm.helpActive">Identificação da última transação registrada</p>
+                </div>
+              </div>
+            </div>
+            <div id="servicos_agendados">
+              <fieldset data-ng-repeat="agendamento in vm.form.servicos_agendados">
+                <hr>
+                <div class="row">
+                  <div class="col-xs-3">
+                    <div class="row">
+                      <div class="col-xs-12">
+                        <label>Data *</label>
+                        <div class="form-group">
+                          <p class="input-group">
+                            <input type="text" class="form-control" uib-datepicker-popup="{{vm.format}}" ng-model="agendamento.data_hora" ng-required="true" is-open="agendamento.popup" datepicker-options="dateOptions" altInputFormats="altInputFormats" close-text="Fechar">
+                            <span class="input-group-btn">
+                                      <a type="button" class="btn btn-default" ng-click="vm.openDate(agendamento)"><span class="fa fa-calendar"></span></a>
+                            </span>
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-xs-12">
+                        <!-- <label>Hora *</label> -->
+                        <div class="form-group">
+                          <div uib-timepicker hour-step="1" minute-step="5" show-meridian="true" ng-model="agendamento.data_hora"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-xs-9">
+                    <div class="row">
+                      <div class="col-xs-12">
+                        <div class="row">
+                          <div class="col-xs-4">
+                            <label>Serviço *</label>
+                            <div class="form-group">
+                              <select class="form-control" ng-model="agendamento.servico_id" ng-options="servico.id as servico.nome for servico in vm.servicos track by servico.id"></select>
+                            </div>
+                          </div>
+                          <div class="col-xs-4">
+                            <label>Animal *</label>
+                            <div class="form-group">
+                              <select class="form-control" ng-model="agendamento.animal" ng-options="animal.nome for animal in vm.animais track by animal.id" ng-change="vm.selectAnimal(agendamento, agendamento.animal)"></select>
+                            </div>
+                          </div>
+                          <div class="col-xs-2">
+                            <div class="form-group">
+                              <label>Detalhes</label>
+                              <a class="form-control btn btn-link" ng-disabled="!agendamento.animal" data-toggle="modal" data-target="#detalhesAnimal" data-toggle="tooltip" data-placement="top" title="Ver detalhes do animal" ng-click="vm.detalhes_animal(agendamento.animal.id)"><span class="fa fa-plus"></span></a>
+                            </div>
+                          </div>
+                          <div class="col-xs-2">
+                            <div class="form-group">
+                              <label>Remover</label>
+                              <a class="form-control btn btn-link" data-toggle="tooltip" data-placement="top" title="Remover este agendamento" ng-click="vm.removeAgendamento(agendamento)"><span class="fa fa-minus"></span></a>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-xs-12">
+                        <br>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-xs-12">
+                        <div class="row">
+                          <div class="col-xs-3">
+                            <div class="form-group">
+                              <label class="control-label" for="input">Preço *</label>
+                              <div class="input-group">
+                                <a class="btn btn-link input-group-addon" data-toggle="tooltip" data-placement="top" title="Calcular valor do serviço" ng-click="vm.calcularPreco(agendamento)"><span class="fa fa-usd"></span></a>
+                                <input type="text" ng-model="agendamento.preco" class="form-control" id="input">
+                                <p class="help-block" ng-show="vm.helpActive">Clique no botão para calcular o valor do serviço ou informe-o manualmente</p>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-xs-3">
+                            <div class="form-group">
+                              <label>Observações *</label>
+                              <input class="form-control" type="text" ng-model="agendamento.observacao">
+                              <p class="help-block" ng-show="vm.helpActive">Informações sobre este serviço</p>
+                            </div>
+                          </div>
+                          <div class="col-xs-2">
+                            <div class="form-group">
+                              <label>
+                                <br>
+                              </label>
+                              <div class="checkbox">
+                                <label>
+                                  <input type="checkbox" data-ng-model="agendamento.recorrente">&nbsp;&nbsp; Recorrente
+                                </label>
+                              </div>
+                              <p class="help-block" ng-show="vm.helpActive">Marque esta opção se o serviço acontece regularmente</p>
+                            </div>
+                          </div>
+                          <div class="col-xs-2">
+                            <div class="form-group">
+                              <label>
+                                <br>
+                              </label>
+                              <div class="checkbox">
+                                <label>
+                                  <input type="checkbox" data-ng-model="agendamento.executado">&nbsp;&nbsp; Executado
+                                </label>
+                              </div>
+                              <p class="help-block" ng-show="vm.helpActive">Marque esta opção se o serviço foi realizado</p>
+                            </div>
+                          </div>
+                          <div class="col-xs-2">
+                            <div class="form-group">
+                              <label>
+                                <br>
+                              </label>
+                              <div class="checkbox">
+                                <label>
+                                  <input type="checkbox" data-ng-model="agendamento.pago">&nbsp;&nbsp; Pago
+                                </label>
+                              </div>
+                              <p class="help-block" ng-show="vm.helpActive">Marque esta opção se o serviço teve o pagamento efetuado</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </fieldset>
+            </div>
+
+            <div class="row">
+              <div class="col-xs-6">
+                <a class="btn btn-link" data-ng-click="vm.add()" data-toggle="tooltip" data-placement="top" title="Confirmar agendamento"><span class="fa fa-check"></span><b>&nbsp;&nbsp; Confirmar Agendamento</b></a>
+              </div>
+              <div class="col-xs-6">
+                <a class="btn btn-link pull-right" data-ng-click="vm.incluirAgendamento()" data-toggle="tooltip" data-placement="top" title="Adicionar Serviço"><span class="fa fa-plus"></span><b>&nbsp;&nbsp; Adicionar Serviço</b></a>
               </div>
             </div>
           </form>
@@ -203,19 +227,18 @@
               <tbody>
                 <tr ng-repeat="entry in vm.clientes | filter:vm.filtro">
                   <th>
-                    <input type="checkbox" ng-model="entry.checked" ng-change="vm.updateSelection(entry.id, vm.clientes); vm.selecionarCliente(entry)">
+                    <input type="checkbox" ng-model="entry.checked" ng-change="vm.updateSelection(entry.id, vm.clientes); vm.selectCliente(entry.pessoa)" data-dismiss="modal">
                   </th>
-                  <td>{{entry.nome}}</td>
-                  <td>{{entry.email}}</td>
-                  <td>{{entry.telefone}}</td>
+                  <td>{{entry.pessoa.nome}}</td>
+                  <td>{{entry.pessoa.email}}</td>
+                  <td>{{entry.pessoa.telefone}}</td>
                 </tr>
               </tbody>
             </table>
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
-          <!-- <button type="button" class="btn btn-success" ng-click="vm.selecionarCliente()">Confirmar</button> -->
+          <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.cancelCliente()">Fechar</button>
         </div>
       </div>
     </div>
@@ -227,7 +250,7 @@
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-          <h4 class="modal-title">Detalhese</h4>
+          <h4 class="modal-title">Detalhes</h4>
         </div>
         <div class="modal-body">
           <div class="row">
@@ -238,12 +261,17 @@
                 <p class="help-block" ng-show="vm.helpActive">Nome do animal</p>
               </div>
             </div>
-            <div class="col-xs-12">
-              <div class="form-group">
-                <label>Sexo</label>
-                <input class="form-control" type="text" ng-if="vm.form.animal.sexo === 'M'" value="Macho" ng-readonly="true">
-                <input class="form-control" type="text" ng-if="vm.form.animal.sexo === 'F'" value="Fêmea" ng-readonly="true">
-                <p class="help-block" ng-show="vm.helpActive">Sexo</p>
+            <div class="col-xs-4">
+              <div class="form-group has-feedback">
+                <label class="control-label" for="input">Sexo</label>
+                <div class="input-group" ng-show="vm.form.animal.sexo === 'M'">
+                  <input type="text" class="form-control" id="input" ng-readonly="true" value="Macho">
+                  <span class="form-control-feedback input-group-addon fa fa-mars"></span>
+                </div>
+                <div class="input-group" ng-show="vm.form.animal.sexo === 'F'">
+                  <input type="text" class="form-control" id="input" ng-readonly="true" value="Fêmea">
+                  <span class="form-control-feedback  input-group-addon fa fa-venus"></span>
+                </div>
               </div>
             </div>
             <div class="col-xs-12">
@@ -271,7 +299,6 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
-          <!-- <button type="button" class="btn btn-success" ng-click="vm.selecionarCliente()">Confirmar</button> -->
         </div>
       </div>
     </div>

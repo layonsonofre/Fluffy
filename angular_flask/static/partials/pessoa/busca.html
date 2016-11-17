@@ -102,7 +102,7 @@
                   <td>{{ entry.raca.nome}}</td>
                   <td>{{ entry.porte.nome}}</td>
                   <td>
-                    <button class="btn btn-link" ng-click="vm.detalhes_animal(entry)" data-toggle="tooltip" data-placement="top" title="Ver informações detalhadas">
+                    <button class="btn btn-link" ng-click="vm.detalhes_animal(entry)" data-toggle="modal" data-target="#detalhes_animal" data-toggle="tooltip" data-placement="top" title="Ver informações detalhadas">
                       <span class="fa fa-plus"></span>
                     </button>
                     <button class="btn btn-link" ng-click="vm.editar_animal(entry)" data-toggle="tooltip" data-placement="top" title="Editar estas informações">
@@ -238,6 +238,72 @@
                 <div class="form-group">
                   <label>Insc. Estadual</label>
                   <input class="form-control" type="text" ng-model="vm.form.pessoa.inscricao_estadual" ng-readonly="true">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">OK</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" tabindex="-1" id="detalhes_animal">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title">Detalhes do animal</h4>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-xs-12">
+                <div class="form-group">
+                  <label>Nome</label>
+                  <input class="form-control" type="text" ng-model="vm.form.animal.nome" ng-readonly="true">
+                </div>
+              </div>
+              <div class="col-xs-4">
+                <div class="form-group has-feedback">
+                  <label class="control-label" for="input">Sexo</label>
+                  <div class="input-group" ng-show="vm.form.animal.sexo === 'M'">
+                    <input type="text" class="form-control" id="input" ng-readonly="true" value="Macho">
+                    <span class="form-control-feedback input-group-addon fa fa-mars"></span>
+                  </div>
+                  <div class="input-group" ng-show="vm.form.animal.sexo === 'F'">
+                    <input type="text" class="form-control" id="input" ng-readonly="true" value="Fêmea">
+                    <span class="form-control-feedback  input-group-addon fa fa-venus"></span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-xs-8">
+                <div class="form-group">
+                  <label>Nascimento</label>
+                  <input class="form-control" type="text" ng-model="vm.form.animal.data_nascimento" ng-readonly="true">
+                </div>
+              </div>
+              <div class="col-xs-6">
+                <div class="form-group">
+                  <label>Raça</label>
+                  <input class="form-control" type="text" ng-model="vm.form.animal.raca.nome" ng-readonly="true">
+                </div>
+              </div>
+              <div class="col-xs-6">
+                <div class="form-group">
+                  <label>Porte</label>
+                  <input class="form-control" type="text" ng-model="vm.form.animal.porte.nome" ng-readonly="true">
+                </div>
+              </div>
+              <div class="col-xs-12">
+                <div class="form-group">
+                  <label>Restrições</label>
+                  <ul>
+                    <li data-ng-repeat="r in vm.form.animal.restricoes">{{r.nome}}
+                      <p>{{r.descricao}}</p>
+                    </li>
+                  </ul>
+                  <input class="form-control" type="text" ng-model="vm.form.pessoa.telefone" ng-readonly="true">
                 </div>
               </div>
             </div>

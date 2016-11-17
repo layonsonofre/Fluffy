@@ -8,7 +8,8 @@
       'Consulta', 'Lembrete', 'PessoaTemFuncao', 'PessoaTemRedeSocial', 'Telefone', 'Animal',
       'Estoque', 'Venda', 'Estatisticas', 'modalServiceModule', 'dataStorageService',
       'Authentication', 'Login', 'Raca', 'Porte', 'Especie', 'Restricao', 'Configuracao',
-      'Lote', 'Vacina', 'angularUtils.directives.dirPagination', 'Anamnese', 'AnimalTemRestricao'
+      'Lote', 'Vacina', 'angularUtils.directives.dirPagination', 'Anamnese', 'AnimalTemRestricao',
+      'ServicoTemPorte',
     ])
     .config(['$routeProvider', '$locationProvider', '$httpProvider', 'calendarConfig', 'uibDatepickerPopupConfig',
       function($routeProvider, $locationProvider, $httpProvider, calendarConfig, uibDatepickerPopupConfig) {
@@ -50,20 +51,6 @@
     ])
     .run(function(editableOptions, $rootScope, $http, $location, $window) {
       editableOptions.theme = 'bs3';
-
-      // keep user logged in after page refresh
-      if ($window.localStorage.currentUser) {
-        $http.defaults.headers.common.Authorization = 'Bearer ' + $window.localStorage.currentUser.token;
-      }
-
-      // redirect to login page if not logged in and trying to access a restricted page
-      $rootScope.$on('$locationChangeStart', function(event, next, current) {
-        var publicPages = ['/login'];
-        var restrictedPage = publicPages.indexOf($location.path()) === -1;
-        if (restrictedPage && !$window.localStorage.currentUser) {
-          $location.path('/login');
-        }
-      });
     })
     .filter('capitalize', function() {
       // Create the return function and set the required parameter as well as an optional paramater

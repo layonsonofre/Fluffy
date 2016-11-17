@@ -25,6 +25,7 @@
     var vm = this;
     vm.form = {};
     vm.form.pessoa = dataStorage.getPessoa();
+    vm.form.animal = dataStorage.getAnimal();
     vm.filtro = vm.form.pessoa.nome;
     vm.alterando = false;
 
@@ -125,9 +126,7 @@
     }
 
     function validarAnimal() {
-      // vm.form.animal.data_nascimento = new Date(vm.form.animal.data_nascimento).toISOString();
       vm.form.animal.data_nascimento = new Date(vm.form.animal.data_nascimento).toISOString().substring(0, 19).replace('T', ' ');
-      console.log(vm.form.animal.data_nascimento);
       return true;
     }
 
@@ -373,7 +372,6 @@
         .catch(failed);
 
       function success(response) {
-        console.log('response', response.data.result);
         return response.data.result;
       }
 

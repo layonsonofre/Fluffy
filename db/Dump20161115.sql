@@ -1,10 +1,10 @@
 CREATE DATABASE  IF NOT EXISTS `pet_shop` /*!40100 DEFAULT CHARACTER SET latin1 */;
 USE `pet_shop`;
--- MySQL dump 10.13  Distrib 5.5.52, for debian-linux-gnu (i686)
+-- MySQL dump 10.15  Distrib 10.0.27-MariaDB, for Linux (x86_64)
 --
 -- Host: localhost    Database: pet_shop
 -- ------------------------------------------------------
--- Server version	5.6.31-0ubuntu0.14.04.2
+-- Server version	10.0.27-MariaDB
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -1193,7 +1193,7 @@ UNLOCK TABLES;
 /*!50003 SET character_set_results = utf8 */ ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = '' */ ;
+/*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `pet_shop`.`item_de_venda_BEFORE_INSERT`
 BEFORE INSERT ON `pet_shop`.`item_de_venda`
@@ -1201,6 +1201,7 @@ FOR EACH ROW
 BEGIN
 DECLARE invalid INT;
         DECLARE error_message VARCHAR(100);
+        DECLARE money DECIMAL(10,2);
         
         SET invalid = 0;
 		SET error_message = "";
@@ -1232,6 +1233,11 @@ DECLARE invalid INT;
             SIGNAL SQLSTATE VALUE '45000'
 			SET MESSAGE_TEXT = error_message;
 		END IF;
+        
+        SELECT p.valor INTO money FROM pedido p WHERE p.id = NEW.pedido_id;
+        SET money = money + NEW.preco;
+        
+        UPDATE pedido as p SET p.valor = money WHERE p.id = NEW.pedido_id;
 END */;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -1245,7 +1251,7 @@ DELIMITER ;
 /*!50003 SET character_set_results = utf8 */ ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = '' */ ;
+/*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `pet_shop`.`item_de_venda_BEFORE_UPDATE`
 BEFORE UPDATE ON `pet_shop`.`item_de_venda`
@@ -1253,6 +1259,7 @@ FOR EACH ROW
 BEGIN
 DECLARE invalid INT;
         DECLARE error_message VARCHAR(100);
+        DECLARE money DECIMAL(10,2);
         
         SET invalid = 0;
 		SET error_message = "";
@@ -1284,6 +1291,36 @@ DECLARE invalid INT;
             SIGNAL SQLSTATE VALUE '45000'
 			SET MESSAGE_TEXT = error_message;
 		END IF;
+        
+        SELECT p.valor INTO money FROM pedido p WHERE p.id = NEW.pedido_id;
+        SET money = money + NEW.preco;
+        
+        UPDATE pedido as p SET p.valor = money WHERE p.id = NEW.pedido_id;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `pet_shop`.`item_de_venda_BEFORE_DELETE` 
+BEFORE DELETE ON `item_de_venda` 
+FOR EACH ROW
+BEGIN
+	DECLARE money DECIMAL(10,2);
+        
+	SELECT p.valor INTO money FROM pedido p WHERE p.id = OLD.pedido_id;
+	SET money = money - OLD.preco;
+        
+	UPDATE pedido as p SET p.valor = money WHERE p.id = OLD.pedido_id;
 END */;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -1408,7 +1445,7 @@ CREATE TABLE `log` (
   `metodo` varchar(10) NOT NULL,
   `data_hora` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1417,7 +1454,7 @@ CREATE TABLE `log` (
 
 LOCK TABLES `log` WRITE;
 /*!40000 ALTER TABLE `log` DISABLE KEYS */;
-INSERT INTO `log` VALUES (1,'(1644, u\'Imposs\\xedvel inserir campo nulo\')','pessoa','{u\'uf\': u\'PA\', u\'id\': 17}','POST','2016-11-04 00:48:20'),(2,'(1644, u\'Nenhuma informa\\xe7\\xe3o foi alterada\')','pessoa','{u\'bairro\': u\'Alameda\', u\'id\': 1}','PUT','2016-11-07 22:25:56'),(3,'(1644, u\'Nenhuma informa\\xe7\\xe3o foi alterada\')','pessoa','{u\'bairro\': u\'Alameda\', u\'id\': 1}','PUT','2016-11-07 22:27:26'),(4,'(1054, u\"Unknown column \'bairrp\' in \'field list\'\")','pessoa','{u\'bairro\': u\'Alameda\', u\'id\': 1}','PUT','2016-11-07 22:29:05');
+INSERT INTO `log` VALUES (1,'(1644, u\'Imposs\\xedvel inserir campo nulo\')','pessoa','{u\'uf\': u\'PA\', u\'id\': 17}','POST','2016-11-04 00:48:20'),(2,'(1644, u\'Nenhuma informa\\xe7\\xe3o foi alterada\')','pessoa','{u\'bairro\': u\'Alameda\', u\'id\': 1}','PUT','2016-11-07 22:25:56'),(3,'(1644, u\'Nenhuma informa\\xe7\\xe3o foi alterada\')','pessoa','{u\'bairro\': u\'Alameda\', u\'id\': 1}','PUT','2016-11-07 22:27:26'),(4,'(1054, u\"Unknown column \'bairrp\' in \'field list\'\")','pessoa','{u\'bairro\': u\'Alameda\', u\'id\': 1}','PUT','2016-11-07 22:29:05'),(5,'(1644, u\'Imposs\\xedvel inserir campo nulo\')','transacao','{}','POST','2016-11-08 08:52:02'),(6,'(1644, u\'Necess\\xe1rio informar c\\xf3digo de registro\')','servicoContratado','{u\'pessoa_tem_funcao\': 3, u\'preco\': 0, u\'transacao_id\': 7}','POST','2016-11-08 08:53:33'),(7,'(1644, u\'Imposs\\xedvel inserir campo nulo\')','servicoAgendado','{u\'animal_id\': 3, u\'servico_contratado_id\': 5, u\'pago\': 0, u\'observacao\': u\'SERVICO URGENTE\', u\'recorrente\': 0, u\'executado\': 0, u\'data_hora\': u\'2016-11-11 09:00:00\', u\'servico_id\': 2}','POST','2016-11-08 08:57:31'),(8,'(1644, u\'data hora inv\\xe1lido!\')','servicoAgendado','{u\'animal_id\': 3, u\'servico_contratado_id\': 5, u\'pago\': 0, u\'observacao\': u\'SERVICO URGENTE\', u\'recorrente\': 0, u\'executado\': 0, u\'preco\': 34, u\'data_hora\': u\'2016-11-11 09:00:00\', u\'servico_id\': 2}','POST','2016-11-08 08:57:54'),(9,'(1644, u\'data hora inv\\xe1lido!\')','servicoAgendado','{u\'animal_id\': 3, u\'servico_contratado_id\': 5, u\'pago\': 0, u\'observacao\': u\'SERVICO URGENTE\', u\'recorrente\': 0, u\'executado\': 0, u\'preco\': 34, u\'data_hora\': u\'2016-11-15 09:00:00\', u\'servico_id\': 2}','POST','2016-11-08 08:58:23'),(10,'(1644, u\'data hora inv\\xe1lido!\')','servicoAgendado','{u\'animal_id\': 3, u\'servico_contratado_id\': 5, u\'pago\': 0, u\'observacao\': u\'SERVICO URGENTE\', u\'recorrente\': 0, u\'executado\': 0, u\'preco\': 34, u\'data_hora\': u\'2016-11-15\', u\'servico_id\': 2}','POST','2016-11-08 09:01:31'),(11,'(1644, u\'data hora inv\\xe1lido!\')','servicoAgendado','{u\'animal_id\': 3, u\'servico_contratado_id\': 5, u\'pago\': 0, u\'observacao\': u\'SERVICO URGENTE\', u\'recorrente\': 0, u\'executado\': 0, u\'preco\': 34, u\'data_hora\': u\'2016-11-15 09:00:00\', u\'servico_id\': 2}','POST','2016-11-08 09:03:50'),(12,'(1644, u\'data hora inv\\xe1lido!\')','servicoAgendado','{u\'animal_id\': 3, u\'servico_contratado_id\': 5, u\'pago\': 0, u\'recorrente\': 0, u\'executado\': 0, u\'preco\': 34, u\'data_hora\': u\'2016-11-15 09:00:00\', u\'servico_id\': 2}','POST','2016-11-08 09:06:50'),(13,'(1644, u\'data hora inv\\xe1lido!\')','servicoAgendado','{u\'animal_id\': 3, u\'servico_contratado_id\': 5, u\'pago\': 0, u\'recorrente\': 0, u\'executado\': 0, u\'preco\': 34, u\'data_hora\': u\'2016-11-15 09:00:00\', u\'servico_id\': 2}','POST','2016-11-08 09:09:35'),(14,'(1644, u\'data hora inv\\xe1lido!\')','servicoAgendado','{u\'animal_id\': 3, u\'servico_contratado_id\': 5, u\'pago\': 0, u\'recorrente\': 0, u\'executado\': 0, u\'preco\': 34, u\'data_hora\': u\'2016-11-15 09:00:00\', u\'servico_id\': 2}','POST','2016-11-08 09:09:38'),(15,'(1644, u\'data hora inv\\xe1lido!\')','servicoAgendado','{u\'animal_id\': 3, u\'servico_contratado_id\': 5, u\'pago\': 0, u\'recorrente\': 0, u\'executado\': 0, u\'preco\': 34, u\'data_hora\': u\'asdasd\', u\'servico_id\': 2}','POST','2016-11-08 09:10:49'),(16,'(1644, u\'data hora inv\\xe1lido!\')','servicoAgendado','{u\'animal_id\': 3, u\'servico_contratado_id\': 5, u\'pago\': 0, u\'recorrente\': 0, u\'executado\': 0, u\'preco\': 34, u\'data_hora\': u\'2016-11-15 09:00:00\', u\'servico_id\': 2}','POST','2016-11-08 09:11:23'),(17,'(1644, u\'Imposs\\xedvel inserir campo nulo\')','servicoAgendado','{}','POST','2016-11-08 09:34:12'),(18,'(1644, u\'Imposs\\xedvel inserir campo nulo\')','servicoAgendado','{u\'animal_id\': 3, u\'pago\': 0, u\'recorrente\': 0, u\'executado\': 0, u\'preco\': 50, u\'servico_id\': 4, u\'servico_contratado\': 5, u\'pessoa_tem_funcao_funcionario_id\': 3}','POST','2016-11-08 23:20:24');
 /*!40000 ALTER TABLE `log` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1562,7 +1599,7 @@ CREATE TABLE `oauth` (
   `refresh_token` varchar(100) DEFAULT NULL COMMENT 'Token para atualizar a autenticação',
   `valido` tinyint(4) NOT NULL COMMENT 'Controle da validade do token',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1571,6 +1608,7 @@ CREATE TABLE `oauth` (
 
 LOCK TABLES `oauth` WRITE;
 /*!40000 ALTER TABLE `oauth` DISABLE KEYS */;
+INSERT INTO `oauth` VALUES (1,'2016-11-13 22:17:28','2016-11-14 01:17:28','2ce896e5-196a-4c9f-aa8f-318f4a9c2327','f87d79ab-03fe-4d3e-9d67-9e72b2404e79',1),(2,'2016-11-14 19:45:04','2016-11-14 22:45:04','249a1d3e-755b-47fe-84af-0e0d7409331c','46b74327-b9d2-48d2-9df9-6eed47bb1550',1),(3,'2016-11-14 19:54:24','2016-11-14 22:54:24','eac17414-3771-473b-8f3a-f3190d3c7144','a27b7c23-8dcc-4299-a1a9-0636b7bd5062',1),(4,'2016-11-14 19:57:31','2016-11-14 22:57:31','e4afde13-056f-488c-bfbe-2ef0c094a12d','0adadacf-bd58-43fd-9820-b6de54f264a5',1),(5,'2016-11-14 20:12:44','2016-11-14 23:12:44','ae3a17f5-e2d4-4823-a222-f1af184963f5','625b6b26-97a4-437e-a310-51bf161d8b23',1),(6,'2016-11-14 20:13:58','2016-11-14 23:13:58','995e67ca-d8aa-450c-9517-50f11d6bb22a','1104e092-af55-47f3-ae2d-a76013597136',1),(7,'2016-11-14 20:14:30','2016-11-14 23:14:30','e9e26e7d-071b-4047-ad50-4d6ce0401533','f9694d64-e1f0-471a-9365-3d9c5bb95166',1),(8,'2016-11-14 20:16:04','2016-11-14 23:16:04','71db9e3c-0e5e-401c-81c0-c53b494d93d4','0747d28a-a086-4c9c-9b1c-0f39f073735e',1),(9,'2016-11-14 20:17:22','2016-11-14 23:17:22','7fc87d39-3cec-4e00-b1a4-01194f55c963','6bf133e5-825b-4a7b-b0ec-5940dbaff7e6',1),(10,'2016-11-14 20:17:38','2016-11-14 23:17:38','4b975134-3276-4601-8c2f-635f6b3e6557','b03fea96-8848-45bf-aa54-cbc176eac689',1),(11,'2016-11-14 20:28:35','2016-11-14 23:28:35','c9047374-98fe-4555-be3c-53eab2d2dc85','40fe7415-5236-4431-96c3-8c1753bba342',1),(12,'2016-11-14 20:29:06','2016-11-14 23:29:06','c0b0ea7c-8784-4b87-b189-2fb46612e4ca','7d1c4a7d-2925-4da2-b7d3-c560b0edf35e',1),(13,'2016-11-14 20:30:03','2016-11-14 23:30:03','46deacca-fb46-4951-a44d-585a6de5c555','3a7456d6-a4e6-44b5-b040-b7a3b93fc593',1),(14,'2016-11-14 20:35:41','2016-11-14 23:35:41','889afd3a-bee9-49c2-bd96-8a75d24e9cd0','48698fd7-be90-4e4a-8fe7-1ab6d2307b28',1),(15,'2016-11-14 20:36:31','2016-11-14 23:36:31','7abfa392-205f-45de-901d-796d33ac2ce3','6620e418-cd12-4351-bef2-ec629bf62fd2',1),(16,'2016-11-14 20:36:38','2016-11-14 23:36:38','469c0c6a-4af1-43cd-abbf-ca32978a2c28','0fab639e-ece5-432a-8ecc-7036123d13b0',1),(17,'2016-11-14 20:38:38','2016-11-14 23:38:38','4a7492f7-ac0e-437f-aaf3-15d15821e4e4','531cb199-16e1-4876-a4b3-c051c7c6ff0e',1),(18,'2016-11-14 20:38:40','2016-11-14 23:38:40','1271fe14-560a-4ca7-9767-c979ffe2cfb8','ef159744-2b15-4fa2-a808-53201260cdb3',1),(19,'2016-11-14 20:38:56','2016-11-14 23:38:56','543091c4-958e-4c55-bfb7-37dab091b04a','982ffdd5-ff6d-4df9-b56a-59f1fc0e7a40',1),(20,'2016-11-14 20:39:14','2016-11-14 23:39:14','2b9d56d4-5efb-4fa5-b1ab-aa85bf5d281c','36b75385-8dbe-4b3c-8e9d-1ee982bde661',1),(21,'2016-11-14 20:39:26','2016-11-14 23:39:26','067c6f93-b875-4c9f-bcaa-c08601a8ca43','1c4d37b3-5ca7-4ee0-9355-2b4bf2d55f57',1),(22,'2016-11-14 20:39:46','2016-11-14 23:39:46','7c2ec47b-2f05-41bc-aafa-c14ec38c25dd','d1911310-f9e7-4263-a84c-9967019fbfaf',1),(23,'2016-11-14 20:40:16','2016-11-14 23:40:16','b5b6d69b-3c72-482d-9599-baed3641fbf2','119861f9-7957-4039-bb80-dd0fdfa06dda',1),(24,'2016-11-14 21:09:33','2016-11-15 00:09:33','ac4114c3-877b-4fb1-95ff-82a37067db3c','45c1a157-d949-4a82-b37d-9310774da597',1),(25,'2016-11-14 21:09:37','2016-11-15 00:09:37','eaca25c5-a967-46ee-86fe-fdf660ff1371','4877d0f2-5330-45e7-be9c-7c986240d2f5',1),(26,'2016-11-14 21:09:38','2016-11-15 00:09:38','09776284-0bd7-4add-bb50-c48bac46b7d7','a4d8690d-d8e2-4872-b54a-9a3f7672fc9e',1),(27,'2016-11-14 21:10:45','2016-11-15 00:10:45','8b6a72f7-88b9-498e-a9e3-f49f4fa41d68','21b161f8-b7ed-4475-ac37-5f14b9e3c038',1),(28,'2016-11-14 21:11:16','2016-11-15 00:11:16','8cf30ab8-7600-4ca7-9321-e82fa6078261','eb497f2e-9e9b-4d5c-aa36-f71a16fbf157',1),(29,'2016-11-14 21:12:09','2016-11-15 00:12:09','2ef66179-98e1-4ff3-a3a9-88dfd0960369','7930cfa0-3170-4d00-8ecb-d57512e2c19b',1),(30,'2016-11-14 21:40:11','2016-11-15 00:40:11','ff964dae-f823-4808-be80-a5223d53db85','3d9ace3b-4526-45f1-87f5-0820a645e449',1),(31,'2016-11-14 21:41:13','2016-11-15 00:41:13','7dd2c07d-5085-47de-9f2d-4ab752c5d690','7950d358-9a04-4cf6-bb90-90fc36c95577',1),(32,'2016-11-14 21:52:57','2016-11-15 00:52:57','b5a76087-7ad4-4366-82c5-b928b5050586','770f6044-3371-4a5c-a839-eb234239f7df',1),(33,'2016-11-14 21:54:58','2016-11-15 00:54:58','9c457fde-8ec0-4c46-a497-dd249d8e50eb','b870bd7b-0ff9-4989-9d66-2e73e087d516',1),(34,'2016-11-14 21:56:37','2016-11-15 00:56:37','2fb6c195-7d7d-4487-90df-6bf01a127436','de5ac784-4bf3-4ffe-b65f-0de02fed7e88',1),(35,'2016-11-14 21:57:42','2016-11-15 00:57:42','a8fe50a8-a0cc-4d2e-9b72-0dfb454b4596','f95c14da-ef6a-40ea-821a-c0b2f28780af',1),(36,'2016-11-14 21:59:26','2016-11-15 00:59:26','35c312c5-a45b-483a-b0bb-d56a74b9be69','b1b77ba1-43f4-4fda-9c1f-28a332cd1a86',1),(37,'2016-11-14 22:03:08','2016-11-15 01:03:08','748b1ecd-390f-44e1-9dfd-71d8d0058476','66120106-acea-4adf-b6ea-c63a23107f8f',1),(38,'2016-11-14 22:04:38','2016-11-15 01:04:38','984ff67a-80a8-4f81-93c1-720951201447','da8758d6-67b0-48fc-88eb-25fd26eb8614',1),(39,'2016-11-14 22:04:52','2016-11-15 01:04:52','07f9fa21-f0f8-4c76-9881-7eba4e751d0d','f7125733-a337-4b75-a7f4-1e68d6af3621',1),(40,'2016-11-14 22:05:13','2016-11-15 01:05:13','f747e3bd-4ed6-4702-8d40-6fdf866146de','704c0045-4682-465c-bf3b-c070400b92a0',1),(41,'2016-11-14 23:11:36','2016-11-15 02:11:36','2e60240e-f168-43f6-bcd1-223d1aef4782','1e399d9a-4780-4e10-a6a2-2b680c3f74bc',1),(42,'2016-11-14 23:14:28','2016-11-15 02:14:28','fe10d71d-e215-42b7-a994-552e67610695','e8f9bd3f-9deb-45db-9792-785897af3f75',1),(43,'2016-11-14 23:19:09','2016-11-15 02:19:09','3cae5815-a017-4ccf-86ee-d08e6a06b29d','46182e4f-2ef9-446a-aad8-af449a7e5c7f',1),(44,'2016-11-14 23:42:54','2016-11-15 02:42:54','6a206b63-f91c-495a-9247-031fa2c52e85','07d53495-e733-4870-8c46-d981eea911ba',1),(45,'2016-11-15 00:02:36','2016-11-15 03:02:36','88603019-9077-4e49-bd70-96523ab420f5','82263e2b-3312-4c9e-8b9c-97370629a094',1),(46,'2016-11-15 09:25:46','2016-11-15 12:25:46','e7d3ccea-810a-4fae-a5a0-2b07f83ba6d7','70559400-ca27-4fc4-a556-db7073699ec0',1);
 /*!40000 ALTER TABLE `oauth` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1595,7 +1633,7 @@ CREATE TABLE `pedido` (
   CONSTRAINT `fk_pedido_pessoa_tem_funcao1` FOREIGN KEY (`cliente_id`) REFERENCES `pessoa_tem_funcao` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_pedido_pessoa_tem_funcao2` FOREIGN KEY (`funcionario_id`) REFERENCES `pessoa_tem_funcao` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_pedido_transacao1` FOREIGN KEY (`transacao_id`) REFERENCES `transacao` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1604,7 +1642,7 @@ CREATE TABLE `pedido` (
 
 LOCK TABLES `pedido` WRITE;
 /*!40000 ALTER TABLE `pedido` DISABLE KEYS */;
-INSERT INTO `pedido` VALUES (1,22.00,2.00,3,1,3),(2,95.00,5.00,2,2,3);
+INSERT INTO `pedido` VALUES (1,22.00,2.00,3,1,3),(2,95.00,5.00,2,2,3),(3,0.00,0.00,7,1,3);
 /*!40000 ALTER TABLE `pedido` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -1614,7 +1652,7 @@ UNLOCK TABLES;
 /*!50003 SET character_set_results = utf8 */ ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = '' */ ;
+/*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `pet_shop`.`pedido_BEFORE_INSERT`
 BEFORE INSERT ON `pet_shop`.`pedido`
@@ -1624,6 +1662,8 @@ BEGIN
         DECLARE pessoa_funcionario VARCHAR(50);
 		DECLARE invalid INT;
         DECLARE error_message VARCHAR(100);
+        
+        DECLARE money DECIMAL(10,2);
         
         SET invalid = 0;
 		SET error_message = "";
@@ -1675,6 +1715,12 @@ BEGIN
             SIGNAL SQLSTATE VALUE '45000'
 			SET MESSAGE_TEXT = error_message;
 		END IF;
+        
+        SELECT t.valor INTO money FROM transacao t WHERE t.id = NEW.transacao_id;
+        SET money = money + (NEW.valor - NEW.desconto);
+        
+        UPDATE transacao as t SET t.valor = money WHERE t.id = NEW.transacao_id;
+        
 END */;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -1688,7 +1734,7 @@ DELIMITER ;
 /*!50003 SET character_set_results = utf8 */ ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = '' */ ;
+/*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `pet_shop`.`pedido_BEFORE_UPDATE`
 BEFORE UPDATE ON `pet_shop`.`pedido`
@@ -1698,6 +1744,8 @@ BEGIN
         DECLARE pessoa_funcionario VARCHAR(50);
 		DECLARE invalid INT;
         DECLARE error_message VARCHAR(100);
+        
+        DECLARE money DECIMAL(10,2);
         
         SET invalid = 0;
 		SET error_message = "";
@@ -1749,6 +1797,39 @@ BEGIN
             SIGNAL SQLSTATE VALUE '45000'
 			SET MESSAGE_TEXT = error_message;
 		END IF;
+        
+        SELECT t.valor INTO money FROM transacao t WHERE t.id = NEW.transacao_id;
+        SET money = money + ((NEW.valor - OLD.valor) - (NEW.desconto - OLD.desconto));
+        
+        UPDATE transacao as t SET t.valor = money WHERE t.id = NEW.transacao_id;
+        
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `pet_shop`.`pedido_BEFORE_DELETE` 
+BEFORE DELETE ON `pedido` 
+FOR EACH ROW
+BEGIN
+	DECLARE money DECIMAL(10,2);
+    
+    SELECT t.valor INTO money FROM transacao t WHERE t.id = OLD.transacao_id;
+	SET money = money - (OLD.valor - OLD.desconto);
+        
+	UPDATE transacao as t SET t.valor = money WHERE t.id = OLD.transacao_id;
+        
+
 END */;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -2888,7 +2969,7 @@ CREATE TABLE `servico_agendado` (
   CONSTRAINT `fk_servico_agendado_pessoa_tem_funcao1` FOREIGN KEY (`funcionario_executa_id`) REFERENCES `pessoa_tem_funcao` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_servico_agendado_servico_contratado1` FOREIGN KEY (`servico_contratado_id`) REFERENCES `servico_contratado` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_servico_agendado_servico_tem_porte1` FOREIGN KEY (`servico_tem_porte_id`) REFERENCES `servico_tem_porte` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2897,7 +2978,7 @@ CREATE TABLE `servico_agendado` (
 
 LOCK TABLES `servico_agendado` WRITE;
 /*!40000 ALTER TABLE `servico_agendado` DISABLE KEYS */;
-INSERT INTO `servico_agendado` VALUES (1,28.00,0,'2016-09-06 09:00:00',14,2,1,1,1,NULL,'2016-09-06 10:31:00',3),(2,28.00,0,'2016-09-06 10:00:00',14,3,1,1,1,NULL,'2016-09-06 11:00:00',3),(3,100.00,0,'2016-09-06 10:00:00',62,2,1,1,1,NULL,'2016-09-06 11:00:00',3),(4,50.00,0,'2016-09-12 09:00:00',8,3,2,0,1,NULL,NULL,NULL),(5,20.00,0,'2016-09-12 10:00:00',33,4,2,0,1,NULL,NULL,NULL),(6,36.00,0,'2016-09-12 13:00:00',28,5,2,0,1,NULL,NULL,NULL),(7,7.00,0,'2016-09-12 14:00:00',19,6,2,0,1,NULL,NULL,NULL),(8,171.00,0,'2016-09-15 11:00:00',62,1,3,0,1,NULL,NULL,NULL);
+INSERT INTO `servico_agendado` VALUES (1,28.00,0,'2016-09-06 09:00:00',14,2,1,1,1,NULL,'2016-09-06 10:31:00',3),(2,28.00,0,'2016-09-06 10:00:00',14,3,1,1,1,NULL,'2016-09-06 11:00:00',3),(3,100.00,0,'2016-09-06 10:00:00',62,2,1,1,1,NULL,'2016-09-06 11:00:00',3),(4,50.00,0,'2016-09-12 09:00:00',8,3,2,0,1,NULL,NULL,NULL),(5,20.00,0,'2016-09-12 10:00:00',33,4,2,0,1,NULL,NULL,NULL),(6,36.00,0,'2016-09-12 13:00:00',28,5,2,0,1,NULL,NULL,NULL),(7,7.00,0,'2016-09-12 14:00:00',19,6,2,0,1,NULL,NULL,NULL),(8,171.00,0,'2016-09-15 11:00:00',62,1,3,0,1,NULL,NULL,NULL),(19,10.00,0,'2016-11-12 00:00:00',23,1,8,0,0,NULL,NULL,NULL),(20,10.00,0,'2016-11-12 00:00:00',23,1,8,0,0,NULL,NULL,NULL),(21,10.00,0,'2016-11-12 00:00:00',23,1,8,0,0,NULL,NULL,NULL),(24,55.00,0,'2016-11-15 08:00:00',22,1,55,0,0,NULL,NULL,NULL),(25,55.00,0,'2016-11-15 09:00:00',22,1,56,0,0,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `servico_agendado` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -2907,7 +2988,7 @@ UNLOCK TABLES;
 /*!50003 SET character_set_results = utf8 */ ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = '' */ ;
+/*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `pet_shop`.`servico_agendado_BEFORE_INSERT`
 BEFORE INSERT ON `pet_shop`.`servico_agendado`
@@ -2917,6 +2998,8 @@ BEGIN
         DECLARE tipo_pessoa VARCHAR(50);
         DECLARE invalid INT;
         DECLARE error_message VARCHAR(100);
+        
+        DECLARE money DECIMAL(10,2);
         
         SET invalid = 0;
 		SET error_message = "";
@@ -2940,15 +3023,15 @@ BEGIN
 			END IF;
 		END IF;
         
-        #SELECT COUNT(*) INTO numero_animais FROM animais_dia WHERE data_hora = NEW.data_hora;
-		#IF(numero_animais >= (SELECT quantidade_animais FROM configuracao)) THEN
-		#	SET invalid = invalid + 1;
-		#	IF (invalid > 1) THEN
-		#		SET error_message = CONCAT(error_message, ", data hora");
-		#	ELSE
-		#		SET error_message = CONCAT(error_message, "data hora");
-		#	END IF;
-		#END IF;
+        
+		
+		
+		
+		
+		
+		
+		
+		
         
         IF (invalid > 0) THEN
 			IF (invalid > 1) THEN
@@ -2959,6 +3042,11 @@ BEGIN
             SIGNAL SQLSTATE VALUE '45000'
 			SET MESSAGE_TEXT = error_message;
 		END IF;
+        
+        SELECT sc.preco INTO money FROM servico_contratado sc WHERE sc.id = NEW.servico_contratado_id;
+        SET money = money + NEW.preco;
+        
+        UPDATE servico_contratado as sc SET sc.preco = money WHERE sc.id = NEW.servico_contratado_id;
 END */;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -2972,7 +3060,7 @@ DELIMITER ;
 /*!50003 SET character_set_results = utf8 */ ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = '' */ ;
+/*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `pet_shop`.`servico_agendado_BEFORE_UPDATE`
 BEFORE UPDATE ON `pet_shop`.`servico_agendado`
@@ -2982,6 +3070,8 @@ DECLARE numero_animais INT;
         DECLARE tipo_pessoa VARCHAR(50);
         DECLARE invalid INT;
         DECLARE error_message VARCHAR(100);
+        
+        DECLARE money DECIMAL(10,2);
         
         SET invalid = 0;
 		SET error_message = "";
@@ -3005,15 +3095,15 @@ DECLARE numero_animais INT;
 			END IF;
 		END IF;
         
-        #SELECT COUNT(*) INTO numero_animais FROM animais_dia WHERE data_hora = NEW.data_hora;
-		#IF(numero_animais <= (SELECT quantidade_animais FROM configuracao)) THEN
-		#	SET invalid = invalid + 1;
-		#	IF (invalid > 1) THEN
-		#		SET error_message = CONCAT(error_message, ", data hora");
-		#	ELSE
-		#		SET error_message = CONCAT(error_message, "data hora");
-		#	END IF;
-		#END IF;
+        
+		
+		
+		
+		
+		
+		
+		
+		
         
         IF (invalid > 0) THEN
 			IF (invalid > 1) THEN
@@ -3024,6 +3114,38 @@ DECLARE numero_animais INT;
             SIGNAL SQLSTATE VALUE '45000'
 			SET MESSAGE_TEXT = error_message;
 		END IF;
+        
+        SELECT sc.preco INTO money FROM servico_contratado sc WHERE sc.id = NEW.servico_contratado_id;
+        SET money = money + (NEW.preco - OLD.preco);
+        
+        UPDATE servico_contratado as sc SET sc.preco = money WHERE sc.id = NEW.servico_contratado_id;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `pet_shop`.`servico_agendado_BEFORE_DELETE` 
+BEFORE DELETE ON `servico_agendado` 
+FOR EACH ROW
+BEGIN
+	DECLARE money DECIMAL(10,2);
+    
+    SELECT sc.preco INTO money FROM servico_contratado sc WHERE sc.id = OLD.servico_contratado_id;
+	SET money = money - OLD.preco;
+        
+	UPDATE servico_contratado as sc SET sc.preco = money WHERE sc.id = OLD.servico_contratado_id;
+
+
 END */;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -3049,7 +3171,7 @@ CREATE TABLE `servico_contratado` (
   KEY `fk_servico_contratado_transacao1_idx` (`transacao_id`),
   CONSTRAINT `fk_servico_contratado_pessoa_tem_funcao1` FOREIGN KEY (`pessoa_tem_funcao_id_funcionario`) REFERENCES `pessoa_tem_funcao` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_servico_contratado_transacao1` FOREIGN KEY (`transacao_id`) REFERENCES `transacao` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=59 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -3058,7 +3180,7 @@ CREATE TABLE `servico_contratado` (
 
 LOCK TABLES `servico_contratado` WRITE;
 /*!40000 ALTER TABLE `servico_contratado` DISABLE KEYS */;
-INSERT INTO `servico_contratado` VALUES (1,3,156.00,'2016-09-10 02:52:52',1),(2,3,113.00,'2016-09-10 02:52:52',2),(3,3,171.00,'2016-09-10 02:52:52',3),(4,3,0.00,'2016-09-10 02:52:52',4);
+INSERT INTO `servico_contratado` VALUES (1,3,156.00,'2016-09-10 02:52:52',1),(2,3,113.00,'2016-09-10 02:52:52',2),(3,3,171.00,'2016-09-10 02:52:52',3),(4,3,0.00,'2016-09-10 02:52:52',4),(8,3,30.00,'2016-11-11 00:03:14',17),(9,3,0.00,'2016-11-15 09:50:40',18),(10,3,0.00,'2016-11-15 10:00:25',19),(11,3,0.00,'2016-11-15 10:04:32',20),(12,3,0.00,'2016-11-15 10:04:40',21),(13,3,0.00,'2016-11-15 10:08:51',22),(14,3,0.00,'2016-11-15 10:12:19',23),(15,3,0.00,'2016-11-15 10:12:59',24),(16,3,0.00,'2016-11-15 10:15:23',25),(17,3,0.00,'2016-11-15 10:16:39',26),(18,3,0.00,'2016-11-15 10:18:22',27),(19,3,0.00,'2016-11-15 10:20:04',28),(20,3,0.00,'2016-11-15 10:22:09',29),(21,3,0.00,'2016-11-15 10:23:08',30),(22,3,0.00,'2016-11-15 10:25:01',31),(23,3,0.00,'2016-11-15 10:27:22',32),(24,3,0.00,'2016-11-15 10:27:53',33),(25,3,0.00,'2016-11-15 10:29:16',34),(26,3,0.00,'2016-11-15 10:29:34',35),(27,3,0.00,'2016-11-15 10:30:29',36),(28,3,0.00,'2016-11-15 10:33:25',37),(29,3,0.00,'2016-11-15 10:34:31',38),(30,3,0.00,'2016-11-15 10:38:12',39),(31,3,0.00,'2016-11-15 10:42:56',40),(32,3,0.00,'2016-11-15 10:47:32',41),(33,3,0.00,'2016-11-15 10:48:23',42),(34,3,0.00,'2016-11-15 10:49:16',43),(35,3,0.00,'2016-11-15 10:49:55',44),(36,3,0.00,'2016-11-15 10:50:45',45),(37,3,0.00,'2016-11-15 10:51:08',46),(38,3,0.00,'2016-11-15 10:51:46',47),(39,3,0.00,'2016-11-15 10:52:11',48),(40,3,0.00,'2016-11-15 10:53:08',49),(41,3,0.00,'2016-11-15 10:54:13',50),(42,3,0.00,'2016-11-15 10:55:17',51),(43,3,0.00,'2016-11-15 10:55:47',52),(44,3,0.00,'2016-11-15 10:56:25',53),(45,3,0.00,'2016-11-15 10:57:06',54),(46,3,0.00,'2016-11-15 10:59:34',55),(47,3,0.00,'2016-11-15 11:00:19',56),(48,3,0.00,'2016-11-15 11:01:44',57),(49,3,0.00,'2016-11-15 11:02:19',58),(50,3,0.00,'2016-11-15 11:03:07',59),(51,3,0.00,'2016-11-15 11:04:48',60),(52,3,0.00,'2016-11-15 11:06:24',61),(53,3,0.00,'2016-11-15 11:07:32',62),(54,3,0.00,'2016-11-15 11:09:06',63),(55,3,55.00,'2016-11-15 11:12:53',64),(56,3,55.00,'2016-11-15 11:13:26',65),(57,3,0.00,'2016-11-15 18:07:30',64),(58,3,0.00,'2016-11-15 18:50:48',64);
 /*!40000 ALTER TABLE `servico_contratado` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -3068,7 +3190,7 @@ UNLOCK TABLES;
 /*!50003 SET character_set_results = utf8 */ ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = '' */ ;
+/*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `pet_shop`.`servico_contratado_BEFORE_INSERT`
 BEFORE INSERT ON `pet_shop`.`servico_contratado`
@@ -3077,6 +3199,8 @@ BEGIN
 		DECLARE tipo_pessoa VARCHAR(50);
         DECLARE invalid INT;
         DECLARE error_message VARCHAR(100);
+        
+        DECLARE money DECIMAL(10,2);
         
         SET invalid = 0;
 		SET error_message = "";
@@ -3118,6 +3242,11 @@ BEGIN
             SIGNAL SQLSTATE VALUE '45000'
 			SET MESSAGE_TEXT = error_message;
 		END IF;
+        
+        SELECT t.valor INTO money FROM transacao as t WHERE t.id = NEW.transacao_id;
+        SET money = money + NEW.preco;
+        
+        UPDATE transacao as t SET t.valor = money WHERE t.id = NEW.transacao_id;
 END */;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -3131,7 +3260,7 @@ DELIMITER ;
 /*!50003 SET character_set_results = utf8 */ ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = '' */ ;
+/*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `pet_shop`.`servico_contratado_BEFORE_UPDATE`
 BEFORE UPDATE ON `pet_shop`.`servico_contratado`
@@ -3140,6 +3269,8 @@ BEGIN
 DECLARE tipo_pessoa VARCHAR(50);
         DECLARE invalid INT;
         DECLARE error_message VARCHAR(100);
+        
+        DECLARE money DECIMAL(10,2);
         
         SET invalid = 0;
 		SET error_message = "";
@@ -3150,15 +3281,6 @@ DECLARE tipo_pessoa VARCHAR(50);
 				SET error_message = CONCAT(error_message, ", preco");
             ELSE
 				SET error_message = CONCAT(error_message, "preco");
-            END IF;
-		END IF;
-        
-        IF (NEW.data_hora <> NOW()) THEN
-			SET invalid = invalid + 1;
-            IF (invalid > 1) THEN
-				SET error_message = CONCAT(error_message, ", data hora");
-            ELSE
-				SET error_message = CONCAT(error_message, "data hora");
             END IF;
 		END IF;
 		
@@ -3181,6 +3303,39 @@ DECLARE tipo_pessoa VARCHAR(50);
             SIGNAL SQLSTATE VALUE '45000'
 			SET MESSAGE_TEXT = error_message;
 		END IF;
+        
+        SELECT t.valor INTO money FROM transacao as t WHERE t.id = NEW.transacao_id;
+        SET money = money + (NEW.preco - OLD.preco);
+        
+        UPDATE transacao as t SET t.valor = money WHERE t.id = NEW.transacao_id;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `pet_shop`.`servico_contratado_BEFORE_DELETE` 
+BEFORE DELETE ON `servico_contratado` 
+FOR EACH ROW
+BEGIN
+	
+    DECLARE money DECIMAL(10,2);
+
+	SELECT t.valor INTO money FROM transacao as t WHERE t.id = OLD.transacao_id;
+	SET money = money - OLD.preco;
+        
+	UPDATE transacao as t SET t.valor = money WHERE t.id = OLD.transacao_id;
+
+
 END */;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -3354,14 +3509,14 @@ BEGIN
             END IF;
 	END IF;
     
-    #IF NOT (SELECT NEW.codigo_area REGEXP '^0[0-9]{2}$') THEN
-	#	SET invalid = invalid + 1;
-    #        IF (invalid > 1) THEN
-	#			SET error_message = CONCAT(error_message, ", codigo area");
-    #        ELSE
-	#			SET error_message = CONCAT(error_message, "codigo area");
-    #        END IF;
-	#END IF;
+    
+	
+    
+	
+    
+	
+    
+	
     
     IF NOT (SELECT New.numero REGEXP '^[0-9]{8,9}$') THEN
 		SET invalid = invalid + 1;
@@ -3413,14 +3568,14 @@ BEGIN
             END IF;
 	END IF;
     
-    #IF NOT (SELECT NEW.codigo_area REGEXP '^0[0-9]{2}$') THEN
-	#	SET invalid = invalid + 1;
-    #        IF (invalid > 1) THEN
-	#			SET error_message = CONCAT(error_message, ", codigo area");
-    #        ELSE
-	#			SET error_message = CONCAT(error_message, "codigo area");
-    #        END IF;
-	#END IF;
+    
+	
+    
+	
+    
+	
+    
+	
     
     IF NOT (SELECT NEW.numero REGEXP '^[0-9]{8,9}$') THEN
 		SET invalid = invalid + 1;
@@ -3488,7 +3643,7 @@ CREATE TABLE `transacao` (
   `data_hora` datetime NOT NULL COMMENT 'Controla o momento em que a transação foi cadastrada\n',
   `valor` decimal(10,2) NOT NULL COMMENT 'Valor em reais',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=66 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -3497,7 +3652,7 @@ CREATE TABLE `transacao` (
 
 LOCK TABLES `transacao` WRITE;
 /*!40000 ALTER TABLE `transacao` DISABLE KEYS */;
-INSERT INTO `transacao` VALUES (1,'C','2016-09-10 02:50:39',156.00),(2,'C','2016-09-10 02:50:39',203.00),(3,'C','2016-09-10 02:50:39',201.00),(4,'D','2016-09-10 02:50:39',0.00),(6,'D','2016-11-01 01:31:08',0.00);
+INSERT INTO `transacao` VALUES (1,'C','2016-09-10 02:50:39',156.00),(2,'C','2016-09-10 02:50:39',203.00),(3,'C','2016-09-10 02:50:39',201.00),(4,'D','2016-09-10 02:50:39',0.00),(6,'D','2016-11-01 01:31:08',0.00),(7,'C','2016-11-08 08:52:28',0.00),(17,'C','2016-11-11 00:03:14',30.00),(18,'C','2016-11-15 09:50:40',0.00),(19,'C','2016-11-15 10:00:25',0.00),(20,'C','2016-11-15 10:04:32',0.00),(21,'C','2016-11-15 10:04:40',0.00),(22,'C','2016-11-15 10:08:51',0.00),(23,'C','2016-11-15 10:12:19',0.00),(24,'C','2016-11-15 10:12:59',0.00),(25,'C','2016-11-15 10:15:23',0.00),(26,'C','2016-11-15 10:16:39',0.00),(27,'C','2016-11-15 10:18:22',0.00),(28,'C','2016-11-15 10:20:04',0.00),(29,'C','2016-11-15 10:22:09',0.00),(30,'C','2016-11-15 10:23:08',0.00),(31,'C','2016-11-15 10:25:01',0.00),(32,'C','2016-11-15 10:27:22',0.00),(33,'C','2016-11-15 10:27:53',0.00),(34,'C','2016-11-15 10:29:16',0.00),(35,'C','2016-11-15 10:29:34',0.00),(36,'C','2016-11-15 10:30:29',0.00),(37,'C','2016-11-15 10:33:25',0.00),(38,'C','2016-11-15 10:34:31',0.00),(39,'C','2016-11-15 10:38:12',0.00),(40,'C','2016-11-15 10:42:56',0.00),(41,'C','2016-11-15 10:47:32',0.00),(42,'C','2016-11-15 10:48:23',0.00),(43,'C','2016-11-15 10:49:16',0.00),(44,'C','2016-11-15 10:49:55',0.00),(45,'C','2016-11-15 10:50:45',0.00),(46,'C','2016-11-15 10:51:07',0.00),(47,'C','2016-11-15 10:51:46',0.00),(48,'C','2016-11-15 10:52:11',0.00),(49,'C','2016-11-15 10:53:08',0.00),(50,'C','2016-11-15 10:54:12',0.00),(51,'C','2016-11-15 10:55:17',0.00),(52,'C','2016-11-15 10:55:46',0.00),(53,'C','2016-11-15 10:56:25',0.00),(54,'C','2016-11-15 10:57:06',0.00),(55,'C','2016-11-15 10:59:34',0.00),(56,'C','2016-11-15 11:00:19',0.00),(57,'C','2016-11-15 11:01:44',0.00),(58,'C','2016-11-15 11:02:19',0.00),(59,'C','2016-11-15 11:03:07',0.00),(60,'C','2016-11-15 11:04:48',0.00),(61,'C','2016-11-15 11:06:24',0.00),(62,'C','2016-11-15 11:07:32',0.00),(63,'C','2016-11-15 11:09:06',0.00),(64,'C','2016-11-15 11:12:53',55.00),(65,'C','2016-11-15 11:13:26',55.00);
 /*!40000 ALTER TABLE `transacao` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -3849,6 +4004,10 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
+
+--
+-- Dumping events for database 'pet_shop'
+--
 
 --
 -- Dumping routines for database 'pet_shop'
@@ -5235,7 +5394,7 @@ DELIMITER ;
 /*!50003 SET character_set_results = utf8 */ ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `altPessoaTemFuncao`(
 	IN p_id int
@@ -5280,14 +5439,14 @@ BEGIN
 		SET MESSAGE_TEXT = 'Função não cadastrada';
 	END IF;
     
-    SELECT count(*) INTO c_pessoa_tem_funcao2
-      FROM pessoa_tem_funcao
-	 WHERE pessoa_id = p_pessoa_id
-	   AND funcao_id = p_funcao_id;
-	IF c_pessoa_tem_funcao2 > 0 THEN
-		SIGNAL SQLSTATE VALUE '45000'
-		SET MESSAGE_TEXT = 'Função já atribuída à Pessoa';
-	END IF;
+--     SELECT count(*) INTO c_pessoa_tem_funcao2
+--       FROM pessoa_tem_funcao
+-- 	 WHERE pessoa_id = p_pessoa_id
+-- 	   AND funcao_id = p_funcao_id;
+-- 	IF c_pessoa_tem_funcao2 > 0 THEN
+-- 		SIGNAL SQLSTATE VALUE '45000'
+-- 		SET MESSAGE_TEXT = 'Função já atribuída à Pessoa';
+-- 	END IF;
     
     IF p_pessoa_id IS NULL AND p_funcao_id IS NULL THEN
 		SIGNAL SQLSTATE VALUE '45000'
@@ -5297,6 +5456,7 @@ BEGIN
 	UPDATE pessoa_tem_funcao
 	   SET pessoa_id = CASE WHEN p_pessoa_id IS NULL THEN pessoa_id ELSE p_pessoa_id END
          , funcao_id = CASE WHEN p_funcao_id IS NULL THEN funcao_id ELSE p_funcao_id END
+         , oauth_id = CASE WHEN p_oauth_id IS NULL THEN oauth_id ELSE p_oauth_id END
 	 WHERE id = p_id;
 	
     SELECT p_id;
@@ -8097,7 +8257,7 @@ DELIMITER ;
 /*!50003 SET character_set_results = utf8 */ ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = '' */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getPessoaTemFuncao`(
 	IN p_id int
@@ -8107,7 +8267,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `getPessoaTemFuncao`(
   , IN p_pessoa_email varchar(100)
   , IN p_password varchar(50)
   , IN p_oauth_id int
-  , IN p_oauth_token int
+  , IN p_oauth_token varchar(100)
 )
 BEGIN
 	SELECT 	ptf.id, p.id as pessoa_id, p.nome as pessoa, p.email as email, 
@@ -8554,7 +8714,7 @@ DELIMITER ;
 /*!50003 SET character_set_results = utf8 */ ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getVacinaTemLote`(
 		IN p_id INT
@@ -8567,7 +8727,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `getVacinaTemLote`(
 )
 BEGIN
 
-	SELECT vtl.id, v.id, v.nome, l.id, l.numero, l.vencimento, vtl.quantidade
+	SELECT vtl.id, v.id, v.nome, l.id, l.numero, l.vencimento, l.preco, vtl.quantidade
     FROM vacina_tem_lote vtl
     INNER JOIN vacina v ON vtl.vacina_id = v.id
     INNER JOIN lote l ON vtl.lote_id = l.id
@@ -9202,11 +9362,11 @@ DELIMITER ;
 /*!50003 SET character_set_results = utf8 */ ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = '' */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `insOAuth`(
-		IN p_token VARCHAR(100)
-	,	IN p_refresh_token VARCHAR(100)
+		IN p_token VARCHAR(160)
+	,	IN p_refresh_token VARCHAR(160)
 )
 BEGIN
 	
@@ -9214,7 +9374,7 @@ BEGIN
     DECLARE c_refresh_token INT;
 	DECLARE error_message VARCHAR(100);
     
-    IF token IS NULL OR refresh_token IS NULL THEN
+    IF p_token IS NULL OR p_refresh_token IS NULL THEN
         SIGNAL SQLSTATE VALUE '45000'
 		SET MESSAGE_TEXT = 'Impossível inserir campo nulo';
 	END IF;
@@ -9237,8 +9397,8 @@ BEGIN
 		SET MESSAGE_TEXT = 'Refresh Token já está em uso';
 	END IF;
     
-    INSERT INTO oauth
-		(data_hora, vencimento, token, refresh_token, valido)
+    INSERT INTO `pet_shop`.`oauth`
+		(`data_hora`, `vencimento`, `token`, `refresh_token`,`valido`)
 	VALUES
 		(NOW(), DATE_ADD(NOW(), INTERVAL 3 HOUR), p_token, p_refresh_token, true);
         
@@ -10331,4 +10491,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-11-07 23:15:19
+-- Dump completed on 2016-11-15 20:11:13
