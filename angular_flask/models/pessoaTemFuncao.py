@@ -5,7 +5,7 @@ class PessoaTemFuncao():
 		self.pessoa = [data[1], data[2], data[3], data[4]]
 		self.funcao = [data[5], data[6]]
 		self.password = data[7]
-		self.oauth = [data[8], data[9], data[10]]
+		self.oauth = [data[8], data[9]]
 
 	def toJSON(self):
 		return {
@@ -23,8 +23,7 @@ class PessoaTemFuncao():
 			"password":self.password,
 			"oauth": {
 				"id":self.oauth[0],
-				"token":self.oauth[1],
-				"valido":self.oauth[2]
+				"token":self.oauth[1]
 			}
 		}
 
