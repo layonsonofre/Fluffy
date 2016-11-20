@@ -131,6 +131,19 @@
               </li>
             </ul>
           </li>
+          <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Consulta
+                        <span class="caret"></span>
+                     </a>
+            <ul class="dropdown-menu" role="menu">
+              <li>
+                <a href="#/servico/agenda">Agenda</a>
+              </li>
+              <li ng-show="permissoes.consulta">
+                <a href="#/servico/consulta">Realizar consulta</a>
+              </li>
+            </ul>
+          </li>
           <li class="dropdown"  ng-show="permissoes.cadastro">
             <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Estoque
                         <span class="caret"></span>

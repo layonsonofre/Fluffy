@@ -23,39 +23,38 @@ def basic_pages(**kwargs):
 
 @app.route('/api/<modelo>', methods=['GET'])
 def get_modelo(modelo=None):
+    args = []
+    args = Util.requestGetArgs(modelo)
 
-	args = []
-	args = Util.requestGetArgs(modelo)
+    print("get"+modelo[0].upper()+modelo[1:])
+    print(args)
 
-	print("get"+modelo[0].upper()+modelo[1:])
-	print(args)
+    try:
+        data = Util.getData("get"+modelo[0].upper()+modelo[1:], args)
+        print(data)
+    except Exception as e:
+    	message = e.__str__()
+    	table = modelo
+    	json = request.json
+    	method = request.method
 
-	try:
-		data = Util.getData("get"+modelo[0].upper()+modelo[1:], args)
-		print(data)
-	except Exception as e:
-		message = e.__str__()
-		table = modelo
-		json = request.json
-		method = request.method
+    	data = Util.postData("insLog", [message, json, table, method])
+    	print(data)
+    	#return jsonify(success=False, result={}, codigo=code,message=error_message.decode('cp1251').encode('utf8'))
+    	return jsonify(success=False, result={}, mensagem=message, tabela=table, json = json, metodo=method)
 
-		data = Util.postData("insLog", [message, json, table, method])
-		print(messages)
-		#return jsonify(success=False, result={}, codigo=code,message=error_message.decode('cp1251').encode('utf8'))
-		return jsonify(success=False, result={}, mensagem=message, tabela=table, json = json, metodo=method)
+    class_name = globals()[modelo[0].upper()+modelo[1:]]
 
-	class_name = globals()[modelo[0].upper()+modelo[1:]]
+    list = []
+    if data is None or len(data) == 0 :
+    	return jsonify(success=True,result=list,message="Nenhum registro cadastrado")
+    for info in data:
+    	list.append(class_name(info))
 
-	list = []
-	if data is None or len(data) == 0 :
-		return jsonify(success=True,result=list,message="Nenhum registro cadastrado")
-	for info in data:
-		list.append(class_name(info))
-
-	if len(data) == 1 :
-		return jsonify(success=True,result=list[0].toJSON(),message="")
-	else :
-		return jsonify(success=True,result=[p.toJSON() for p in list],message="")
+    if len(data) == 1 :
+    	return jsonify(success=True,result=list[0].toJSON(),message="")
+    else :
+    	return jsonify(success=True,result=[p.toJSON() for p in list],message="")
 
 
 @app.route('/api/<modelo>', methods=['POST','PUT','DELETE'])

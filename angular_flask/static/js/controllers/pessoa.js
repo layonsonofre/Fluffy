@@ -41,7 +41,6 @@
 
     vm.form = {};
     vm.form.pessoa = dataStorage.getPessoa();
-    console.log('pessoa init', vm.form.pessoa);
     vm.form.pessoa.funcao = "";
 
     vm.add = add;
@@ -197,7 +196,6 @@
         });
         vm.form.pessoa.telefone = temp;
       });
-      console.log('pessoa', vm.form.pessoa);
     }
 
     function editar_pessoa(entry) {
@@ -359,6 +357,7 @@
           vm.form.pessoa.pais = "Brasil";
           vm.form.pessoa.uf = response.data["uf"];
           vm.form.pessoa.cidade = response.data["cidade"];
+          vm.form.pessoa.bairro = response.data["bairro"];
           vm.form.pessoa.logradouro = response.data["tipo_logradouro"] + " " + response.data["logradouro"];
         });
     }
@@ -621,7 +620,6 @@
         .catch(failed);
 
       function success(response) {
-        console.log('get ésspa', response.data.result);
         return response.data.result;
       }
 

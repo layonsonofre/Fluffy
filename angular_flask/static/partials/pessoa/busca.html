@@ -41,7 +41,7 @@
                     </td>
                     <td>{{entry.nome}}</td>
                     <td>{{entry.email}}</td>
-                    <td>{{entry.logradouro + ', ' + entry.numero + ' - ' + entry.complemento + ' (' + entry.ponto_de_referencia + ') - ' + entry.cidade}}</td>
+                    <td>{{entry.logradouro + ', ' + entry.numero + ' - ' + entry.bairro + ' - ' + (entry.complemento ? entry.complemento : '') + (entry.ponto_de_referencia ? ' (' + entry.ponto_de_referencia + ') - ' : '') + entry.cidade}}</td>
                     <td>
                       <button class="btn btn-link" ng-click="vm.detalhes_pessoa(entry)" data-toggle="modal" data-target="#detalhes_pessoa" data-toggle="tooltip" data-placement="top" title="Ver informações detalhadas">
                         <span class="fa fa-plus"></span>

@@ -1,0 +1,473 @@
+<div>
+  <div class="row">
+    <div class="col-md-12">
+      <h1 class="page-head-line">Consulta</h1>
+      <h1 class="page-subhead-line">Cadastre as informações referentes à uma consulta</h1>
+      <a ng-click="vm.helpActive = !vm.helpActive" class="btn btn-link pull-right"><span class="fa fa-info"></span></a>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          Consulta
+        </div>
+        <div class="panel-body">
+          <form ng-submit="vm.add()">
+            <div class="row">
+              <div class="col-xs-6">
+                <div class="form-group">
+                  <label>Cliente *</label>
+                  <input class="form-control" type="text" ng-model="vm.pessoa_tem_funcao.nome" ng-readonly="true">
+                  <p class="help-block" ng-show="vm.helpActive">Selecione um cliente</p>
+                </div>
+              </div>
+              <div class="col-xs-6">
+                <div class="row">
+                  <div class="col-xs-12">
+                    <div class="form-group">
+                      <label>Data *</label>
+                      <input class="form-control" type="text" ng-model="vm.consulta.data_hora" ng-readonly="true">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xs-6">
+                <div class="form-group">
+                  <label>Animal *</label>
+                  <input class="form-control" type="text" ng-model="vm.consulta.animal.nome" ng-readonly="true">
+                  <p class="help-block" ng-show="vm.helpActive">Animal desta consulta</p>
+                </div>
+              </div>
+              <div class="col-xs-2">
+                <div class="form-group">
+                  <label>Detalhes</label>
+                  <a class="form-control btn btn-link" ng-disabled="!vm.consulta.animal" data-toggle="modal" data-target="#detalhesAnimal" data-toggle="tooltip" data-placement="top" title="Ver detalhes do animal" ng-click="vm.detalhes_animal(vm.consulta.animal.id)"><span class="fa fa-plus"></span></a>
+                </div>
+              </div>
+              <div class="col-xs-4">
+                <div class="form-group">
+                  <label>Observações *</label>
+                  <input class="form-control" type="text" ng-model="vm.consulta.observacao" ng-readonly="true">
+                  <p class="help-block" ng-show="vm.helpActive">Informações sobre este serviço</p>
+                </div>
+              </div>
+            </div>
+            <hr>
+            <div class="row">
+              <div class="col-xs-12">
+                <h4>Anamnese</h4>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xs-12">
+                <div class="form-group">
+                  <label>Queixa</label>
+                  <input class="form-control" type="text" ng-model="vm.anamnese.queixa">
+                  <p class="help-block" ng-show="vm.helpActive">Queixa apresenta pelo responsável do pet</p>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xs-9">
+                <div class="form-group">
+                  <label>Qual alimentação/ração come</label>
+                  <input class="form-control" type="text" ng-model="vm.anamnese.alimentacao" >
+                  <p class="help-block" ng-show="vm.helpActive">Hábitos de alimentação do animal</p>
+                </div>
+              </div>
+              <div class="col-xs-3">
+                <div class="form-group">
+                  <label><br></label>
+                  <div class="checkbox">
+                    <label><input type="checkbox" data-ng-model="vm.anamnese.alimentacao_regular">&nbsp;&nbsp; Alimentação regular</label>
+                  </div>
+                  <p class="help-block" ng-show="vm.helpActive">O animal tem comido/bebido regularmente?</p>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xs-3">
+                <div class="form-group">
+                  <label>Peso</label>
+                  <input class="form-control" type="text" ng-model="vm.anamnese.peso">
+                  <p class="help-block" ng-show="vm.helpActive">Peso do animal (kilogramas)</p>
+                </div>
+              </div>
+              <div class="col-xs-3">
+                <div class="form-group">
+                  <label>Tamanho</label>
+                  <input class="form-control" type="text" ng-model="vm.anamnese.tamanho" >
+                  <p class="help-block" ng-show="vm.helpActive">Tamanho do animal (centímetros)</p>
+                </div>
+              </div>
+              <div class="col-xs-3">
+                <div class="form-group">
+                  <label>Temperatura</label>
+                  <input class="form-control" type="text" ng-model="vm.anamnese.temperatura" >
+                  <p class="help-block" ng-show="vm.helpActive">Temperatura do corpo (° C)</p>
+                </div>
+              </div>
+              <div class="col-xs-3">
+                <div class="form-group">
+                  <label>Tempo de evolução</label>
+                  <input class="form-control" type="text" ng-model="vm.anamnese.tempo_evolucao">
+                  <p class="help-block" ng-show="vm.helpActive">Dias desde a observação da queixa</p>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xs-3">
+                <div class="form-group">
+                  <label><br></label>
+                  <div class="checkbox">
+                    <label><input type="checkbox" data-ng-model="vm.anamnese.sob_tratamento">&nbsp;&nbsp; Sob tratamento</label>
+                  </div>
+                  <p class="help-block" ng-show="vm.helpActive">O animal está sob tratamento?</p>
+                </div>
+              </div>
+              <div class="col-xs-3">
+                <div class="form-group">
+                  <label><br></label>
+                  <div class="checkbox">
+                    <label><input type="checkbox" data-ng-model="vm.anamnese.medicacao_continua">&nbsp;&nbsp; Medicação contínua</label>
+                  </div>
+                  <p class="help-block" ng-show="vm.helpActive">O animal está sob medicação contínua?</p>
+                </div>
+              </div>
+              <div class="col-xs-3">
+                <div class="form-group">
+                  <label><br></label>
+                  <div class="checkbox">
+                    <label><input type="checkbox" data-ng-model="vm.anamnese.fezes_normais">&nbsp;&nbsp; Fezes normais</label>
+                  </div>
+                  <p class="help-block" ng-show="vm.helpActive">As fezes estão normais?</p>
+                </div>
+              </div>
+              <div class="col-xs-3">
+                <div class="form-group">
+                  <label><br></label>
+                  <div class="checkbox">
+                    <label><input type="checkbox" data-ng-model="vm.anamnese.urina_normal">&nbsp;&nbsp; Urina normal</label>
+                  </div>
+                  <p class="help-block" ng-show="vm.helpActive">A urina está normal?</p>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xs-3">
+                <div class="form-group">
+                  <label><br></label>
+                  <div class="checkbox">
+                    <label><input type="checkbox" data-ng-model="vm.anamnese.convulsao">&nbsp;&nbsp; Convulsão</label>
+                  </div>
+                  <p class="help-block" ng-show="vm.helpActive">Já teve convulsão?</p>
+                </div>
+              </div>
+              <div class="col-xs-3">
+                <div class="form-group">
+                  <label><br></label>
+                  <div class="checkbox">
+                    <label><input type="checkbox" data-ng-model="vm.anamnese.desmaio">&nbsp;&nbsp; Desmaio</label>
+                  </div>
+                  <p class="help-block" ng-show="vm.helpActive">Já desmaiou?</p>
+                </div>
+              </div>
+              <div class="col-xs-3">
+                <div class="form-group">
+                  <label><br></label>
+                  <div class="checkbox">
+                    <label><input type="checkbox" data-ng-model="vm.anamnese.tosse">&nbsp;&nbsp; Tosse</label>
+                  </div>
+                  <p class="help-block" ng-show="vm.helpActive">Tem tossido com frequência?</p>
+                </div>
+              </div>
+              <div class="col-xs-3">
+                <div class="form-group">
+                  <label><br></label>
+                  <div class="checkbox">
+                    <label><input type="checkbox" data-ng-model="vm.anamnese.espirro">&nbsp;&nbsp; Espirro</label>
+                  </div>
+                  <p class="help-block" ng-show="vm.helpActive">Tem espirrado com frequência?</p>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xs-3">
+                <div class="form-group">
+                  <label><br></label>
+                  <div class="checkbox">
+                    <label><input type="checkbox" data-ng-model="vm.anamnese.cansaco">&nbsp;&nbsp; Cansaço fácil</label>
+                  </div>
+                  <p class="help-block" ng-show="vm.helpActive">Apresenta sinais de cansaço rápidamente?</p>
+                </div>
+              </div>
+              <div class="col-xs-3">
+                <div class="form-group">
+                  <label><br></label>
+                  <div class="checkbox">
+                    <label><input type="checkbox" data-ng-model="vm.anamnese.contato_animais">&nbsp;&nbsp; Contato com outros animais</label>
+                  </div>
+                  <p class="help-block" ng-show="vm.helpActive">Este animal entra em contato com outros?</p>
+                </div>
+              </div>
+              <div class="col-xs-3">
+                <div class="form-group">
+                  <label><br></label>
+                  <div class="checkbox">
+                    <label><input type="checkbox" data-ng-model="vm.anamnese.acesso_rua">&nbsp;&nbsp; Acesso à rua</label>
+                  </div>
+                  <p class="help-block" ng-show="vm.helpActive">O animal tem acesso/frequenta a rua sem a companhia do dono?</p>
+                </div>
+              </div>
+              <div class="col-xs-3">
+                <div class="form-group">
+                  <label><br></label>
+                  <div class="checkbox">
+                    <label><input type="checkbox" data-ng-model="vm.anamnese.castrado">&nbsp;&nbsp; Castrado</label>
+                  </div>
+                  <p class="help-block" ng-show="vm.helpActive">O animal é castrado?</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-xs-3">
+                <div class="form-group">
+                  <label><br></label>
+                  <div class="checkbox">
+                    <label><input type="checkbox" data-ng-model="vm.anamnese.pulga">&nbsp;&nbsp; Pulga</label>
+                  </div>
+                  <p class="help-block" ng-show="vm.helpActive">Animal tem pulga?</p>
+                </div>
+              </div>
+              <div class="col-xs-3">
+                <div class="form-group">
+                  <label><br></label>
+                  <div class="checkbox">
+                    <label><input type="checkbox" data-ng-model="vm.anamnese.carrapato">&nbsp;&nbsp; Carrapato</label>
+                  </div>
+                  <p class="help-block" ng-show="vm.helpActive">Animal tem carrapato?</p>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xs-12">
+                <div class="form-group">
+                  <label>Ambiente onde vive</label>
+                  <input class="form-control" type="text" ng-model="vm.anamnese.ambiente">
+                  <p class="help-block" ng-show="vm.helpActive">Como é o ambiente no qual o animal fica</p>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xs-12">
+                <div class="form-group">
+                  <label>Doenças anteriores</label>
+                  <input class="form-control" type="text" ng-model="vm.anamnese.doencas_anteriores">
+                  <p class="help-block" ng-show="vm.helpActive">Breve informação sobre doenças anteriores</p>
+                </div>
+              </div>
+            </div>
+            <hr>
+            <div class="row" ng-show="vm.aplicacoes">
+              <div class="col-xs-12">
+                <h4>Vacinas</h4>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xs-12">
+                <fieldset data-ng-repeat="aplicacao in vm.aplicacoes">
+                  <div class="row">
+                    <div class="col-xs-3">
+                      <div class="row">
+                        <div class="col-xs-12">
+                          <label>Data de aplicação*</label>
+                          <div class="form-group">
+                            <p class="input-group">
+                              <input type="text" class="form-control" uib-datepicker-popup="{{vm.format}}" ng-model="aplicacao.data_hora" ng-required="true" is-open="aplicacao.popup" datepicker-options="dateOptions" altInputFormats="altInputFormats" close-text="Fechar">
+                              <span class="input-group-btn">
+                                <a type="button" class="btn btn-default" ng-click="vm.openDate(aplicacao)"><span class="fa fa-calendar"></span></a>
+                              </span>
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-xs-12">
+                          <div class="form-group">
+                            <div uib-timepicker hour-step="1" minute-step="5" show-meridian="true" ng-model="aplicacao.data_hora"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-xs-9">
+                      <div class="row">
+                        <div class="col-xs-12">
+                          <div class="row">
+                            <div class="col-xs-6">
+                              <label>Vacina *</label>
+                              <div class="form-group">
+                                <select class="form-control" ng-model="aplicacao.vacina_id" ng-options="aplicacao.id as vacina.nome for vacina in vm.vacinas track by vacina.id"></select>
+                              </div>
+                            </div>
+                            <div class="col-xs-3">
+                              <div class="form-group">
+                                <label>Dose *</label>
+                                <input class="form-control" type="text" ng-model="aplicacao.dose">
+                                <p class="help-block" ng-show="vm.helpActive">Dose aplicada (mL)</p>
+                              </div>
+                            </div>
+                            <div class="col-xs-3">
+                              <div class="form-group">
+                                <label><br></label>
+                                <div class="checkbox">
+                                  <label><input type="checkbox" data-ng-model="aplicacao.aplicado">&nbsp;&nbsp; Já aplicada</label>
+                                </div>
+                                <p class="help-block" ng-show="vm.helpActive">Marque esta opção se a aplicação já tiver acontecido</p>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row"
+                            <div class="col-xs-2">
+                              <div class="form-group pull-right">
+                                <label>Remover</label>
+                                <a class="form-control btn btn-link" data-toggle="tooltip" data-placement="top" title="Remover esta aplicação de vacina" ng-click="vm.removeAplicacao(aplicacao)"><span class="fa fa-minus"></span></a>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </fieldset>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xs-4">
+                <a class="btn btn-link" data-ng-click="vm.add()" data-toggle="tooltip" data-placement="top" title="Confirmar consulta"><span class="fa fa-check"></span><b>&nbsp;&nbsp; Confirmar e finalizar consulta</b></a>
+              </div>
+              <div class="col-xs-4">
+                <a class="btn btn-link pull-right" data-ng-click="vm.incluirAplicacao()" data-toggle="tooltip" data-placement="top" title="Aplicação de vacinas"><span class="fa fa-heartbeat"></span><b>&nbsp;&nbsp; Aplicação de vacinas</b></a>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- MODAL DE SELEÇÂO DO CLIENTE -->
+  <div id="selecionarCliente" class="modal fade" role="dialog" aria-labelledby="cliente">
+    <div class="modal-dialog modal-md" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title">Selecionar cliente</h4>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-xs-12">
+              <div class="form-group">
+                <label>Busque por um cliente</label>
+                <input class="form-control" type="text" ng-model="vm.filtro">
+                <p class="help-block" ng-show="vm.helpActive">Você pode pesquisar por qualquer dado do cliente</p>
+              </div>
+            </div>
+          </div>
+          <label>Cliente *</label>
+          <div class="table-wrapper">
+            <table class="table table-striped table-hover">
+              <thead>
+                <tr>
+                  <th class="col-xs-1">#</th>
+                  <th class="col-xs-4">Nome</th>
+                  <th class="col-xs-4">Email</th>
+                  <th class="col-xs-3">Telefone</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-repeat="entry in vm.clientes | filter:vm.filtro">
+                  <th>
+                    <input type="checkbox" ng-model="entry.checked" ng-change="vm.updateSelection(entry.id, vm.clientes); vm.selectCliente(entry.pessoa)" data-dismiss="modal">
+                  </th>
+                  <td>{{entry.pessoa.nome}}</td>
+                  <td>{{entry.pessoa.email}}</td>
+                  <td>{{entry.pessoa.telefone}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.cancelCliente()">Fechar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL DE DETALHES DO ANIMAL -->
+  <div id="detalhesAnimal" class="modal fade" role="dialog" aria-labelledby="detalhes">
+    <div class="modal-dialog modal-sm" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title">Detalhes</h4>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-xs-12">
+              <div class="form-group">
+                <label>Nome</label>
+                <input class="form-control" type="text" ng-model="vm.animal.nome" ng-readonly="true">
+                <p class="help-block" ng-show="vm.helpActive">Nome do animal</p>
+              </div>
+            </div>
+            <div class="col-xs-4">
+              <div class="form-group has-feedback">
+                <label class="control-label" for="input">Sexo</label>
+                <div class="input-group" ng-show="vm.animal.sexo === 'M'">
+                  <input type="text" class="form-control" id="input" ng-readonly="true" value="Macho">
+                  <span class="form-control-feedback input-group-addon fa fa-mars"></span>
+                </div>
+                <div class="input-group" ng-show="vm.animal.sexo === 'F'">
+                  <input type="text" class="form-control" id="input" ng-readonly="true" value="Fêmea">
+                  <span class="form-control-feedback  input-group-addon fa fa-venus"></span>
+                </div>
+              </div>
+            </div>
+            <div class="col-xs-12">
+              <div class="form-group">
+                <label>Nascimento</label>
+                <input class="form-control" type="text" ng-model="vm.animal.data_nascimento" ng-readonly="true">
+                <p class="help-block" ng-show="vm.helpActive">Data de Nascimento</p>
+              </div>
+            </div>
+            <div class="col-xs-12">
+              <div class="form-group">
+                <label>Raça</label>
+                <input class="form-control" type="text" ng-model="vm.animal.raca.nome" ng-readonly="true">
+                <p class="help-block" ng-show="vm.helpActive">Raça do animal</p>
+              </div>
+            </div>
+            <div class="col-xs-12">
+              <div class="form-group">
+                <label>Porte</label>
+                <input class="form-control" type="text" ng-model="vm.animal.porte.nome" ng-readonly="true">
+                <p class="help-block" ng-show="vm.helpActive">Porte</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

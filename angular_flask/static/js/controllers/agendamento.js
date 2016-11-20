@@ -5,8 +5,8 @@
     .module('Agendamento', [])
     .config(['$routeProvider', function($routeProvider) {
       $routeProvider
-        .when('/servico/agendamento', {
-          templateUrl: '../static/partials/servico/agendamento.html',
+        .when('/servico/consulta', {
+          templateUrl: '../static/partials/servico/consulta.html',
           controller: 'AgendamentoController',
           controllerAs: 'vm'
         });
@@ -294,7 +294,7 @@
             });
             AgendamentoFactory.getContrato({id: vm.form.contrato})
               .then(function(response) {
-                vm.form.pessoa_tem_funcao = response.pessoa_tem_funcao
+                vm.form.pessoa_tem_funcao = response.pessoa_tem_funcao;
                 vm.form.preco = response.preco;
                 vm.form.transacao_id = response.transacao_id;
                 console.log('contrato', response);
@@ -324,7 +324,7 @@
       add: add,
       alt: alt,
       del: del,
-      getContrato
+      getContrato: getContrato
     };
     return AgendamentoFactory;
 
@@ -405,24 +405,8 @@
       }
     }
 
-    function getAgendados(data) {
-      return $http.get(
-          _url + '/servicoAgendado',
-          data
-        )
-        .then(success)
-        .catch(failed);
-
-      function success(response) {
-        return response;
-      }
-
-      function failed(response) {
-        console.error('Failed: ' + JSON.stringify(response));
-      }
-    }
-
     function getContrato(data) {
+
       data = data || null;
       return $http({
           url: _url + '/servicoContratado',

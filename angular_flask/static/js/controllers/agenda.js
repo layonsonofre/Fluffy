@@ -27,7 +27,7 @@
     vm.agendamentos = [];
     vm.delAgendado = delAgendado;
     vm.editAgendado = editAgendado;
-    vm.detalhes_servico = detalhes_servico;
+    vm.editConsulta = editConsulta;
     refreshData();
 
     // INIT CALENDAR
@@ -39,7 +39,12 @@
       label: '<a class="btn btn-default btn-xs" data-toggle="modal" data-target="#detalhesServico"><span class="fa fa-plus"></span></a>',
       onClick: function(args) {
         vm.form = args.calendarEvent.info;
-        vm.detalhes_servico();
+      }
+    }, {
+      label: '<a class="btn btn-default btn-xs"><span class="fa fa-stethoscope"></span></a>',
+      onClick: function(args) {
+        vm.form = args.calendarEvent;
+        vm.editConsulta();
       }
     }, {
       label: '<a class="btn btn-default btn-xs"><span class="fa fa-pencil"></span></a>',
@@ -47,7 +52,7 @@
         vm.form = args.calendarEvent;
         vm.editAgendado();
       }
-    }, {
+    },{
       label: '<a class="btn btn-default btn-xs"><span class="fa fa-trash"></span></a>',
       onClick: function(args) {
         vm.form = args.calendarEvent.info;
@@ -107,8 +112,6 @@
             angular.forEach(vm.agendados, function(value, key) {
               var starts = new Date(value.data_hora);
               var ends = new Date(starts.getTime() + _duration*60000);
-              // title: 'Serviço: <b>' + value.servico_tem_porte.servico.nome + '</b> - Preço: <b>R$ ' + value.servico_tem_porte.preco + '</b> - Animal: <b>' + value.animal.nome + '</b>' + observacao,
-              // title: '<a data-toggle="modal" data-tager="#detalhes_servico"><b>' + value.animal.nome + '</b></a>',
               vm.agendamentos.push({
                 title: '<b>' + value.animal.nome + '</b>',
                 startsAt: starts,
@@ -149,11 +152,10 @@
       $location.path('/servico/agendamento');
     }
 
-    function detalhes_servico() {
-      // title: 'Serviço: <b>' + value.servico_tem_porte.servico.nome + '</b> - Preço: <b>R$ ' + value.servico_tem_porte.preco + '</b> - Animal: <b>' + value.animal.nome + '</b>' + observacao,
-      console.log('alou', vm.form);
+    function editConsulta() {
+      dataStorage.addAgendamento(vm.form.info.id);
+      $location.path('/servico/consulta');
     }
-
   }
 
   AgendaFactory.$inject = ['$http', 'Fluffy'];

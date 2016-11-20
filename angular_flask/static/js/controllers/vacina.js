@@ -129,6 +129,7 @@
     }
 
     function getLote(entry) {
+      console.log(entry);
       if (entry.checked) {
         vm.form.lotes = [];
         LoteFactory.getLotesVacina({vacina_id: entry.id})
@@ -182,7 +183,6 @@
         .catch(failed);
 
       function success(response) {
-        console.log(response);
         return response;
       }
 

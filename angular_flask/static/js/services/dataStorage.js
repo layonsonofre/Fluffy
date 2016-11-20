@@ -21,6 +21,12 @@
     dataStorage.addContrato = addContrato;
     dataStorage.getContrato = getContrato;
 
+    dataStorage.addAgendamento = addAgendamento;
+    dataStorage.getAgendamento = getAgendamento;
+
+    dataStorage.addVenda = addVenda;
+    dataStorage.getVenda = getVenda;
+
     dataStorage.getUser = getUser;
 
     dataStorage.addPermissoes = addPermissoes;
@@ -34,6 +40,7 @@
       $window.localStorage.currentAgendamento = JSON.stringify({});
       $window.localStorage.currentAnimal = JSON.stringify({});
       $window.localStorage.currentContrato = JSON.stringify({});
+      $window.localStorage.currentVenda = JSON.stringify({});
     }
 
     //pessoa
@@ -60,7 +67,7 @@
       return null;
     }
 
-    //agendamento
+    //contrato
     function addContrato(entry) {
       $window.localStorage.currentContrato = entry;
     }
@@ -68,6 +75,30 @@
     function getContrato() {
       if ($window.localStorage.currentContrato) {
         return JSON.parse($window.localStorage.currentContrato);
+      }
+      return null;
+    }
+
+    //agendamento
+    function addAgendamento(entry) {
+      $window.localStorage.currentAgendamento = entry;
+    }
+
+    function getAgendamento() {
+      if ($window.localStorage.currentAgendamento) {
+        return JSON.parse($window.localStorage.currentAgendamento);
+      }
+      return null;
+    }
+
+    //venda
+    function addVenda(entry) {
+      $window.localStorage.currentVenda = JSON.stringify(entry);
+    }
+
+    function getVenda() {
+      if ($window.localStorage.currentVenda != null) {
+        return JSON.parse($window.localStorage.currentVenda);
       }
       return null;
     }

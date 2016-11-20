@@ -1,0 +1,19 @@
+<div>
+  <div class="row">
+    <div class="col-xs-12">
+      <h1 class="page-head-line">Venda</h1>
+      <h1 class="page-subhead-line">Confirmação</h1>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="jumbotron">
+        <h1>Venda concluída</h1>
+        <p>A venda no valor de {{vm.cart_total|currency:"R$ "}} para o cliente {{vm.cliente_nome}} foi concluída .</p>
+        <p>Até a próxima! <i class="text-info fa fa-heart"></i></p>
+        <p><a ng-click="vm.gotoNova()" class="btn btn-link"><span class="fa fa-plus"></span>&nbsp;<span class="fa fa-shopping-cart"></span>&nbsp; <b>Nova Venda</b></a></p>
+      </div>
+    </div>
+  </div>
+</div>

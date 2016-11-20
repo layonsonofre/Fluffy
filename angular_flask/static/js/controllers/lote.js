@@ -19,9 +19,12 @@
     return LoteFactory;
 
     function get() {
-      return $http.get(
-          _url + '/lote'
-        )
+      data = data || null;
+      return $http({
+          url: _url + '/lote',
+          params: data,
+          method: 'GET'
+        })
         .then(success)
         .catch(failed);
 
@@ -95,9 +98,10 @@
 
     function getLotesVacina(data) {
       data = data || null;
+      console.log(data);
       return $http({
           url: _url + '/vacinaTemLote',
-          data: data,
+          params: data,
           method: 'GET'
         })
         .then(success)
