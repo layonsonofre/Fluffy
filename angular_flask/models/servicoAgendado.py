@@ -5,7 +5,7 @@ class ServicoAgendado():
 	def __init__(self, data):
 		self.id = data[0]
 		self.data_hora = data[1]
-		self.servico_tem_porte = [[data[2], data[3], data[4]],[data[5], data[6]], float(data[7])]
+		self.servico_tem_porte = [data[2], float(data[3]), [data[4], data[5]],[data[6], data[7]]]
 		self.animal = [data[8], data[9]]
 		self.servico_contratado_id = data[10]
 		self.recorrente = False if data[11] == 0 else True
@@ -14,22 +14,23 @@ class ServicoAgendado():
 		self.observacao = data[14]
 		self.data_hora_executado = data[15]
 		self.pessoa_tem_funcao_funcionario = [data[16], data[17], data[18]]
+		self.preco = float(data[19])
 
 	def toJSON(self):
 		return {
 			"id":self.id,
 			"data_hora":self.data_hora,
 			"servico_tem_porte": {
+				"id": self.servico_tem_porte[0],
+				"preco": self.servico_tem_porte[1],
 				"servico": {
-					"id":self.servico_tem_porte[0][0],
-					"servico_id":self.servico_tem_porte[0][1],
-					"nome":self.servico_tem_porte[0][2]
+					"servico_id":self.servico_tem_porte[2][0],
+					"nome":self.servico_tem_porte[2][1]
 				},
 				"porte": {
-					"id":self.servico_tem_porte[1][0],
-					"nome":self.servico_tem_porte[1][1]
-				},
-				"preco": self.servico_tem_porte[2] 
+					"id":self.servico_tem_porte[3][0],
+					"nome":self.servico_tem_porte[3][1]
+				}
 			},
 			"animal": {
 				"id":self.animal[0],
@@ -45,7 +46,8 @@ class ServicoAgendado():
 				"id":self.pessoa_tem_funcao_funcionario[0],
 				"pessoa_id":self.pessoa_tem_funcao_funcionario[1],
 				"pessoa_nome":self.pessoa_tem_funcao_funcionario[2]
-			}
+			},
+			"preco": self.preco
 		}
 
 	def fromJSON():

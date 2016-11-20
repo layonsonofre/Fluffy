@@ -3,8 +3,7 @@ class VacinaTemLote():
 	def __init__(self, data):
 		self.id = data[0]
 		self.vacina = [data[1], data[2]]
-		# self.lote = [data[3], data[4], data[5].strftime("%B %d, %Y")]
-		self.lote = [data[3], data[4], data[5], data[6]]
+		self.lote = [data[3], data[4], data[5].strftime("%B %d, %Y"), data[6]]
 		self.quantidade = data[7]
 
 	def toJSON(self):
@@ -18,7 +17,7 @@ class VacinaTemLote():
 				"id":self.lote[0],
 				"numero":self.lote[1],
 				"vencimento":self.lote[2],
-				"preco":self.lote[3]
+				"preco": float(self.lote[3])
 			},
 			"quantidade": self.quantidade
 		}
