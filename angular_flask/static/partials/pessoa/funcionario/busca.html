@@ -1,0 +1,154 @@
+<div>
+  <div class="row">
+    <div class="col-xs-12">
+      <h1 class="page-head-line">Buscar Pessoas</h1>
+      <h1 class="page-subhead-line">Busque e veja detahes das pessoas, animais e serviços realizados</h1>
+      <a ng-click="vm.helpActive = !vm.helpActive" class="btn btn-link pull-right"><span class="fa fa-info"></span></a>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          Pesquisar
+        </div>
+        <div class="panel-body">
+          <div class="row">
+            <div class="col-xs-12">
+              <div class="form-group">
+                <label>Insira os parâmetros da busca</label>
+                <input class="form-control" type="text" ng-model="vm.filtro">
+                <p class="help-block" ng-show="vm.helpActive">Você pode pesquisar por qualquer dado da pessoa ou animal</p>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-12">
+              <table class="table table-striped table-hover">
+                <thead>
+                  <tr>
+                    <th class="col-xs-1">#</th>
+                    <th class="col-xs-2">Nome</th>
+                    <th class="col-xs-2">Email</th>
+                    <th class="col-xs-5">Endereço</th>
+                    <th class="col-xs-2">Ações</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr dir-paginate="entry in vm.pessoas | filter:vm.filtro | itemsPerPage: 10" pagination-id="pessoas">
+                    <td>
+                      <input type="checkbox" ng-model="entry.checked" ng-click="vm.updateSelection(entry.id, vm.pessoas)">
+                    </td>
+                    <td>{{entry.nome}}</td>
+                    <td>{{entry.email}}</td>
+                    <td>{{entry.logradouro + ', ' + entry.numero + ' - ' + entry.bairro + ' - ' + (entry.complemento ? entry.complemento : '') + (entry.ponto_de_referencia ? ' (' + entry.ponto_de_referencia + ') - ' : '') + entry.cidade}}</td>
+                    <td>
+                      <button class="btn btn-link" ng-click="vm.detalhes_pessoa(entry)" data-toggle="modal" data-target="#detalhes_pessoa" data-toggle="tooltip" data-placement="top" title="Ver informações detalhadas">
+                        <span class="fa fa-plus"></span>
+                      </button>
+                      <button class="btn btn-link" ng-click="vm.editar_pessoa(entry)" data-toggle="tooltip" data-placement="top" title="Editar estas informações">
+                        <span class="fa fa-pencil"></span>
+                      </button>
+                      <button class="btn btn-link" ng-click="vm.excluir_pessoa(entry)" data-toggle="tooltip" data-placement="top" title="Excluir este registro">
+                        <span class="fa fa-trash"></span>
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-12 text-center">
+              <dir-pagination-controls pagination-id="pessoas"></dir-pagination-controls>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" tabindex="-1" id="detalhes_pessoa">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title">Detalhes da pessoa</h4>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-xs-12">
+              <div class="form-group">
+                <label>Nome</label>
+                <input class="form-control" type="text" ng-model="vm.form.pessoa.nome" ng-readonly="true">
+              </div>
+            </div>
+            <div class="col-xs-12">
+              <div class="form-group">
+                <label>Email</label>
+                <input class="form-control" type="text" ng-model="vm.form.pessoa.email" ng-readonly="true">
+              </div>
+            </div>
+            <div class="col-xs-12">
+              <div class="form-group">
+                <label>Telefones</label>
+                <input class="form-control" type="text" ng-model="vm.form.pessoa.telefone" ng-readonly="true">
+              </div>
+            </div>
+            <div class="col-xs-10">
+              <div class="form-group">
+                <label>Endereço</label>
+                <input class="form-control" type="text" ng-model="vm.form.pessoa.logradouro" ng-readonly="true">
+              </div>
+            </div>
+            <div class="col-xs-2">
+              <div class="form-group">
+                <label>Nº.</label>
+                <input class="form-control" type="text" ng-model="vm.form.pessoa.numero" ng-readonly="true">
+              </div>
+            </div>
+            <div class="col-xs-4">
+              <div class="form-group">
+                <label>Compl.</label>
+                <input class="form-control" type="text" ng-model="vm.form.pessoa.complemento" ng-readonly="true">
+              </div>
+            </div>
+            <div class="col-xs-4">
+              <div class="form-group">
+                <label>Ref.</label>
+                <input class="form-control" type="text" ng-model="vm.form.pessoa.ponto_de_referencia" ng-readonly="true">
+              </div>
+            </div>
+            <div class="col-xs-4">
+              <div class="form-group">
+                <label>Cidade</label>
+                <input class="form-control" type="text" ng-model="vm.form.pessoa.cidade" ng-readonly="true">
+              </div>
+            </div>
+            <div class="col-xs-6">
+              <div class="form-group">
+                <label>CPF/CPNPJ</label>
+                <input class="form-control" type="text" ng-model="vm.form.pessoa.registro" ng-readonly="true">
+              </div>
+            </div>
+            <div class="col-xs-6" ng-show="vm.form.pessoa.rg">
+              <div class="form-group">
+                <label>RG</label>
+                <input class="form-control" type="text" ng-model="vm.form.pessoa.rg" ng-readonly="true">
+              </div>
+            </div>
+            <div class="col-xs-6" ng-show="vm.form.pessoa.inscricao_estadual">
+              <div class="form-group">
+                <label>Insc. Estadual</label>
+                <input class="form-control" type="text" ng-model="vm.form.pessoa.inscricao_estadual" ng-readonly="true">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">OK</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

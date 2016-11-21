@@ -20,14 +20,13 @@
     var vm = this;
 
     vm.form = {};
-    vm.gotoAgendamento = function() {
-      $location.path('/servico/agendamento');
-    }
+
 
     vm.agendamentos = [];
     vm.delAgendado = delAgendado;
     vm.editAgendado = editAgendado;
     vm.editConsulta = editConsulta;
+    vm.gotoAgendamento = gotoAgendamento;
     refreshData();
 
     // INIT CALENDAR
@@ -41,12 +40,6 @@
         vm.form = args.calendarEvent.info;
       }
     }, {
-      label: '<a class="btn btn-default btn-xs"><span class="fa fa-stethoscope"></span></a>',
-      onClick: function(args) {
-        vm.form = args.calendarEvent;
-        vm.editConsulta();
-      }
-    }, {
       label: '<a class="btn btn-default btn-xs"><span class="fa fa-pencil"></span></a>',
       onClick: function(args) {
         vm.form = args.calendarEvent;
@@ -57,6 +50,19 @@
       onClick: function(args) {
         vm.form = args.calendarEvent.info;
         vm.delAgendado();
+      }
+    }];
+
+    var actionsConsulta = [{
+      label: '<a class="btn btn-default btn-xs" data-toggle="modal" data-target="#detalhesServico"><span class="fa fa-plus"></span></a>',
+      onClick: function(args) {
+        vm.form = args.calendarEvent.info;
+      }
+    }, {
+      label: '<a class="btn btn-default btn-xs"><span class="fa fa-stethoscope"></span></a>',
+      onClick: function(args) {
+        vm.form = args.calendarEvent;
+        vm.editConsulta();
       }
     }];
 
@@ -112,14 +118,32 @@
             angular.forEach(vm.agendados, function(value, key) {
               var starts = new Date(value.data_hora);
               var ends = new Date(starts.getTime() + _duration*60000);
-              vm.agendamentos.push({
-                title: '<b>' + value.animal.nome + '</b>',
-                startsAt: starts,
-                endsAt: ends,
-                actions: actions,
-                color: calendarConfig.colorTypes.warning,
-                info: value
-              });
+              var executado = value.executado ? 'Executado' : 'Não executado';
+              if (value.servico_tem_porte.servico.nome === 'Consulta') {
+                vm.agendamentos.push({
+                  title: '<b>' + value.animal.nome + '</b>' + ' - ' + executado,
+                  startsAt: starts,
+                  endsAt: ends,
+                  actions: actionsConsulta,
+                  color: {
+                    primary: '#0974A2'
+                  , secondary: '#4A9ABB'
+                  },
+                  info: value
+                });
+              } else {
+                vm.agendamentos.push({
+                  title: '<b>' + value.animal.nome + '</b>' + ' - ' + executado,
+                  startsAt: starts,
+                  endsAt: ends,
+                  actions: actions,
+                  color: {
+                    primary: '#FFC803'
+                  , secondary: '#FFDD65'
+                  },
+                  info: value
+                });
+              }
             });
 
           },
@@ -149,12 +173,18 @@
 
     function editAgendado() {
       dataStorage.addContrato(vm.form.info.servico_contratado);
+      dataStorage.addAgendamento(vm.form.info.id);
       $location.path('/servico/agendamento');
     }
 
     function editConsulta() {
+      dataStorage.addContrato(vm.form.info.servico_contratado);
       dataStorage.addAgendamento(vm.form.info.id);
       $location.path('/servico/consulta');
+    }
+
+    function gotoAgendamento() {
+      $location.path('/servico/agendamento');
     }
   }
 

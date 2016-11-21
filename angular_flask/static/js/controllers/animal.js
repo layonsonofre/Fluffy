@@ -5,8 +5,8 @@
     .module('Animal', [])
     .config(['$routeProvider', function($routeProvider) {
       $routeProvider
-        .when('/pessoa/pet', {
-          templateUrl: '../static/partials/pessoa/pet.html',
+        .when('/cliente/pet', {
+          templateUrl: '../static/partials/pessoa/cliente/pet.html',
           controller: 'AnimalController',
           controllerAs: 'vm'
         });
@@ -24,11 +24,6 @@
     TelefoneFactory, modalService, $filter) {
     var vm = this;
     vm.form = {};
-    vm.form.pessoa = dataStorage.getPessoa();
-    vm.form.animal = dataStorage.getAnimal();
-    vm.filtro = vm.form.pessoa.nome;
-    vm.alterando = false;
-
     vm.add = add;
     vm.alt = alt;
     vm.get = get;
@@ -38,13 +33,26 @@
     vm.validarAnimal = validarAnimal;
     vm.handleResponse = handleResponse;
 
+    vm.form.pessoa = dataStorage.getPessoa();
+    dataStorage.addPessoa("");
+    vm.form.animal = dataStorage.getAnimal();
+    dataStorage.addAnimal("");
+    vm.filtro = vm.form.pessoa.nome;
+    if (vm.form.animal) {
+      vm.alterando = true;
+      set(vm.form.animal);
+    } else {
+      vm.alterando = false;
+    }
+
     vm.updateSelection = updateSelection;
 
-    vm.getPessoas = getPessoas;
+    vm.getCliente = getCliente;
     vm.getPortes = getPortes;
     vm.getEspecies = getEspecies;
     vm.getRestricoes = getRestricoes;
     vm.getRacas = getRacas;
+    vm.detalhes_animal = detalhes_animal;
 
     vm.addEspecie = addEspecie;
     vm.addRestricao = addRestricao;
@@ -55,25 +63,22 @@
     vm.detalhes_pessoa = detalhes_pessoa;
 
     function selectPessoa() {
-      console.log('pessoa:', vm.form.pessoa);
       if (vm.form.pessoa.id != null) {
         let temp = vm.form.pessoa;
-        // temp.checked = true;
         get(temp);
       }
     }
 
-    getPessoas();
+    getCliente();
     getPortes();
     getEspecies();
     getRestricoes();
     getRacas();
 
-    function getPessoas() {
-      PessoaFactory.get()
+    function getCliente() {
+      PessoaFactory.get({cliente: true})
         .then(function(response) {
           vm.pessoas = response;
-          console.log(response);
         }, function(response) {
           vm.status = 'Failed to load: ' + response.message;
         });
@@ -92,7 +97,6 @@
             } else {
               vm.animais = response;
             }
-            console.log('animais', vm.animais);
           }, function(response) {
             vm.status = 'Failed to load: ' + error.message;
           });
@@ -101,13 +105,11 @@
             pessoa_id: entry.id
           })
           .then(function(response) {
-            console.log('pessoa funcao', response);
             if (!vm.form.animal) {
               vm.form.animal = {};
             }
             vm.form.animal.pessoa_tem_funcao_cliente_id = response.id;
           }, function(response) {
-            console.log('pessoa funcao erro', response);
           });
       }
     }
@@ -122,7 +124,6 @@
     }
 
     function handleResponse(response) {
-      console.log(response);
     }
 
     function validarAnimal() {
@@ -131,14 +132,12 @@
     }
 
     function add() {
+      console.log('add');
       if (validarAnimal()) {
         // adicionando o animal
         AnimalFactory.add(vm.form.animal)
           .then(function(response) {
-            console.log(response);
             if (response.data.result.id) {
-              console.log('animal cadastrada');
-              vm.status = 'animal cadastrada com sucesso';
               vm.form.animal.id = response.data.result.id;
 
               // adicionando restricoes
@@ -158,7 +157,6 @@
               selectPessoa();
             }
           }, function(response) {
-            console.log('erro animal');
             handleResponse(response);
           });
       }
@@ -170,18 +168,18 @@
         // adicionando o animal
         AnimalFactory.alt(vm.form.animal)
           .then(function(response) {
-            console.log(response);
             if (response.data.result.id) {
-              console.log('animal alterado');
-              vm.status = 'animal alterado com sucesso';
 
-              // adicionando restricoes
+              // deletando restricoes antigas
+              angular.forEach(vm.old_restricoes, function(value, key) {
+                AnimalTemRestricaoFactory.del(value.id).then(function(response){
+                });
+              });
               var temp = {};
               temp.animal_id = vm.form.animal.id;
               angular.forEach(vm.form.animal.restricoes, function(value, key) {
-                temp.restricao_id = value;
-
-                AnimalTemRestricaoFactory.alt(value)
+                temp.restricao_id = value.id;
+                AnimalTemRestricaoFactory.add(temp)
                   .then(function(response) {
                     vm.status = 'Restrição alterada com sucesso';
                   }, function(response) {
@@ -191,12 +189,24 @@
 
               selectPessoa();
               vm.alterando = false;
+              cancel();
             }
           }, function(response) {
-            console.log('erro animal');
             handleResponse(response);
           });
       }
+    }
+
+    function detalhes_animal(entry) {
+      vm.form.animal = entry;
+      AnimalTemRestricaoFactory.get({animal_id: entry.id}).then(function(response) {
+        if (!angular.isArray(response)) {
+          vm.form.animal.restricoes = [];
+          vm.form.animal.restricoes.push(response);
+        } else {
+          vm.form.animal.restricoes = response;
+        }
+      });
     }
 
     function set(entry) {
@@ -212,27 +222,26 @@
       AnimalTemRestricaoFactory.get({
         animal_id: entry.id
       }).then(function(response) {
-        console.log('restricoes', response);
-        vm.form.animal.restricoes = [];
-        angular.forEach(response.restricao, function(value, key) {
-          vm.form.animal.restricoes.push(value);
-        })
+        if (!angular.isArray(response)) {
+          vm.form.animal.restricoes = [];
+          vm.form.animal.restricoes.push(response);
+        } else {
+          vm.form.animal.restricoes = response;
+        }
+        vm.old_restricoes = vm.form.animal.restricoes;
       });
-      console.log('animal', vm.form.animal);
     }
 
     function detalhes_pessoa(entry) {
       vm.form.pessoa = {};
       vm.form.pessoa = entry;
       TelefoneFactory.get({pessoa_id: entry.id}).then(function(response) {
-        console.log(response);
         var temp = '';
         angular.forEach(response, function(value, key) {
           temp += '(' + value.codigo_area + ') '+ value.numero + '  /  '
         });
         vm.form.pessoa.telefone = temp;
       });
-      console.log('animal', vm.form.pessoa);
     }
 
     function editar_pessoa(entry) {
@@ -275,7 +284,6 @@
           })
           .then(function(response) {
             vm.racas = response;
-            console.log('racas', vm.racas);
           }, function(response) {
             vm.status = 'Failed to load: ' + error.message;
           });
@@ -311,34 +319,26 @@
         .then(function(result) {
           AnimalFactory.del(vm.form.animal.id)
             .then(function(response) {
-              console.log(response);
             }, function(response) {
-              console.error(response);
             });
         });
     }
 
     function addRaca() {
       RacaFactory.add(vm.raca).then(function(response) {
-        console.log(response)
       }, function(response) {
-        console.log(response)
       });
     }
 
     function addEspecie() {
       EspecieFactory.add(vm.especie).then(function(response) {
-        console.log(response)
       }, function(response) {
-        console.log(response)
       });
     }
 
     function addRestricao() {
       RetricaoFactory.add(vm.restricao).then(function(response) {
-        console.log(response)
       }, function(response) {
-        console.log(response)
       });
     }
 
@@ -362,7 +362,6 @@
 
     function get(data) {
       data = data || null;
-      console.log('params', data);
       return $http({
           url: _url + '/animal',
           method: 'GET',
@@ -381,7 +380,6 @@
     }
 
     function add(data) {
-      console.log('add', JSON.stringify(data));
       return $http({
           url: _url + '/animal',
           data: data,
@@ -400,7 +398,6 @@
     }
 
     function alt(data) {
-      console.log('UPDATING: ' + JSON.stringify(data));
       return $http({
           url: _url + '/animal',
           data: data,

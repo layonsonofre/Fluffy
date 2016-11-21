@@ -37,7 +37,7 @@
     }
 
     function add(data) {
-      console.log(JSON.stringify(data));
+      console.log("data_hora", data);
       return $http({
           url: _url + '/animalTemRestricao',
           data: data,

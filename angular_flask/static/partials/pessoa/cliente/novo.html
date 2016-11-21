@@ -1,7 +1,8 @@
 <div>
   <div class="row">
     <div class="col-xs-12">
-      <h1 class="page-head-line">Cadastrar Cliente</h1>
+      <h1 class="page-head-line" ng-hide="vm.alterando">Cadastrar Cliente</h1>
+      <h1 class="page-head-line" ng-show="vm.alterando">Alterar Cliente</h1>
       <h1 class="page-subhead-line">Insira os dados dos clientes e seus animais</h1>
       <a ng-click="vm.helpActive = !vm.helpActive" class="btn btn-link pull-right"><span class="fa fa-info"></span></a>
       <p class="text-muted">Os campos marcados com * são obrigatórios</p>

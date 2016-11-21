@@ -16,12 +16,14 @@
 
   ConsultaController.$inject = ['ConsultaFactory', 'calendarConfig', 'modalService',
     '$filter', 'PessoaFactory', 'AnimalFactory', 'AnimalTemRestricaoFactory', 'PessoaTemFuncaoFactory',
-    'ServicoTemPorteFactory', '$window', 'dataStorage', 'ServicoFactory', 'VacinaFactory', 'AgendamentoFactory'
+    'ServicoTemPorteFactory', '$window', 'dataStorage', 'ServicoFactory', 'VacinaFactory', 'AgendamentoFactory',
+    'AnamneseFactory'
   ];
 
   function ConsultaController(ConsultaFactory, calendarConfig, modalService,
     $filter, PessoaFactory, AnimalFactory, AnimalTemRestricaoFactory, PessoaTemFuncaoFactory,
-    ServicoTemPorteFactory, $window, dataStorage, ServicoFactory, VacinaFactory, AgendamentoFactory
+    ServicoTemPorteFactory, $window, dataStorage, ServicoFactory, VacinaFactory, AgendamentoFactory,
+    AnamneseFactory
   ) {
     var vm = this;
 
@@ -36,6 +38,7 @@
     vm.removeAplicacao = removeAplicacao;
     vm.getConsulta = getConsulta;
     vm.getVacinas = getVacinas;
+    vm.alt = alt;
 
     vm.consulta = {};
     var agendamento = dataStorage.getAgendamento();
@@ -164,16 +167,16 @@
                 vm.pessoa_tem_funcao = response.pessoa_tem_funcao;
                 console.log('contrato', response);
               });
-            // vm.consulta.data_hora = new Date(vm.consulta.data_hora);
-            // if (!angular.isArray(response.aplicacao)) {
-            //   vm.form.aplicacoes = [];
-            //   vm.form.aplicacoes.push(response.aplicacao);
-            // } else {
-            //   vm.form.aplicacoes = response.aplicacao;
-            // }
-            // angular.forEach(vm.form.aplicacoes, function(value, key) {
-            //   value.data_hora = new Date(value.data_hora);
-            // });
+            vm.consulta.data_hora = new Date(vm.consulta.data_hora);
+            if (!angular.isArray(response.aplicacao)) {
+              vm.form.aplicacoes = [];
+              vm.form.aplicacoes.push(response.aplicacao);
+            } else {
+              vm.form.aplicacoes = response.aplicacao;
+            }
+            angular.forEach(vm.form.aplicacoes, function(value, key) {
+              value.data_hora = new Date(value.data_hora);
+            });
           });
       }
       if (append) {
@@ -213,6 +216,17 @@
       VacinaFactory.get().then(function(response) {
         vm.vacinas = response.data.result;
         console.log(vm.vacinas);
+      });
+    }
+
+    function alt() {
+      AnamneseFactory.add(vm.anamnese).then(function(response){
+        angular.forEach(vm.aplicacoes, function(value, key) {
+          value.servico_agendado_id = vm.servico_agendado_id;
+          AplicacaoFactory.add(value).then(function(response){
+            console.log("response aplicacao", response);
+          });
+        });
       });
     }
   }

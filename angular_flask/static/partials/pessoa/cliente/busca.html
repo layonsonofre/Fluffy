@@ -299,8 +299,8 @@
                 <div class="form-group">
                   <label>Restrições</label>
                   <ul>
-                    <li data-ng-repeat="r in vm.form.animal.restricoes">{{r.nome}}
-                      <p>{{r.descricao}}</p>
+                    <li data-ng-repeat="r in vm.form.animal.restricoes">{{r.restricao.nome}}
+                      <p ng-show="r.restricao.descricao">{{r.restricao.descricao}}</p>
                     </li>
                   </ul>
                   <input class="form-control" type="text" ng-model="vm.form.pessoa.telefone" ng-readonly="true">

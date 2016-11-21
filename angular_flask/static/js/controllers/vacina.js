@@ -24,14 +24,13 @@
     vm.add = add;
     vm.alt = alt;
     vm.del = del;
-    vm.cancel = cancel;
 
     vm.getLote = getLote;
     vm.addLote = addLote;
-    vm.altLote = altLote;
     vm.delLote = delLote;
+    vm.setLote = setLote;
+    vm.cancelLote = cancelLote;
 
-    vm.incluirLote = incluirLote;
     vm.updateSelection = updateSelection;
 
     get();
@@ -46,7 +45,7 @@
     }
 
     function add() {
-      VacinaFactory.add(vm.form)
+      VacinaFactory.add(vm.form.vacina)
         .then(function(response) {
           get();
         }, function(response) {
@@ -80,31 +79,30 @@
         });
     }
 
-    function incluirLote() {
-      if (!vm.form.lotes) {
-        vm.form.lotes = [];
-      }
-      vm.form.lotes.push({
-        id: null
-      });
+    function setLote(entry) {
+      vm.lote = entry.lote;
+      vm.alterandoLote = true;
     }
+
 
     function addLote() {
-      LoteFactory.add(vm.form)
-        .then(function(response) {
-          get();
-        }, function(response) {
-          vm.status = response.message
-        });
-    }
-
-    function altLote(data) {
-      LoteFactory.altLote(data)
-        .then(function(response) {
-          getLote();
-        }, function(response) {
-          vm.status = response.message
-        });
+      vm.lote.vencimento = new Date(vm.lote.vencimento).toISOString().substring(0, 19).replace('T', ' ');
+      if (vm.alterandoLote) {
+        vm.alterandoLote = false;
+        LoteFactory.alt(vm.lote)
+          .then(function(response) {
+            getLote(vm.vacina);
+          }, function(response) {
+            vm.status = response.message
+          });
+      } else {
+        LoteFactory.add(vm.lote)
+          .then(function(response) {
+            getLote(vm.vacina);
+          }, function(response) {
+            vm.status = response.message
+          });
+      }
     }
 
     function delLote(item) {
@@ -120,7 +118,7 @@
           .then(function(result) {
             LoteFactory.del(entry.id)
               .then(function(response) {
-                getLote();
+                getLote(vm.vacina);
               }, function(response) {
                 vm.status = response.message
               });
@@ -129,10 +127,11 @@
     }
 
     function getLote(entry) {
-      console.log(entry);
       if (entry.checked) {
         vm.form.lotes = [];
-        LoteFactory.getLotesVacina({vacina_id: entry.id})
+        LoteFactory.getLotesVacina({
+            vacina_id: entry.id
+          })
           .then(function(response) {
             if (!angular.isArray(response)) {
               vm.form.lotes = [];
@@ -140,26 +139,28 @@
             } else {
               vm.form.lotes = response;
             }
-            // angular.forEach(vm.form.lotes, function(value, key){
-            //   value.lote.vencimento = new Date(value.lote.vencimento);
-            // });
-            console.log(vm.form.lotes);
+            angular.forEach(vm.form.lotes, function(value, key) {
+              value.lote.vencimento = Date.parse(value.lote.vencimento);
+            });
           }, function(response) {
             vm.status = 'Failed to load: ' + error.message;
           });
       }
     }
 
-    function updateSelection(position, entities) {
+    function updateSelection(entry, entities) {
       angular.forEach(entities, function(subscription, index) {
-        if (position != subscription.id) {
+        if (entry.id != subscription.id) {
           subscription.checked = false;
         }
       });
+      vm.vacina = entry;
+      cancelLote();
     }
 
-    function cancel() {
-      vm.form.lotes = {};
+    function cancelLote() {
+      vm.form.lotes = [];
+      vm.lote = null;
     }
   }
 

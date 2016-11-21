@@ -2,40 +2,36 @@
   'use strict';
 
   angular
-    .module('Pessoa', [])
+    .module('Funcionario', [])
     .config(['$routeProvider', function($routeProvider) {
       $routeProvider
-        .when('/cliente', {
-          templateUrl: '../static/partials/pessoa/cliente/novo.html',
-          controller: 'PessoaController',
+        .when('/funcionario', {
+          templateUrl: '../static/partials/pessoa/funcionario/novo.html',
+          controller: 'FuncionarioController',
           controllerAs: 'vm'
         })
-        .when('/cliente/busca', {
-          templateUrl: '../static/partials/pessoa/cliente/busca.html',
-          controller: 'PessoaController',
+        .when('/funcionario/busca', {
+          templateUrl: '../static/partials/pessoa/funcionario/busca.html',
+          controller: 'FuncionarioController',
           controllerAs: 'vm'
         });
     }])
-    .controller('PessoaController', PessoaController)
-    .factory('PessoaFactory', PessoaFactory);
+    .controller('FuncionarioController', FuncionarioController);
 
-  PessoaController.$inject = ['PessoaFactory', '$http', 'RedeSocialFactory', 'AgendaFactory',
-    'PorteFactory', 'RacaFactory', 'EspecieFactory', 'RestricaoFactory', 'modalService',
-    'dataStorage', '$location', 'calendarConfig', 'FuncaoFactory', 'PermissaoFactory',
-    'PessoaTemFuncaoFactory', 'PessoaTemRedeSocialFactory', 'TelefoneFactory', 'AnimalFactory',
-    'AnimalTemRestricaoFactory', '$filter'
+  FuncionarioController.$inject = ['PessoaFactory', '$http', 'RedeSocialFactory', 'AgendaFactory',
+    'modalService', 'dataStorage', '$location', 'calendarConfig', 'FuncaoFactory', 'PermissaoFactory',
+    'PessoaTemFuncaoFactory', 'PessoaTemRedeSocialFactory', 'TelefoneFactory', '$filter'
   ];
 
-  function PessoaController(PessoaFactory, $http, RedeSocialFactory, AgendaFactory,
-    PorteFactory, RacaFactory, EspecieFactory, RestricaoFactory, modalService,
-    dataStorage, $location, calendarConfig, FuncaoFactory, PermissaoFactory,
-    PessoaTemFuncaoFactory, PessoaTemRedeSocialFactory, TelefoneFactory, AnimalFactory,
-    AnimalTemRestricaoFactory, $filter
+  function FuncionarioController(PessoaFactory, $http, RedeSocialFactory, AgendaFactory,
+    modalService, dataStorage, $location, calendarConfig, FuncaoFactory, PermissaoFactory,
+    PessoaTemFuncaoFactory, PessoaTemRedeSocialFactory, TelefoneFactory, $filter
   ) {
     var vm = this;
 
     vm.form = {};
     vm.form.pessoa = dataStorage.getPessoa();
+    // vm.form.pessoa.funcao = "";
     dataStorage.addPessoa("");
 
     vm.add = add;
@@ -48,11 +44,6 @@
     vm.excluir_pessoa = excluir_pessoa;
     vm.detalhes_pessoa = detalhes_pessoa;
     vm.editar_pessoa = editar_pessoa;
-    vm.gotoAddPet = gotoAddPet;
-
-    vm.excluir_animal = excluir_animal;
-    vm.detalhes_animal = detalhes_animal;
-    vm.editar_animal = editar_animal;
 
     vm.removeTelefone = removeTelefone;
     vm.incluirTelefone = incluirTelefone;
@@ -71,17 +62,13 @@
 
     vm.selectEstado = selectEstado;
     vm.getWhatsappId = getWhatsappId;
-    vm.getAnimais = getAnimais;
-    vm.getHistorico = getHistorico;
-    vm.selectAnimal = selectAnimal;
-    vm.novoServico = novoServico;
 
     if (!vm.form.pessoa.id) {
       get();
     }
 
     function get() {
-      PessoaFactory.get({cliente: true})
+      PessoaFactory.get()
         .then(function(response) {
           vm.pessoas = response;
         }, function(response) {
@@ -109,6 +96,7 @@
         .then(function(result) {
           PessoaFactory.del(vm.form.pessoa.id)
             .then(function(response) {
+              console.log('del pessoa', response);
             }, function(response) {
               console.error(response);
             });
@@ -124,62 +112,14 @@
       vm.alterando = true;
       vm.form.pessoa = entry;
 
-      AnimalTemRestricaoFactory.get({
-        animal_id: entry.id
-      }).then(function(response) {
-        vm.form.animal.restricoes = [];
-        angular.forEach(response.restricao, function(value, key) {
-          vm.form.animal.restricoes.push(value);
-        })
-      });
-    }
-
-    function getAnimais(entry) {
-      vm.form.pessoa = entry;
-      vm.animais = {};
-      if (entry.checked) {
-        AnimalFactory.get({
-            pessoa_id: entry.id
-          })
-          .then(function(response) {
-            if (!angular.isArray(response)) {
-              vm.animais = [];
-              vm.animais.push(response);
-            } else {
-              vm.animais = response;
-            }
-          }, function(response) {
-            vm.status = 'Failed to load: ' + error.message;
-          });
-      }
-    }
-
-    function selectAnimal(entry) {
-      dataStorage.animal = entry;
-      getHistorico(entry);
-    }
-
-    function getHistorico(entry) {
-      vm.historico = {};
-      if (entry.checked) {
-        AgendaFactory.getAgendados({animal_id: entry.id})
-          .then(function(response) {
-            if (!angular.isArray(response.data.result)) {
-              vm.historico = [];
-              vm.historico.push(response.data.result);
-            } else {
-              vm.historico = response.data.result;
-            }
-          }, function(response) {
-            vm.status = 'Failed to load historico: ' + error.message;
-          });
-      }
+      console.log('pessoa', vm.form.pessoa);
     }
 
     function detalhes_pessoa(entry) {
       vm.form.pessoa = {};
       vm.form.pessoa = entry;
       TelefoneFactory.get({pessoa_id: entry.id}).then(function(response) {
+        console.log(response);
         var temp = '';
         angular.forEach(response, function(value, key) {
           temp += '(' + value.codigo_area + ') '+ value.numero + '   '
@@ -192,28 +132,7 @@
       vm.form.pessoa = {};
       vm.form.pessoa = entry;
       dataStorage.addPessoa(vm.form.pessoa);
-      $location.path('/cliente');
-    }
-
-    function detalhes_animal(entry) {
-      vm.form.animal = {};
-      vm.form.animal = entry;
-      AnimalTemRestricaoFactory.get({animal_id: entry.id}).then(function(response) {
-        if (!angular.isArray(response)) {
-          vm.form.animal.restricoes = [];
-          vm.form.animal.restricoes.push(response);
-        } else {
-          vm.form.animal.restricoes = response;
-        }
-      });
-    }
-
-    function editar_animal(entry) {
-      vm.form.animal = {};
-      vm.form.animal = entry;
-      dataStorage.addPessoa(vm.form.pessoa);
-      dataStorage.addAnimal(vm.form.animal);
-      $location.path('/cliente/pet');
+      $location.path('/funcionario');
     }
 
     function novoServico() {
@@ -423,6 +342,7 @@
     }
 
     function handleResponse(response) {
+      console.log(response);
     }
 
     vm.setFuncao = function(funcao) {
@@ -436,6 +356,7 @@
         .then(function(response) {
           vm.whatsapp_id = response.id;
         }, function(response) {
+          console.log('getWhatsappId', response);
         });
     }
 
@@ -446,6 +367,7 @@
         selectEstado();
         PessoaFactory.add(vm.form.pessoa)
           .then(function(response) {
+            console.log("1", response);
             if (response.data.result.id) {
               vm.form.pessoa.id = response.data.result.id;
 
@@ -455,6 +377,7 @@
 
                 TelefoneFactory.add(value)
                   .then(function(response) {
+                    console.log("2", response);
                     vm.status = 'Telefone cadastrado com sucesso';
                   }, function(response) {
                     handleResponse(response)
@@ -467,7 +390,7 @@
                   temp.rede_social_id = vm.whatsapp_id;
                   PessoaTemRedeSocialFactory.add(temp)
                     .then(function(response) {
-                      vm.status = 'Whatsapp inserido';
+                      console.log("3", response);
                     });
                 }
               });
@@ -478,40 +401,31 @@
 
                 PessoaTemRedeSocialFactory.add(value)
                   .then(function(response) {
-                    vm.status = 'Rede social cadastrado com sucesso';
-                  }, function(response) {
-                    handleResponse(response)
+                    console.log("4", response);
                   });
               });
 
+              //adicionando pessoa função
+              var temp = {};
+              temp.pessoa_id = vm.form.pessoa.id;
+              temp.funcao_id = vm.form.funcao.id;
 
-              var nome_funcao = "";
-              var funcao_id = 0;
-              if (vm.form.pessoa.clienteEspecial) {
-                nome_funcao = 'cliente-especial';
-              } else {
-                nome_funcao = vm.form.pessoa.funcao;
-              }
-              FuncaoFactory.get({
-                  nome: nome_funcao
-                })
+              PessoaTemFuncaoFactory.add(temp)
                 .then(function(response) {
-                  funcao_id = response.id;
-
-                  //adicionando pessoa função
-                  var temp = {};
-                  temp.pessoa_id = vm.form.pessoa.id;
-                  temp.funcao_id = funcao_id;
-
-                  PessoaTemFuncaoFactory.add(temp)
-                    .then(function(response) {
-                      vm.status = 'Pessoa função adicionada com sucesso';
-                      vm.form.pessoa.pessoa_funcao_id = response.data.result.id;
-                    }, function(response) {
-                      handleResponse(response)
+                  console.log("5", response);
+                  vm.form.pessoa.pessoa_funcao_id = response.data.result.id;
+                  // adicionando permissoes
+                  console.log("permissoesFuncionario", vm.form.permissoesFuncionario);
+                  angular.forEach(vm.form.permissoesFuncionario, function(value, key) {
+                    value.pessoa_funcao_id  = vm.form.pessoa.pessoa_funcao_id;
+                    value.permissao_id = value.id;
+                    PessoaTemPermissaoFactory.add({value}).then(function(response) {
+                      console.log("6", response);
                     });
+                  });
+                }, function(response) {
+                  console.log("6", response);
                 });
-
             }
           }, function(response) {
             handleResponse(response);
@@ -534,33 +448,11 @@
         .then(function(result) {
           PessoaFactory.del(vm.form.pessoa.id)
             .then(function(response) {
+              console.log('del pessoa', response);
             }, function(response) {
               console.error(response);
             });
         });
-    }
-
-    function excluir_animal(data) {
-      vm.form.pessoa = data;
-      var modalOptions = {
-        closeButtonText: 'Cancelar',
-        actionButtonText: 'Excluir',
-        actionButtonClass: 'btn btn-danger'
-      };
-      modalService.showModal({}, modalOptions)
-        .then(function(result) {
-          AnimalFactory.del(vm.form.animal.id)
-            .then(function(response) {
-            }, function(response) {
-              console.error(response);
-            });
-        });
-    }
-
-    function gotoAddPet() {
-      add();
-      dataStorage.addPessoa(vm.form.pessoa);
-      $location.path('/cliente/pet');
     }
 
     function getFuncoes() {
@@ -620,6 +512,8 @@
     }
 
     function add(data) {
+      console.log('pessoa');
+      console.log(JSON.stringify(data));
       return $http({
           method: 'POST',
           url: _url + '/pessoa',
@@ -638,6 +532,7 @@
     }
 
     function alt(data) {
+      console.log('UPDATING: ' + JSON.stringify(data));
       return $http({
           url: _url + '/pessoa',
           data: data,

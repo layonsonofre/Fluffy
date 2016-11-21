@@ -9,7 +9,7 @@
       'Estoque', 'Venda', 'Estatisticas', 'modalServiceModule', 'dataStorageService',
       'Authentication', 'Login', 'Raca', 'Porte', 'Especie', 'Restricao', 'Configuracao',
       'Lote', 'Vacina', 'angularUtils.directives.dirPagination', 'Anamnese', 'AnimalTemRestricao',
-      'ServicoTemPorte',
+      'ServicoTemPorte', 'Funcionario', 'Aplicacao'
     ])
     .config(['$routeProvider', '$locationProvider', '$httpProvider', 'calendarConfig', 'uibDatepickerPopupConfig',
       function($routeProvider, $locationProvider, $httpProvider, calendarConfig, uibDatepickerPopupConfig) {

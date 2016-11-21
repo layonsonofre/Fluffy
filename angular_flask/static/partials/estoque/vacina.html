@@ -25,62 +25,20 @@
                   <p class="help-block" ng-show="vm.helpActive">Insira o nome da vacina</p>
                 </div>
               </div>
-              <div class="col-xs-2">
+              <div class="col-xs-3">
                 <div class="form-group">
                   <label>Doses *</label>
                   <input class="form-control" type="text" data-ng-model="vm.form.vacina.total_doses">
                   <p class="help-block" ng-show="vm.helpActive">Total de doses</p>
                 </div>
               </div>
-              <div class="col-xs-2">
+              <div class="col-xs-3">
                 <div class="form-group">
                   <label>Intervalo *</label>
                   <input class="form-control" type="text" data-ng-model="vm.form.vacina.quantidade">
                   <p class="help-block" ng-show="vm.helpActive">Insira a quantidade</p>
                 </div>
               </div>
-              <div class="col-xs-2">
-                <div class="form-group">
-                  <label>Lote</label>
-                  <a class="form-control btn btn-link" ng-click="vm.incluirLote()" data-toggle="tooltip" data-placement="top" title="Adicionar informações sobre um lote">
-                    <span class="fa fa-plus"></span>&nbsp;<span class="fa fa-barcode"></span>&nbsp;
-                    <b>Adicionar</b>
-                  </a>
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <fieldset data-ng-repeat="entry in vm.form.lotes">
-                <div class="col-xs-5">
-                  <div class="form-group">
-                    <label>Número *</label>
-                    <input class="form-control" type="text" data-ng-model="entry.lote.numero">
-                    <p class="help-block" ng-show="vm.helpActive">Identificação do lote</p>
-                  </div>
-                </div>
-                <div class="col-xs-3">
-                  <div class="form-group">
-                    <label>Vencimento *</label>
-                    <input class="form-control" type="text" data-ng-model="entry.lote.vencimento">
-                    <p class="help-block" ng-show="vm.helpActive">Data de vencimento</p>
-                  </div>
-                </div>
-                <div class="col-xs-2">
-                  <div class="form-group">
-                    <label>Preço (R$) *</label>
-                    <input class="form-control" type="text" data-ng-model="entry.lote.preco">
-                    <p class="help-block" ng-show="vm.helpActive">Preço da vacina</p>
-                  </div>
-                </div>
-                <div class="col-xs-2">
-                  <div class="form-group" ng-hide="$first">
-                    <label>Remover</label>
-                    <a class="form-control btn btn-link" ng-click="vm.delLote(entry.lote)" data-toggle="tooltip" data-placement="top" title="" data-title="Remover este lote">
-                      <i class="fa fa-minus"></i>&nbsp;<i class="fa fa-barcode"></i>
-                    </a>
-                  </div>
-                </div>
-              </fieldset>
             </div>
             <div class="row">
               <div class="col-xs-12">
@@ -125,7 +83,7 @@
                   <tbody>
                     <tr dir-paginate="entry in vm.vacinas | filter:vm.filtroVacina | orderBy: 'nome' | itemsPerPage: 10" pagination-id="vacina">
                       <td>
-                        <input type="checkbox" ng-model="entry.checked" ng-click="vm.updateSelection(entry.id, vm.vacinas); vm.getLote(entry)">
+                        <input type="checkbox" ng-model="entry.checked" ng-click="vm.updateSelection(entry, vm.vacinas); vm.getLote(entry)">
                       </td>
                       <td>
                         <span data-ng-hide="editMode">{{entry.nome}}</span>
@@ -190,21 +148,16 @@
                   <tbody>
                     <tr dir-paginate="entry in vm.form.lotes | filter:vm.filtroLote | orderBy: 'vencimento' : reverse | itemsPerPage: 10" pagination-id="lote">
                       <td>
-                        <span data-ng-hide="editMode">{{entry.lote.numero}}</span>
-                        <input type="text" data-ng-show="editMode" data-ng-model="entry.lote.numero" data-ng-required>
+                        <span>{{entry.lote.numero}}</span>
                       </td>
                       <td>
-                        <span data-ng-hide="editMode">{{entry.lote.vencimento}}</span>
-                        <input type="text" data-ng-show="editMode" data-ng-model="entry.lote.vencimento" data-ng-required>
+                        <span>{{entry.lote.vencimento}}</span>
                       </td>
                       <td>
-                        <span data-ng-hide="editMode">{{entry.lote.preco}}</span>
-                        <input type="text" data-ng-show="editMode" data-ng-model="entry.lote.preco" data-ng-required>
+                        <span>{{entry.lote.preco}}</span>
                       </td>
                       <td>
-                        <a class="btn btn-link" data-ng-hide="editMode" data-ng-click="editMode = true" data-toggle="tooltip" data-placement="top" title="Alterar dados cadastrados"><span class="fa fa-pencil"></span></a>
-                        <a class="btn btn-link" data-ng-show="editMode" data-ng-click="vm.altLote(entry); editMode = false" data-toggle="tooltip" data-placement="top" title="Salvar alterações"><span class="fa fa-check"></span></a>
-                        <a class="btn btn-link" data-ng-show="editMode" data-ng-click="editMode = false" data-toggle="tooltip" data-placement="top" title="Cancelar alterações"><span class="fa fa-close"></span></a>
+                        <a class="btn btn-link" data-toggle="modal" data-target="#adicionarLote" ng-click="vm.setLote(entry)" data-toggle="tooltip" data-placement="top" title="Alterar dados cadastrados"><span class="fa fa-pencil"></span></a>
                         <a class="btn btn-link pull-right" ng-click="vm.delLote(entry)" data-toggle="tooltip" data-placement="top" title="Excluir cadastro"><span class="fa fa-trash"></span></a>
                       </td>
                     </tr>
@@ -218,9 +171,60 @@
               <dir-pagination-controls pagination-id="lote"></dir-pagination-controls>
             </div>
           </div>
+          <div class="row">
+            <div class="col-xs-12">
+              <div class="form-group">
+                <a class="form-control btn btn-link" data-toggle="modal" data-target="#adicionarLote" data-toggle="tooltip" data-placement="top" title="Adicionar informações sobre um lote" >
+                  <span class="fa fa-plus"></span>&nbsp;<span class="fa fa-barcode"></span>&nbsp;
+                  <b>Adicionar Lote</b>
+                </a>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div>
+
+  <div class="modal fade" tabindex="-1" id="adicionarLote">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" ng-click="vm.lote = null" aria-hidden="true">&times;</button>
+          <h4 class="modal-title">Adicionar Lote</h4>
+        </div>
+        <form ng-submit="vm.addLote()">
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-xs-12">
+                <div class="form-group">
+                  <label>Número *</label>
+                  <input class="form-control" type="text" data-ng-model="vm.lote.numero">
+                  <p class="help-block" ng-show="vm.helpActive">Identificação do lote</p>
+                </div>
+              </div>
+              <div class="col-xs-12">
+                <div class="form-group">
+                  <label>Vencimento *</label>
+                  <input class="form-control" type="text" data-ng-model="vm.lote.vencimento">
+                  <p class="help-block" ng-show="vm.helpActive">Data de vencimento</p>
+                </div>
+              </div>
+              <div class="col-xs-12">
+                <div class="form-group">
+                  <label>Preço (R$) *</label>
+                  <input class="form-control" type="text" data-ng-model="vm.lote.preco">
+                  <p class="help-block" ng-show="vm.helpActive">Preço da vacina</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <a type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.lote = null">Cancelar</a>
+            <a type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.addLote()">Confirmar</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 </div>

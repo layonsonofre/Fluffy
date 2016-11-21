@@ -54,7 +54,6 @@
 
     var venda = dataStorage.getVenda();
     if (venda != null) {
-      console.log("venda", venda);
       vm.cart_total = venda.cart_total;
       vm.cliente_nome = venda.cliente_nome;
     }
