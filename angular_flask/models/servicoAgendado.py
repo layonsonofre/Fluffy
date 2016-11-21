@@ -15,6 +15,7 @@ class ServicoAgendado():
 		self.data_hora_executado = data[15]
 		self.pessoa_tem_funcao_funcionario = [data[16], data[17], data[18]]
 		self.preco = float(data[19])
+		self.cancelado = False if data[20] == 0 else True
 
 	def toJSON(self):
 		return {
@@ -47,7 +48,8 @@ class ServicoAgendado():
 				"pessoa_id":self.pessoa_tem_funcao_funcionario[1],
 				"pessoa_nome":self.pessoa_tem_funcao_funcionario[2]
 			},
-			"preco": self.preco
+			"preco": self.preco,
+			"cancelado": self.cancelado
 		}
 
 	def fromJSON():
