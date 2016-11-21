@@ -63,6 +63,7 @@ def insertPedido() :
 
 	transacao_id = 0
 	valor = 0
+	desconto = 0
 
 	if "transacao_id" in json:
 		transacao_id = json["transacao_id"]
@@ -73,23 +74,22 @@ def insertPedido() :
 	if "valor" in json:
 		valor = json["valor"]
 
-	data = Util.postData("insServicoContratado", [json["pessoa_tem_funcao_funcionario_id"], valor, transacao_id])
-	servico_contratado_id = data[0]
-	print(servico_contratado_id)
-	servicosAgendados = json["servicos_agendados"]
+	if "desconto" in json:
+		desconto = json["desconto"]
 
-	for servicoAgendado in servicosAgendados:
-		observacao = None
-		data_hora_executado = None
-		pessoa_tem_funcao_funcionario_executa_id = None
-		observacao = servicoAgendado["observacao"] if ("observacao" in servicoAgendado) else None
-		data_hora_executado = servicoAgendado["data_hora_executado"] if ("data_hora_executado" in servicoAgendado) else None
-		pessoa_tem_funcao_funcionario_executa_id = servicoAgendado["pessoa_tem_funcao_funcionario_executa_id"] if("pessoa_tem_funcao_funcionario_executa_id" in servicoAgendado) else None
-		data = Util.postData("insServicoAgendado", [
-			servicoAgendado["preco"], servicoAgendado["recorrente"], servicoAgendado["data_hora"], servicoAgendado["servico_id"],
-			servicoAgendado["animal_id"], servico_contratado_id, servicoAgendado["executado"],
-			servicoAgendado["pago"], observacao, data_hora_executado,
-			pessoa_tem_funcao_funcionario_executa_id
+	data = Util.postData("insPedido", [valor, desconto, transacao_id, json["pessoa_tem_funcao_cliente_id"], json["pessoa_tem_funcao_funcionario_id"]])
+	pedido_id = data[0]
+	print(pedido_id)
+	itensDeVenda = json["itens_de_venda"]
+
+	for itemDeVenda in itensDeVenda:
+		
+		preco = itemDeVenda["preco"]
+		quantidade = itemDeVenda["quantidade"]
+		item_id = itemDeVenda["item_id"]
+
+		data = Util.postData("insItemDeVenda", [
+			preco, quantidade, item_id, pedido_id
 		])
 
 	return jsonify(result="OK")
