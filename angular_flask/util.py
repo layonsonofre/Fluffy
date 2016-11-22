@@ -61,7 +61,7 @@ class Util:
         args["servicoContratado"] = ["id", "pessoa_tem_funcao_funcionario_id", "preco", "transacao_id"]
         args["servicoTemPorte"] = ["id","servico_id","porte_id","preco"]
         args["telefone"] = ["id", "numero", "codigo_area", "codigo_pais", "pessoa_id"]
-        args["transacao"] = ["id","tipo","valor"]
+        args["transacao"] = ["id","tipo","valor", "comentario"]
         args["vacina"] = ["id", "nome", "dose", "intervalo"]
         args["vacinaTemLote"] = ["id", "vacina_id", "lote_id", "quantidade"]
 

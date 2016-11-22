@@ -17,7 +17,7 @@ def insertServicoAgendado() :
 	if "transacao_id" in json:
 		transacao_id = json["transacao_id"]
 	else:
-		data = Util.postData("insTransacao", ["C", 0])
+		data = Util.postData("insTransacao", ["C", 0, None])
 		transacao_id = data[0]
 
 	if "valor" in json:
@@ -38,6 +38,7 @@ def insertServicoAgendado() :
 		animal_id = servicoAgendado["animal_id"] if ("animal_id" in servicoAgendado) else None
 		executado = ("executado" in servicoAgendado)
 		pago = ("pago" in servicoAgendado)
+		cancelado = servicoAgendado["cancelado"] if "cancelado" in servicoAgendado  else False
 
 		data = Util.postData("insServicoAgendado", [
 			preco,
@@ -50,7 +51,8 @@ def insertServicoAgendado() :
 			pago,
 			observacao,
 			data_hora_executado,
-			pessoa_tem_funcao_funcionario_executa_id
+			pessoa_tem_funcao_funcionario_executa_id,
+			cancelado
 		])
 		print data
 
@@ -68,7 +70,7 @@ def insertPedido() :
 	if "transacao_id" in json:
 		transacao_id = json["transacao_id"]
 	else:
-		data = Util.postData("insTransacao", ["C", 0])
+		data = Util.postData("insTransacao", ["C", 0, None])
 		transacao_id = data[0]
 
 	if "valor" in json:
