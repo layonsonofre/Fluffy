@@ -229,9 +229,7 @@
           pessoa_id: entry.id
         })
         .then(function(response) {
-          if (response.data.success != true) {
-            ngToast.warning({content: '<b>Não foram encontrados animais</b>: ' + response.data.message});
-          }
+          console.log("response", response);
           if (!angular.isArray(response)) {
             vm.animais = [];
             vm.animais.push(response);
@@ -239,7 +237,7 @@
             vm.animais = response;
           }
         }, function(response) {
-          ngToast.warning({content: '<b>Falha ao adicionar o registro</b>: ' + response.data.message});
+          ngToast.warning({content: '<b>Falha ao buscar os animais</b>: ' + response.data.message});
         });
     }
 
@@ -289,7 +287,7 @@
 
     function cancelAgendamento(item) {
       if (item.new === true) {
-        vm.form.servicos_agendados = vm.form.servicos_agendados.splice(vm.form.servicos_agendados.indexOf(item), 1)
+        vm.form.servicos_agendados.splice(vm.form.servicos_agendados.indexOf(item), 1)
       } else {
         var modalOptions = {
           closeButtonText: 'Fechar',

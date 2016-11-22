@@ -1,9 +1,9 @@
-(function() {
+(function () {
   'use strict';
 
   angular
     .module('Funcionario', [])
-    .config(['$routeProvider', function($routeProvider) {
+    .config(['$routeProvider', function ($routeProvider) {
       $routeProvider
         .when('/funcionario', {
           templateUrl: '../static/partials/pessoa/funcionario/novo.html',
@@ -20,12 +20,14 @@
 
   FuncionarioController.$inject = ['PessoaFactory', '$http', 'RedeSocialFactory', 'AgendaFactory',
     'modalService', 'dataStorage', '$location', 'calendarConfig', 'FuncaoFactory', 'PermissaoFactory',
-    'PessoaTemFuncaoFactory', 'PessoaTemRedeSocialFactory', 'TelefoneFactory', '$filter'
+    'PessoaTemFuncaoFactory', 'PessoaTemRedeSocialFactory', 'TelefoneFactory', '$filter', 'ngToast',
+    'PessoaTemPermissaoFactory'
   ];
 
   function FuncionarioController(PessoaFactory, $http, RedeSocialFactory, AgendaFactory,
     modalService, dataStorage, $location, calendarConfig, FuncaoFactory, PermissaoFactory,
-    PessoaTemFuncaoFactory, PessoaTemRedeSocialFactory, TelefoneFactory, $filter
+    PessoaTemFuncaoFactory, PessoaTemRedeSocialFactory, TelefoneFactory, $filter, ngToast,
+    PessoaTemPermissaoFactory
   ) {
     var vm = this;
 
@@ -69,16 +71,16 @@
 
     function get() {
       PessoaFactory.get()
-        .then(function(response) {
+        .then(function (response) {
           vm.pessoas = response;
-        }, function(response) {
+        }, function (response) {
           vm.status = 'Failed to load: ' + response.message;
         });
     }
 
     function updateSelection(position, entities) {
       cancel();
-      angular.forEach(entities, function(subscription, index) {
+      angular.forEach(entities, function (subscription, index) {
         if (position != subscription.id) {
           subscription.checked = false;
         }
@@ -93,11 +95,11 @@
         actionButtonClass: 'btn btn-danger'
       };
       modalService.showModal({}, modalOptions)
-        .then(function(result) {
+        .then(function (result) {
           PessoaFactory.del(vm.form.pessoa.id)
-            .then(function(response) {
+            .then(function (response) {
               console.log('del pessoa', response);
-            }, function(response) {
+            }, function (response) {
               console.error(response);
             });
         });
@@ -118,11 +120,11 @@
     function detalhes_pessoa(entry) {
       vm.form.pessoa = {};
       vm.form.pessoa = entry;
-      TelefoneFactory.get({pessoa_id: entry.id}).then(function(response) {
+      TelefoneFactory.get({ pessoa_id: entry.id }).then(function (response) {
         console.log(response);
         var temp = '';
-        angular.forEach(response, function(value, key) {
-          temp += '(' + value.codigo_area + ') '+ value.numero + '   '
+        angular.forEach(response, function (value, key) {
+          temp += '(' + value.codigo_area + ') ' + value.numero + '   '
         });
         vm.form.pessoa.telefone = temp;
       });
@@ -165,11 +167,11 @@
           actionButtonClass: 'btn btn-danger'
         };
         modalService.showModal({}, modalOptions)
-          .then(function(result) {
+          .then(function (result) {
             TelefoneFactory.del(item.id)
-              .then(function(response) {
+              .then(function (response) {
                 getTelefones();
-              }, function(response) {
+              }, function (response) {
                 vm.status = 'Falha na tentativa de remover o telefone.\n' + error.message;
               });
           });
@@ -181,9 +183,9 @@
         TelefoneFactory.get({
             pessoa_id: vm.form.pessoa.id
           })
-          .then(function(response) {
+          .then(function (response) {
             vm.form.telefones = response;
-          }, function(response) {
+          }, function (response) {
             vm.status = 'Failed to load telefones: ' + error.message;
           });
       }
@@ -208,7 +210,7 @@
         PessoaTemRedeSocialFactory.get({
             pessoa_id: vm.form.pessoa.id
           })
-          .then(function(response) {
+          .then(function (response) {
             if (!angular.isArray(response)) {
               vm.form.redesSociais = [];
               vm.form.redesSociais.push(response);
@@ -218,7 +220,7 @@
             if (append) {
               vm.form.redesSociais.push({ id: null });
             }
-          }, function(response) {
+          }, function (response) {
             vm.status = 'Failed to load: ' + error.message;
           });
       }
@@ -235,9 +237,9 @@
         vm.form.redesSociais = vm.form.redesSociais.splice(vm.form.redesSociais.indexOf(item), 1)
       } else {
         PessoaTemRedeSocialFactory.del(item.id)
-          .then(function(response) {
+          .then(function (response) {
             getPessoaRedesSociais(false);
-          }, function(response) {
+          }, function (response) {
             vm.status = 'Falha na tentativa de remover a rede social.\n' + error.message;
           });
       }
@@ -245,18 +247,18 @@
 
     function getTiposRedesSociais() {
       RedeSocialFactory.get()
-        .then(function(response) {
+        .then(function (response) {
           vm.tiposRedesSociais = response;
-        }, function(response) {
+        }, function (response) {
           vm.status = 'Failed to load socials networks: ' + error.message;
         });
     }
 
     function addRedeSocial() {
       RedeSocial.add(vm.form.nomeRedeSocial)
-        .then(function(response) {
+        .then(function (response) {
           getTiposRedesSociais();
-        }, function(response) {
+        }, function (response) {
           vm.status = 'Failed ' + error.message;
         })
     }
@@ -269,7 +271,7 @@
             'Authorization': undefined
           }
         })
-        .then(function(response) {
+        .then(function (response) {
           vm.form.pessoa.pais = "Brasil";
           vm.form.pessoa.uf = response.data["uf"];
           vm.form.pessoa.cidade = response.data["cidade"];
@@ -342,10 +344,10 @@
     }
 
     function handleResponse(response) {
-      console.log(response);
+      ngToast.warning({ content: '<b>Falha ao realizar a operação</b>: ' + response });
     }
 
-    vm.setFuncao = function(funcao) {
+    vm.setFuncao = function (funcao) {
       vm.form.pessoa.funcao = funcao;
     }
 
@@ -353,9 +355,9 @@
       RedeSocialFactory.get({
           nome: 'whatsapp'
         })
-        .then(function(response) {
+        .then(function (response) {
           vm.whatsapp_id = response.id;
-        }, function(response) {
+        }, function (response) {
           console.log('getWhatsappId', response);
         });
     }
@@ -366,20 +368,23 @@
         // adicionando a pessoa
         selectEstado();
         PessoaFactory.add(vm.form.pessoa)
-          .then(function(response) {
+          .then(function (response) {
             console.log("1", response);
-            if (response.data.result.id) {
+
+            if (response.data.success != true) {
+              ngToast.warning({ content: '<b>Falha ao adicionar o registro</b>: ' + response.data.mensagem });
+            } else if (response.data.result.id) {
               vm.form.pessoa.id = response.data.result.id;
 
               // adicionando telefones
-              angular.forEach(vm.form.telefones, function(value, key) {
+              angular.forEach(vm.form.telefones, function (value, key) {
                 value.pessoa_id = vm.form.pessoa.id;
 
                 TelefoneFactory.add(value)
-                  .then(function(response) {
+                  .then(function (response) {
                     console.log("2", response);
                     vm.status = 'Telefone cadastrado com sucesso';
-                  }, function(response) {
+                  }, function (response) {
                     handleResponse(response)
                   });
 
@@ -389,45 +394,48 @@
                   temp.pessoa_id = value.pessoa_id;
                   temp.rede_social_id = vm.whatsapp_id;
                   PessoaTemRedeSocialFactory.add(temp)
-                    .then(function(response) {
+                    .then(function (response) {
                       console.log("3", response);
                     });
                 }
               });
 
               //adicionando redes sociais
-              angular.forEach(vm.form.redesSociais, function(value, key) {
+              angular.forEach(vm.form.redesSociais, function (value, key) {
                 value.pessoa_id = vm.form.pessoa.id;
+                value.rede_social_id = value.redeSocial;
 
                 PessoaTemRedeSocialFactory.add(value)
-                  .then(function(response) {
+                  .then(function (response) {
                     console.log("4", response);
                   });
               });
 
               //adicionando pessoa função
+              console.log('funcao', vm.form.funcao);
               var temp = {};
               temp.pessoa_id = vm.form.pessoa.id;
-              temp.funcao_id = vm.form.funcao.id;
+              temp.funcao_id = vm.form.funcao;
+              temp.password = vm.form.pessoa.password;
 
               PessoaTemFuncaoFactory.add(temp)
-                .then(function(response) {
+                .then(function (response) {
                   console.log("5", response);
-                  vm.form.pessoa.pessoa_funcao_id = response.data.result.id;
+                  vm.form.pessoa.pessoa_tem_funcao_id = response.data.result.id;
                   // adicionando permissoes
                   console.log("permissoesFuncionario", vm.form.permissoesFuncionario);
-                  angular.forEach(vm.form.permissoesFuncionario, function(value, key) {
-                    value.pessoa_funcao_id  = vm.form.pessoa.pessoa_funcao_id;
+                  angular.forEach(vm.form.permissoesFuncionario, function (value, key) {
+                    value.pessoa_id = vm.form.pessoa.pessoa_tem_funcao_id;
                     value.permissao_id = value.id;
-                    PessoaTemPermissaoFactory.add({value}).then(function(response) {
+                    PessoaTemPermissaoFactory.add({ pessoa_id: value.pessoa_id, permissao_id: value.permissao_id }).then(function (response) {
                       console.log("6", response);
                     });
                   });
-                }, function(response) {
-                  console.log("6", response);
+                }, function (response) {
+                  console.log("7", response);
                 });
             }
-          }, function(response) {
+          }, function (response) {
             handleResponse(response);
           });
       }
@@ -445,11 +453,11 @@
         actionButtonClass: 'btn btn-danger'
       };
       modalService.showModal({}, modalOptions)
-        .then(function(result) {
+        .then(function (result) {
           PessoaFactory.del(vm.form.pessoa.id)
-            .then(function(response) {
+            .then(function (response) {
               console.log('del pessoa', response);
-            }, function(response) {
+            }, function (response) {
               console.error(response);
             });
         });
@@ -457,23 +465,23 @@
 
     function getFuncoes() {
       FuncaoFactory.get()
-        .then(function(response) {
+        .then(function (response) {
           vm.funcoes = response;
-        }, function(response) {
+        }, function (response) {
           vm.status = 'Failed to load: ' + error.message;
         });
     }
 
     function getPermissoes() {
       PermissaoFactory.get()
-        .then(function(response) {
+        .then(function (response) {
           vm.permissoes = response.data.result;
-        }, function(response) {
+        }, function (response) {
           vm.status = 'Failed to load: ' + error.message;
         });
     }
 
-    vm.selecionarPermissao = function() {
+    vm.selecionarPermissao = function () {
       vm.form.permissoesFuncionario = $filter('filter')(vm.permissoes, {
         checked: true
       });
@@ -495,10 +503,10 @@
     function get(data) {
       data = data || null;
       return $http({
-        url: _url + '/pessoa',
-        method: 'GET',
-        params: data
-      })
+          url: _url + '/pessoa',
+          method: 'GET',
+          params: data
+        })
         .then(success)
         .catch(failed);
 

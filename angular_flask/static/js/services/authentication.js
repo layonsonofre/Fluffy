@@ -51,7 +51,6 @@
             var _token = response.data.result.token;
             $http.defaults.headers.common.Authorization = "Bearer " + _token;
 
-
             $http({
               url: _url + '/getPermissoes',
               method: 'GET'
@@ -62,7 +61,6 @@
                 pessoa_id: response.data.result.pessoa.id,
                 registro: response.data.result.pessoa.registro
               });
-              console.log(response);
               $window.localStorage.currentPermissoes = JSON.stringify(response.data.result.modulos);
               callback(_token);
             });

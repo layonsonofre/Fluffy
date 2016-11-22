@@ -114,7 +114,7 @@
 
     function refreshData() {
       var _duration = 30;
-      var data = vm._hoje ? $filter('date')(new Date(), 'dd/MM/yyyy') : null;
+      var data = vm._hoje ? $filter('date')(new Date(), 'yyyy-MM-dd') : null;
       AgendaFactory.getAgendados({data_inicio: data, data_fim: data})
         .then(function(response) {
 

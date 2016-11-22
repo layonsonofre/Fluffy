@@ -26,7 +26,6 @@
     function login() {
       vm.loading = true;
       AuthService.login(vm.email, vm.senha, function(result) {
-        console.log("result", result);
         if (result != false) {
           $location.path('/overview');
         } else {

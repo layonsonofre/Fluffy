@@ -13,7 +13,7 @@
 
     $rootScope.permissoes = {};
     angular.forEach(dataStorage.getPermissoes(), function(value, key) {
-      console.log("permissao", value);
+      console.log('value', value);
       if (value.modulo === 'Cadastro') {
         $rootScope.permissoes.cadastro = true;
       }

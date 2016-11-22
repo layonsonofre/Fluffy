@@ -6,7 +6,7 @@
       'ngDragDrop', 'angularMoment', 'mwl.calendar', 'ui.bootstrap', 'Index', 'Pessoa',
       'Funcao', 'Permissao', 'RedeSocial', 'GrupoItem', 'Servico', 'Agenda', 'Agendamento',
       'Consulta', 'Lembrete', 'PessoaTemFuncao', 'PessoaTemRedeSocial', 'Telefone', 'Animal',
-      'Estoque', 'Venda', 'modalServiceModule', 'dataStorageService',
+      'Estoque', 'Venda', 'modalServiceModule', 'dataStorageService', 'PessoaTemPermissao',
       'Authentication', 'Login', 'Raca', 'Porte', 'Especie', 'Restricao', 'Configuracao',
       'Lote', 'Vacina', 'angularUtils.directives.dirPagination', 'Anamnese', 'AnimalTemRestricao',
       'ServicoTemPorte', 'Funcionario', 'Aplicacao', 'ngToast', 'Transacao'
