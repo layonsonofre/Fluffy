@@ -14,6 +14,57 @@ def getPessoa() :
 	print(data)
 	return jsonify(result="OK")
 
+@app.route('/api/getPermissoes', methods=['GET'])
+def getPermissoes() :
+
+	authorization = str(request.headers["Authorization"])
+	try:
+		auth_type, auth_token = authorization.split(" ")
+	except Exception as e:
+		return jsonify(success=False, result={}, mensagem="Sua Sessao Expirou", code=401)
+
+	if auth_type != "Bearer":
+		return jsonify(success=False, result={}, mensagem="Sua Sessao Expirou", code=401)
+
+	data = Util.getData("getOAuth", [None, str(auth_token), None])
+
+	if len(data) != 1:
+		return jsonify(success=False, result={}, mensagem="Sua Sessao Expirou", code=401)
+
+	oauth = OAuth(data[0])
+
+	if oauth.time_left < 0:
+		if oauth.time_left > - (3*60*60):
+			return jsonify(success=False, result={}, mensagem="Sua Sessao Expirou", code=401)
+		else :    
+			return jsonify(success=False, result={}, mensagem="Sua Sessao Expirou", code=401)
+
+	print([None, None, None, None, None, None, oauth.id, None])
+	data = Util.getData("getPessoaTemFuncao", [None, None, None, None, None, None, oauth.id, None])
+	print(data)
+	ptf = PessoaTemFuncao(data[0])
+
+	data = Util.getData("getPessoaTemPermissao", [None, ptf.id, None])
+	
+	permissoes = []
+	for info in data:
+		permissoes.append(PessoaTemPermissao(info))
+
+	return jsonify(result={
+							"token": {
+								"id": oauth.id,
+								"token": oauth.token
+							},
+							"pessoa": {
+								"id":ptf.pessoa[0],
+								"nome":ptf.pessoa[1],
+								"email":ptf.pessoa[2],
+								"registro":ptf.pessoa[3]
+							},
+							"modulos": [{"id": p.permissao[0],"modulo": p.permissao[1]} for p in permissoes]
+							})
+
+
 @app.route('/api/getHistorico', methods=['GET'])
 def getHistorico() :
 
