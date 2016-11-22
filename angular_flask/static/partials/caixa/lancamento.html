@@ -1,0 +1,68 @@
+<div>
+  <div class="row">
+    <div class="col-md-12">
+      <h1 class="page-head-line">Controle de Caixa</h1>
+      <h1 class="page-subhead-line">Cadastre um novo lançamento</h1>
+      <a ng-click="vm.helpActive = !vm.helpActive" class="btn btn-link pull-right"><span class="fa fa-info"></span></a>
+      <toast></toast>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          Novo Lançamento
+        </div>
+        <div class="panel-body">
+          <form role="form">
+            <div class="row">
+              <div class="col-xs-12">
+                <div class="form-group">
+                  <label>Tipo *</label>
+                  <div class="radio">
+                    <label>
+                      <input type="radio" value="C" ng-model="vm.form.tipo">&nbsp;&nbsp; Crédito</label>
+                  </div>
+                  <div class="radio">
+                    <label>
+                      <input type="radio" value="D" ng-model="vm.form.tipo">&nbsp;&nbsp; Débito</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xs-6">
+                <div class="form-group">
+                  <label>Valor (R$) *</label>
+                  <input class="form-control" type="text" data-ng-model="vm.form.valor">
+                  <p class="help-block" ng-show="vm.helpActive">Valor do lançamento</p>
+                </div>
+              </div>
+              <div class="col-xs-6">
+                <div class="form-group">
+                  <label>Comentário</label>
+                  <input class="form-control" type="text" data-ng-model="vm.form.comentario">
+                  <p class="help-block" ng-show="vm.helpActive">Insira uma breve descrição sobre este lançamento</p>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xs-12">
+                <a ng-click="vm.add()" class="btn btn-link" data-toggle="tooltip" data-placement="top" title="Armazena as informações inseridas acima">
+                  <span class="fa fa-check"></span>&nbsp;&nbsp;
+                  <b>Salvar</b>
+                </a>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12 text-right">
+      <a ng-click="vm.gotoNova()" class="btn btn-link"><span class="fa fa-chevron-left"></span>&nbsp;<span class="fa fa-shopping-cart"></span>&nbsp; <b>Alterar Ítens</b></a>
+      <a ng-click="vm.gotoConfirmacao()" class="btn btn-link"><span class="fa fa-check"></span>&nbsp;<span class="fa fa-money"></span>&nbsp; <b>Confirmar</b></a>
+    </div>
+  </div>
+</div>

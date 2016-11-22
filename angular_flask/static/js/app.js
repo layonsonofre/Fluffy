@@ -9,10 +9,10 @@
       'Estoque', 'Venda', 'Estatisticas', 'modalServiceModule', 'dataStorageService',
       'Authentication', 'Login', 'Raca', 'Porte', 'Especie', 'Restricao', 'Configuracao',
       'Lote', 'Vacina', 'angularUtils.directives.dirPagination', 'Anamnese', 'AnimalTemRestricao',
-      'ServicoTemPorte', 'Funcionario', 'Aplicacao'
+      'ServicoTemPorte', 'Funcionario', 'Aplicacao', 'ngToast', 'Transacao'
     ])
-    .config(['$routeProvider', '$locationProvider', '$httpProvider', 'calendarConfig', 'uibDatepickerPopupConfig',
-      function($routeProvider, $locationProvider, $httpProvider, calendarConfig, uibDatepickerPopupConfig) {
+    .config(['$routeProvider', '$locationProvider', '$httpProvider', 'calendarConfig', 'uibDatepickerPopupConfig', 'ngToastProvider',
+      function($routeProvider, $locationProvider, $httpProvider, calendarConfig, uibDatepickerPopupConfig, ngToastProvider) {
         $httpProvider.defaults.cache = false;
         $locationProvider.html5Mode(false);
         $httpProvider.defaults.headers.post["Content-Type"] = "application/json;charset=UTF-8";
@@ -47,6 +47,12 @@
         uibDatepickerPopupConfig.closeText = "Fechar";
 
         calendarConfig.i18nStrings.weekNumber = 'Semana {week}';
+
+        ngToastProvider.configure({
+          animation: 'fade'
+        , horizontalPosition: 'left'
+        , verticalPosition: 'bottom'
+        });
       }
     ])
     .run(function(editableOptions, $rootScope, $http, $location, $window) {

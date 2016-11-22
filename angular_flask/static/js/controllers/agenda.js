@@ -27,7 +27,7 @@
     vm.editAgendado = editAgendado;
     vm.editConsulta = editConsulta;
     vm.gotoAgendamento = gotoAgendamento;
-    refreshData();
+    vm.refreshData = refreshData;
 
     // INIT CALENDAR
     //These variables MUST be set as a minimum for the calendar to work
@@ -108,14 +108,19 @@
       }
     };
 
+    vm.hoje = function() {
+      vm._hoje = true;
+    }
+
     function refreshData() {
       var _duration = 30;
-      AgendaFactory.getAgendados()
+      var data = vm._hoje ? $filter('date')(new Date(), 'dd/MM/yyyy') : null;
+      AgendaFactory.getAgendados({data_inicio: data, data_fim: data})
         .then(function(response) {
             vm.agendados = response.data.result;
-            console.log('agendados', vm.agendados);
 
             angular.forEach(vm.agendados, function(value, key) {
+              value.data_hora = new Date(value.data_hora);
               var starts = new Date(value.data_hora);
               var ends = new Date(starts.getTime() + _duration*60000);
               var executado = value.executado ? 'Executado' : 'Não executado';
@@ -199,6 +204,7 @@
     return ServicoFactory;
 
     function getAgendados(data) {
+      data = data || null;
       return $http({
           url: _url + '/servicoAgendado',
           data: data,

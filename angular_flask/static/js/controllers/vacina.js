@@ -14,9 +14,9 @@
     .controller('VacinaController', VacinaController)
     .factory('VacinaFactory', VacinaFactory);
 
-  VacinaController.$inject = ['VacinaFactory', 'LoteFactory', 'modalService'];
+  VacinaController.$inject = ['VacinaFactory', 'LoteFactory', 'modalService', 'calendarConfig'];
 
-  function VacinaController(VacinaFactory, LoteFactory, modalService) {
+  function VacinaController(VacinaFactory, LoteFactory, modalService, calendarConfig) {
     var vm = this;
     vm.form = {};
 
@@ -161,6 +161,78 @@
     function cancelLote() {
       vm.form.lotes = [];
       vm.lote = null;
+    }
+
+    vm.today = function(lote) {
+      lote.vencimento = new Date();
+    }
+    vm.clearDate = function(lote) {
+      lote.data_hora = null;
+    }
+    vm.disabled = disabled;
+    vm.toggleMin = toggleMin;
+    vm.openDate = function(lote) {
+      lote.popup = true;
+    }
+    vm.setDate = setDate;
+
+    vm.formats = ['dd/MM/yyyy', 'dd-MMMM-yyyy', 'shortDate'];
+    vm.format = vm.formats[0];
+    vm.altInputFormats = ['d!/M!/yyyy'];
+
+    vm.inlineOptions = {
+      customClass: getDayClass,
+      minDate: new Date(),
+      showWeeks: true
+    };
+
+    vm.oneYearFromNow = new Date();
+    vm.oneYearFromNow.setDate(vm.oneYearFromNow.getDate() + 1);
+
+    vm.oneMonthAgo = new Date();
+    vm.oneMonthAgo.setDate(vm.oneMonthAgo.getDate() - 30);
+
+    vm.dateOptions = {
+      dateDisabled: disabled,
+      formatYear: 'yyyy',
+      maxDate: vm.oneYearFromNow,
+      minDate: vm.oneMonthAgo,
+      startingDay: 1
+    }
+
+    //disabled weekend selection
+    function disabled(data) {
+      var date = data.date,
+        mode = data.mode;
+      return mode == 'day' && (date.getDay() === 0 || date.getDay() === 6);
+    }
+
+    function toggleMin() {
+      vm.inlineOptions.minDate = vm.inlineOptions.minDate ? null : new Date();
+      vm.dateOptions.minDate = vm.inlineOptions.minDate;
+    }
+
+    vm.toggleMin();
+
+    function setDate(lote, year, month, day) {
+      lote.vencimento = new Date(year, month, day);
+    }
+
+    function getDayClass(data) {
+      var date = data.date,
+        mode = data.mode;
+      if (mode === 'day') {
+        var dayToCheck = new Date(date).setHours(0, 0, 0, 0);
+
+        for (var i = 0; i < vm.events.length; i++) {
+          var currentDay = new Date(vm.events[i].date).setHours(0, 0, 0, 0);
+
+          if (dayToCheck === currentDay) {
+            return vm.events[i].status;
+          }
+        }
+      }
+      return '';
     }
   }
 

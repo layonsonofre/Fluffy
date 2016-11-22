@@ -16,14 +16,12 @@
           controllerAs: 'vm'
         })
     }])
-    .controller('VendaController', VendaController);
-    // .factory('VendaFactory', VendaFactory);
+    .controller('VendaController', VendaController)
+    .factory('VendaFactory', VendaFactory);
 
-  VendaController.$inject = ['modalService', 'PessoaFactory', 'PessoaTemFuncaoFactory'
-      , '$window', '$filter', '$location', 'dataStorage', 'ProdutoFactory', 'TelefoneFactory'];
+  VendaController.$inject = ['VendaFactory', 'modalService', 'PessoaFactory', 'PessoaTemFuncaoFactory', '$window', '$filter', '$location', 'dataStorage', 'ProdutoFactory', 'TelefoneFactory'];
 
-  function VendaController(modalService, PessoaFactory, PessoaTemFuncaoFactory
-      , $window, $filter, $location, dataStorage, ProdutoFactory, TelefoneFactory) {
+  function VendaController(VendaFactory, modalService, PessoaFactory, PessoaTemFuncaoFactory, $window, $filter, $location, dataStorage, ProdutoFactory, TelefoneFactory) {
 
     var vm = this;
 
@@ -41,7 +39,7 @@
     vm.increase = increase;
     vm.decrease = decrease;
     vm.cartTotal = cartTotal;
-    vm.calcParcelas = calcParcelas;
+    vm.selectPessoa = selectPessoa;
 
     vm.cliente = {};
     vm.cart = [];
@@ -59,7 +57,9 @@
     }
 
     function getClientes() {
-      PessoaFactory.get({cliente: true}).then(function(response) {
+      PessoaFactory.get({
+        cliente: true
+      }).then(function(response) {
         vm.pessoas = response;
       });
     }
@@ -81,20 +81,19 @@
       }
       if (itemJaAdicionado === false) {
         vm.cart.push({
-          id: entry.id,
+          item_id: entry.id,
           nome: entry.nome,
           preco: entry.preco,
           quantidade: 1,
           max_quantidade: entry.quantidade
         });
         cartTotal();
-        calcParcelas();
       }
     }
 
     function removeFromCart(entry) {
-      vm.cart[vm.cart.indexOf(entry)] = vm.cart.splice(vm.cart.indexOf(entry), 1);
-      if (vm.cart.length === 1) {
+      vm.cart.splice(vm.cart.indexOf(entry), 1);
+      if (vm.cart.length === 0) {
         vm.cart = [];
       }
       cartTotal();
@@ -119,21 +118,28 @@
     function cartTotal() {
       var _total = 0;
       for (var i = 0; i < vm.cart.length; i++) {
-        _total += vm.cart[i].preco*vm.cart[i].quantidade;
+        _total += vm.cart[i].preco * vm.cart[i].quantidade;
       }
       vm.cart_total = _total;
     }
 
-    function calcParcelas() {
-      vm.valor_parcela = vm.cart_total/vm.parcelas;
-    }
-
     vm.gotoConfirmacao = function() {
-      dataStorage.addVenda({
-        cart_total: vm.cart_total,
-        cliente_nome: vm.cliente.nome
+      vm.pessoa_tem_funcao_funcionario_id = 3;
+      var send = {
+        pessoa_tem_funcao_funcionario_id: vm.pessoa_tem_funcao_funcionario_id,
+        pessoa_tem_funcao_cliente_id: vm.pessoa_tem_funcao_cliente_id,
+        desconto: vm.desconto,
+        pago: vm.pago,
+        itens_de_venda: vm.cart
+      };
+      VendaFactory.add(send).then(function(response) {
+        console.log("\nADICIONADO", response);
+        dataStorage.addVenda({
+          cart_total: vm.cart_total,
+          cliente_nome: vm.cliente.nome
+        });
+        $location.path('/venda/confirmacao');
       });
-      $location.path('/venda/confirmacao');
     }
 
     vm.gotoNova = function() {
@@ -161,6 +167,15 @@
       });
     }
 
+    function selectPessoa(entry) {
+      PessoaTemFuncaoFactory.get({
+          pessoa_id: entry.id
+        })
+        .then(function(response) {
+          vm.pessoa_tem_funcao_cliente_id = response.id;
+        }, function(response) {});
+    }
+
     function updateSelection(entry, entities) {
       angular.forEach(entities, function(subscription, index) {
         if (entry.id != subscription.id) {
@@ -169,6 +184,54 @@
           vm.cliente = entry;
         }
       });
+    }
+  }
+
+  VendaFactory.$inject = ['$http', 'Fluffy'];
+
+  function VendaFactory($http, Fluffy) {
+    var _url = Fluffy.urlBase;
+    var VendaFactory = {
+      add: add,
+      alt: alt
+    };
+    return VendaFactory;
+
+    function add(data) {
+      return $http({
+          url: _url + '/insertPedido',
+          data: data,
+          method: 'POST'
+        })
+        .then(success)
+        .catch(failed);
+
+      function success(response) {
+        return response;
+      }
+
+      function failed(response) {
+        console.error('Failed: ' + JSON.stringify(response));
+      }
+    }
+
+    function alt(data) {
+      console.log('UPDATING: ' + JSON.stringify(data));
+      return $http({
+          url: _url + '/vacina',
+          data: data,
+          method: 'PUT'
+        })
+        .then(success)
+        .catch(failed);
+
+      function success(response) {
+        return response;
+      }
+
+      function failed(response) {
+        console.error('Failed: ' + JSON.stringify(response));
+      }
     }
   }
 })()

@@ -12,6 +12,8 @@
   <link href="static/css/xeditable.min.css" rel="stylesheet" />
   <link href="static/css/select.min.css" rel="stylesheet" />
   <link href="static/css/angular-bootstrap-calendar.css" rel="stylesheet" />
+  <link href="static/css/ngToast.min.css" rel="stylesheet" />
+  <link href="static/css/ngToast-animations.min.css" rel="stylesheet" />
 
   <link href="static/css/custom.css" rel="stylesheet" />
 
@@ -30,6 +32,8 @@
   <script src="static/lib/angular/angular-dragdrop.js"></script>
   <script src="static/lib/angular/angular-bootstrap-calendar-tpls.min.js"></script>
   <script src="static/lib/angular/dirPagination.js"></script>
+  <script src="static/lib/angular/angular-sanitize.min.js"></script>
+  <script src="static/lib/angular/ngToast.min.js"></script>
   <script src="static/lib/bootstrap/bootstrap.min.js"></script>
 
   <script src="../static/js/app.js"></script>
@@ -69,6 +73,7 @@
   <script src="../static/js/controllers/vacina.js"></script>
   <script src="../static/js/controllers/aplicacao.js"></script>
   <script src="../static/js/controllers/anamnese.js"></script>
+  <script src="../static/js/controllers/transacao.js"></script>
 </head>
 
 <body class="{{bodyBackground}}">
@@ -169,6 +174,19 @@
             <ul class="dropdown-menu" role="menu">
               <li>
                 <a href="#/venda/nova">Nova</a>
+              </li>
+            </ul>
+          </li>
+          <li class="dropdown" ng-show="permissoes.venda">
+            <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Caixa
+                        <span class="caret"></span>
+                     </a>
+            <ul class="dropdown-menu" role="menu">
+              <li>
+                <a href="#/caixa/lista">Visualizar</a>
+              </li>
+              <li>
+                <a href="#/caixa/lancamento">Lançar</a>
               </li>
             </ul>
           </li>

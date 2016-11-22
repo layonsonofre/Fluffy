@@ -85,7 +85,7 @@ def insertPedido() :
 	itensDeVenda = json["itens_de_venda"]
 
 	for itemDeVenda in itensDeVenda:
-		
+
 		preco = itemDeVenda["preco"]
 		quantidade = itemDeVenda["quantidade"]
 		item_id = itemDeVenda["item_id"]

@@ -6,9 +6,9 @@
     .controller('LembreteController', LembreteController)
     .factory('LembreteFactory', LembreteFactory);
 
-  LembreteController.$inject = ['LembreteFactory', 'modalService'];
+  LembreteController.$inject = ['LembreteFactory', 'modalService', 'ngToast', '$filter'];
 
-  function LembreteController(LembreteFactory, modalService) {
+  function LembreteController(LembreteFactory, modalService, ngToast, $filter) {
     var vm = this;
 
     vm.form = {};
@@ -26,26 +26,42 @@
       LembreteFactory.get()
         .then(function(response) {
           vm.lembretes = response.data.result;
+          angular.forEach(vm.lembretes, function(value, key) {
+            value.data_hora = $filter('date')(new Date(value.data_hora), 'dd/MM/yyyy');
+          });
         }, function(response) {
-          console.error(response);
+          ngToast.warning({content: '<b>Falha ao buscar registros</b>: ' + response.data.message});
         });
     }
 
     function add() {
+      // vm.form.data_hora = new Date(vm.form.data_hora).toISOString().substring(0, 19).replace('T', ' ');
+      vm.form.data_hora = $filter('date')(new Date(vm.form.data_hora), 'yyyy-MM-dd HH:mm:ss');
+      // console.log("data_hora", vm.form.data_hora);
       LembreteFactory.add(vm.form)
         .then(function(response) {
-          get();
-        }, function(response) {
-          console.error(response)
-        });
+        if (response.data.success != true) {
+          ngToast.warning({content: '<b>Falha ao adicionar o registro</b>: ' + response.data.message});
+        } else {
+          ngToast.success({content: 'Registro adicionado com sucesso'});
+        }
+      }, function(response) {
+        ngToast.warning({content: '<b>Falha ao incluir o registro</b>: ' + response.data.message});
+      });
     }
 
     function alt(data) {
+      data.data_hora = $filter('date')(new Date(data.data_hora), 'yyyy-MM-dd HH:mm:ss');
       LembreteFactory.alt(data)
         .then(function(response) {
           get();
+          if (response.data.success != true) {
+            ngToast.warning({content: '<b>Falha ao alterar o registro</b>: ' + response.data.message});
+          } else {
+            ngToast.success({content: 'Registro alterado com sucesso'});
+          }
         }, function(response) {
-          console.error(response)
+          ngToast.warning({content: '<b>Falha ao alterar o registro</b>: ' + response.data.message});
         });
     }
 
@@ -60,9 +76,14 @@
         .then(function(result) {
           LembreteFactory.del(entry.id)
             .then(function(response) {
+              if (response.data.success != true) {
+                ngToast.warning({content: '<b>Falha ao excluir o registro</b>: ' + response.data.message});
+              } else {
+                ngToast.success({content: 'Registro excluído com sucesso'});
+              }
               get();
             }, function(response) {
-              vm.status = response.message
+              ngToast.warning({content: '<b>Falha ao excluir o registro</b>: ' + response.data.message});
             });
         });
     }

@@ -42,7 +42,7 @@
     vm.calcularPreco = calcularPreco;
     vm.detalhes_animal = detalhes_animal;
     vm.incluirAgendamento = incluirAgendamento;
-    vm.removeAgendamento = removeAgendamento;
+    vm.cancelAgendamento = cancelAgendamento;
     vm.getAgendamentos = getAgendamentos;
 
     vm.form.servicos_agendados = [];
@@ -147,8 +147,12 @@
     function add() {
       vm.form.pessoa_tem_funcao_funcionario_id = 3;
       angular.forEach(vm.form.servicos_agendados, function(value, key) {
-        value.data_hora = new Date(value.data_hora).toISOString().substring(0, 19).replace('T', ' ');
+        value.data_hora = $filter('date')(new Date(value.data_hora), 'yyyy-MM-dd HH:mm:ss');
+        value.recorrente = value.recorrente ? 1 : 0;
+        value.pago = value.pago ? 1 : 0;
+        value.executado = value.executado ? 1 : 0;
       });
+      console.log("adding", vm.form);
       AgendamentoFactory.add(vm.form)
         .then(function(response) {
           getAgendamentos(false);
@@ -160,17 +164,20 @@
     function alt() {
       vm.form.pessoa_tem_funcao_funcionario_id = 3;
       angular.forEach(vm.form.servicos_agendados, function(value, key) {
-        value.data_hora = new Date(value.data_hora).toISOString().substring(0, 19).replace('T', ' ');
+        value.data_hora = $filter('date')(new Date(value.data_hora), 'yyyy-MM-dd HH:mm:ss');
         value.pessoa_tem_funcao_funcionario_id = vm.form.pessoa_tem_funcao_funcionario_id;
         value.animal_id = value.animal.id;
+        value.recorrente = value.recorrente ? 1 : 0;
+        value.pago = value.pago ? 1 : 0;
+        value.executado = value.executado ? 1 : 0;
 
         console.log("value", value);
-        // AgendamentoFactory.alt(value)
-        //   .then(function(response) {
-        //     getAgendamentos(false);
-        //   }, function(response) {
-        //     vm.status = response.message
-        //   });
+        AgendamentoFactory.alt(value)
+          .then(function(response) {
+            getAgendamentos(false);
+          }, function(response) {
+            vm.status = response.message
+          });
       });
     }
 
@@ -190,7 +197,9 @@
     }
 
     function getClientes() {
-      PessoaTemFuncaoFactory.get()
+      PessoaFactory.get({
+          cliente: true
+        })
         .then(function(response) {
           vm.clientes = response;
         }, function(response) {
@@ -260,24 +269,25 @@
       getAgendamentos(true);
     }
 
-    function removeAgendamento(item) {
+    function cancelAgendamento(item) {
       if (item.new === true) {
         vm.form.servicos_agendados = vm.form.servicos_agendados.splice(vm.form.servicos_agendados.indexOf(item), 1)
       } else {
         var modalOptions = {
-          closeButtonText: 'Cancelar',
-          actionButtonText: 'Excluir',
+          closeButtonText: 'Fechar',
+          actionButtonText: 'Cancelar',
           actionButtonClass: 'btn btn-danger'
         };
         modalService.showModal({}, modalOptions)
           .then(function(result) {
-            AgendamentoFactory.del(item.id)
-              .then(function(response) {
-                getAgendamentos(false);
-              }, function(response) {
-                vm.status = 'Falha na tentativa de remover o agendamento.\n' + error.message;
-              });
+            AgendamentoFactory.alt({
+              id: item.id,
+              cancelado: true
+            }).then(function(response) {
+              getAgendamentos(false);
+            });
           });
+
       }
     }
 
@@ -357,6 +367,7 @@
     }
 
     function add(data) {
+      console.log("adding agendamento", JSON.stringify(data));
       return $http({
           url: _url + '/insertServicoAgendado',
           data: data,
@@ -375,7 +386,7 @@
     }
 
     function alt(data) {
-      console.log("data", data);
+      console.log("data", JSON.stringify(data));
       return $http({
           url: _url + '/servicoAgendado',
           data: data,

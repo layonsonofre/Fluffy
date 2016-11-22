@@ -14,9 +14,9 @@
     .controller('ProdutoController', ProdutoController)
     .factory('ProdutoFactory', ProdutoFactory);
 
-  ProdutoController.$inject = ['ProdutoFactory', 'GrupoItemFactory', 'modalService', '$filter'];
+  ProdutoController.$inject = ['ProdutoFactory', 'GrupoItemFactory', 'modalService', '$filter', 'ngToast'];
 
-  function ProdutoController(ProdutoFactory, GrupoItemFactory, modalService, $filter) {
+  function ProdutoController(ProdutoFactory, GrupoItemFactory, modalService, $filter, ngToast) {
     var vm = this;
     vm.form = null;
 
@@ -35,25 +35,37 @@
         .then(function(response) {
           vm.produtos = response.data.result;
         }, function(response) {
-          vm.status = response.message
+          if (response.data.success != true) {
+            ngToast.warning({content: '<b>Falha ao buscar registros</b>: ' + response.data.message});
+          }
         });
     }
 
     function add() {
       ProdutoFactory.add(vm.form)
         .then(function(response) {
-          get();
+          if (response.data.success != true) {
+            ngToast.warning({content: '<b>Falha ao adicionar o registro</b>: ' + response.data.message});
+          } else {
+            get();
+            ngToast.success({content: 'Registro adicionado com sucesso'});
+          }
         }, function(response) {
-          vm.status = response.message
+            ngToast.warning({content: '<b>Falha ao adicionar o registro</b>: ' + response.data.message});
         });
     }
 
     function alt(data) {
       ProdutoFactory.alt(data)
         .then(function(response) {
-          get();
+          if (response.data.success != true) {
+            ngToast.warning({content: '<b>Falha ao alterar o registro</b>: ' + response.data.message});
+          } else {
+            ngToast.success({content: 'Registro alterado com sucesso'});
+            get();
+          }
         }, function(response) {
-          vm.status = response.message
+          ngToast.warning({content: '<b>Falha ao alterar o registro</b>: ' + response.data.message});
         });
     }
 

@@ -1,0 +1,150 @@
+<div>
+  <div class="row">
+    <div class="col-md-12">
+      <h1 class="page-head-line">Controle de Caixa</h1>
+      <h1 class="page-subhead-line">Veja as transações realizadas</h1>
+      <a ng-click="vm.helpActive = !vm.helpActive" class="btn btn-link pull-right"><span class="fa fa-info"></span></a>
+      <toast></toast>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          Transações
+        </div>
+        <div class="panel-body">
+          <div class="row">
+            <form ng-submit="vm.getHistorico()">
+              <div class="col-xs-3">
+                <div class="form-group">
+                  <label>Início período *</label>
+                  <p class="input-group">
+                    <input type="text" class="form-control" uib-datepicker-popup="{{vm.format}}" ng-model="vm.form.data_inicio" is-open="vm.popupDataInicio" datepicker-options="dateOptions" altInputFormats="altInputFormats" close-text="Fechar">
+                    <span class="input-group-btn">
+                        <a type="a" class="btn btn-default" ng-click="vm.openDataInicio()">
+                          <span class="fa fa-calendar"></span>
+                    </a>
+                    </span>
+                  </p>
+                </div>
+              </div>
+              <div class="col-xs-3">
+                <div class="form-group">
+                  <label>Fim período *</label>
+                  <p class="input-group">
+                    <input type="text" class="form-control" uib-datepicker-popup="{{vm.format}}" ng-model="vm.form.data_fim" is-open="vm.popupDataFim" datepicker-options="dateOptions" altInputFormats="altInputFormats" close-text="Fechar">
+                    <span class="input-group-btn">
+                        <a type="a" class="btn btn-default" ng-click="vm.openDataFim()">
+                          <span class="fa fa-calendar"></span>
+                    </a>
+                    </span>
+                  </p>
+                </div>
+              </div>
+              <div class="col-xs-5">
+                <div class="form-group">
+                  <label>Tipo *</label>
+                  <div class="radio">
+                    <label>
+                      <input type="radio" value="C" ng-model="vm.form.tipo">&nbsp;&nbsp; Crédito</label>
+                  </div>
+                  <div class="radio">
+                    <label>
+                      <input type="radio" value="D" ng-model="vm.form.tipo">&nbsp;&nbsp; Débito</label>
+                  </div>
+                </div>
+              </div>
+              <div class="col-xs-1">
+                <div class="form-group">
+                  <label>Buscar</label>
+                  <a class="form-control btn btn-link" ng-click="vm.getHistorico()">
+                    <span class="fa fa-search"></span>
+                  </a>
+                  <p class="help-block" ng-show="vm.helpActive"></p>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="row" ng-show="vm.total">
+             <div class="col-xs-12">
+                <div class="row">
+                   <div class="col-xs-4">
+                      <div class="alert alert-warning">
+                         Histórico<br>
+                         <h4>{{vm.total|currency:"R$ "}}</h4>
+                      </div>
+                   </div>
+                   <div class="col-xs-4">
+                      <div class="alert alert-success">
+                         Crédito<br>
+                         <h4>{{vm.soma_credito|currency:"R$ "}}</h4>
+                      </div>
+                   </div>
+                   <div class="col-xs-4">
+                      <div class="alert alert-danger">
+                         Débito<br>
+                         <h4>{{vm.soma_debito|currency:"R$ "}}</h4>
+                      </div>
+                   </div>
+                </div>
+             </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-12">
+              <table class="table table-striped table-hover">
+                <thead>
+                  <tr>
+                    <th class="col-xs-1">Tipo</th>
+                    <th class="col-xs-2">Valor</th>
+                    <th class="col-xs-4">Descrição</th>
+                    <th class="col-xs-3">Data</th>
+                    <th class="col-xs-2">Ações</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr dir-paginate="entry in vm.historico | itemsPerPage: 10" pagination-id="historico">
+                    <td>
+                      <span data-ng-hide="editMode">{{entry.tipo | capitalize}}</span>
+                      <div class="radio" data-ng-show="editMode">
+                        <label>
+                          <input type="radio" value="C" ng-model="vm.form.tipo">&nbsp;&nbsp; Crédito</label>
+                      </div>
+                      <div class="radio" data-ng-show="editMode">
+                        <label>
+                          <input type="radio" value="D" ng-model="vm.form.tipo">&nbsp;&nbsp; Débito</label>
+                      </div>
+                    </td>
+                    <td>
+                      <span data-ng-hide="editMode">{{entry.valor | currency:"R$ "}}</span>
+                      <input type="text" data-ng-show="editMode" data-ng-model="entry.valor">
+                    </td>
+                    <td>
+                      <span data-ng-hide="editMode">{{entry.descricao}}</span>
+                      <input type="text" data-ng-show="editMode" data-ng-model="entry.descricao">
+                    </td>
+                    <td>
+                      <span data-ng-hide="editMode">{{entry.data_hora|date:'dd/MM/yyyy'}}</span>
+                    </td>
+                    <td>
+                      <button class="btn btn-link" data-ng-hide="editMode" data-ng-click="editMode = true" data-toggle="tooltip" data-placement="top" title="Alterar dados cadastrados"><span class="fa fa-pencil"></span></button>
+                      <button class="btn btn-link" data-ng-show="editMode" data-ng-click="vm.alt(entry); editMode = false" data-toggle="tooltip" data-placement="top" title="Salvar alterações"><span class="fa fa-check"></span></button>
+                      <button class="btn btn-link" data-ng-show="editMode" data-ng-click="editMode = false" data-toggle="tooltip" data-placement="top" title="Cancelar alterações"><span class="fa fa-close"></span></button>
+                      <button class="btn btn-link pull-right" ng-click="vm.del(entry)" data-toggle="tooltip" data-placement="top" title="Excluir cadastro"><span class="fa fa-trash"></span></button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-12 text-center">
+              <dir-pagination-controls pagination-id="historico"></dir-pagination-controls>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
