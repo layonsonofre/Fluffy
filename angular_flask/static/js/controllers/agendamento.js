@@ -16,12 +16,12 @@
 
   AgendamentoController.$inject = ['AgendamentoFactory', 'calendarConfig', 'modalService',
     '$filter', 'PessoaFactory', 'AnimalFactory', 'AnimalTemRestricaoFactory', 'PessoaTemFuncaoFactory',
-    'ServicoTemPorteFactory', '$window', 'dataStorage', 'ServicoFactory'
+    'ServicoTemPorteFactory', '$window', 'dataStorage', 'ServicoFactory', 'ngToast'
   ];
 
   function AgendamentoController(AgendamentoFactory, calendarConfig, modalService,
     $filter, PessoaFactory, AnimalFactory, AnimalTemRestricaoFactory, PessoaTemFuncaoFactory,
-    ServicoTemPorteFactory, $window, dataStorage, ServicoFactory
+    ServicoTemPorteFactory, $window, dataStorage, ServicoFactory, ngToast
   ) {
     var vm = this;
 
@@ -139,8 +139,9 @@
       ServicoFactory.get()
         .then(function(response) {
           vm.servicos = response.data.result;
+          ngToast.success({content: 'Registros carregados'});
         }, function(response) {
-          console.error(response);
+          ngToast.warning({content: '<b>Falha ao buscar por serviços</b>: ' + response.data.message});
         });
     }
 
@@ -152,12 +153,16 @@
         value.pago = value.pago ? 1 : 0;
         value.executado = value.executado ? 1 : 0;
       });
-      console.log("adding", vm.form);
       AgendamentoFactory.add(vm.form)
         .then(function(response) {
+          if (response.data.success != true) {
+            ngToast.warning({content: '<b>Falha ao adicionar o registro</b>: ' + response.data.message});
+          } else {
+            ngToast.success({content: 'Registro adicionado com sucesso'});
+          }
           getAgendamentos(false);
         }, function(response) {
-          vm.status = response.message
+          ngToast.warning({content: '<b>Falha ao adicionar o registro</b>: ' + response.data.message});
         });
     }
 
@@ -171,12 +176,16 @@
         value.pago = value.pago ? 1 : 0;
         value.executado = value.executado ? 1 : 0;
 
-        console.log("value", value);
         AgendamentoFactory.alt(value)
           .then(function(response) {
+            if (response.data.success != true) {
+              ngToast.warning({content: '<b>Falha ao alterar o registro</b>: ' + response.data.message});
+            } else {
+              ngToast.success({content: 'Registro alterado com sucesso'});
+            }
             getAgendamentos(false);
           }, function(response) {
-            vm.status = response.message
+            ngToast.warning({content: '<b>Falha ao adicionar o registro</b>: ' + response.data.message});
           });
       });
     }
@@ -190,8 +199,14 @@
       modalService.showModal({}, modalOptions)
         .then(function(result) {
           AgendamentoFactory.del(vm.form.id)
-            .then(function(response) {}, function(response) {
-              console.error(response);
+            .then(function(response) {
+              if (response.data.success != true) {
+                ngToast.warning({content: '<b>Falha ao excluir o registro</b>: ' + response.data.message});
+              } else {
+                ngToast.success({content: 'Registro excluído com sucesso'});
+              }
+            }, function(response) {
+              ngToast.warning({content: '<b>Falha ao excluir o registro</b>: ' + response.data.message});
             });
         });
     }
@@ -203,7 +218,7 @@
         .then(function(response) {
           vm.clientes = response;
         }, function(response) {
-          console.error(response);
+          ngToast.warning({content: '<b>Falha ao buscar por clientes</b>: ' + response.data.message});
         });
     }
 
@@ -214,6 +229,9 @@
           pessoa_id: entry.id
         })
         .then(function(response) {
+          if (response.data.success != true) {
+            ngToast.warning({content: '<b>Não foram encontrados animais</b>: ' + response.data.message});
+          }
           if (!angular.isArray(response)) {
             vm.animais = [];
             vm.animais.push(response);
@@ -221,7 +239,7 @@
             vm.animais = response;
           }
         }, function(response) {
-          vm.status = 'Failed to load: ' + error.message;
+          ngToast.warning({content: '<b>Falha ao adicionar o registro</b>: ' + response.data.message});
         });
     }
 

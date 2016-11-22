@@ -15,6 +15,11 @@
           controller: 'VendaController',
           controllerAs: 'vm'
         })
+        .when('/venda/lista', {
+          templateUrl: '../static/partials/venda/lista.html',
+          controller: 'VendaController',
+          controllerAs: 'vm'
+        })
     }])
     .controller('VendaController', VendaController)
     .factory('VendaFactory', VendaFactory);
@@ -40,6 +45,7 @@
     vm.decrease = decrease;
     vm.cartTotal = cartTotal;
     vm.selectPessoa = selectPessoa;
+    vm.alt = alt;
 
     vm.cliente = {};
     vm.cart = [];
@@ -168,12 +174,30 @@
     }
 
     function selectPessoa(entry) {
+      vm.pessoa = entry;
       PessoaTemFuncaoFactory.get({
           pessoa_id: entry.id
         })
         .then(function(response) {
           vm.pessoa_tem_funcao_cliente_id = response.id;
+
+          VendaFactory.get({pessoa_tem_funcao_cliente_id: vm.pessoa_tem_funcao_cliente_id})
+            .then(function(response) {
+              console.log("vendas", response);
+              vm.vendas = response;
+            });
         }, function(response) {});
+    }
+
+
+    function alt(entry) {
+      var send = {
+        pago: entry.pago,
+        id: entry.id
+      };
+      VendaFactory.alt(send).then(function(response) {
+        console.log("\nAlterando", response);
+      });
     }
 
     function updateSelection(entry, entities) {
@@ -193,7 +217,8 @@
     var _url = Fluffy.urlBase;
     var VendaFactory = {
       add: add,
-      alt: alt
+      alt: alt,
+      get: get
     };
     return VendaFactory;
 
@@ -227,6 +252,26 @@
 
       function success(response) {
         return response;
+      }
+
+      function failed(response) {
+        console.error('Failed: ' + JSON.stringify(response));
+      }
+    }
+
+    function get(data) {
+
+      data = data || null;
+      return $http({
+          url: _url + '/pedido',
+          params: data,
+          method: 'GET'
+        })
+        .then(success)
+        .catch(failed);
+
+      function success(response) {
+        return response.data.result;
       }
 
       function failed(response) {

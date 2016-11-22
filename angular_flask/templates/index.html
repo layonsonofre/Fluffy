@@ -67,7 +67,6 @@
   <script src="../static/js/controllers/estoque.js"></script>
   <script src="../static/js/controllers/consulta.js"></script>
   <script src="../static/js/controllers/venda.js"></script>
-  <script src="../static/js/controllers/estatisticas.js"></script>
   <script src="../static/js/controllers/configuracao.js"></script>
   <script src="../static/js/controllers/lote.js"></script>
   <script src="../static/js/controllers/vacina.js"></script>
@@ -92,35 +91,6 @@
         <ul class="nav navbar-nav navbar-right">
           <li class="hidden">
             <a href="#page-top"></a>
-          </li>
-          <li class="dropdown" ng-show="permissoes.cadastro">
-            <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Cliente
-                        <span class="caret"></span>
-                     </a>
-            <ul class="dropdown-menu" role="menu">
-              <li>
-                <a href="#/cliente">Novo Cliente</a>
-              </li>
-              <li>
-                <a href="#/cliente/pet">Incluir Pet</a>
-              </li>
-              <li>
-                <a href="#/cliente/busca">Buscar</a>
-              </li>
-            </ul>
-          </li>
-          <li class="dropdown" ng-show="permissoes.cadastro">
-            <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Funcionário
-                        <span class="caret"></span>
-                     </a>
-            <ul class="dropdown-menu" role="menu">
-              <li>
-                <a href="#/funcionario">Novo Funcionário</a>
-              </li>
-              <li>
-                <a href="#/funcionario/busca">Buscar</a>
-              </li>
-            </ul>
           </li>
           <li class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Serviço
@@ -151,7 +121,7 @@
               </li>
             </ul>
           </li>
-          <li class="dropdown"  ng-show="permissoes.cadastro">
+          <li class="dropdown" ng-show="permissoes.cadastro">
             <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Estoque
                         <span class="caret"></span>
                      </a>
@@ -175,6 +145,9 @@
               <li>
                 <a href="#/venda/nova">Nova</a>
               </li>
+              <li>
+                <a href="#/venda/lista">Lista</a>
+              </li>
             </ul>
           </li>
           <li class="dropdown" ng-show="permissoes.venda">
@@ -190,8 +163,34 @@
               </li>
             </ul>
           </li>
-          <li>
-            <a href="#/estatisticas">Estatísticas</a>
+          <li class="dropdown" ng-show="permissoes.cadastro">
+            <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Cliente
+                        <span class="caret"></span>
+                     </a>
+            <ul class="dropdown-menu" role="menu">
+              <li>
+                <a href="#/cliente">Novo Cliente</a>
+              </li>
+              <li>
+                <a href="#/cliente/pet">Incluir Pet</a>
+              </li>
+              <li>
+                <a href="#/cliente/busca">Buscar</a>
+              </li>
+            </ul>
+          </li>
+          <li class="dropdown" ng-show="permissoes.cadastro">
+            <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Funcionário
+                        <span class="caret"></span>
+                     </a>
+            <ul class="dropdown-menu" role="menu">
+              <li>
+                <a href="#/funcionario">Novo Funcionário</a>
+              </li>
+              <li>
+                <a href="#/funcionario/busca">Buscar</a>
+              </li>
+            </ul>
           </li>
           <li class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Avançado

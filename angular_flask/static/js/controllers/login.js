@@ -26,16 +26,9 @@
     function login() {
       vm.loading = true;
       AuthService.login(vm.email, vm.senha, function(result) {
+        console.log("result", result);
         if (result != false) {
-          console.log('SUBSTITUIR QUANDO LOGIN TIVER OK');
-          // PessoaTemFuncaoFactory.get({oauth_token: result}).then(function(response) {
-          //   dataStorage.addPermissoes(response);
-          //   $location.path('/overview');
-          // });
-          PermissaoFactory.get().then(function(response) {
-            dataStorage.addPermissoes(response.data.result);
-            $location.path('/overview');
-          })
+          $location.path('/overview');
         } else {
           vm.error = 'Falha ao realizar conexão, verifique se suas credenciais estão corretas.';
           vm.loading = false;

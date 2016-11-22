@@ -41,7 +41,7 @@
           url: _url + '/login',
           data: {
             usuario: username,
-            senha: null,
+            senha: password,
             client_id: Fluffy.clientId
           },
           method: 'POST'
@@ -49,14 +49,24 @@
         .then(function(response) {
           if (response.data.result.token) {
             var _token = response.data.result.token;
+            $http.defaults.headers.common.Authorization = "Bearer " + _token;
 
-            $window.localStorage.currentUser = JSON.stringify({
-              username: username,
-              token: _token
+
+            $http({
+              url: _url + '/getPermissoes',
+              method: 'GET'
+            }).then(function(response) {
+              $window.localStorage.currentUser = JSON.stringify({
+                username: username,
+                token: _token,
+                pessoa_id: response.data.result.pessoa.id,
+                registro: response.data.result.pessoa.registro
+              });
+              console.log(response);
+              $window.localStorage.currentPermissoes = JSON.stringify(response.data.result.modulos);
+              callback(_token);
             });
 
-            $http.defaults.headers.common.Authorization = _token;
-            callback(_token);
           } else {
             callback(false);
           }

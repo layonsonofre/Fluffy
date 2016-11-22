@@ -14,9 +14,9 @@
     .controller('AgendaController', AgendaController)
     .factory('AgendaFactory', AgendaFactory);
 
-  AgendaController.$inject = ['AgendaFactory', 'calendarConfig', 'modalService', '$filter', '$location', 'dataStorage'];
+  AgendaController.$inject = ['AgendaFactory', 'calendarConfig', 'modalService', '$filter', '$location', 'dataStorage', 'ngToast'];
 
-  function AgendaController(AgendaFactory, calendarConfig, modalService, $filter, $location, dataStorage) {
+  function AgendaController(AgendaFactory, calendarConfig, modalService, $filter, $location, dataStorage, ngToast) {
     var vm = this;
 
     vm.form = {};
@@ -117,6 +117,11 @@
       var data = vm._hoje ? $filter('date')(new Date(), 'dd/MM/yyyy') : null;
       AgendaFactory.getAgendados({data_inicio: data, data_fim: data})
         .then(function(response) {
+
+            if (response.data.success != true) {
+              ngToast.warning({content: '<b>Falha na consulta pelos registros</b>: ' + response.data.message});
+            }
+
             vm.agendados = response.data.result;
 
             angular.forEach(vm.agendados, function(value, key) {
@@ -153,7 +158,7 @@
 
           },
           function(response) {
-            console.error(response);
+            ngToast.warning({content: '<b>Dados não encontrados</b>: ' + response.data.message});
           });
     };
     // END CALENDAR
@@ -168,10 +173,15 @@
         .then(function(result) {
           AgendaFactory.del(vm.form.id)
             .then(function(response) {
-              console.log(response);
+
+              if (response.data.success != true) {
+                ngToast.warning({content: '<b>Falha ao excluir o registro</b>: ' + response.data.message});
+              } else {
+                ngToast.success({content: 'Registro excluído com sucesso'});
+              }
               refreshData();
             }, function(response) {
-              console.error(response);
+              ngToast.warning({content: '<b>Falha ao excluir o registro</b>: ' + response.data.message});
             });
         });
     }

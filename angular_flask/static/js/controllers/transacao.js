@@ -40,10 +40,16 @@
           tipo: vm.form.tipo
         })
         .then(function(response) {
+          console.log('transacao', response);
           vm.total = response.data.result.caixa;
           vm.historico = response.data.result.historico;
           vm.soma_credito = response.data.result.soma_credito;
           vm.soma_debito = response.data.result.soma_debito;
+          vm.servicos_executados = response.data.result.servicos_executados;
+          vm.servicos_pagos = response.data.result.servicos_pagos;
+          vm.servicos_totais = response.data.result.servicos_totais;
+          vm.vendas_pagas = response.data.result.vendas_pagas;
+          vm.vendas_totais = response.data.result.vendas_totais;
           angular.forEach(vm.historico, function(value, key) {
             value.data_hora = $filter('date')(new Date(value.data_hora), 'dd/MM/yyyy');
           });
