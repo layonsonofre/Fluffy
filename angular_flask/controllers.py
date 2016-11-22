@@ -23,6 +23,29 @@ def basic_pages(**kwargs):
 
 @app.route('/api/<modelo>', methods=['GET'])
 def get_modelo(modelo=None):
+    
+    authorization = str(request.headers["Authorization"])
+    try:
+        auth_type, auth_token = authorization.split(" ")
+    except Exception as e:
+        return jsonify(success=False, result={}, mensagem="Sua Sessao Expirou", code=401)
+    
+    if auth_type != "Bearer":
+        return jsonify(success=False, result={}, mensagem="Sua Sessao Expirou", code=401)
+
+    data = Util.getData("getOAuth", [None, str(auth_token), None])
+
+    if len(data) != 1:
+        return jsonify(success=False, result={}, mensagem="Sua Sessao Expirou", code=401)
+
+    oauth = OAuth(data[0])
+
+    if oauth.time_left < 0:
+        if oauth.time_left > - (3*60*60):
+            return jsonify(success=False, result={}, mensagem="Sua Sessao Expirou", code=401)
+        else :    
+            return jsonify(success=False, result={}, mensagem="Sua Sessao Expirou", code=401)
+
     args = []
     args = Util.requestGetArgs(modelo)
 
@@ -59,43 +82,63 @@ def get_modelo(modelo=None):
 
 @app.route('/api/<modelo>', methods=['POST','PUT','DELETE'])
 def form_modelo(modelo = None):
-	args = []
+	
+    authorization = str(request.headers["Authorization"])
+    try:
+        auth_type, auth_token = authorization.split(" ")
+    except Exception as e:
+        return jsonify(success=False, result={}, mensagem="Sua Sessao Expirou", code=401)
 
-	args = Util.requestFormArgs(modelo, request.json)
-	proc = ""
+    if auth_type != "Bearer":
+        return jsonify(success=False, result={}, mensagem="Sua Sessao Expirou", code=401)
 
-	print(args)
+    data = Util.getData("getOAuth", [None, str(auth_token), None])
 
-	if request.method == 'POST':
-		args.pop(0)
-		proc = "ins"+modelo[0].upper()+modelo[1:]
-	elif request.method == 'PUT':
-		proc = "alt"+modelo[0].upper()+modelo[1:]
-	elif request.method == 'DELETE':
-		proc = "del"+modelo[0].upper()+modelo[1:]
-		args = [args.pop(0)]
+    if len(data) != 1:
+        return jsonify(success=False, result={}, mensagem="Sua Sessao Expirou", code=401)
 
-	print(proc)
-	print(args)
+    oauth = OAuth(data[0])
 
-	try:
-		data = Util.postData(proc, args)
-		return jsonify(success=True, result={"id":data[0]}, message="")
-	except Exception as e:
+    if oauth.time_left < 0:
+        if oauth.time_left > - (3*60*60):
+            return jsonify(success=False, result={}, mensagem="Sua Sessao Expirou", code=401)
+        else :    
+            return jsonify(success=False, result={}, mensagem="Sua Sessao Expirou", code=401)
 
-		message = e.__str__()
-		table = modelo
-		json = str(request.json)
-		method = request.method
+    args = []
+    args = Util.requestFormArgs(modelo, request.json)
+    proc = ""
+    print(args)
 
-		print(message)
-		print(table)
-		print(json)
-		print(method)
+    if request.method == 'POST':
+        args.pop(0)
+        proc = "ins"+modelo[0].upper()+modelo[1:]
+    elif request.method == 'PUT':
+        proc = "alt"+modelo[0].upper()+modelo[1:]
+    elif request.method == 'DELETE':
+        proc = "del"+modelo[0].upper()+modelo[1:]
+        args = [args.pop(0)]
 
-		data = Util.postData("insLog", [message, json, table, method])
-		#return jsonify(success=False, result={}, codigo=code,message=error_message.decode('cp1251').encode('utf8'))
-		return jsonify(success=False, result={}, mensagem=message, tabela=table, json = json, metodo=method)
+    print(proc)
+    print(args)
+
+    try:
+        data = Util.postData(proc, args)
+        return jsonify(success=True, result={"id":data[0]}, message="")
+    except Exception as e:
+        message = e.__str__()
+        table = modelo
+        json = str(request.json)
+        method = request.method
+
+        print(message)
+        print(table)
+        print(json)
+        print(method)
+
+        data = Util.postData("insLog", [message, json, table, method])
+        #return jsonify(success=False, result={}, codigo=code,message=error_message.decode('cp1251').encode('utf8'))
+        return jsonify(success=False, result={}, mensagem=message, tabela=table, json = json, metodo=method)
 
 @app.route('/api/login', methods=['POST'])
 def login():
@@ -103,9 +146,12 @@ def login():
     CLIENT_SECRET = ""
 
     json = request.json
-    username = json['usuario']
-    passwd = json['senha']
-    client_id = json['client_id']
+
+    username = json['usuario'] if 'usuario' in json else None
+    passwd = json['senha'] if 'senha' in json else None
+    client_id = json['client_id'] if 'client_id' in json else None
+
+    print([username, passwd, client_id])
     try:
     	data = Util.getData('getPessoaTemFuncao', [None, None, None, None, username, passwd, None, None])
         # print data
@@ -115,11 +161,9 @@ def login():
             refresh_token = str(uuid4())
             # print([token, refresh_token])
             id = Util.postData('insOAuth',[token, refresh_token])
-            # print(id[0])
-            # print(ptf.id)
-            print '\n\nDESCOMENTAR A LINHA ABAIXO NO CONTROLLERS.PY QUANDO AJEITAR A TRIGGER NO UPDATE PESSOA TEM FUNCAO\n\n'
-            # result = Util.postData('altPessoaTemFuncao', [ptf.id, ptf.pessoa[0], ptf.funcao[0], None, id[0]])
-            # print(result)
+            
+            result = Util.postData('altPessoaTemFuncao', [ptf.id, ptf.pessoa[0], ptf.funcao[0], None, id[0]])
+            print(result)
             return jsonify(success=True, result={"token":token, "refresh_token":refresh_token}, message="")
     	else:
     		return jsonify(success=False, result={}, message="Usuario e/ou Senha incorretos")

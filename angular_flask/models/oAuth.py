@@ -8,6 +8,7 @@ class OAuth():
 		self.vencimento = data[2]
 		self.token = data[3]
 		self.refresh_token = data[4]
+		self.time_left = int(data[5])
 
 	def toJSON(self):
 		return {
@@ -15,7 +16,8 @@ class OAuth():
 			"data_hora":self.data_hora,
 			"vencimento":self.vencimento,
 			"token":self.token,
-			"refresh_token":self.refresh_token
+			"refresh_token":self.refresh_token,
+			"tempo_restante": self.time_left
 		}
 
 	def fromJSON():

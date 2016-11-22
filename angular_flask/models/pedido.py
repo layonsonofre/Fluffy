@@ -6,6 +6,7 @@ class Pedido():
 		self.desconto = float(data[2])
 		self.cliente = [data[3], data[4], data[5]]
 		self.funcionario = [data[6], data[7], data[8]]
+		self.pago = False if data[9] == 0 else True
 
 	def toJSON(self):
 		return {
@@ -21,7 +22,8 @@ class Pedido():
 				"pessoa_tem_funcao":self.funcionario[0],
 				"pessoa_id":self.funcionario[1],
 				"nome":self.funcionario[2]
-			}
+			},
+			"pago": self.pago
 		}
 
 	def fromJSON():
