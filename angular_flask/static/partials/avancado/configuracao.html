@@ -15,12 +15,14 @@
           Configuração
         </div>
         <div class="panel-body">
-          <form ng-submit="vm.alt()">
+          <form ng-submit="vm.alt()" name="form" novalidate>
             <div class="row">
               <div class="col-xs-12">
                 <div class="form-group">
                   <label>Quantidade de animais por período *</label>
-                  <input class="form-control" type="text" ng-model="vm.form.quantidade_animais">
+                  <input class="form-control" type="text" ng-model="vm.form.quantidade_animais" name="quantidade_animais" ng-maxlength="11" ng-pattern="/^\d+$/">
+                  <p class="help-block error" ng-show="form.quantidade_animais.$invalid && !form.quantidade_animais.$pristine">Necessário inserir um quantidade válida</p>
+                  <p class="help-block error" ng-show="form.quantidade_animais.$error.maxlength">O valor informado foi maior que o limite</p>
                   <p class="help-block" ng-show="vm.helpActive">Insira o nome do grupo de ítem que deseja adicionar</p>
                 </div>
               </div>
@@ -28,6 +30,9 @@
                 <div class="form-group">
                   <label>Número de períodos do dia *</label>
                   <input class="form-control" type="text" ng-model="vm.form.periodos_dia">
+                  <input class="form-control" type="text" ng-model="vm.form.quantidade_animais" name="periodos_animais" ng-maxlength="11" ng-pattern="/^\d+$/">
+                  <p class="help-block error" ng-show="form.periodos_animais.$invalid && !form.periodos_animais.$pristine">Necessário inserir um quantidade válida</p>
+                  <p class="help-block error" ng-show="form.periodos_animais.$error.maxlength">O valor informado foi maior que o limite</p>
                   <p class="help-block" ng-show="vm.helpActive">Insira o nome do grupo de ítem que deseja adicionar</p>
                 </div>
               </div>

@@ -64,22 +64,24 @@
           Dados do Funcionário
         </div>
         <div class="panel-body">
-          <form ng-submit="vm.add()">
+          <form ng-submit="vm.add()" name="form" novalidate>
             <div class="row">
               <div class="col-xs-7">
                 <div class="form-group">
                   <label>Nome *</label>
-                  <input class="form-control" type="text" data-ng-model="vm.form.pessoa.nome" name="nome">
+                  <input class="form-control" type="text" data-ng-model="vm.form.pessoa.nome" name="nome" required ng-maxlength="50">
+                  <p class="help-block error" ng-show="form.nome.$invalid && !form.nome.$pristine">Necessário inserir um nome válido</p>
+                  <p class="help-block error" ng-show="form.nome.$error.maxlength">O valor informado foi maior que o limite</p>
                   <p class="help-block" ng-show="vm.helpActive">Insira o nome completo do funcionário</p>
                 </div>
               </div>
               <div class="col-xs-5">
                 <div class="form-group">
                   <label>Email *</label>
-                  <input class="form-control" type="text" data-ng-model="vm.form.pessoa.email">
-                  <p class="help-block" ng-show="vm.helpActive">Insira o email do funcionário no formato:
-                    <i>email@exemplo.com</i>
-                  </p>
+                  <input class="form-control" type="email" data-ng-model="vm.form.pessoa.email" name="email" ng-maxlength="50">
+                  <p class="help-block error" ng-show="form.email.$invalid && !form.email.$pristine">Informe um email válido</p>
+                  <p class="help-block error" ng-show="form.email.$error.maxlength">O valor informado foi maior que o limite</p>
+                  <p class="help-block" ng-show="vm.helpActive">Insira o email do funcionário no formato: <i>email@exemplo.com</i></p>
                 </div>
               </div>
             </div>
@@ -87,28 +89,36 @@
               <div class="col-xs-4">
                 <div class="form-group">
                   <label>CPF/CNPJ *</label>
-                  <input class="form-control" type="text" data-ng-model="vm.form.pessoa.registro">
+                  <input class="form-control" type="text" data-ng-model="vm.form.pessoa.registro" name="registro" ng-maxlength="20" ng-pattern="/^\d+$/">
+                  <p class="help-block error" ng-show="form.registro.$invalid && !form.registro.$pristine">Informe um registro válido</p>
+                  <p class="help-block error" ng-show="form.registro.$error.maxlength">O valor informado foi maior que o limite</p>
                   <p class="help-block" ng-show="vm.helpActive">Insira o CPF ou CNPJ do cliente</p>
                 </div>
               </div>
               <div class="col-xs-3">
                 <div class="form-group">
                   <label>RG *</label>
-                  <input class="form-control" type="text" data-ng-model="vm.form.pessoa.rg">
+                  <input class="form-control" type="text" data-ng-model="vm.form.pessoa.rg" name="rg" ng-pattern="/^\d+$/" ng-maxlength="20">
+                  <p class="help-block error" ng-show="form.rg.$invalid && !form.rg.$pristine">Necessário inserir um registro válido</p>
+                  <p class="help-block error" ng-show="form.rg.$error.maxlength">O valor informado foi maior que o limite</p>
                   <p class="help-block" ng-show="vm.helpActive">Insira o número do RG</p>
                 </div>
               </div>
               <div class="col-xs-1">
                 <div class="form-group">
                   <label>Exp. *</label>
-                  <input class="form-control" type="text" data-ng-model="vm.form.pessoa.orgao_expedidor">
+                  <input class="form-control" type="text" data-ng-model="vm.form.pessoa.orgao_expedidor" name="orgao_expedidor" ng-maxlength="6">
+                  <p class="help-block error" ng-show="form.orgao_expedidor.$invalid && !form.orgao_expedidor.$pristine">Necessário inserir um órgão expedidor válido</p>
+                  <p class="help-block error" ng-show="form.orgao_expedidor.$error.maxlength">O valor informado foi maior que o limite</p>
                   <p class="help-block" ng-show="vm.helpActive">Insira o órgão expedidor</p>
                 </div>
               </div>
               <div class="col-xs-3">
                 <div class="form-group">
                   <label>Insc. Estadual *</label>
-                  <input class="form-control" type="text" data-ng-model="vm.form.pessoa.inscricao_estadual">
+                  <input class="form-control" type="text" data-ng-model="vm.form.pessoa.inscricao_estadual" name="inscricao_estadual" ng-pattern="/^\d+$/">
+                  <p class="help-block error" ng-show="form.inscricao_estadual.$invalid && !form.inscricao_estadual.$pristine">Necessário inserir uma inscrição estadual válida</p>
+                  <p class="help-block error" ng-show="form.inscricao_estadual.$error.maxlength">O valor informado foi maior que o limite</p>
                   <p class="help-block" ng-show="vm.helpActive">Insira o número da Inscrição Estadual</p>
                 </div>
               </div>
@@ -121,7 +131,9 @@
               <div class="col-xs-2">
                 <div class="form-group">
                   <label>CEP *</label>
-                  <input class="form-control" type="text" data-ng-model="vm.form.pessoa.cep">
+                  <input class="form-control" type="text" data-ng-model="vm.form.pessoa.cep" name="cep" ng-pattern="/^\d+$/" required ng-maxlength="8">
+                  <p class="help-block error" ng-show="form.cep.$invalid && !form.cep.$pristine">Necessário inserir um nome válido</p>
+                  <p class="help-block error" ng-show="form.cep.$error.maxlength">O valor informado foi maior que o limite</p>
                   <p class="help-block" ng-show="vm.helpActive">CEP da localidade do funcionário</p>
                 </div>
               </div>
@@ -137,21 +149,27 @@
               <div class="col-xs-5">
                 <div class="form-group">
                   <label>Logradouro *</label>
-                  <input class="form-control" type="text" data-ng-model="vm.form.pessoa.logradouro">
+                  <input class="form-control" type="text" data-ng-model="vm.form.pessoa.logradouro" name="logradouro" required ng-maxlength="100">
+                  <p class="help-block error" ng-show="form.logradouro.$invalid && !form.logradouro.$pristine">Necessário inserir um logradouro válido</p>
+                  <p class="help-block error" ng-show="form.logradouro.$error.maxlength">O valor informado foi maior que o limite</p>
                   <p class="help-block" ng-show="vm.helpActive">Nome da rua</p>
                 </div>
               </div>
               <div class="col-xs-1">
                 <div class="form-group">
                   <label>Nº. *</label>
-                  <input class="form-control" type="text" data-ng-model="vm.form.pessoa.numero">
+                  <input class="form-control" type="text" data-ng-model="vm.form.pessoa.numero" ng-pattern="/^\d+$/" name="numero" required ng-maxlength="11">
+                  <p class="help-block error" ng-show="form.numero.$invalid && !form.numero.$pristine">Necessário inserir um número válido</p>
+                  <p class="help-block error" ng-show="form.numero.$error.maxlength">O valor informado foi maior que o limite</p>
                   <p class="help-block" ng-show="vm.helpActive">No. da residência</p>
                 </div>
               </div>
               <div class="col-xs-3">
                 <div class="form-group">
                   <label>Complemento</label>
-                  <input class="form-control" type="text" data-ng-model="vm.form.pessoa.complemento">
+                  <input class="form-control" type="text" data-ng-model="vm.form.pessoa.complemento" name="complemento" ng-maxlength="50">
+                  <p class="help-block error" ng-show="form.complemento.$invalid && !form.complemento.$pristine">Necessário inserir um complemento válido</p>
+                  <p class="help-block error" ng-show="form.complemento.$error.maxlength">O valor informado foi maior que o limite</p>
                   <p class="help-block" ng-show="vm.helpActive">Informações adicionais</p>
                 </div>
               </div>
@@ -160,28 +178,36 @@
               <div class="col-xs-3">
                 <div class="form-group">
                   <label>Ponto de Referência</label>
-                  <input class="form-control" type="text" data-ng-model="vm.form.pessoa.pontoDeReferencia">
+                  <input class="form-control" type="text" data-ng-model="vm.form.pessoa.pontoDeReferencia" name="pontoDeReferencia" ng-maxlength="50">
+                  <p class="help-block error" ng-show="form.pontoDeReferencia.$invalid && !form.pontoDeReferencia.$pristine">Necessário inserir um ponto de referência válido</p>
+                  <p class="help-block error" ng-show="form.pontoDeReferencia.$error.maxlength">O valor informado foi maior que o limite</p>
                   <p class="help-block" ng-show="vm.helpActive">Insira uma localidade próxima conhecida</p>
                 </div>
               </div>
               <div class="col-xs-4">
                 <div class="form-group">
                   <label>Cidade *</label>
-                  <input class="form-control" type="text" data-ng-model="vm.form.pessoa.cidade">
+                  <input class="form-control" type="text" data-ng-model="vm.form.pessoa.cidade" name="cidade" required ng-maxlength="50">
+                  <p class="help-block error" ng-show="form.cidade.$invalid && !form.cidade.$pristine">Necessário inserir um cidade válido</p>
+                  <p class="help-block error" ng-show="form.cidade.$error.maxlength">O valor informado foi maior que o limite</p>
                   <p class="help-block" ng-show="vm.helpActive">Insira a cidade do cliente</p>
                 </div>
               </div>
               <div class="col-xs-2">
                 <div class="form-group">
                   <label>Bairro *</label>
-                  <input class="form-control" type="text" data-ng-model="vm.form.pessoa.bairro">
+                  <input class="form-control" type="text" data-ng-model="vm.form.pessoa.bairro" name="bairro" required ng-maxlength="50">
+                  <p class="help-block error" ng-show="form.bairro.$invalid && !form.bairro.$pristine">Necessário inserir um bairro válido</p>
+                  <p class="help-block error" ng-show="form.bairro.$error.maxlength">O valor informado foi maior que o limite</p>
                   <p class="help-block" ng-show="vm.helpActive">Insira a bairro do cliente</p>
                 </div>
               </div>
               <div class="col-xs-1">
                 <div class="form-group">
                   <label>UF *</label>
-                  <input class="form-control" type="text" data-ng-model="vm.form.pessoa.uf">
+                  <input class="form-control" type="text" data-ng-model="vm.form.pessoa.uf" name="uf" required ng-maxlength="2">
+                  <p class="help-block error" ng-show="form.uf.$invalid && !form.uf.$pristine">Necessário inserir um estado válido</p>
+                  <p class="help-block error" ng-show="form.uf.$error.maxlength">O valor informado foi maior que o limite</p>
                   <p class="help-block" ng-show="vm.helpActive">Uni. Federativa. Ex.:
                     <i>PR</i>
                   </p>
@@ -190,7 +216,9 @@
               <div class="col-xs-2">
                 <div class="form-group">
                   <label>País *</label>
-                  <input class="form-control" type="text" data-ng-model="vm.form.pessoa.pais">
+                  <input class="form-control" type="text" data-ng-model="vm.form.pessoa.pais" name="pais" required ng-maxlength="50">
+                  <p class="help-block error" ng-show="form.pais.$invalid && !form.pais.$pristine">Necessário inserir um pais válido</p>
+                  <p class="help-block error" ng-show="form.pais.$error.maxlength">O valor informado foi maior que o limite</p>
                   <p class="help-block" ng-show="vm.helpActive">Ex.:
                     <i>Brasil</i>
                   </p>
@@ -322,7 +350,7 @@
                 <div class="form-group">
                   <label>Função *</label>
                   <div class="radio" ng-repeat="f in vm.funcoes | orderBy:'nome'">
-                    <label><input type="radio" value="{{f.id}}" ng-model="vm.form.funcao">&nbsp;&nbsp; {{f.nome|capitalize}}</label>
+                    <label><input type="radio" value="{{f.id}}" required ng-model="vm.form.funcao">&nbsp;&nbsp; {{f.nome|capitalize}}</label>
                   </div>
                 </div>
               </div>
@@ -330,7 +358,7 @@
                 <div class="form-group">
                   <label>Permissões *</label>
                   <div class="checkbox" ng-repeat="p in vm.permissoes | orderBy:'modulo'">
-                    <label><input type="checkbox" ng-model="p.checked" ng-change="vm.selecionarPermissao()">&nbsp;&nbsp; {{p.modulo|capitalize}}</label>
+                    <label><input type="checkbox" ng-model="p.checked" required ng-change="vm.selecionarPermissao()">&nbsp;&nbsp; {{p.modulo|capitalize}}</label>
                   </div>
                 </div>
               </div>
@@ -342,7 +370,9 @@
               <div class="col-xs-6">
                 <div class="form-group">
                   <label>Senha</label>
-                  <input class="form-control" type="text" data-ng-model="vm.form.pessoa.password" name="senha">
+                  <input class="form-control" type="text" data-ng-model="vm.form.pessoa.password" name="senha" ng-maxlength="12">
+                  <p class="help-block error" ng-show="form.senha.$invalid && !form.senha.$pristine">Necessário inserir sua senha</p>
+                  <p class="help-block error" ng-show="form.senha.$error.maxlength">O valor informado foi maior que o limite</p>
                   <p class="help-block" ng-show="vm.helpActive">Senha de acesso ao sistema, que pode ser alterada pelo funcionário depois</p>
                 </div>
               </div>
@@ -352,10 +382,10 @@
             <div class="row">
               <div class="col-xs-12">
                 <hr>
-                <a ng-click="vm.add()" class="btn btn-link" data-toggle="tooltip" data-placement="top" title="Armazena as informações inseridas acima">
+                <button type="submit" ng-disabled="form.$invalid" class="btn btn-link" data-toggle="tooltip" data-placement="top" title="Armazena as informações inseridas acima">
                   <span class="fa fa-check"></span>&nbsp;&nbsp;
                   <b>Salvar</b>
-                </a>
+                </button>
               </div>
             </div>
           </form>

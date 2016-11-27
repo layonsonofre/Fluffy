@@ -140,6 +140,7 @@
         AnimalFactory.add(vm.form.animal)
           .then(function (response) {
             if (response.data.success === true) {
+              ngToast.success({content: 'Animal adicionado com sucesso'});
               if (response.data.result.id) {
                 vm.form.animal.id = response.data.result.id;
 

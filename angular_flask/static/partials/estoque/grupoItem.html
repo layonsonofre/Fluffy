@@ -15,21 +15,23 @@
           Grupo de Ítens
         </div>
         <div class="panel-body">
-          <div class="row">
-            <div class="col-xs-5">
-              <div class="form-group">
-                <label>Nome *</label>
-                <input class="form-control" type="text" ng-model="vm.form.nome">
-                <p class="help-block" ng-show="vm.helpActive">Insira o nome do grupo de ítem que deseja adicionar</p>
+          <form ng-submit="vm.add()" name="form" novalidate>
+            <div class="row">
+              <div class="col-xs-5">
+                <div class="form-group">
+                  <label>Nome *</label>
+                  <input class="form-control" type="text" ng-model="vm.form.nome" name="nome" required="true" ng-maxlength="50">
+                  <p class="help-block error" ng-show="form.nome.$invalid && !form.nome.$pristine">Necessário inserir um nome</p>
+                  <p class="help-block error" ng-show="form.nome.$error.maxlength">O valor informado foi maior que o limite</p>
+                  <p class="help-block" ng-show="vm.helpActive">Insira o nome do grupo de ítem que deseja adicionar</p>
+                </div>
+              </div>
+              <div class="col-xs-1">
+                <label>Adicionar</label>
+                <button class="btn btn-link" ng-disabled="form.$invalid" data-toggle="tooltip" data-placement="top" title="Salvar cadastro"><span class="fa fa-check"></span></button>
               </div>
             </div>
-            <div class="col-xs-1">
-              <label>
-                <br>
-              </label>
-              <button class="btn btn-link" data-ng-click="vm.add()" data-toggle="tooltip" data-placement="top" title="Salvar cadastro"><span class="fa fa-check"></span></button>
-            </div>
-          </div>
+          </form>
           <div class="row">
             <div class="col-xs-12">
               <table class="table table-striped table-hover">

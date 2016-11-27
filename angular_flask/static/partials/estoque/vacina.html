@@ -15,33 +15,39 @@
           Cadastrar Vacina
         </div>
         <div class="panel-body">
-          <form ng-submit="vm.add()">
+          <form ng-submit="vm.add()" name="form" novalidate>
             <div class="row">
               <div class="col-xs-6">
                 <div class="form-group">
                   <label>Nome *</label>
-                  <input class="form-control" type="text" data-ng-model="vm.form.vacina.nome">
+                  <input class="form-control" type="text" name="nome" data-ng-model="vm.form.vacina.nome" required="true" ng-maxlength="50">
+                  <p class="help-block error" ng-show="form.nome.$invalid && !form.nome.$pristine">Necessário inserir um nome</p>
+                  <p class="help-block error" ng-show="form.nome.$error.maxlength">O valor informado foi maior que o limite</p>
                   <p class="help-block" ng-show="vm.helpActive">Insira o nome da vacina</p>
                 </div>
               </div>
               <div class="col-xs-3">
                 <div class="form-group">
                   <label>Doses *</label>
-                  <input class="form-control" type="text" data-ng-model="vm.form.vacina.dose">
+                  <input class="form-control" type="text" name="dose" data-ng-model="vm.form.vacina.dose" required="true" ng-maxlength="11" ng-pattern="/^\d+$/">
+                  <p class="help-block error" ng-show="form.dose.$invalid && !form.dose.$pristine">Necessário inserir uma dose válida</p>
+                  <p class="help-block error" ng-show="form.dose.$error.maxlength">O valor informado foi maior que o limite</p>
                   <p class="help-block" ng-show="vm.helpActive">Total de doses</p>
                 </div>
               </div>
               <div class="col-xs-3">
                 <div class="form-group">
                   <label>Intervalo *</label>
-                  <input class="form-control" type="text" data-ng-model="vm.form.vacina.intervalo">
-                  <p class="help-block" ng-show="vm.helpActive">Insira a quantidade</p>
+                  <input class="form-control" type="text" name="intervalo" data-ng-model="vm.form.vacina.intervalo" required="true" ng-maxlength="11" ng-pattern="/^\d+$/">
+                  <p class="help-block error" ng-show="form.intervalo.$invalid && !form.intervalo.$pristine">Necessário inserir um intervalo válido</p>
+                  <p class="help-block error" ng-show="form.intervalo.$error.maxlength">O valor informado foi maior que o limite</p>
+                  <p class="help-block" ng-show="vm.helpActive">Insira o intervalo</p>
                 </div>
               </div>
             </div>
             <div class="row">
               <div class="col-xs-12">
-                <a class="btn btn-link" ng-click="vm.add()"><span class="fa fa-check"></span>&nbsp; <b>Salvar</b></a>
+                <button class="btn btn-link" type="submit" ng-disabled="form.$invalid"><span class="fa fa-check"></span>&nbsp; <b>Salvar</b></button>
               </div>
             </div>
           </form>

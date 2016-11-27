@@ -13,19 +13,21 @@
         Lembretes
       </div>
       <div class="panel-body" ng-controller="LembreteController as vm">
-        <form ng-submit="vm.add()">
+        <form ng-submit="vm.add()" name="form" novalidate>
           <div class="row">
             <div class="col-xs-5">
               <div class="form-group">
                 <label>Descrição *</label>
-                <input class="form-control" type="text" ng-model="vm.form.descricao">
+                <input class="form-control" type="text" name="descricao" ng-model="vm.form.descricao" required="true">
+                <p class="help-block error" ng-show="form.descricao.$invalid && !form.descricao.$pristine">Informe uma descrição válida</p>
+                <p class="help-block" ng-show="vm.helpActive">Insira uma descrição para o lembrete</p>
               </div>
             </div>
             <div class="col-xs-3">
               <div class="form-group">
                 <label>Data *</label>
                 <p class="input-group">
-                  <input type="text" class="form-control" uib-datepicker-popup="{{vm.format}}" ng-model="vm.form.data_hora" ng-required="true" is-open="vm.popupData" datepicker-options="dateOptions" altInputFormats="altInputFormats" close-text="Fechar">
+                  <input type="text" class="form-control" uib-datepicker-popup="{{vm.format}}" ng-model="vm.form.data_hora" ng-required="true" is-open="vm.popupData" datepicker-options="dateOptions" altInputFormats="altInputFormats" close-text="Fechar" name="data" required="true" ng-readonly="true">
                   <span class="input-group-btn">
                       <a type="a" class="btn btn-default" ng-click="vm.openData()">
                         <span class="fa fa-calendar"></span>
@@ -47,10 +49,10 @@
             <div class="col-xs-2">
               <label>Ações</label>
               <div class="buttons">
-                <a type="submit" class="btn btn-link" data-ng-click="vm.add()" data-toggle="tooltip" data-placement="top" title="Salvar cadastro">
+                <a type="submit" class="btn btn-link" ng-disabled="form.$invalid" data-ng-click="vm.add()" data-toggle="tooltip" data-placement="top" title="Salvar cadastro">
                   <span class="fa fa-check"></span>
                 </a>
-                <a class="btn btn-link" data-ng-click="vm.cancel()" data-toggle="tooltip" data-placement="top" title="Cancelar">
+                <a class="btn btn-link" data-ng-click="vm.cancel()" ng-disabled="!form.$dirty" data-toggle="tooltip" data-placement="top" title="Cancelar">
                   <span class="fa fa-trash"></span>
                 </a>
               </div>

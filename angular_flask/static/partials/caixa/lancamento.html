@@ -14,18 +14,18 @@
           Novo Lançamento
         </div>
         <div class="panel-body">
-          <form role="form">
+          <form role="form" ng-submit="vm.add()" name="form" novalidate>
             <div class="row">
               <div class="col-xs-12">
                 <div class="form-group">
                   <label>Tipo *</label>
                   <div class="radio">
                     <label>
-                      <input type="radio" value="C" ng-model="vm.form.tipo">&nbsp;&nbsp; Crédito</label>
+                      <input type="radio" value="C" required ng-model="vm.form.tipo">&nbsp;&nbsp; Crédito</label>
                   </div>
                   <div class="radio">
                     <label>
-                      <input type="radio" value="D" ng-model="vm.form.tipo">&nbsp;&nbsp; Débito</label>
+                      <input type="radio" value="D" required ng-model="vm.form.tipo">&nbsp;&nbsp; Débito</label>
                   </div>
                 </div>
               </div>
@@ -34,24 +34,28 @@
               <div class="col-xs-6">
                 <div class="form-group">
                   <label>Valor (R$) *</label>
-                  <input class="form-control" type="text" data-ng-model="vm.form.valor">
+                  <input class="form-control" type="text" data-ng-model="vm.form.valor" name="valor" required="true" ng-maxlength="11" ng-maxlength="11" ng-pattern="/^[0-9]{1,7}(\.[0-9]+)?$/">
+                  <p class="help-block error" ng-show="form.valor.$invalid && !form.valor.$pristine">Necessário inserir um valor válido</p>
+                  <p class="help-block error" ng-show="form.valor.$error.maxlength">O valor informado foi maior que o limite</p>
                   <p class="help-block" ng-show="vm.helpActive">Valor do lançamento</p>
                 </div>
               </div>
               <div class="col-xs-6">
                 <div class="form-group">
                   <label>Comentário</label>
-                  <input class="form-control" type="text" data-ng-model="vm.form.comentario">
+                  <input class="form-control" type="text" data-ng-model="vm.form.comentario" ng-maxlength="50">
+                  <p class="help-block error" ng-show="form.comentario.$invalid && !form.comentario.$pristine">Necessário inserir um comentário válido</p>
+                  <p class="help-block error" ng-show="form.comentario.$error.maxlength">O valor informado foi maior que o limite</p>
                   <p class="help-block" ng-show="vm.helpActive">Insira uma breve descrição sobre este lançamento</p>
                 </div>
               </div>
             </div>
             <div class="row">
               <div class="col-xs-12">
-                <a ng-click="vm.add()" class="btn btn-link" data-toggle="tooltip" data-placement="top" title="Armazena as informações inseridas acima">
+                <button ng-disabled="form.$invalid" class="btn btn-link" data-toggle="tooltip" data-placement="top" title="Armazena as informações inseridas acima">
                   <span class="fa fa-check"></span>&nbsp;&nbsp;
                   <b>Salvar</b>
-                </a>
+                </button>
               </div>
             </div>
           </form>

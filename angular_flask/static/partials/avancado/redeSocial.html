@@ -20,14 +20,14 @@
               <div class="col-xs-5">
                 <div class="form-group">
                   <label>Nome *</label>
-                  <input class="form-control" type="text" ng-model="vm.form.nome">
+                  <input class="form-control" type="text" ng-model="vm.form.nome" name="nome" required ng-maxlength="50">
+                  <p class="help-block error" ng-show="form.nome.$invalid && !form.nome.$pristine">Necessário inserir um nome válido</p>
+                  <p class="help-block error" ng-show="form.nome.$error.maxlength">O valor informado foi maior que o limite</p>
                   <p class="help-block" ng-show="vm.helpActive">Insira o nome da nova rede social que deseja cadastrar</p>
                 </div>
               </div>
               <div class="col-xs-1">
-                <label>
-                  <br>
-                </label>
+                <label>Adicionar</label>
                 <button class="btn btn-link" data-ng-click="vm.add()" data-toggle="tooltip" data-placement="top" title="Salvar cadastro"><span class="fa fa-check"></span></button>
               </div>
             </form>
