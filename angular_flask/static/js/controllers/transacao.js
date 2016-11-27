@@ -1,9 +1,9 @@
-(function() {
+(function () {
   'use strict';
 
   angular
     .module('Transacao', [])
-    .config(['$routeProvider', function($routeProvider) {
+    .config(['$routeProvider', function ($routeProvider) {
       $routeProvider
         .when('/caixa/lancamento', {
           templateUrl: '../static/partials/caixa/lancamento.html',
@@ -32,37 +32,39 @@
     vm.add = add;
 
     function getHistorico() {
-      vm.form.data_inicio = vm.form.data_inicio ? $filter('date')(new Date(vm.form.data_inicio), 'yyyy-MM-dd') : null;
-      vm.form.data_fim = vm.form.data_fim ? $filter('date')(new Date(vm.form.data_fim), 'yyyy-MM-dd') : null;
+      var inicio = vm.form.data_inicio ? new Date(vm.form.data_inicio).toISOString().substring(0, 19).replace('T', ' ') : null;
+      var fim = vm.form.data_fim ? new Date(vm.form.data_fim).toISOString().substring(0, 19).replace('T', ' ') : null;
+      var tipo = vm.form.tipo;
       TransacaoFactory.getHistorico({
-          data_inicio: vm.form.data_inicio,
-          data_fim: vm.form.data_fim,
-          tipo: vm.form.tipo
+          data_inicio: inicio,
+          data_fim: fim,
+          tipo: tipo
         })
-        .then(function(response) {
-          console.log('transacao', response);
-          vm.total = response.data.result.caixa;
-          vm.historico = response.data.result.historico;
-          vm.soma_credito = response.data.result.soma_credito;
-          vm.soma_debito = response.data.result.soma_debito;
-          vm.servicos_executados = response.data.result.servicos_executados;
-          vm.servicos_pagos = response.data.result.servicos_pagos;
-          vm.servicos_totais = response.data.result.servicos_totais;
-          vm.vendas_pagas = response.data.result.vendas_pagas;
-          vm.vendas_totais = response.data.result.vendas_totais;
-          angular.forEach(vm.historico, function(value, key) {
-            value.data_hora = $filter('date')(new Date(value.data_hora), 'dd/MM/yyyy');
-          });
-        }, function(response) {
-          ngToast.warning({
-            content: '<b>Falha ao buscar registros</b>: ' + response.data.message
-          });
+        .then(function (response) {
+          if (response.data.success === true) {
+            ngToast.success({ content: 'Mostrando registros encontrados' });
+            console.log('transacao', response);
+            vm.total = response.data.result.caixa;
+            vm.historico = response.data.result.historico;
+            vm.soma_credito = response.data.result.soma_credito;
+            vm.soma_debito = response.data.result.soma_debito;
+            vm.servicos_executados = response.data.result.servicos_executados;
+            vm.servicos_pagos = response.data.result.servicos_pagos;
+            vm.servicos_totais = response.data.result.servicos_totais;
+            vm.vendas_pagas = response.data.result.vendas_pagas;
+            vm.vendas_totais = response.data.result.vendas_totais;
+            angular.forEach(vm.historico, function (value, key) {
+              value.data_hora = $filter('date')(new Date(value.data_hora), 'dd/MM/yyyy');
+            });
+          } else {
+            ngToast.danger({ content: 'Falha na busca pelos registros' });
+          }
         });
     }
 
     function add() {
       TransacaoFactory.add(vm.form)
-        .then(function(response) {
+        .then(function (response) {
           console.log("response", response);
           if (response.data.success != true) {
             ngToast.warning({
@@ -73,16 +75,12 @@
               content: 'Registro adicionado com sucesso'
             });
           }
-        }, function(response) {
-          ngToast.warning({
-            content: '<b>Falha ao incluir o registro</b>: ' + response.data.message
-          });
         });
     }
 
     function alt(data) {
       TransacaoFactory.alt(data)
-        .then(function(response) {
+        .then(function (response) {
           getHistorico();
           if (response.data.success != true) {
             ngToast.warning({
@@ -93,10 +91,6 @@
               content: 'Registro alterado com sucesso'
             });
           }
-        }, function(response) {
-          ngToast.warning({
-            content: '<b>Falha ao alterar o registro</b>: ' + response.data.message
-          });
         });
     }
 
@@ -108,31 +102,27 @@
         actionButtonClass: 'btn btn-danger'
       };
       modalService.showModal({}, modalOptions)
-        .then(function(result) {
+        .then(function (result) {
           TransacaoFactory.del(entry.id)
-            .then(function(response) {
+            .then(function (response) {
               if (response.data.success != true) {
-                ngToast.warning({
+                ngToast.danger({
                   content: '<b>Falha ao excluir o registro</b>: ' + response.data.message
                 });
               } else {
                 ngToast.success({
                   content: 'Registro excluído com sucesso'
                 });
+                getHistorico();
               }
-              getHistorico();
-            }, function(response) {
-              ngToast.warning({
-                content: '<b>Falha ao excluir o registro</b>: ' + response.data.message
-              });
             });
         });
     }
 
-    vm.openDataInicio = function() {
+    vm.openDataInicio = function () {
       vm.popupDataInicio = true;
     }
-    vm.openDataFim = function() {
+    vm.openDataFim = function () {
       vm.popupDataFim = true;
     }
 
@@ -177,12 +167,11 @@
       }
 
       function failed(response) {
-        console.error('Failed: ' + JSON.stringify(response));
+        return response;
       }
     }
 
     function getHistorico(data) {
-      console.log("historico", JSON.stringify(data));
       data = data || null;
       return $http({
           url: _url + '/getHistorico',
@@ -197,12 +186,11 @@
       }
 
       function failed(response) {
-        console.error('Failed: ' + JSON.stringify(response));
+        return response;
       }
     }
 
     function add(data) {
-      console.log('SAVING: ' + JSON.stringify(data));
       return $http({
           method: 'POST',
           url: _url + '/transacao',
@@ -216,49 +204,48 @@
       }
 
       function failed(response) {
-        console.error('Failed: ' + JSON.stringify(response));
+        return response;
       }
     }
 
 
-        function alt(data) {
-          console.log('UPDATING: ' + JSON.stringify(data));
-          return $http({
-              method: 'PUT',
-              url: _url + '/transacao',
-              data: data
-            })
-            .then(success)
-            .catch(failed);
+    function alt(data) {
+      return $http({
+          method: 'PUT',
+          url: _url + '/transacao',
+          data: data
+        })
+        .then(success)
+        .catch(failed);
 
-          function success(response) {
-            return response;
+      function success(response) {
+        return response;
+      }
+
+      function failed(response) {
+        return response;
+      }
+    }
+
+    function del(id) {
+      return $http({
+          method: 'DELETE',
+          url: _url + '/transacao',
+          data: {
+            id: id
           }
+        })
+        .then(success)
+        .catch(failed);
 
-          function failed(response) {
-            console.error('Failed: ' + JSON.stringify(response));
-          }
-        }
+      function success(response) {
+        console.log(response);
+        return response;
+      }
 
-        function del(id) {
-          return $http({
-              method: 'DELETE',
-              url: _url + '/transacao',
-              data: {
-                id: id
-              }
-            })
-            .then(success)
-            .catch(failed);
-
-          function success(response) {
-            console.log(response);
-            return response;
-          }
-
-          function failed(response) {
-            console.error('Failed: ' + JSON.stringify(response));
-          }
-        }
+      function failed(response) {
+        return response;
+      }
+    }
   }
 })()

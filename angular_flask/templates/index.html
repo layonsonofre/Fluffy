@@ -70,13 +70,14 @@
   <script src="../static/js/controllers/venda.js"></script>
   <script src="../static/js/controllers/configuracao.js"></script>
   <script src="../static/js/controllers/lote.js"></script>
+  <script src="../static/js/controllers/vacinaTemLote.js"></script>
   <script src="../static/js/controllers/vacina.js"></script>
   <script src="../static/js/controllers/aplicacao.js"></script>
   <script src="../static/js/controllers/anamnese.js"></script>
   <script src="../static/js/controllers/transacao.js"></script>
 </head>
 
-<body class="{{bodyBackground}}">
+<body class="{{bodyBackground}}"  ng-model-options="{ updateOn: 'keyup change click blur', debounce: { keyup: 500, click: 0, change: 0, blur: 0 } }">
   <nav class="navbar navbar-default navbar-fixed-top" ng-hide="hideMenu">
     <div class="container">
       <div class="navbar-header page-scroll">
@@ -234,8 +235,7 @@
   <footer ng-hide="hideMenu">
     <div class="container">
       <div class="text-center">
-        Made with
-        <i class="fa fa-heart"></i> by André Cadamuro Garcia e Layon de Souza Onofre
+        Criado com <i class="fa fa-heart"></i> by André Cadamuro Garcia e Layon de Souza Onofre
       </div>
     </div>
   </footer>

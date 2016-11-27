@@ -59,6 +59,9 @@ textarea:focus, input:focus, input[type]:focus, .uneditable-input:focus, select:
     box-shadow: inset 0px -1px 0px 0px rgba(210, 210, 210, 0.075), inset 0px -2px 0px 0px rgba(210, 210, 210, 0.80)!important;
 }
 
+p.error {
+  color: rgba(241, 156, 187, 1);
+}
 
 
 .card {

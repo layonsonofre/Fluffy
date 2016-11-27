@@ -1,9 +1,9 @@
-(function() {
+(function () {
   'use strict';
 
   angular
     .module('Agenda', [])
-    .config(['$routeProvider', function($routeProvider) {
+    .config(['$routeProvider', function ($routeProvider) {
       $routeProvider
         .when('/servico/agenda', {
           templateUrl: '../static/partials/servico/agenda.html',
@@ -36,18 +36,18 @@
 
     var actions = [{
       label: '<a class="btn btn-default btn-xs" data-toggle="modal" data-target="#detalhesServico"><span class="fa fa-plus"></span></a>',
-      onClick: function(args) {
+      onClick: function (args) {
         vm.form = args.calendarEvent.info;
       }
     }, {
       label: '<a class="btn btn-default btn-xs"><span class="fa fa-pencil"></span></a>',
-      onClick: function(args) {
+      onClick: function (args) {
         vm.form = args.calendarEvent;
         vm.editAgendado();
       }
-    },{
+    }, {
       label: '<a class="btn btn-default btn-xs"><span class="fa fa-trash"></span></a>',
-      onClick: function(args) {
+      onClick: function (args) {
         vm.form = args.calendarEvent.info;
         vm.delAgendado();
       }
@@ -55,12 +55,12 @@
 
     var actionsConsulta = [{
       label: '<a class="btn btn-default btn-xs" data-toggle="modal" data-target="#detalhesServico"><span class="fa fa-plus"></span></a>',
-      onClick: function(args) {
+      onClick: function (args) {
         vm.form = args.calendarEvent.info;
       }
     }, {
       label: '<a class="btn btn-default btn-xs"><span class="fa fa-stethoscope"></span></a>',
-      onClick: function(args) {
+      onClick: function (args) {
         vm.form = args.calendarEvent;
         vm.editConsulta();
       }
@@ -68,29 +68,29 @@
 
     vm.cellIsOpen = true;
 
-    vm.eventClicked = function(event) {
+    vm.eventClicked = function (event) {
       console.log('Clicked', event);
     };
 
-    vm.eventEdited = function(event) {
+    vm.eventEdited = function (event) {
       console.log('Edited', event);
     };
 
-    vm.eventDeleted = function(event) {
+    vm.eventDeleted = function (event) {
       console.log('Deleted', event);
     };
 
-    vm.eventTimesChanged = function(event) {
+    vm.eventTimesChanged = function (event) {
       console.log('Dropped or resized', event);
     };
 
-    vm.toggle = function($event, field, event) {
+    vm.toggle = function ($event, field, event) {
       $event.preventDefault();
       $event.stopPropagation();
       event[field] = !event[field];
     };
 
-    vm.timespanClicked = function(date, cell) {
+    vm.timespanClicked = function (date, cell) {
       if (vm.calendarView === 'month') {
         if ((vm.cellIsOpen && moment(date).startOf('day').isSame(moment(vm.viewDate).startOf('day'))) || cell.events.length === 0 || !cell.inMonth) {
           vm.cellIsOpen = false;
@@ -108,58 +108,57 @@
       }
     };
 
-    vm.hoje = function() {
+    vm.hoje = function () {
       vm._hoje = true;
     }
 
     function refreshData() {
+      vm.agedandados = null;
+      vm.agendamentos = [];
       var _duration = 30;
       var data = vm._hoje ? $filter('date')(new Date(), 'yyyy-MM-dd') : null;
-      AgendaFactory.getAgendados({data_inicio: data, data_fim: data})
-        .then(function(response) {
+      AgendaFactory.getAgendados({ data_inicio: data, data_fim: data })
+        .then(function (response) {
 
-            if (response.data.success != true) {
-              ngToast.warning({content: '<b>Falha na consulta pelos registros</b>: ' + response.data.message});
+          if (response.data.success != true) {
+            ngToast.warning({ content: '<b>Falha na consulta pelos registros</b>: ' + response.data.message });
+          }
+
+          vm.agendados = response.data.result;
+
+          angular.forEach(vm.agendados, function (value, key) {
+            value.data_hora = new Date(value.data_hora);
+            var starts = new Date(value.data_hora);
+            var ends = new Date(starts.getTime() + _duration * 60000);
+            var executado = value.executado ? 'Executado' : 'Não executado';
+            if (value.servico_tem_porte.servico.nome === 'Consulta') {
+              vm.agendamentos.push({
+                title: '<b>' + value.animal.nome + '</b>' + ' - ' + executado,
+                startsAt: starts,
+                endsAt: ends,
+                actions: actionsConsulta,
+                color: {
+                  primary: '#0974A2',
+                  secondary: '#4A9ABB'
+                },
+                info: value
+              });
+            } else {
+              vm.agendamentos.push({
+                title: '<b>' + value.animal.nome + '</b>' + ' - ' + executado,
+                startsAt: starts,
+                endsAt: ends,
+                actions: actions,
+                color: {
+                  primary: '#FFC803',
+                  secondary: '#FFDD65'
+                },
+                info: value
+              });
             }
-
-            vm.agendados = response.data.result;
-
-            angular.forEach(vm.agendados, function(value, key) {
-              value.data_hora = new Date(value.data_hora);
-              var starts = new Date(value.data_hora);
-              var ends = new Date(starts.getTime() + _duration*60000);
-              var executado = value.executado ? 'Executado' : 'Não executado';
-              if (value.servico_tem_porte.servico.nome === 'Consulta') {
-                vm.agendamentos.push({
-                  title: '<b>' + value.animal.nome + '</b>' + ' - ' + executado,
-                  startsAt: starts,
-                  endsAt: ends,
-                  actions: actionsConsulta,
-                  color: {
-                    primary: '#0974A2'
-                  , secondary: '#4A9ABB'
-                  },
-                  info: value
-                });
-              } else {
-                vm.agendamentos.push({
-                  title: '<b>' + value.animal.nome + '</b>' + ' - ' + executado,
-                  startsAt: starts,
-                  endsAt: ends,
-                  actions: actions,
-                  color: {
-                    primary: '#FFC803'
-                  , secondary: '#FFDD65'
-                  },
-                  info: value
-                });
-              }
-            });
-
-          },
-          function(response) {
-            ngToast.warning({content: '<b>Dados não encontrados</b>: ' + response.data.message});
           });
+
+        });
     };
     // END CALENDAR
 
@@ -170,18 +169,16 @@
         actionButtonClass: 'btn btn-danger'
       };
       modalService.showModal({}, modalOptions)
-        .then(function(result) {
+        .then(function (result) {
           AgendaFactory.del(vm.form.id)
-            .then(function(response) {
+            .then(function (response) {
 
               if (response.data.success != true) {
-                ngToast.warning({content: '<b>Falha ao excluir o registro</b>: ' + response.data.message});
+                ngToast.warning({ content: '<b>Falha ao excluir o registro</b>: ' + response.data.message });
               } else {
-                ngToast.success({content: 'Registro excluído com sucesso'});
+                ngToast.success({ content: 'Registro excluído com sucesso' });
               }
               refreshData();
-            }, function(response) {
-              ngToast.warning({content: '<b>Falha ao excluir o registro</b>: ' + response.data.message});
             });
         });
     }
@@ -228,7 +225,7 @@
       }
 
       function failed(response) {
-        console.error('Failed: ' + JSON.stringify(response));
+        return response;
       }
     }
 
@@ -248,7 +245,7 @@
       }
 
       function failed(response) {
-        console.error('Failed: ' + JSON.stringify(response));
+        return response;
       }
     }
   }

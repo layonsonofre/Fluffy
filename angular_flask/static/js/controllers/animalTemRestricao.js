@@ -1,4 +1,4 @@
-(function() {
+(function () {
   'use strict';
 
   angular
@@ -20,24 +20,23 @@
     function get(data) {
       data = data || null;
       return $http({
-        url: _url + '/animalTemRestricao',
-        method: 'GET',
-        params: data
-      })
+          url: _url + '/animalTemRestricao',
+          method: 'GET',
+          params: data
+        })
         .then(success)
         .catch(failed);
 
       function success(response) {
-        return response.data.result;
+        return response;
       }
 
       function failed(error) {
-        console.error('Failed funcoes: ' + error.data);
+        return error;
       }
     }
 
     function add(data) {
-      console.log("data_hora", data);
       return $http({
           url: _url + '/animalTemRestricao',
           data: data,
@@ -51,7 +50,7 @@
       }
 
       function failed(response) {
-        console.error('Failed: ' + JSON.stringify(response));
+        return response;
       }
     }
 
@@ -70,7 +69,7 @@
       }
 
       function failed(response) {
-        console.error('Failed: ' + JSON.stringify(response));
+        return response;
       }
     }
 
@@ -90,7 +89,7 @@
       }
 
       function failed(response) {
-        console.error('Failed: ' + JSON.stringify(response));
+        return response;
       }
     }
 

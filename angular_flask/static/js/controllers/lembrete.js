@@ -1,4 +1,4 @@
-(function() {
+(function () {
   'use strict';
 
   angular
@@ -24,13 +24,11 @@
 
     function get() {
       LembreteFactory.get()
-        .then(function(response) {
+        .then(function (response) {
           vm.lembretes = response.data.result;
-          angular.forEach(vm.lembretes, function(value, key) {
+          angular.forEach(vm.lembretes, function (value, key) {
             value.data_hora = $filter('date')(new Date(value.data_hora), 'dd/MM/yyyy');
           });
-        }, function(response) {
-          ngToast.warning({content: '<b>Falha ao buscar registros</b>: ' + response.data.message});
         });
     }
 
@@ -39,29 +37,25 @@
       vm.form.data_hora = $filter('date')(new Date(vm.form.data_hora), 'yyyy-MM-dd HH:mm:ss');
       // console.log("data_hora", vm.form.data_hora);
       LembreteFactory.add(vm.form)
-        .then(function(response) {
-        if (response.data.success != true) {
-          ngToast.warning({content: '<b>Falha ao adicionar o registro</b>: ' + response.data.message});
-        } else {
-          ngToast.success({content: 'Registro adicionado com sucesso'});
-        }
-      }, function(response) {
-        ngToast.warning({content: '<b>Falha ao incluir o registro</b>: ' + response.data.message});
-      });
+        .then(function (response) {
+          if (response.data.success != true) {
+            ngToast.warning({ content: '<b>Falha ao adicionar o registro</b>: ' + response.data.message });
+          } else {
+            ngToast.success({ content: 'Registro adicionado com sucesso' });
+          }
+        });
     }
 
     function alt(data) {
       data.data_hora = $filter('date')(new Date(data.data_hora), 'yyyy-MM-dd HH:mm:ss');
       LembreteFactory.alt(data)
-        .then(function(response) {
+        .then(function (response) {
           get();
           if (response.data.success != true) {
-            ngToast.warning({content: '<b>Falha ao alterar o registro</b>: ' + response.data.message});
+            ngToast.warning({ content: '<b>Falha ao alterar o registro</b>: ' + response.data.message });
           } else {
-            ngToast.success({content: 'Registro alterado com sucesso'});
+            ngToast.success({ content: 'Registro alterado com sucesso' });
           }
-        }, function(response) {
-          ngToast.warning({content: '<b>Falha ao alterar o registro</b>: ' + response.data.message});
         });
     }
 
@@ -73,22 +67,20 @@
         actionButtonClass: 'btn btn-danger'
       };
       modalService.showModal({}, modalOptions)
-        .then(function(result) {
+        .then(function (result) {
           LembreteFactory.del(entry.id)
-            .then(function(response) {
+            .then(function (response) {
               if (response.data.success != true) {
-                ngToast.warning({content: '<b>Falha ao excluir o registro</b>: ' + response.data.message});
+                ngToast.warning({ content: '<b>Falha ao excluir o registro</b>: ' + response.data.message });
               } else {
-                ngToast.success({content: 'Registro excluído com sucesso'});
+                ngToast.success({ content: 'Registro excluído com sucesso' });
               }
               get();
-            }, function(response) {
-              ngToast.warning({content: '<b>Falha ao excluir o registro</b>: ' + response.data.message});
             });
         });
     }
 
-    vm.openData = function() {
+    vm.openData = function () {
       vm.popupData = true;
     }
 
@@ -128,12 +120,11 @@
       }
 
       function failed(response) {
-        console.error('Failed: ' + JSON.stringify(response));
+        return response;
       }
     }
 
     function add(data) {
-      console.log('SAVING: ' + JSON.stringify(data));
       return $http({
           method: 'POST',
           url: _url + '/lembrete',
@@ -147,12 +138,11 @@
       }
 
       function failed(response) {
-        console.error('Failed: ' + JSON.stringify(response));
+        return response;
       }
     }
 
     function alt(data) {
-      console.log('UPDATING: ' + JSON.stringify(data));
       return $http({
           method: 'PUT',
           url: _url + '/lembrete',
@@ -166,7 +156,7 @@
       }
 
       function failed(response) {
-        console.error('Failed: ' + JSON.stringify(response));
+        return response;
       }
     }
 
@@ -187,7 +177,7 @@
       }
 
       function failed(response) {
-        console.error('Failed: ' + JSON.stringify(response));
+        return response;
       }
     }
   }

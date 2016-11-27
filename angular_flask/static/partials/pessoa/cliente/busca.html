@@ -4,6 +4,7 @@
       <h1 class="page-head-line">Buscar Pessoas</h1>
       <h1 class="page-subhead-line">Busque e veja detahes das pessoas, animais e serviços realizados</h1>
       <a ng-click="vm.helpActive = !vm.helpActive" class="btn btn-link pull-right"><span class="fa fa-info"></span></a>
+      <toast></toast>
     </div>
   </div>
   <div class="row">
@@ -37,7 +38,7 @@
                 <tbody>
                   <tr dir-paginate="entry in vm.pessoas | filter:vm.filtro | itemsPerPage: 10" pagination-id="pessoas">
                     <td>
-                      <input type="checkbox" ng-model="entry.checked" ng-click="vm.updateSelection(entry.id, vm.pessoas); vm.getAnimais(entry)">
+                      <input type="checkbox" ng-model="entry.checked" ng-change="vm.updateSelection(entry.id, vm.pessoas); vm.getAnimais(entry)">
                     </td>
                     <td>{{entry.nome}}</td>
                     <td>{{entry.email}}</td>
@@ -91,7 +92,7 @@
               <tbody>
                 <tr dir-paginate="entry in vm.animais | itemsPerPage: 10" pagination-id="animais">
                   <td>
-                    <input type="checkbox" ng-model="entry.checked" ng-click="vm.updateSelection(entry.id, vm.animais); vm.selectAnimal(entry)">
+                    <input type="checkbox" ng-model="entry.checked" ng-change="vm.updateSelection(entry.id, vm.animais); vm.selectAnimal(entry)">
                   </td>
                   <td>{{ entry.nome }}</td>
                   <td>

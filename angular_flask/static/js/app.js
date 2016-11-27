@@ -9,7 +9,7 @@
       'Estoque', 'Venda', 'modalServiceModule', 'dataStorageService', 'PessoaTemPermissao',
       'Authentication', 'Login', 'Raca', 'Porte', 'Especie', 'Restricao', 'Configuracao',
       'Lote', 'Vacina', 'angularUtils.directives.dirPagination', 'Anamnese', 'AnimalTemRestricao',
-      'ServicoTemPorte', 'Funcionario', 'Aplicacao', 'ngToast', 'Transacao'
+      'ServicoTemPorte', 'Funcionario', 'Aplicacao', 'ngToast', 'Transacao', 'VacinaTemLote'
     ])
     .config(['$routeProvider', '$locationProvider', '$httpProvider', 'calendarConfig', 'uibDatepickerPopupConfig', 'ngToastProvider',
       function($routeProvider, $locationProvider, $httpProvider, calendarConfig, uibDatepickerPopupConfig, ngToastProvider) {
@@ -24,19 +24,9 @@
           'Content-Type': 'application/json;charset=UTF-8'
         };
         $routeProvider
-          .when('/login', {
-            templateUrl: '../static/partials/login.html',
-            controller: 'LoginController',
-            controllerAs: 'vm'
-          })
           .when('/erro', {
             templateUrl: '../static/partials/erro.html',
             controller: 'ErroController',
-            controllerAs: 'vm'
-          })
-          .when('/overview', {
-            templateUrl: '../static/partials/overview.html',
-            controller: 'IndexController',
             controllerAs: 'vm'
           })
           .otherwise('/erro');

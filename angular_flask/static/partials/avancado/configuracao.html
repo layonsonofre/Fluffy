@@ -4,6 +4,7 @@
       <h1 class="page-head-line">Configuração</h1>
       <h1 class="page-subhead-line">Ajuste parâmetros do sistema necessários para seu correto funcionamento</h1>
       <a ng-click="vm.helpActive = !vm.helpActive" class="btn btn-link pull-right"><span class="fa fa-info"></span></a>
+      <toast></toast>
     </div>
   </div>
 
@@ -14,28 +15,30 @@
           Configuração
         </div>
         <div class="panel-body">
-          <div class="row">
-            <div class="col-xs-12">
-              <div class="form-group">
-                <label>Quantidade de animais por período *</label>
-                <input class="form-control" type="text" ng-model="vm.form.quantidade_animais">
-                <p class="help-block" ng-show="vm.helpActive">Insira o nome do grupo de ítem que deseja adicionar</p>
+          <form ng-submit="vm.alt()">
+            <div class="row">
+              <div class="col-xs-12">
+                <div class="form-group">
+                  <label>Quantidade de animais por período *</label>
+                  <input class="form-control" type="text" ng-model="vm.form.quantidade_animais">
+                  <p class="help-block" ng-show="vm.helpActive">Insira o nome do grupo de ítem que deseja adicionar</p>
+                </div>
+              </div>
+              <div class="col-xs-12">
+                <div class="form-group">
+                  <label>Número de períodos do dia *</label>
+                  <input class="form-control" type="text" ng-model="vm.form.periodos_dia">
+                  <p class="help-block" ng-show="vm.helpActive">Insira o nome do grupo de ítem que deseja adicionar</p>
+                </div>
+              </div>
+              <div class="col-xs-1">
+                <label>
+                  <br>
+                </label>
+                <button class="btn btn-link" type="submit" data-toggle="tooltip" data-placement="top" title="Salvar cadastro"><span class="fa fa-check"></span></button>
               </div>
             </div>
-            <div class="col-xs-12">
-              <div class="form-group">
-                <label>Número de períodos do dia *</label>
-                <input class="form-control" type="text" ng-model="vm.form.periodos_dia">
-                <p class="help-block" ng-show="vm.helpActive">Insira o nome do grupo de ítem que deseja adicionar</p>
-              </div>
-            </div>
-            <div class="col-xs-1">
-              <label>
-                <br>
-              </label>
-              <button class="btn btn-link" data-ng-click="vm.alt()" data-toggle="tooltip" data-placement="top" title="Salvar cadastro"><span class="fa fa-check"></span></button>
-            </div>
-          </div>
+          </form>
         </div>
       </div>
     </div>

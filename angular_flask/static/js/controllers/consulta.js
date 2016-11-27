@@ -1,9 +1,9 @@
-(function() {
+(function () {
   'use strict';
 
   angular
     .module('Consulta', [])
-    .config(['$routeProvider', function($routeProvider) {
+    .config(['$routeProvider', function ($routeProvider) {
       $routeProvider
         .when('/servico/consulta', {
           templateUrl: '../static/partials/servico/consulta.html',
@@ -50,15 +50,15 @@
     getVacinas();
 
     // INIT TIME PICKER
-    vm.today = function(aplicacao) {
+    vm.today = function (aplicacao) {
       aplicacao.data_hora = new Date();
     }
-    vm.clearDate = function(aplicacao) {
+    vm.clearDate = function (aplicacao) {
       aplicacao.data_hora = null;
     }
     vm.disabled = disabled;
     vm.toggleMin = toggleMin;
-    vm.openDate = function(aplicacao) {
+    vm.openDate = function (aplicacao) {
       aplicacao.popup = true;
     }
     vm.setDate = setDate;
@@ -73,17 +73,11 @@
       showWeeks: true
     };
 
-    vm.oneYearFromNow = new Date();
-    vm.oneYearFromNow.setDate(vm.oneYearFromNow.getDate() + 1);
-
-    vm.oneMonthAgo = new Date();
-    vm.oneMonthAgo.setDate(vm.oneMonthAgo.getDate() - 30);
-
     vm.dateOptions = {
       dateDisabled: disabled,
       formatYear: 'yyyy',
-      maxDate: vm.oneYearFromNow,
-      minDate: vm.oneMonthAgo,
+      maxDate: new Date(new Date().getDate + 1),
+      minDate: new Date(new Date().getDate - 30),
       startingDay: 1
     }
 
@@ -127,10 +121,10 @@
     }
 
     function removeAplicacao(item) {
-      console.log(item);
       if (item.new === true) {
         if (vm.aplicacoes.indexOf(item) > 0) {
-          vm.aplicacoes = vm.aplicacoes.splice(vm.aplicacoes.indexOf(item), 1)
+          vm.aplicacoes = vm.aplicacoes.splice(vm.aplicacoes.indexOf(item), 1);
+          ngToast.success({ content: 'Aplicação removida' });
         } else {
           vm.aplicacoes = null;
         }
@@ -142,12 +136,15 @@
           actionButtonClass: 'btn btn-danger'
         };
         modalService.showModal({}, modalOptions)
-          .then(function(result) {
-            ConsultaFactory.del(item.id)
-              .then(function(response) {
-                getAgendamentos(false);
-              }, function(response) {
-                vm.status = 'Falha na tentativa de remover a aplicação.\n' + error.message;
+          .then(function (result) {
+            AplicacaoFactory.del(item.id)
+              .then(function (response) {
+                if (response.data.success === true) {
+                  getAgendamentos(false);
+                  ngToast.success({ content: 'Aplicação removida' });
+                } else {
+                  ngToast.danger({ content: 'Falha ao remover a aplicação' });
+                }
               });
           });
       }
@@ -158,23 +155,21 @@
         ConsultaFactory.get({
             id: vm.servico_agendado_id
           })
-          .then(function(response) {
-            console.log('getAplicacoes', response);
-            vm.consulta = response;
+          .then(function (response) {
+            vm.consulta = response.data.result;
 
-            AgendamentoFactory.getContrato({id: vm.consulta.servico_contratado})
-              .then(function(response) {
-                vm.pessoa_tem_funcao = response.pessoa_tem_funcao;
-                console.log('contrato', response);
+            AgendamentoFactory.getContrato({ id: vm.consulta.servico_contratado })
+              .then(function (response) {
+                vm.pessoa_tem_funcao = response.data.result.pessoa_tem_funcao;
               });
             vm.consulta.data_hora = new Date(vm.consulta.data_hora);
-            if (!angular.isArray(response.aplicacao)) {
+            if (!angular.isArray(response.data.result.aplicacao)) {
               vm.form.aplicacoes = [];
-              vm.form.aplicacoes.push(response.aplicacao);
+              vm.form.aplicacoes.push(response.data.result.aplicacao);
             } else {
-              vm.form.aplicacoes = response.aplicacao;
+              vm.form.aplicacoes = response.data.result.aplicacao;
             }
-            angular.forEach(vm.form.aplicacoes, function(value, key) {
+            angular.forEach(vm.form.aplicacoes, function (value, key) {
               value.data_hora = new Date(value.data_hora);
             });
           });
@@ -194,18 +189,18 @@
     function detalhes_animal(animal_id) {
       AnimalFactory.get({
         id: animal_id
-      }).then(function(response) {
-        vm.animal = response;
+      }).then(function (response) {
+        vm.animal = response.data.result;
         AnimalTemRestricaoFactory.get({
           animal_id: animal_id
-        }).then(function(response) {
-          vm.animal.restricoes = response;
+        }).then(function (response) {
+          vm.animal.restricoes = response.data.result;
         });
       });
     }
 
     function updateSelection(position, entities) {
-      angular.forEach(entities, function(subscription, index) {
+      angular.forEach(entities, function (subscription, index) {
         if (position != subscription.id) {
           subscription.checked = false;
         }
@@ -213,20 +208,27 @@
     }
 
     function getVacinas() {
-      VacinaFactory.get().then(function(response) {
+      VacinaFactory.get().then(function (response) {
         vm.vacinas = response.data.result;
-        console.log(vm.vacinas);
       });
     }
 
     function alt() {
-      AnamneseFactory.add(vm.anamnese).then(function(response){
-        angular.forEach(vm.aplicacoes, function(value, key) {
-          value.servico_agendado_id = vm.servico_agendado_id;
-          AplicacaoFactory.add(value).then(function(response){
-            console.log("response aplicacao", response);
+      AnamneseFactory.add(vm.anamnese).then(function (response) {
+        if (response.data.success === true) {
+          angular.forEach(vm.aplicacoes, function (value, key) {
+            value.servico_agendado_id = vm.servico_agendado_id;
+            AplicacaoFactory.add(value).then(function (response) {
+              if (response.data.success === true) {
+                ngToast.success({ content: 'Registro alterado com sucesso' });
+              } else {
+                ngToast.danger({ content: 'Falha na alteração do registro' });
+              }
+            });
           });
-        });
+        } else {
+          ngToast.danger({ content: 'Falha na alteração do registro' });
+        }
       });
     }
   }
@@ -254,11 +256,11 @@
         .catch(failed);
 
       function success(response) {
-        return response.data.result;
+        return response;
       }
 
       function failed(response) {
-        console.error('Failed: ' + JSON.stringify(response));
+        return response;
       }
     }
 
@@ -277,12 +279,11 @@
       }
 
       function failed(response) {
-        console.error('Failed: ' + JSON.stringify(response));
+        return response;
       }
     }
 
     function alt(data) {
-      console.log('UPDATING: ' + JSON.stringify(data));
       return $http({
           url: _url + '/servico',
           data: data,
@@ -296,7 +297,7 @@
       }
 
       function failed(response) {
-        console.error('Failed: ' + JSON.stringify(response));
+        return response;
       }
     }
 
@@ -316,7 +317,7 @@
       }
 
       function failed(response) {
-        console.error('Failed: ' + JSON.stringify(response));
+        return response;
       }
     }
 
@@ -333,7 +334,7 @@
       }
 
       function failed(response) {
-        console.error('Failed: ' + JSON.stringify(response));
+        return response;
       }
     }
 
@@ -348,11 +349,11 @@
         .catch(failed);
 
       function success(response) {
-        return response.data.result;
+        return response;
       }
 
       function failed(response) {
-        console.error('Failed: ' + JSON.stringify(response));
+        return response;
       }
     }
   }

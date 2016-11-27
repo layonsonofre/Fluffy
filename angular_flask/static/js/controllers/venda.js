@@ -1,9 +1,9 @@
-(function() {
+(function () {
   'use strict';
 
   angular
     .module('Venda', [])
-    .config(['$routeProvider', function($routeProvider) {
+    .config(['$routeProvider', function ($routeProvider) {
       $routeProvider
         .when('/venda/nova', {
           templateUrl: '../static/partials/venda/nova.html',
@@ -65,13 +65,13 @@
     function getClientes() {
       PessoaFactory.get({
         cliente: true
-      }).then(function(response) {
-        vm.pessoas = response;
+      }).then(function (response) {
+        vm.pessoas = response.data.result;
       });
     }
 
     function getProdutos() {
-      ProdutoFactory.get().then(function(response) {
+      ProdutoFactory.get().then(function (response) {
         console.log(response);
         vm.produtos = response.data.result;
       });
@@ -129,7 +129,7 @@
       vm.cart_total = _total;
     }
 
-    vm.gotoConfirmacao = function() {
+    vm.gotoConfirmacao = function () {
       vm.pessoa_tem_funcao_funcionario_id = 3;
       var send = {
         pessoa_tem_funcao_funcionario_id: vm.pessoa_tem_funcao_funcionario_id,
@@ -138,7 +138,7 @@
         pago: vm.pago,
         itens_de_venda: vm.cart
       };
-      VendaFactory.add(send).then(function(response) {
+      VendaFactory.add(send).then(function (response) {
         console.log("\nADICIONADO", response);
         dataStorage.addVenda({
           cart_total: vm.cart_total,
@@ -148,7 +148,7 @@
       });
     }
 
-    vm.gotoNova = function() {
+    vm.gotoNova = function () {
       dataStorage.addVenda(null);
       $location.path('/venda/nova');
     }
@@ -159,14 +159,14 @@
       var telefones = [];
       TelefoneFactory.get({
         pessoa_id: entry.id
-      }).then(function(response) {
-        if (!angular.isArray(response)) {
-          telefones.push(response);
+      }).then(function (response) {
+        if (!angular.isArray(response.data.result)) {
+          telefones.push(response.data.result);
         } else {
-          telefones = response;
+          telefones = response.data.result;
         }
         var temp = '';
-        angular.forEach(telefones, function(value, key) {
+        angular.forEach(telefones, function (value, key) {
           temp += '(' + value.codigo_area + ') ' + value.numero + '   '
         });
         vm.pessoa.telefone = temp;
@@ -178,15 +178,14 @@
       PessoaTemFuncaoFactory.get({
           pessoa_id: entry.id
         })
-        .then(function(response) {
-          vm.pessoa_tem_funcao_cliente_id = response.id;
+        .then(function (response) {
+          vm.pessoa_tem_funcao_cliente_id = response.data.result.id;
 
-          VendaFactory.get({pessoa_tem_funcao_cliente_id: vm.pessoa_tem_funcao_cliente_id})
-            .then(function(response) {
-              console.log("vendas", response);
-              vm.vendas = response;
+          VendaFactory.get({ pessoa_tem_funcao_cliente_id: vm.pessoa_tem_funcao_cliente_id })
+            .then(function (response) {
+              vm.vendas = response.data.result;
             });
-        }, function(response) {});
+        });
     }
 
 
@@ -195,13 +194,13 @@
         pago: entry.pago,
         id: entry.id
       };
-      VendaFactory.alt(send).then(function(response) {
+      VendaFactory.alt(send).then(function (response) {
         console.log("\nAlterando", response);
       });
     }
 
     function updateSelection(entry, entities) {
-      angular.forEach(entities, function(subscription, index) {
+      angular.forEach(entities, function (subscription, index) {
         if (entry.id != subscription.id) {
           subscription.checked = false;
         } else {
@@ -236,12 +235,11 @@
       }
 
       function failed(response) {
-        console.error('Failed: ' + JSON.stringify(response));
+        return response;
       }
     }
 
     function alt(data) {
-      console.log('UPDATING: ' + JSON.stringify(data));
       return $http({
           url: _url + '/vacina',
           data: data,
@@ -255,7 +253,7 @@
       }
 
       function failed(response) {
-        console.error('Failed: ' + JSON.stringify(response));
+        return response;
       }
     }
 
@@ -271,11 +269,11 @@
         .catch(failed);
 
       function success(response) {
-        return response.data.result;
+        return response;
       }
 
       function failed(response) {
-        console.error('Failed: ' + JSON.stringify(response));
+        return response;
       }
     }
   }

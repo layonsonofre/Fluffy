@@ -3,11 +3,19 @@
 
   angular
     .module('Login', [])
+    .config(['$routeProvider', function($routeProvider) {
+      $routeProvider
+        .when('/login', {
+          templateUrl: '../static/partials/login.html',
+          controller: 'LoginController',
+          controllerAs: 'vm'
+        });
+    }])
     .controller('LoginController', LoginController);
 
-  LoginController.$inject = ['AuthService', '$location', '$rootScope', 'dataStorage', 'PessoaTemFuncaoFactory', 'PermissaoFactory'];
+  LoginController.$inject = ['AuthService', '$location', '$rootScope', 'dataStorage', 'PessoaTemFuncaoFactory', 'PermissaoFactory', 'ngToast'];
 
-  function LoginController(AuthService, $location, $rootScope, dataStorage, PessoaTemFuncaoFactory, PermissaoFactory) {
+  function LoginController(AuthService, $location, $rootScope, dataStorage, PessoaTemFuncaoFactory, PermissaoFactory, ngToast) {
     var vm = this;
     vm.login = login;
     vm.logout = logout;
@@ -26,11 +34,11 @@
     function login() {
       vm.loading = true;
       AuthService.login(vm.email, vm.senha, function(result) {
-        if (result != false) {
-          $location.path('/overview');
-        } else {
-          vm.error = 'Falha ao realizar conexão, verifique se suas credenciais estão corretas.';
+        if (result === false) {
+          ngToast.danger({content: 'Falha ao realizar conexão, verifique se suas credenciais estão corretas.'});
           vm.loading = false;
+        } else {
+          $location.path('/overview');
         }
       });
     };

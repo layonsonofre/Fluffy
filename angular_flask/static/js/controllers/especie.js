@@ -1,4 +1,4 @@
-(function() {
+(function () {
   'use strict';
 
   angular
@@ -21,16 +21,15 @@
         .catch(failed);
 
       function success(response) {
-        return response.data.result;
+        return response;
       }
 
       function failed(error) {
-        console.error('Failed getEspecie: ' + error.data);
+        return error;
       }
     }
 
     function add(data) {
-      console.log('SAVING: ' + JSON.stringify(data));
       return $http({
           method: 'POST',
           url: _url + '/especie',
@@ -44,7 +43,7 @@
       }
 
       function failed(response) {
-        console.error('Failed: ' + JSON.stringify(response));
+        return response;
       }
     }
   }

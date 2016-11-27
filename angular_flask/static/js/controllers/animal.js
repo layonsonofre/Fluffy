@@ -1,9 +1,9 @@
-(function() {
+(function () {
   'use strict';
 
   angular
     .module('Animal', [])
-    .config(['$routeProvider', function($routeProvider) {
+    .config(['$routeProvider', function ($routeProvider) {
       $routeProvider
         .when('/cliente/pet', {
           templateUrl: '../static/partials/pessoa/cliente/pet.html',
@@ -16,12 +16,12 @@
 
   AnimalController.$inject = ['PessoaFactory', 'dataStorage', 'AnimalFactory', 'PorteFactory',
     'EspecieFactory', 'RestricaoFactory', 'RacaFactory', 'PessoaTemFuncaoFactory', 'AnimalTemRestricaoFactory',
-    'TelefoneFactory', 'modalService', '$filter'
+    'TelefoneFactory', 'modalService', '$filter', 'ngToast'
   ]
 
   function AnimalController(PessoaFactory, dataStorage, AnimalFactory, PorteFactory,
     EspecieFactory, RestricaoFactory, RacaFactory, PessoaTemFuncaoFactory, AnimalTemRestricaoFactory,
-    TelefoneFactory, modalService, $filter) {
+    TelefoneFactory, modalService, $filter, ngToast) {
     var vm = this;
     vm.form = {};
     vm.add = add;
@@ -31,13 +31,14 @@
     vm.cancel = cancel;
     vm.set = set;
     vm.validarAnimal = validarAnimal;
-    vm.handleResponse = handleResponse;
 
     vm.form.pessoa = dataStorage.getPessoa();
-    dataStorage.addPessoa("");
+    dataStorage.addPessoa(null);
     vm.form.animal = dataStorage.getAnimal();
-    dataStorage.addAnimal("");
-    vm.filtro = vm.form.pessoa.nome;
+    dataStorage.addAnimal(null);
+    if (vm.form.pessoa) {
+      vm.filtro = vm.form.pessoa.nome;
+    }
     if (vm.form.animal) {
       vm.alterando = true;
       set(vm.form.animal);
@@ -57,13 +58,15 @@
     vm.addEspecie = addEspecie;
     vm.addRestricao = addRestricao;
     vm.addRaca = addRaca;
+    vm.altRaca = altRaca;
+    vm.delRaca = delRaca;
     vm.selectPessoa = selectPessoa;
 
     vm.editar_pessoa = editar_pessoa;
     vm.detalhes_pessoa = detalhes_pessoa;
 
     function selectPessoa() {
-      if (vm.form.pessoa.id != null) {
+      if (vm.form.pessoa && vm.form.pessoa.id != null) {
         let temp = vm.form.pessoa;
         get(temp);
       }
@@ -76,54 +79,54 @@
     getRacas();
 
     function getCliente() {
-      PessoaFactory.get({cliente: true})
-        .then(function(response) {
-          vm.pessoas = response;
-        }, function(response) {
-          vm.status = 'Failed to load: ' + response.message;
+      PessoaFactory.get({ cliente: true })
+        .then(function (response) {
+          vm.pessoas = response.data.result;
         });
     }
 
     function get(entry) {
-      vm.animais = {};
-      if (entry.checked) {
+      vm.animais = null;
+      if (entry.checked === true) {
         AnimalFactory.get({
             pessoa_id: entry.id
           })
-          .then(function(response) {
-            if (!angular.isArray(response)) {
-              vm.animais = [];
-              vm.animais.push(response);
+          .then(function (response) {
+            if (response.data.success === true) {
+              if (!angular.isArray(response.data.result)) {
+                vm.animais = [];
+                vm.animais.push(response.data.result);
+              } else {
+                vm.animais = response.data.result;
+              }
             } else {
-              vm.animais = response;
+              ngToast.warning({ content: 'Falha: ' + response.data.message });
             }
-          }, function(response) {
-            vm.status = 'Failed to load: ' + error.message;
           });
 
         PessoaTemFuncaoFactory.get({
             pessoa_id: entry.id
           })
-          .then(function(response) {
-            if (!vm.form.animal) {
-              vm.form.animal = {};
+          .then(function (response) {
+            if (response.data.success === true) {
+              if (!vm.form.animal) {
+                vm.form.animal = null;
+              }
+              vm.form.animal.pessoa_tem_funcao_cliente_id = response.data.result.id;
+            } else {
+              ngToast.danger({ content: 'Falha' });
             }
-            vm.form.animal.pessoa_tem_funcao_cliente_id = response.id;
-          }, function(response) {
           });
       }
     }
 
     function updateSelection(position, entities) {
       cancel();
-      angular.forEach(entities, function(subscription, index) {
+      angular.forEach(entities, function (subscription, index) {
         if (position != subscription.id) {
           subscription.checked = false;
         }
       });
-    }
-
-    function handleResponse(response) {
     }
 
     function validarAnimal() {
@@ -132,32 +135,31 @@
     }
 
     function add() {
-      console.log('add');
       if (validarAnimal()) {
         // adicionando o animal
         AnimalFactory.add(vm.form.animal)
-          .then(function(response) {
-            if (response.data.result.id) {
-              vm.form.animal.id = response.data.result.id;
+          .then(function (response) {
+            if (response.data.success === true) {
+              if (response.data.result.id) {
+                vm.form.animal.id = response.data.result.id;
 
-              // adicionando restricoes
-              var temp = {};
-              temp.animal_id = vm.form.animal.id;
-              angular.forEach(vm.form.animal.restricoes, function(value, key) {
-                temp.restricao_id = value;
+                // adicionando restricoes
+                var temp = {};
+                temp.animal_id = vm.form.animal.id;
+                angular.forEach(vm.form.animal.restricoes, function (value, key) {
+                  temp.restricao_id = value;
 
-                AnimalTemRestricaoFactory.add(value)
-                  .then(function(response) {
-                    vm.status = 'Restrição cadastrado com sucesso';
-                  }, function(response) {
-                    handleResponse(response)
-                  });
-              });
+                  AnimalTemRestricaoFactory.add(value)
+                    .then(function (response) {
+                      ngToast.success({ content: 'Restrição cadastrado com sucesso' });
+                    });
+                });
 
-              selectPessoa();
+                selectPessoa();
+              }
+            } else {
+              ngToast.danger({ content: 'Falha ao adicionar registro' });
             }
-          }, function(response) {
-            handleResponse(response);
           });
       }
     }
@@ -167,44 +169,51 @@
 
         // adicionando o animal
         AnimalFactory.alt(vm.form.animal)
-          .then(function(response) {
-            if (response.data.result.id) {
+          .then(function (response) {
+            if (response.data.success === true) {
+              if (response.data.result.id) {
 
-              // deletando restricoes antigas
-              angular.forEach(vm.old_restricoes, function(value, key) {
-                AnimalTemRestricaoFactory.del(value.id).then(function(response){
+                // deletando restricoes antigas
+                angular.forEach(vm.old_restricoes, function (value, key) {
+                  AnimalTemRestricaoFactory.del(value.id).then(function (response) {});
                 });
-              });
-              var temp = {};
-              temp.animal_id = vm.form.animal.id;
-              angular.forEach(vm.form.animal.restricoes, function(value, key) {
-                temp.restricao_id = value.id;
-                AnimalTemRestricaoFactory.add(temp)
-                  .then(function(response) {
-                    vm.status = 'Restrição alterada com sucesso';
-                  }, function(response) {
-                    handleResponse(response)
-                  });
-              });
+                var temp = {};
+                temp.animal_id = vm.form.animal.id;
+                angular.forEach(vm.form.animal.restricoes, function (value, key) {
+                  temp.restricao_id = value.id;
+                  AnimalTemRestricaoFactory.add(temp)
+                    .then(function (response) {
+                      if (response.data.success === true) {
+                        ngToast.success({ content: 'Restrição alterada com sucesso' });
+                      } else {
+                        ngToast.warning({ content: 'Falha: ' + response.data.message });
+                      }
+                    });
+                });
 
-              selectPessoa();
-              vm.alterando = false;
-              cancel();
+                selectPessoa();
+                vm.alterando = false;
+                cancel();
+              }
+            } else {
+              ngToast.warning({ content: 'Falha: ' + response.data.message });
             }
-          }, function(response) {
-            handleResponse(response);
           });
       }
     }
 
     function detalhes_animal(entry) {
       vm.form.animal = entry;
-      AnimalTemRestricaoFactory.get({animal_id: entry.id}).then(function(response) {
-        if (!angular.isArray(response)) {
-          vm.form.animal.restricoes = [];
-          vm.form.animal.restricoes.push(response);
+      AnimalTemRestricaoFactory.get({ animal_id: entry.id }).then(function (response) {
+        if (response.data.success === true) {
+          if (!angular.isArray(response.data.result)) {
+            vm.form.animal.restricoes = [];
+            vm.form.animal.restricoes.push(response.data.result);
+          } else {
+            vm.form.animal.restricoes = response.data.result;
+          }
         } else {
-          vm.form.animal.restricoes = response;
+          ngToast.warning({ content: 'Falha: ' + response.data.message });
         }
       });
     }
@@ -221,12 +230,12 @@
 
       AnimalTemRestricaoFactory.get({
         animal_id: entry.id
-      }).then(function(response) {
-        if (!angular.isArray(response)) {
+      }).then(function (response) {
+        if (!angular.isArray(response.data.result)) {
           vm.form.animal.restricoes = [];
-          vm.form.animal.restricoes.push(response);
+          vm.form.animal.restricoes.push(response.data.result);
         } else {
-          vm.form.animal.restricoes = response;
+          vm.form.animal.restricoes = response.data.result;
         }
         vm.old_restricoes = vm.form.animal.restricoes;
       });
@@ -235,10 +244,10 @@
     function detalhes_pessoa(entry) {
       vm.form.pessoa = {};
       vm.form.pessoa = entry;
-      TelefoneFactory.get({pessoa_id: entry.id}).then(function(response) {
+      TelefoneFactory.get({ pessoa_id: entry.id }).then(function (response) {
         var temp = '';
-        angular.forEach(response, function(value, key) {
-          temp += '(' + value.codigo_area + ') '+ value.numero + '  /  '
+        angular.forEach(response.data.result, function (value, key) {
+          temp += '(' + value.codigo_area + ') ' + value.numero + '  /  '
         });
         vm.form.pessoa.telefone = temp;
       });
@@ -251,7 +260,7 @@
     }
 
 
-    vm.openNascimento = function() {
+    vm.openNascimento = function () {
       vm.popupNascimento = true;
     }
 
@@ -268,10 +277,8 @@
 
     function getPortes() {
       PorteFactory.get()
-        .then(function(response) {
-          vm.portes = response;
-        }, function(response) {
-          vm.status = 'Failed to load: ' + error.message;
+        .then(function (response) {
+          vm.portes = response.data.result;
         });
     }
 
@@ -282,29 +289,23 @@
         RacaFactory.get({
             especie_id: filtro
           })
-          .then(function(response) {
-            vm.racas = response;
-          }, function(response) {
-            vm.status = 'Failed to load: ' + error.message;
+          .then(function (response) {
+            vm.racas = response.data.result;
           });
       }
     }
 
     function getEspecies() {
       EspecieFactory.get()
-        .then(function(response) {
-          vm.especies = response;
-        }, function(response) {
-          vm.status = 'Failed to load: ' + error.message;
+        .then(function (response) {
+          vm.especies = response.data.result;
         });
     }
 
     function getRestricoes() {
       RestricaoFactory.get()
-        .then(function(response) {
-          vm.restricoes = response;
-        }, function(response) {
-          vm.status = 'Failed to load: ' + error.message;
+        .then(function (response) {
+          vm.restricoes = response.data.result;
         });
     }
 
@@ -316,29 +317,75 @@
         actionButtonClass: 'btn btn-danger'
       };
       modalService.showModal({}, modalOptions)
-        .then(function(result) {
+        .then(function (result) {
           AnimalFactory.del(vm.form.animal.id)
-            .then(function(response) {
-            }, function(response) {
+            .then(function (response) {
+              if (response.data.success === true) {
+                ngToast.success({ content: 'Animal excluído com sucesso' });
+              } else {
+                ngToast.danger({ content: 'Falha na exclusão do registro' });
+              }
             });
         });
     }
 
     function addRaca() {
-      RacaFactory.add(vm.raca).then(function(response) {
-      }, function(response) {
+      vm.raca.especie_id = vm.form.animal.especie_id;
+      RacaFactory.add(vm.raca).then(function (response) {
+        if (response.data.success === true) {
+          ngToast.success({ content: 'Registro adicionado com sucesso' });
+        } else {
+          ngToast.warning({ content: 'Falha: ' + response.data.message });
+        }
+      });
+    }
+
+    function delRaca(data) {
+      var modalOptions = {
+        closeButtonText: 'Cancelar',
+        actionButtonText: 'Excluir',
+        actionButtonClass: 'btn btn-danger'
+      };
+      modalService.showModal({}, modalOptions)
+        .then(function (result) {
+          RacaFactory.del(data.id)
+            .then(function (response) {
+              if (response.data.success === true) {
+                ngToast.success({ content: 'Raça excluída com sucesso' });
+              } else {
+                ngToast.danger({ content: 'Falha na exclusão do registro' });
+              }
+            });
+        });
+    }
+
+    function altRaca(data) {
+      RacaFactory.alt(data).then(function (response) {
+        if (response.data.success === true) {
+          ngToast.success({ content: 'Registro alterado com sucesso' });
+        } else {
+          ngToast.warning({ content: 'Falha: ' + response.data.message });
+        }
       });
     }
 
     function addEspecie() {
-      EspecieFactory.add(vm.especie).then(function(response) {
-      }, function(response) {
+      EspecieFactory.add(vm.especie).then(function (response) {}, function (response) {
+        if (response.data.success === true) {
+          ngToast.success({ content: 'Espécie adicionada com sucesso' });
+        } else {
+          ngToast.warning({ content: 'Falha: ' + response.data.message });
+        }
       });
     }
 
     function addRestricao() {
-      RetricaoFactory.add(vm.restricao).then(function(response) {
-      }, function(response) {
+      RetricaoFactory.add(vm.restricao).then(function (response) {
+        if (response.data.success == true) {
+          ngToast.success({ content: 'Restrição adicionada com sucesso' });
+        } else {
+          ngToast.warning({ content: 'Falha: ' + response.data.message });
+        }
       });
     }
 
@@ -371,11 +418,11 @@
         .catch(failed);
 
       function success(response) {
-        return response.data.result;
+        return response;
       }
 
       function failed(error) {
-        console.error('Failed: ' + error.data);
+        return error;
       }
     }
 
@@ -393,7 +440,7 @@
       }
 
       function failed(response) {
-        console.error('Failed: ' + JSON.stringify(response));
+        return response;
       }
     }
 
@@ -411,7 +458,7 @@
       }
 
       function failed(response) {
-        console.error('Failed: ' + JSON.stringify(response));
+        return response;
       }
     }
 
@@ -431,7 +478,7 @@
       }
 
       function failed(response) {
-        console.error('Failed: ' + JSON.stringify(response));
+        return response;
       }
     }
   }

@@ -1,9 +1,9 @@
-(function() {
+(function () {
   'use strict';
 
   angular
     .module('Agendamento', [])
-    .config(['$routeProvider', function($routeProvider) {
+    .config(['$routeProvider', function ($routeProvider) {
       $routeProvider
         .when('/servico/agendamento', {
           templateUrl: '../static/partials/servico/agendamento.html',
@@ -47,7 +47,7 @@
 
     vm.form.servicos_agendados = [];
     var contrato = dataStorage.getContrato();
-    dataStorage.addContrato("");
+    dataStorage.addContrato(null);
     var agendamento = dataStorage.getAgendamento();
     if (contrato != null && agendamento != null) {
       vm.alterando = true;
@@ -63,15 +63,15 @@
     }
 
     // INIT TIME PICKER
-    vm.today = function(agendamento) {
+    vm.today = function (agendamento) {
       agendamento.data_hora = new Date();
     }
-    vm.clearDate = function(agendamento) {
+    vm.clearDate = function (agendamento) {
       agendamento.data_hora = null;
     }
     vm.disabled = disabled;
     vm.toggleMin = toggleMin;
-    vm.openDate = function(agendamento) {
+    vm.openDate = function (agendamento) {
       agendamento.popup = true;
     }
     vm.setDate = setDate;
@@ -85,18 +85,11 @@
       minDate: new Date(),
       showWeeks: true
     };
-
-    vm.oneYearFromNow = new Date();
-    vm.oneYearFromNow.setDate(vm.oneYearFromNow.getDate() + 1);
-
-    vm.oneMonthAgo = new Date();
-    vm.oneMonthAgo.setDate(vm.oneMonthAgo.getDate() - 30);
-
     vm.dateOptions = {
       dateDisabled: disabled,
       formatYear: 'yyyy',
-      maxDate: vm.oneYearFromNow,
-      minDate: vm.oneMonthAgo,
+      maxDate: new Date(new Date().getDate + 1),
+      minDate: new Date(new Date().getDate - 30),
       startingDay: 1
     }
 
@@ -137,39 +130,40 @@
 
     function getServicos() {
       ServicoFactory.get()
-        .then(function(response) {
-          vm.servicos = response.data.result;
-          ngToast.success({content: 'Registros carregados'});
-        }, function(response) {
-          ngToast.warning({content: '<b>Falha ao buscar por serviços</b>: ' + response.data.message});
+        .then(function (response) {
+          if (response.data.success === true) {
+            vm.servicos = response.data.result;
+          } else {
+            ngToast.warning({ content: '<b>Falha ao buscar por serviços</b>: ' + response.data.message });
+          }
         });
     }
 
     function add() {
       vm.form.pessoa_tem_funcao_funcionario_id = 3;
-      angular.forEach(vm.form.servicos_agendados, function(value, key) {
-        value.data_hora = $filter('date')(new Date(value.data_hora), 'yyyy-MM-dd HH:mm:ss');
+      angular.forEach(vm.form.servicos_agendados, function (value, key) {
+        // value.data_hora = $filter('date')(new Date(value.data_hora), 'yyyy-MM-dd HH:mm:ss');
+        value.data_hora = new Date(value.data_hora).toISOString().substring(0, 19).replace('T', ' ');
         value.recorrente = value.recorrente ? 1 : 0;
         value.pago = value.pago ? 1 : 0;
         value.executado = value.executado ? 1 : 0;
       });
       AgendamentoFactory.add(vm.form)
-        .then(function(response) {
-          if (response.data.success != true) {
-            ngToast.warning({content: '<b>Falha ao adicionar o registro</b>: ' + response.data.message});
+        .then(function (response) {
+          if (response.data.result != 'OK') {
+            ngToast.warning({ content: '<b>Falha ao adicionar o registro</b>: ' + response.data.message });
           } else {
-            ngToast.success({content: 'Registro adicionado com sucesso'});
+            getAgendamentos(false);
+            ngToast.success({ content: 'Registro adicionado com sucesso' });
           }
-          getAgendamentos(false);
-        }, function(response) {
-          ngToast.warning({content: '<b>Falha ao adicionar o registro</b>: ' + response.data.message});
         });
     }
 
     function alt() {
       vm.form.pessoa_tem_funcao_funcionario_id = 3;
-      angular.forEach(vm.form.servicos_agendados, function(value, key) {
-        value.data_hora = $filter('date')(new Date(value.data_hora), 'yyyy-MM-dd HH:mm:ss');
+      angular.forEach(vm.form.servicos_agendados, function (value, key) {
+        // value.data_hora = $filter('date')(new Date(value.data_hora), 'yyyy-MM-dd HH:mm:ss');
+        value.data_hora = new Date(value.data_hora).toISOString().substring(0, 19).replace('T', ' ');
         value.pessoa_tem_funcao_funcionario_id = vm.form.pessoa_tem_funcao_funcionario_id;
         value.animal_id = value.animal.id;
         value.recorrente = value.recorrente ? 1 : 0;
@@ -177,15 +171,13 @@
         value.executado = value.executado ? 1 : 0;
 
         AgendamentoFactory.alt(value)
-          .then(function(response) {
+          .then(function (response) {
             if (response.data.success != true) {
-              ngToast.warning({content: '<b>Falha ao alterar o registro</b>: ' + response.data.message});
+              ngToast.warning({ content: '<b>Falha ao alterar o registro</b>: ' + response.data.message });
             } else {
-              ngToast.success({content: 'Registro alterado com sucesso'});
+              ngToast.success({ content: 'Registro alterado com sucesso' });
             }
             getAgendamentos(false);
-          }, function(response) {
-            ngToast.warning({content: '<b>Falha ao adicionar o registro</b>: ' + response.data.message});
           });
       });
     }
@@ -197,16 +189,14 @@
         actionButtonClass: 'btn btn-danger'
       };
       modalService.showModal({}, modalOptions)
-        .then(function(result) {
+        .then(function (result) {
           AgendamentoFactory.del(vm.form.id)
-            .then(function(response) {
+            .then(function (response) {
               if (response.data.success != true) {
-                ngToast.warning({content: '<b>Falha ao excluir o registro</b>: ' + response.data.message});
+                ngToast.warning({ content: '<b>Falha ao excluir o registro</b>: ' + response.data.message });
               } else {
-                ngToast.success({content: 'Registro excluído com sucesso'});
+                ngToast.success({ content: 'Registro excluído com sucesso' });
               }
-            }, function(response) {
-              ngToast.warning({content: '<b>Falha ao excluir o registro</b>: ' + response.data.message});
             });
         });
     }
@@ -215,10 +205,12 @@
       PessoaFactory.get({
           cliente: true
         })
-        .then(function(response) {
-          vm.clientes = response;
-        }, function(response) {
-          ngToast.warning({content: '<b>Falha ao buscar por clientes</b>: ' + response.data.message});
+        .then(function (response) {
+          if (response.data.success === true) {
+            vm.clientes = response.data.result;
+          } else {
+            ngToast.danger({ content: 'Falha ao buscar clientes'});
+          }
         });
     }
 
@@ -228,16 +220,17 @@
       AnimalFactory.get({
           pessoa_id: entry.id
         })
-        .then(function(response) {
-          console.log("response", response);
-          if (!angular.isArray(response)) {
-            vm.animais = [];
-            vm.animais.push(response);
+        .then(function (response) {
+          if (response.data.success === true) {
+            if (!angular.isArray(response.data.result)) {
+              vm.animais = [];
+              vm.animais.push(response.data.result);
+            } else {
+              vm.animais = response.data.result;
+            }
           } else {
-            vm.animais = response;
+            ngToast.danger({ content: 'Falha ao buscar os animais' });
           }
-        }, function(response) {
-          ngToast.warning({content: '<b>Falha ao buscar os animais</b>: ' + response.data.message});
         });
     }
 
@@ -253,12 +246,12 @@
     function detalhes_animal(animal_id) {
       AnimalFactory.get({
         id: animal_id
-      }).then(function(response) {
-        vm.form.animal = response;
+      }).then(function (response) {
+        vm.form.animal = response.data.result;
         AnimalTemRestricaoFactory.get({
           animal_id: animal_id
-        }).then(function(response) {
-          vm.form.animal.restricoes = response;
+        }).then(function (response) {
+          vm.form.animal.restricoes = response.data.result;
         });
       });
     }
@@ -268,13 +261,17 @@
           porte_id: vm.form.animal.porte.id,
           servico_id: agendamento.servico_id
         })
-        .then(function(response) {
-          agendamento.preco = response.preco;
+        .then(function (response) {
+          if (response != null) {
+            agendamento.preco = response.preco;
+          } else {
+            ngToast.warning({content: 'Falha ao calcular o valor do serviço'});
+          }
         });
     }
 
     function updateSelection(position, entities) {
-      angular.forEach(entities, function(subscription, index) {
+      angular.forEach(entities, function (subscription, index) {
         if (position != subscription.id) {
           subscription.checked = false;
         }
@@ -295,11 +292,11 @@
           actionButtonClass: 'btn btn-danger'
         };
         modalService.showModal({}, modalOptions)
-          .then(function(result) {
+          .then(function (result) {
             AgendamentoFactory.alt({
               id: item.id,
               cancelado: true
-            }).then(function(response) {
+            }).then(function (response) {
               getAgendamentos(false);
             });
           });
@@ -308,18 +305,18 @@
     }
 
     function getAgendamentos(append) {
-      if (vm.form.contrato && vm.form.servico_agendado_id) {
+      if (vm.form.contrato != null && vm.form.servico_agendado_id != null) {
         AgendamentoFactory.get({
             id: vm.form.servico_agendado_id
           })
-          .then(function(response) {
+          .then(function (response) {
             var temp = [];
-            if (!angular.isArray(response)) {
-              temp.push(response);
+            if (!angular.isArray(response.data.result)) {
+              temp.push(response.data.result);
             } else {
-              temp = response;
+              temp = response.data.result;
             }
-            angular.forEach(temp, function(value, key) {
+            angular.forEach(temp, function (value, key) {
               value.data_hora = Date.parse(value.data_hora);
               value.preco = value.servico_tem_porte.preco;
               value.servico_id = value.servico_tem_porte.servico.servico_id;
@@ -329,13 +326,11 @@
             AgendamentoFactory.getContrato({
                 id: vm.form.contrato
               })
-              .then(function(response) {
-                vm.form.pessoa_tem_funcao = response.pessoa_tem_funcao;
-                vm.form.preco = response.preco;
-                vm.form.transacao_id = response.transacao_id;
+              .then(function (response) {
+                vm.form.pessoa_tem_funcao = response.data.result.pessoa_tem_funcao;
+                vm.form.preco = response.data.result.preco;
+                vm.form.transacao_id = response.data.result.transacao_id;
               })
-          }, function(response) {
-            vm.status = 'Failed to load: ' + error.message;
           });
       }
       if (append) {
@@ -365,6 +360,7 @@
 
     function get(data) {
       data = data || null;
+      console.log("data get agendado", data);
       return $http({
           url: _url + '/servicoAgendado',
           params: data,
@@ -374,16 +370,15 @@
         .catch(failed);
 
       function success(response) {
-        return response.data.result;
+        return response;
       }
 
       function failed(response) {
-        console.error('Failed: ' + JSON.stringify(response));
+        return response;
       }
     }
 
     function add(data) {
-      console.log("adding agendamento", JSON.stringify(data));
       return $http({
           url: _url + '/insertServicoAgendado',
           data: data,
@@ -397,7 +392,7 @@
       }
 
       function failed(response) {
-        console.error('Failed: ' + JSON.stringify(response));
+        return response;
       }
     }
 
@@ -416,7 +411,7 @@
       }
 
       function failed(response) {
-        console.error('Failed: ' + JSON.stringify(response));
+        return response;
       }
     }
 
@@ -436,7 +431,7 @@
       }
 
       function failed(response) {
-        console.error('Failed: ' + JSON.stringify(response));
+        return response;
       }
     }
 
@@ -452,11 +447,11 @@
         .catch(failed);
 
       function success(response) {
-        return response.data.result;
+        return response;
       }
 
       function failed(response) {
-        console.error('Failed: ' + JSON.stringify(response));
+        return response;
       }
     }
   }

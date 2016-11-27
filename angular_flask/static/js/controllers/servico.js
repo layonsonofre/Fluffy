@@ -1,9 +1,9 @@
-(function() {
+(function () {
   'use strict';
 
   angular
     .module('Servico', [])
-    .config(['$routeProvider', function($routeProvider) {
+    .config(['$routeProvider', function ($routeProvider) {
       $routeProvider
         .when('/servico/cadastro', {
           templateUrl: '../static/partials/servico/cadastro.html',
@@ -14,9 +14,9 @@
     .controller('ServicoController', ServicoController)
     .factory('ServicoFactory', ServicoFactory);
 
-  ServicoController.$inject = ['ServicoFactory', 'calendarConfig', 'modalService', '$filter'];
+  ServicoController.$inject = ['ServicoFactory', 'calendarConfig', 'modalService', '$filter', 'ngToast'];
 
-  function ServicoController(ServicoFactory, calendarConfig, modalService, $filter) {
+  function ServicoController(ServicoFactory, calendarConfig, modalService, $filter, ngToast) {
     var vm = this;
 
     vm.form = {};
@@ -30,29 +30,33 @@
 
     function get() {
       ServicoFactory.get()
-        .then(function(response) {
+        .then(function (response) {
           vm.servicos = response.data.result;
-        }, function(response) {
-          console.error(response);
         });
     }
 
     function add() {
       ServicoFactory.add(vm.form)
-        .then(function(response) {
-          vm.form.nome = null;
-          get();
-        }, function(response) {
-          vm.status = response.message
+        .then(function (response) {
+          if (response.data.success === true) {
+            ngToast.success({content: 'Registro adicionado com sucesso'});
+            vm.form.nome = null;
+            get();
+          } else {
+            ngToast.danger({content: 'Falha ao adicionar o registro'});
+          }
         });
     }
 
     function alt(data, id) {
       ServicoFactory.alt(data, id)
-        .then(function(response) {
-          get();
-        }, function(response) {
-          console.error(response)
+        .then(function (response) {
+          if (response.data.success === true) {
+            get();
+            ngToast.success({content: 'Registro alterado com sucesso'});
+          } else {
+            ngToast.danger({content: 'Falha ao alterar o registro'});
+          }
         });
     }
 
@@ -63,12 +67,15 @@
         actionButtonClass: 'btn btn-danger'
       };
       modalService.showModal({}, modalOptions)
-        .then(function(result) {
+        .then(function (result) {
           ServicoFactory.del(entry.id)
-            .then(function(response) {
-              get();
-            }, function(response) {
-              vm.status = response;
+            .then(function (response) {
+              if (response.data.success === true) {
+                get();
+                ngToast.success({content: 'Registro excluído com sucesso'});
+              } else {
+                ngToast.danger({content: 'Falha ao excluir o registro'});
+              }
             });
         });
     }
@@ -94,12 +101,11 @@
         .catch(failed);
 
       function success(response) {
-        console.log(response);
         return response;
       }
 
       function failed(response) {
-        console.error('Failed: ' + JSON.stringify(response));
+        return response;
       }
     }
 
@@ -117,12 +123,11 @@
       }
 
       function failed(response) {
-        console.error('Failed: ' + JSON.stringify(response));
+        return response;
       }
     }
 
     function alt(data) {
-      console.log('UPDATING: ' + JSON.stringify(data));
       return $http({
           url: _url + '/servico',
           data: data,
@@ -136,7 +141,7 @@
       }
 
       function failed(response) {
-        console.error('Failed: ' + JSON.stringify(response));
+        return response;
       }
     }
 
@@ -156,7 +161,7 @@
       }
 
       function failed(response) {
-        console.error('Failed: ' + JSON.stringify(response));
+        return response;
       }
     }
   }

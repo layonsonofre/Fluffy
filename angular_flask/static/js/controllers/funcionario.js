@@ -33,8 +33,7 @@
 
     vm.form = {};
     vm.form.pessoa = dataStorage.getPessoa();
-    // vm.form.pessoa.funcao = "";
-    dataStorage.addPessoa("");
+    dataStorage.addPessoa(null);
 
     vm.add = add;
     vm.alt = alt;
@@ -65,16 +64,14 @@
     vm.selectEstado = selectEstado;
     vm.getWhatsappId = getWhatsappId;
 
-    if (!vm.form.pessoa.id) {
+    if (vm.form.pessoa != null && vm.form.pessoa.id != null) {
       get();
     }
 
     function get() {
       PessoaFactory.get()
         .then(function (response) {
-          vm.pessoas = response;
-        }, function (response) {
-          vm.status = 'Failed to load: ' + response.message;
+          vm.pessoas = response.data.result;
         });
     }
 
@@ -98,9 +95,11 @@
         .then(function (result) {
           PessoaFactory.del(vm.form.pessoa.id)
             .then(function (response) {
-              console.log('del pessoa', response);
-            }, function (response) {
-              console.error(response);
+              if (response.data.success === true) {
+                ngToast.success({ content: 'Registro excluído com sucesso' });
+              } else {
+                ngToast.danger({ content: 'Falha na exclusão do registro' });
+              }
             });
         });
     }
@@ -123,7 +122,7 @@
       TelefoneFactory.get({ pessoa_id: entry.id }).then(function (response) {
         console.log(response);
         var temp = '';
-        angular.forEach(response, function (value, key) {
+        angular.forEach(response.data.result, function (value, key) {
           temp += '(' + value.codigo_area + ') ' + value.numero + '   '
         });
         vm.form.pessoa.telefone = temp;
@@ -171,22 +170,18 @@
             TelefoneFactory.del(item.id)
               .then(function (response) {
                 getTelefones();
-              }, function (response) {
-                vm.status = 'Falha na tentativa de remover o telefone.\n' + error.message;
               });
           });
       }
     }
 
     function getTelefones(append) {
-      if (vm.form.pessoa.id) {
+      if (vm.form.pessoa != null && vm.form.pessoa.id != null) {
         TelefoneFactory.get({
             pessoa_id: vm.form.pessoa.id
           })
           .then(function (response) {
-            vm.form.telefones = response;
-          }, function (response) {
-            vm.status = 'Failed to load telefones: ' + error.message;
+            vm.form.telefones = response.data.result;
           });
       }
       if (append) {
@@ -206,22 +201,20 @@
     }
 
     function getPessoaRedesSociais(append) {
-      if (vm.form.pessoa.id) {
+      if (vm.form.pessoa != null && vm.form.pessoa.id != null) {
         PessoaTemRedeSocialFactory.get({
             pessoa_id: vm.form.pessoa.id
           })
           .then(function (response) {
-            if (!angular.isArray(response)) {
+            if (!angular.isArray(response.data.result)) {
               vm.form.redesSociais = [];
-              vm.form.redesSociais.push(response);
+              vm.form.redesSociais.push(response.data.result);
             } else {
-              vm.form.redesSociais = response;
+              vm.form.redesSociais = response.data.result;
             }
             if (append) {
               vm.form.redesSociais.push({ id: null });
             }
-          }, function (response) {
-            vm.status = 'Failed to load: ' + error.message;
           });
       }
       if (append) {
@@ -239,8 +232,6 @@
         PessoaTemRedeSocialFactory.del(item.id)
           .then(function (response) {
             getPessoaRedesSociais(false);
-          }, function (response) {
-            vm.status = 'Falha na tentativa de remover a rede social.\n' + error.message;
           });
       }
     }
@@ -248,9 +239,7 @@
     function getTiposRedesSociais() {
       RedeSocialFactory.get()
         .then(function (response) {
-          vm.tiposRedesSociais = response;
-        }, function (response) {
-          vm.status = 'Failed to load socials networks: ' + error.message;
+          vm.tiposRedesSociais = response.data.result;
         });
     }
 
@@ -258,9 +247,7 @@
       RedeSocial.add(vm.form.nomeRedeSocial)
         .then(function (response) {
           getTiposRedesSociais();
-        }, function (response) {
-          vm.status = 'Failed ' + error.message;
-        })
+        });
     }
 
     function search_zip_code() {
@@ -356,9 +343,7 @@
           nome: 'whatsapp'
         })
         .then(function (response) {
-          vm.whatsapp_id = response.id;
-        }, function (response) {
-          console.log('getWhatsappId', response);
+          vm.whatsapp_id = response.data.result.id;
         });
     }
 
@@ -369,7 +354,6 @@
         selectEstado();
         PessoaFactory.add(vm.form.pessoa)
           .then(function (response) {
-            console.log("1", response);
 
             if (response.data.success != true) {
               ngToast.warning({ content: '<b>Falha ao adicionar o registro</b>: ' + response.data.mensagem });
@@ -382,10 +366,7 @@
 
                 TelefoneFactory.add(value)
                   .then(function (response) {
-                    console.log("2", response);
                     vm.status = 'Telefone cadastrado com sucesso';
-                  }, function (response) {
-                    handleResponse(response)
                   });
 
                 if (value.whatsapp) {
@@ -395,7 +376,11 @@
                   temp.rede_social_id = vm.whatsapp_id;
                   PessoaTemRedeSocialFactory.add(temp)
                     .then(function (response) {
-                      console.log("3", response);
+                      if (response.data.success === true) {
+                        ngToast.success({ content: 'Número de Whatsapp com sucesso' });
+                      } else {
+                        ngToast.danger({ content: 'Falha na inclusão do número do Whatsapp' });
+                      }
                     });
                 }
               });
@@ -407,12 +392,15 @@
 
                 PessoaTemRedeSocialFactory.add(value)
                   .then(function (response) {
-                    console.log("4", response);
+                    if (response.data.success === true) {
+                      ngToast.success({ content: 'Rede social adicionada com sucesso' });
+                    } else {
+                      ngToast.danger({ content: 'Falha na inclusão da rede social' });
+                    }
                   });
               });
 
               //adicionando pessoa função
-              console.log('funcao', vm.form.funcao);
               var temp = {};
               temp.pessoa_id = vm.form.pessoa.id;
               temp.funcao_id = vm.form.funcao;
@@ -420,29 +408,22 @@
 
               PessoaTemFuncaoFactory.add(temp)
                 .then(function (response) {
-                  console.log("5", response);
                   vm.form.pessoa.pessoa_tem_funcao_id = response.data.result.id;
                   // adicionando permissoes
-                  console.log("permissoesFuncionario", vm.form.permissoesFuncionario);
                   angular.forEach(vm.form.permissoesFuncionario, function (value, key) {
                     value.pessoa_id = vm.form.pessoa.pessoa_tem_funcao_id;
                     value.permissao_id = value.id;
                     PessoaTemPermissaoFactory.add({ pessoa_id: value.pessoa_id, permissao_id: value.permissao_id }).then(function (response) {
-                      console.log("6", response);
                     });
                   });
-                }, function (response) {
-                  console.log("7", response);
                 });
             }
-          }, function (response) {
-            handleResponse(response);
           });
       }
     }
 
     function alt() {
-      alert('alt');
+      console.log('alt');
     }
 
     function excluir_pessoa(data) {
@@ -456,9 +437,11 @@
         .then(function (result) {
           PessoaFactory.del(vm.form.pessoa.id)
             .then(function (response) {
-              console.log('del pessoa', response);
-            }, function (response) {
-              console.error(response);
+              if (response.data.success === true) {
+                ngToast.success({ content: 'Registro excluído com sucesso' });
+              } else {
+                ngToast.danger({ content: 'Falha na exclusão do registro' });
+              }
             });
         });
     }
@@ -466,9 +449,7 @@
     function getFuncoes() {
       FuncaoFactory.get()
         .then(function (response) {
-          vm.funcoes = response;
-        }, function (response) {
-          vm.status = 'Failed to load: ' + error.message;
+          vm.funcoes = response.data.result;
         });
     }
 
@@ -476,8 +457,6 @@
       PermissaoFactory.get()
         .then(function (response) {
           vm.permissoes = response.data.result;
-        }, function (response) {
-          vm.status = 'Failed to load: ' + error.message;
         });
     }
 
@@ -511,17 +490,15 @@
         .catch(failed);
 
       function success(response) {
-        return response.data.result;
+        return response;
       }
 
       function failed(error) {
-        console.error('Failed getTelefones: ' + error.data);
+        return error;
       }
     }
 
     function add(data) {
-      console.log('pessoa');
-      console.log(JSON.stringify(data));
       return $http({
           method: 'POST',
           url: _url + '/pessoa',
@@ -535,12 +512,11 @@
       }
 
       function failed(response) {
-        console.error('Failed: ' + JSON.stringify(response));
+        return response;
       }
     }
 
     function alt(data) {
-      console.log('UPDATING: ' + JSON.stringify(data));
       return $http({
           url: _url + '/pessoa',
           data: data,
@@ -554,7 +530,7 @@
       }
 
       function failed(response) {
-        console.error('Failed: ' + JSON.stringify(response));
+        return response;
       }
     }
 
@@ -574,7 +550,7 @@
       }
 
       function failed(response) {
-        console.error('Failed: ' + JSON.stringify(response));
+        return response;
       }
     }
 

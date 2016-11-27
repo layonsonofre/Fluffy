@@ -1,4 +1,4 @@
-(function() {
+(function () {
   'use strict';
 
   angular
@@ -15,7 +15,7 @@
     authService.logout = logout;
     authService.isAuthenticated = isAuthenticated;
 
-    $rootScope.$on('$locationChangeStart', function(event, next, current) {
+    $rootScope.$on('$locationChangeStart', function (event, next, current) {
       var publicPages = ['/login'];
       var restrictedPage = publicPages.indexOf($location.path()) === -1;
       if (restrictedPage && !$window.localStorage.currentUser) {
@@ -26,17 +26,6 @@
     return authService;
 
     function login(username, password, callback) {
-      //SUBSTITUIR PELO CÓDIGO ABAIXO
-      // if (username === 'teste' && password === 'teste') {
-      //   $window.localStorage.currentUser = {
-      //     username: username,
-      //     token: 'myToken'
-      //   }
-      //   $http.defaults.headers.common.Authorization = 'Bearer ' + 'myToken';
-      //   callback(true);
-      // } else {
-      //   callback(false);
-      // }
       $http({
           url: _url + '/login',
           data: {
@@ -46,15 +35,15 @@
           },
           method: 'POST'
         })
-        .then(function(response) {
-          if (response.data.result.token) {
+        .then(function (response) {
+          if (response.data.success === true) {
             var _token = response.data.result.token;
             $http.defaults.headers.common.Authorization = "Bearer " + _token;
 
             $http({
               url: _url + '/getPermissoes',
               method: 'GET'
-            }).then(function(response) {
+            }).then(function (response) {
               $window.localStorage.currentUser = JSON.stringify({
                 username: username,
                 token: _token,
@@ -69,8 +58,7 @@
             callback(false);
           }
         })
-        .catch(function(response){
-          console.log('failed login', response);
+        .catch(function (response) {
           callback(false);
         });
     }

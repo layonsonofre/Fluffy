@@ -1,9 +1,9 @@
-(function() {
+(function () {
   'use strict';
 
   angular
     .module('Vacina', [])
-    .config(['$routeProvider', function($routeProvider) {
+    .config(['$routeProvider', function ($routeProvider) {
       $routeProvider
         .when('/estoque/vacina', {
           templateUrl: '../static/partials/estoque/vacina.html',
@@ -14,9 +14,9 @@
     .controller('VacinaController', VacinaController)
     .factory('VacinaFactory', VacinaFactory);
 
-  VacinaController.$inject = ['VacinaFactory', 'LoteFactory', 'modalService', 'calendarConfig'];
+  VacinaController.$inject = ['VacinaFactory', 'LoteFactory', 'VacinaTemLoteFactory', 'modalService', 'calendarConfig', 'ngToast'];
 
-  function VacinaController(VacinaFactory, LoteFactory, modalService, calendarConfig) {
+  function VacinaController(VacinaFactory, LoteFactory, VacinaTemLoteFactory, modalService, calendarConfig, ngToast) {
     var vm = this;
     vm.form = {};
 
@@ -37,28 +37,40 @@
 
     function get() {
       VacinaFactory.get()
-        .then(function(response) {
+        .then(function (response) {
           vm.vacinas = response.data.result;
-        }, function(response) {
-          vm.status = response.message
         });
     }
 
     function add() {
       VacinaFactory.add(vm.form.vacina)
-        .then(function(response) {
-          get();
-        }, function(response) {
-          vm.status = response.message
+        .then(function (response) {
+          if (response.data.success != true) {
+            ngToast.warning({
+              content: '<b>Falha ao adicionar o registro</b>: ' + response.data.message
+            });
+          } else {
+            get();
+            ngToast.success({
+              content: 'Registro adicionado com sucesso'
+            });
+          }
         });
     }
 
     function alt(data) {
       VacinaFactory.alt(data)
-        .then(function(response) {
-          get();
-        }, function(response) {
-          vm.status = response.message
+        .then(function (response) {
+          if (response.data.success != true) {
+            ngToast.warning({
+              content: '<b>Falha ao alterar o registro</b>: ' + response.data.message
+            });
+          } else {
+            get();
+            ngToast.success({
+              content: 'Registro alterado com sucesso'
+            });
+          }
         });
     }
 
@@ -69,12 +81,19 @@
         actionButtonClass: 'btn btn-danger'
       };
       modalService.showModal({}, modalOptions)
-        .then(function(result) {
+        .then(function (result) {
           VacinaFactory.del(entry.id)
-            .then(function(response) {
-              get();
-            }, function(response) {
-              vm.status = response.message
+            .then(function (response) {
+              if (response.data.success != true) {
+                ngToast.warning({
+                  content: '<b>Falha ao excluir o registro</b>: ' + response.data.message
+                });
+              } else {
+                get();
+                ngToast.success({
+                  content: 'Registro excluído com sucesso'
+                });
+              }
             });
         });
     }
@@ -90,24 +109,53 @@
       if (vm.alterandoLote) {
         vm.alterandoLote = false;
         LoteFactory.alt(vm.lote)
-          .then(function(response) {
-            getLote(vm.vacina);
-          }, function(response) {
-            vm.status = response.message
+          .then(function (response) {
+            if (response.data.success != true) {
+              ngToast.warning({content: '<b>Falha ao alterar o lote</b>: ' + response.data.message});
+            } else {
+              ngToast.success({content: 'Lote alterado com sucesso'});
+
+              VacinaTemLoteFactory.alt({id: vm.lote.vacina_tem_lote_id, quantidade: vm.lote.quantidade}).then(function(response) {
+                if (response.data.success === true) {
+                  getLote(vm.vacina);
+                  ngToast.success({content: 'Quantidade de vacina do lote alterada com sucesso'});
+                } else {
+                  ngToast.danger({content: '<b>Falha ao alterar o registro</b>: ' + response.data.message});
+                }
+              });
+
+            }
           });
       } else {
         LoteFactory.add(vm.lote)
-          .then(function(response) {
-            getLote(vm.vacina);
-          }, function(response) {
-            vm.status = response.message
+          .then(function (response) {
+            if (response.data.success != true) {
+              ngToast.warning({ content: '<b>Falha ao adicionar o registro</b>: ' + response.data.message });
+            } else {
+              ngToast.success({
+                content: 'Registro adicionado com sucesso'
+              });
+              var lote_id = response.data.result.id;
+              VacinaTemLoteFactory.add({
+                lote_id: lote_id,
+                vacina_id: vm.vacina.id,
+                quantidade: vm.lote.quantidade
+              }).then(function (response) {
+                if (response.data.success === true) {
+                  ngToast.success({ content: 'O lote foi vinculado à vacina' });
+                  getLote(vm.vacina);
+                } else {
+                  ngToast.danger({ content: 'Lote não vinculado à vacina' });
+                }
+              });
+            }
           });
       }
     }
 
-    function delLote(item) {
-      if (item.id === null) {
-        vm.form.lotes = vm.form.lotes.splice(vm.form.lotes.indexOf(item), 1)
+    function delLote(entry) {
+      if (entry.id === null) {
+        vm.form.lotes = vm.form.lotes.splice(vm.form.lotes.indexOf(entry), 1)
       } else {
         var modalOptions = {
           closeButtonText: 'Cancelar',
@@ -115,47 +163,70 @@
           actionButtonClass: 'btn btn-danger'
         };
         modalService.showModal({}, modalOptions)
-          .then(function(result) {
-            LoteFactory.del(entry.id)
-              .then(function(response) {
-                getLote(vm.vacina);
-              }, function(response) {
-                vm.status = response.message
-              });
+          .then(function (result) {
+            VacinaTemLoteFactory.get({ lote_id: entry.id }).then(function (response) {
+              console.log("response", response);
+              if (response.data.success === true) {
+                VacinaTemLoteFactory.del({ id: response.data.result.id }).then(function (response) {
+                  console.log("response2", response);
+                  if (response.data.result === true) {
+                    ngToast.success({ content: 'Vínculo removido com sucesso' });
+
+                    LoteFactory.del(entry.id)
+                      .then(function (response) {
+                        if (response.data.success != true) {
+                          ngToast.warning({ content: '<b>Falha ao excluir o registro</b>: ' + response.data.message });
+                        } else {
+                          ngToast.success({ content: 'Registro excluído com sucesso' });
+                          getLote(vm.vacina);
+                        }
+                      });
+                  } else {
+                    ngToast.warning({ content: '<b>Falha ao excluir vínculo da vacina com o lote</b>: ' + response.data.message });
+                  }
+                })
+              } else {
+                ngToast.warning({ content: '<b>Não encontrado vínculo da vacina com o lote</b>: ' + response.data.message });
+              }
+            });
           });
       }
     }
 
     function getLote(entry) {
-      if (entry.checked) {
-        vm.form.lotes = [];
-        LoteFactory.getLotesVacina({
+      vm.form.lotes = [];
+      if (entry.checked === true) {
+        VacinaTemLoteFactory.get({
             vacina_id: entry.id
           })
-          .then(function(response) {
-            if (!angular.isArray(response)) {
+          .then(function (response) {
+            if (!angular.isArray(response.data.result)) {
               vm.form.lotes = [];
-              vm.form.lotes.push(response);
+              vm.form.lotes.push(response.data.result);
             } else {
-              vm.form.lotes = response;
+              vm.form.lotes = response.data.result;
             }
-            angular.forEach(vm.form.lotes, function(value, key) {
+            angular.forEach(vm.form.lotes, function (value, key) {
               value.lote.vencimento = Date.parse(value.lote.vencimento);
+              VacinaTemLoteFactory.get({ lote_id: value.lote.id }).then(function (response) {
+                if (response.data.success === true && response.data.result.quantidade) {
+                  value.lote.quantidade = response.data.result.quantidade;
+                  value.lote.vacina_tem_lote_id = response.data.result.id;
+                }
+              });
             });
-          }, function(response) {
-            vm.status = 'Failed to load: ' + error.message;
           });
       }
     }
 
     function updateSelection(entry, entities) {
-      angular.forEach(entities, function(subscription, index) {
+      cancelLote();
+      vm.vacina = entry;
+      angular.forEach(entities, function (subscription, index) {
         if (entry.id != subscription.id) {
           subscription.checked = false;
         }
       });
-      vm.vacina = entry;
-      cancelLote();
     }
 
     function cancelLote() {
@@ -163,15 +234,15 @@
       vm.lote = null;
     }
 
-    vm.today = function(lote) {
+    vm.today = function (lote) {
       lote.vencimento = new Date();
     }
-    vm.clearDate = function(lote) {
+    vm.clearDate = function (lote) {
       lote.data_hora = null;
     }
     vm.disabled = disabled;
     vm.toggleMin = toggleMin;
-    vm.openDate = function(lote) {
+    vm.openDate = function (lote) {
       lote.popup = true;
     }
     vm.setDate = setDate;
@@ -186,17 +257,11 @@
       showWeeks: true
     };
 
-    vm.oneYearFromNow = new Date();
-    vm.oneYearFromNow.setDate(vm.oneYearFromNow.getDate() + 1);
-
-    vm.oneMonthAgo = new Date();
-    vm.oneMonthAgo.setDate(vm.oneMonthAgo.getDate() - 30);
-
     vm.dateOptions = {
       dateDisabled: disabled,
       formatYear: 'yyyy',
-      maxDate: vm.oneYearFromNow,
-      minDate: vm.oneMonthAgo,
+      maxDate: new Date(new Date().getDate() + 1),
+      minDate: new Date(new Date().getDate() - 30),
       startingDay: 1
     }
 
@@ -260,7 +325,7 @@
       }
 
       function failed(response) {
-        console.error('Failed: ' + JSON.stringify(response));
+        return response;
       }
     }
 
@@ -278,12 +343,11 @@
       }
 
       function failed(response) {
-        console.error('Failed: ' + JSON.stringify(response));
+        return response;
       }
     }
 
     function alt(data) {
-      console.log('UPDATING: ' + JSON.stringify(data));
       return $http({
           url: _url + '/vacina',
           data: data,
@@ -297,7 +361,7 @@
       }
 
       function failed(response) {
-        console.error('Failed: ' + JSON.stringify(response));
+        return response;
       }
     }
 
@@ -317,7 +381,7 @@
       }
 
       function failed(response) {
-        console.error('Failed: ' + JSON.stringify(response));
+        return response;
       }
     }
   }

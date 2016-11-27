@@ -2,44 +2,43 @@
   'use strict';
 
   angular
-    .module('Telefone', [])
-    .factory('TelefoneFactory', TelefoneFactory);
+    .module('VacinaTemLote', [])
+    .factory('VacinaTemLoteFactory', VacinaTemLoteFactory);
 
-  TelefoneFactory.$inject = ['$http', 'Fluffy'];
+  VacinaTemLoteFactory.$inject = ['$http', 'Fluffy'];
 
-  function TelefoneFactory($http, Fluffy) {
+  function VacinaTemLoteFactory($http, Fluffy) {
     var _url = Fluffy.urlBase;
-    var TelefoneFactory = {
+    var VacinaTemLoteFactory = {
       get: get,
       add: add,
       alt: alt,
       del: del
     };
-    return TelefoneFactory;
+    return VacinaTemLoteFactory;
 
     function get(data) {
       data = data || null;
       return $http({
-          url: _url + '/telefone',
-          method: 'GET',
-          params: data
+          url: _url + '/vacinaTemLote',
+          params: data,
+          method: 'GET'
         })
         .then(success)
         .catch(failed);
 
       function success(response) {
-        console.log(response);
         return response;
       }
 
-      function failed(error) {
-        return error;
+      function failed(response) {
+        return response;
       }
     }
 
     function add(data) {
       return $http({
-          url: _url + '/telefone',
+          url: _url + '/vacinaTemLote',
           data: data,
           method: 'POST'
         })
@@ -57,7 +56,7 @@
 
     function alt(data) {
       return $http({
-          url: _url + '/telefone',
+          url: _url + '/vacinaTemLote',
           data: data,
           method: 'PUT'
         })
@@ -75,7 +74,7 @@
 
     function del(id) {
       return $http({
-          url: _url + '/telefone',
+          url: _url + '/vacinaTemLote',
           data: {
             id: id
           },
@@ -92,5 +91,26 @@
         return response;
       }
     }
+
+
+    function getLotesVacina(data) {
+      data = data || null;
+      return $http({
+          url: _url + '/vacinaTemLote',
+          params: data,
+          method: 'GET'
+        })
+        .then(success)
+        .catch(failed);
+
+      function success(response) {
+        return response;
+      }
+
+      function failed(response) {
+        return response;
+      }
+    }
   }
+
 })()

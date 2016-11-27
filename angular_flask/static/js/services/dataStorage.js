@@ -36,11 +36,11 @@
     return dataStorage;
 
     function cleanUp() {
-      $window.localStorage.currentPessoa = JSON.stringify({});
-      $window.localStorage.currentAgendamento = JSON.stringify({});
-      $window.localStorage.currentAnimal = JSON.stringify({});
-      $window.localStorage.currentContrato = JSON.stringify({});
-      $window.localStorage.currentVenda = JSON.stringify({});
+      $window.localStorage.currentPessoa = null;
+      $window.localStorage.currentAgendamento = null;
+      $window.localStorage.currentAnimal = null;
+      $window.localStorage.currentContrato = null;
+      $window.localStorage.currentVenda = null;
     }
 
     //pessoa

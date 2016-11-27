@@ -23,28 +23,28 @@ def basic_pages(**kwargs):
 
 @app.route('/api/<modelo>', methods=['GET'])
 def get_modelo(modelo=None):
-    
+
     authorization = str(request.headers["Authorization"])
     try:
         auth_type, auth_token = authorization.split(" ")
     except Exception as e:
-        return jsonify(success=False, result={}, mensagem="Sua Sessao Expirou", code=401)
-    
+        return jsonify(success=False, result={}, message="Sua Sessao Expirou", code=401)
+
     if auth_type != "Bearer":
-        return jsonify(success=False, result={}, mensagem="Sua Sessao Expirou", code=401)
+        return jsonify(success=False, result={}, message="Sua Sessao Expirou", code=401)
 
     data = Util.getData("getOAuth", [None, str(auth_token), None])
 
     if len(data) != 1:
-        return jsonify(success=False, result={}, mensagem="Sua Sessao Expirou", code=401)
+        return jsonify(success=False, result={}, message="Sua Sessao Expirou", code=401)
 
     oauth = OAuth(data[0])
 
     if oauth.time_left < 0:
         if oauth.time_left > - (3*60*60):
-            return jsonify(success=False, result={}, mensagem="Sua Sessao Expirou", code=401)
-        else :    
-            return jsonify(success=False, result={}, mensagem="Sua Sessao Expirou", code=401)
+            return jsonify(success=False, result={}, message="Sua Sessao Expirou", code=401)
+        else :
+            return jsonify(success=False, result={}, message="Sua Sessao Expirou", code=401)
 
     args = []
     args = Util.requestGetArgs(modelo)
@@ -64,7 +64,7 @@ def get_modelo(modelo=None):
     	data = Util.postData("insLog", [message, json, table, method])
     	print(data)
     	#return jsonify(success=False, result={}, codigo=code,message=error_message.decode('cp1251').encode('utf8'))
-    	return jsonify(success=False, result={}, mensagem=message, tabela=table, json = json, metodo=method)
+    	return jsonify(success=False, result={}, message=message, tabela=table, json = json, metodo=method)
 
     class_name = globals()[modelo[0].upper()+modelo[1:]]
 
@@ -82,28 +82,28 @@ def get_modelo(modelo=None):
 
 @app.route('/api/<modelo>', methods=['POST','PUT','DELETE'])
 def form_modelo(modelo = None):
-	
+
     authorization = str(request.headers["Authorization"])
     try:
         auth_type, auth_token = authorization.split(" ")
     except Exception as e:
-        return jsonify(success=False, result={}, mensagem="Sua Sessao Expirou", code=401)
+        return jsonify(success=False, result={}, message="Sua Sessao Expirou", code=401)
 
     if auth_type != "Bearer":
-        return jsonify(success=False, result={}, mensagem="Sua Sessao Expirou", code=401)
+        return jsonify(success=False, result={}, message="Sua Sessao Expirou", code=401)
 
     data = Util.getData("getOAuth", [None, str(auth_token), None])
 
     if len(data) != 1:
-        return jsonify(success=False, result={}, mensagem="Sua Sessao Expirou", code=401)
+        return jsonify(success=False, result={}, message="Sua Sessao Expirou", code=401)
 
     oauth = OAuth(data[0])
 
     if oauth.time_left < 0:
         if oauth.time_left > - (3*60*60):
-            return jsonify(success=False, result={}, mensagem="Sua Sessao Expirou", code=401)
-        else :    
-            return jsonify(success=False, result={}, mensagem="Sua Sessao Expirou", code=401)
+            return jsonify(success=False, result={}, message="Sua Sessao Expirou", code=401)
+        else :
+            return jsonify(success=False, result={}, message="Sua Sessao Expirou", code=401)
 
     args = []
     args = Util.requestFormArgs(modelo, request.json)
@@ -138,7 +138,7 @@ def form_modelo(modelo = None):
 
         data = Util.postData("insLog", [message, json, table, method])
         #return jsonify(success=False, result={}, codigo=code,message=error_message.decode('cp1251').encode('utf8'))
-        return jsonify(success=False, result={}, mensagem=message, tabela=table, json = json, metodo=method)
+        return jsonify(success=False, result={}, message=message, tabela=table, json = json, metodo=method)
 
 @app.route('/api/login', methods=['POST'])
 def login():
@@ -161,7 +161,7 @@ def login():
             refresh_token = str(uuid4())
             # print([token, refresh_token])
             id = Util.postData('insOAuth',[token, refresh_token])
-            
+
             result = Util.postData('altPessoaTemFuncao', [ptf.id, ptf.pessoa[0], ptf.funcao[0], None, id[0]])
             print(result)
             return jsonify(success=True, result={"token":token, "refresh_token":refresh_token}, message="")

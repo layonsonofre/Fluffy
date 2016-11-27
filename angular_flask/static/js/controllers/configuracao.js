@@ -1,9 +1,9 @@
-(function() {
+(function () {
   'use strict';
 
   angular
     .module('Configuracao', [])
-    .config(['$routeProvider', function($routeProvider) {
+    .config(['$routeProvider', function ($routeProvider) {
       $routeProvider
         .when('/configuracao', {
           templateUrl: '../static/partials/avancado/configuracao.html',
@@ -14,9 +14,9 @@
     .controller('ConfiguracaoController', ConfiguracaoController)
     .factory('ConfiguracaoFactory', ConfiguracaoFactory);
 
-  ConfiguracaoController.$inject = ['ConfiguracaoFactory'];
+  ConfiguracaoController.$inject = ['ConfiguracaoFactory', 'ngToast'];
 
-  function ConfiguracaoController(ConfiguracaoFactory) {
+  function ConfiguracaoController(ConfiguracaoFactory, ngToast) {
     var vm = this;
     vm.form = null;
 
@@ -27,20 +27,24 @@
 
     function get() {
       ConfiguracaoFactory.get()
-        .then(function(response) {
-          vm.form = response.data.result;
-        }, function(response) {
-          vm.status = response.message
+        .then(function (response) {
+          if (response.data.success === true) {
+            vm.form = response.data.result;
+          } else {
+            ngToast.warning({ content: 'Falha: ' + response.data.message });
+          }
         });
     }
 
     function alt() {
-      console.log(vm.form);
       ConfiguracaoFactory.alt(vm.form)
-        .then(function(response) {
-          get();
-        }, function(response) {
-          vm.status = response.message
+        .then(function (response) {
+          if (response.data.success === true) {
+            ngToast.success({content: 'Registro alterado com sucesso'});
+            get();
+          } else {
+            ngToast.danger({content: 'Falha na alteração do registro: ' + response.data.message});
+          }
         });
     }
   }
@@ -63,17 +67,15 @@
         .catch(failed);
 
       function success(response) {
-        console.log(response);
         return response;
       }
 
       function failed(response) {
-        console.error('Failed: ' + JSON.stringify(response));
+        return response;
       }
     }
 
     function alt(data) {
-      console.log('UPDATING: ' + JSON.stringify(data));
       return $http({
           url: _url + '/configuracao',
           data: data,
@@ -87,7 +89,7 @@
       }
 
       function failed(response) {
-        console.error('Failed: ' + JSON.stringify(response));
+        return response;
       }
     }
   }

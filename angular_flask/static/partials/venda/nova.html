@@ -39,7 +39,7 @@
                 <tbody>
                   <tr dir-paginate="entry in vm.pessoas | filter:vm.filtroCliente | itemsPerPage: 10" pagination-id="pessoas">
                     <td>
-                      <input type="checkbox" ng-model="entry.checked" ng-click="vm.updateSelection(entry, vm.pessoas); vm.selectPessoa(entry)">
+                      <input type="checkbox" ng-model="entry.checked" ng-change="vm.updateSelection(entry, vm.pessoas); vm.selectPessoa(entry)">
                     </td>
                     <td>{{entry.nome}}</td>
                     <td>{{entry.email}}</td>

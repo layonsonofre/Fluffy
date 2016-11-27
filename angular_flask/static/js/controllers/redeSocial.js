@@ -1,9 +1,9 @@
-(function() {
+(function () {
   'use strict';
 
   angular
     .module('RedeSocial', [])
-    .config(['$routeProvider', function($routeProvider) {
+    .config(['$routeProvider', function ($routeProvider) {
       $routeProvider
         .when('/redesSociais', {
           templateUrl: '../static/partials/avancado/redeSocial.html',
@@ -29,29 +29,23 @@
 
     function get() {
       RedeSocialFactory.get()
-        .then(function(response) {
-          vm.redesSociais = response;
-        }, function(response) {
-          vm.status = response.message
+        .then(function (response) {
+          vm.redesSociais = response.data.result;
         });
     }
 
     function add() {
       RedeSocialFactory.add(vm.form)
-        .then(function(response) {
+        .then(function (response) {
           vm.form = null;
           get();
-        }, function(response) {
-          vm.status = response.message
         });
     }
 
     function alt(data) {
       RedeSocialFactory.alt(data)
-        .then(function(response) {
+        .then(function (response) {
           get();
-        }, function(response) {
-          vm.status = response.message
         });
     }
 
@@ -62,12 +56,10 @@
         actionButtonClass: 'btn btn-danger'
       };
       modalService.showModal({}, modalOptions)
-        .then(function(result) {
+        .then(function (result) {
           RedeSocialFactory.del(entry.id)
-            .then(function(response) {
+            .then(function (response) {
               get();
-            }, function(response) {
-              vm.status = response.message
             });
         });
     }
@@ -96,11 +88,11 @@
         .catch(failed);
 
       function success(response) {
-        return response.data.result;
+        return response;
       }
 
       function failed(response) {
-        console.error('Failed: ' + JSON.stringify(response));
+        return response;
       }
     }
 
@@ -118,7 +110,7 @@
       }
 
       function failed(response) {
-        console.error('Failed: ' + JSON.stringify(response));
+        return response;
       }
     }
 
@@ -136,7 +128,7 @@
       }
 
       function failed(response) {
-        console.error('Failed: ' + JSON.stringify(response));
+        return response;
       }
     }
 
@@ -156,7 +148,7 @@
       }
 
       function failed(response) {
-        console.error('Failed: ' + JSON.stringify(response));
+        return response;
       }
     }
   }

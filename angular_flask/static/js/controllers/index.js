@@ -1,8 +1,16 @@
-(function() {
+(function () {
   'use strict';
 
   angular
     .module('Index', [])
+    .config(['$routeProvider', function ($routeProvider) {
+      $routeProvider
+        .when('/overview', {
+          templateUrl: '../static/partials/overview.html',
+          controller: 'IndexController',
+          controllerAs: 'vm'
+        });
+    }])
     .controller('IndexController', IndexController);
 
   IndexController.$inject = ['$rootScope', 'dataStorage'];
@@ -12,8 +20,7 @@
     $rootScope.bodyBackground = '';
 
     $rootScope.permissoes = {};
-    angular.forEach(dataStorage.getPermissoes(), function(value, key) {
-      console.log('value', value);
+    angular.forEach(dataStorage.getPermissoes(), function (value, key) {
       if (value.modulo === 'Cadastro') {
         $rootScope.permissoes.cadastro = true;
       }

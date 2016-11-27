@@ -1,9 +1,9 @@
-(function() {
+(function () {
   'use strict';
 
   angular
     .module('Funcao', [])
-    .config(['$routeProvider', function($routeProvider) {
+    .config(['$routeProvider', function ($routeProvider) {
       $routeProvider
         .when('/funcao', {
           templateUrl: '../static/partials/avancado/funcao.html',
@@ -29,29 +29,27 @@
 
     function get() {
       FuncaoFactory.get()
-        .then(function(response) {
-          vm.funcoes = response;
-        }, function(response) {
-          console.log('Failed to load funcao' + response);
+        .then(function (response) {
+          if (response.data.success) {
+            vm.funcoes = response.data.result;
+          } else {
+            ngToast.danger({ content: 'Falha ao buscar registros' });
+          }
         });
     }
 
     function add() {
       FuncaoFactory.add(vm.form)
-        .then(function(response) {
+        .then(function (response) {
           vm.form = null;
           get();
-        }, function(response) {
-          vm.status = response.message
         });
     }
 
     function alt(data) {
       FuncaoFactory.alt(data)
-        .then(function(response) {
+        .then(function (response) {
           get();
-        }, function(response) {
-          vm.status = response.message
         });
     }
 
@@ -62,12 +60,10 @@
         actionButtonClass: 'btn btn-danger'
       };
       modalService.showModal({}, modalOptions)
-        .then(function(result) {
+        .then(function (result) {
           FuncaoFactory.del(entry.id)
-            .then(function(response) {
+            .then(function (response) {
               get();
-            }, function(response) {
-              vm.status = response.message
             });
         });
     }
@@ -88,16 +84,16 @@
     function get(data) {
       data = data || null;
       return $http({
-        url: _url + '/funcao',
-        method: 'GET',
-        params: data
-      })
+          url: _url + '/funcao',
+          method: 'GET',
+          params: data
+        })
         .then(success)
         .catch(failed);
 
       function success(response) {
         console.log(response.data.result);
-        return response.data.result;
+        return response;
       }
 
       function failed(error) {
@@ -119,12 +115,11 @@
       }
 
       function failed(response) {
-        console.error('Failed: ' + JSON.stringify(response));
+        return response;
       }
     }
 
     function alt(data) {
-      console.log('UPDATING: ' + JSON.stringify(data));
       return $http({
           url: _url + '/funcao',
           data: data,
@@ -138,7 +133,7 @@
       }
 
       function failed(response) {
-        console.error('Failed: ' + JSON.stringify(response));
+        return response;
       }
     }
 
@@ -158,7 +153,7 @@
       }
 
       function failed(response) {
-        console.error('Failed: ' + JSON.stringify(response));
+        return response;
       }
     }
 

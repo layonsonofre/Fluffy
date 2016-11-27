@@ -1,9 +1,9 @@
-(function() {
+(function () {
   'use strict';
 
   angular
     .module('Estoque', [])
-    .config(['$routeProvider', function($routeProvider) {
+    .config(['$routeProvider', function ($routeProvider) {
       $routeProvider
         .when('/estoque/controle', {
           templateUrl: '../static/partials/estoque/controle.html',
@@ -32,40 +32,36 @@
 
     function get() {
       ProdutoFactory.get()
-        .then(function(response) {
+        .then(function (response) {
           vm.produtos = response.data.result;
-        }, function(response) {
+        }, function (response) {
           if (response.data.success != true) {
-            ngToast.warning({content: '<b>Falha ao buscar registros</b>: ' + response.data.message});
+            ngToast.warning({ content: '<b>Falha ao buscar registros</b>: ' + response.data.message });
           }
         });
     }
 
     function add() {
       ProdutoFactory.add(vm.form)
-        .then(function(response) {
+        .then(function (response) {
           if (response.data.success != true) {
-            ngToast.warning({content: '<b>Falha ao adicionar o registro</b>: ' + response.data.message});
+            ngToast.warning({ content: '<b>Falha ao adicionar o registro</b>: ' + response.data.message });
           } else {
             get();
-            ngToast.success({content: 'Registro adicionado com sucesso'});
+            ngToast.success({ content: 'Registro adicionado com sucesso' });
           }
-        }, function(response) {
-            ngToast.warning({content: '<b>Falha ao adicionar o registro</b>: ' + response.data.message});
         });
     }
 
     function alt(data) {
       ProdutoFactory.alt(data)
-        .then(function(response) {
+        .then(function (response) {
           if (response.data.success != true) {
-            ngToast.warning({content: '<b>Falha ao alterar o registro</b>: ' + response.data.message});
+            ngToast.warning({ content: '<b>Falha ao alterar o registro</b>: ' + response.data.message });
           } else {
-            ngToast.success({content: 'Registro alterado com sucesso'});
+            ngToast.success({ content: 'Registro alterado com sucesso' });
             get();
           }
-        }, function(response) {
-          ngToast.warning({content: '<b>Falha ao alterar o registro</b>: ' + response.data.message});
         });
     }
 
@@ -76,28 +72,29 @@
         actionButtonClass: 'btn btn-danger'
       };
       modalService.showModal({}, modalOptions)
-        .then(function(result) {
+        .then(function (result) {
           ProdutoFactory.del(entry.id)
-            .then(function(response) {
-              get();
-            }, function(response) {
-              vm.status = response.message
+            .then(function (response) {
+              if (response.data.success === true) {
+                get();
+                ngToast.success({ content: 'Registro excluído com sucesso' });
+              } else {
+                ngToast.danger({ content: 'Falha na excluir o registro' });
+              }
             });
         });
     }
 
     function getGrupos() {
       GrupoItemFactory.get()
-        .then(function(response) {
+        .then(function (response) {
           vm.grupos = response.data.result;
-        }, function(response) {
-          vm.status = response.message
         });
     }
 
     function mostrarGrupo(entry) {
       if (entry.nome && vm.grupos && vm.grupos.length) {
-        var selected = $filter('filter')(vm.grupos, {id: entry.id});
+        var selected = $filter('filter')(vm.grupos, { id: entry.id });
         return selected.length ? selected[0].nome : 'Não configurado';
       } else {
         return entry.nome || 'Não configurado';
@@ -130,7 +127,7 @@
       }
 
       function failed(response) {
-        console.error('Failed: ' + JSON.stringify(response));
+        return response;
       }
     }
 
@@ -148,12 +145,11 @@
       }
 
       function failed(response) {
-        console.error('Failed: ' + JSON.stringify(response));
+        return response;
       }
     }
 
     function alt(data) {
-      console.log('UPDATING: ' + JSON.stringify(data));
       return $http({
           url: _url + '/item',
           data: data,
@@ -167,7 +163,7 @@
       }
 
       function failed(response) {
-        console.error('Failed: ' + JSON.stringify(response));
+        return response;
       }
     }
 
@@ -187,7 +183,7 @@
       }
 
       function failed(response) {
-        console.error('Failed: ' + JSON.stringify(response));
+        return response;
       }
     }
   }

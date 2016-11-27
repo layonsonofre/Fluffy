@@ -1,4 +1,4 @@
-(function() {
+(function () {
   'use strict';
 
   angular
@@ -13,12 +13,11 @@
       get: get,
       add: add,
       alt: alt,
-      del: del,
-      getLotesVacina: getLotesVacina
+      del: del
     };
     return LoteFactory;
 
-    function get() {
+    function get(data) {
       data = data || null;
       return $http({
           url: _url + '/lote',
@@ -29,12 +28,11 @@
         .catch(failed);
 
       function success(response) {
-        console.log(response);
-        return response.data.result;
+        return response;
       }
 
       function failed(response) {
-        console.error('Failed: ' + JSON.stringify(response));
+        return response;
       }
     }
 
@@ -52,7 +50,7 @@
       }
 
       function failed(response) {
-        console.error('Failed: ' + JSON.stringify(response));
+        return response;
       }
     }
 
@@ -70,7 +68,7 @@
       }
 
       function failed(response) {
-        console.error('Failed: ' + JSON.stringify(response));
+        return response;
       }
     }
 
@@ -90,28 +88,7 @@
       }
 
       function failed(response) {
-        console.error('Failed: ' + JSON.stringify(response));
-      }
-    }
-
-
-    function getLotesVacina(data) {
-      data = data || null;
-      console.log(data);
-      return $http({
-          url: _url + '/vacinaTemLote',
-          params: data,
-          method: 'GET'
-        })
-        .then(success)
-        .catch(failed);
-
-      function success(response) {
-        return response.data.result;
-      }
-
-      function failed(response) {
-        console.error('Failed: ' + JSON.stringify(response));
+        return response;
       }
     }
   }

@@ -1,9 +1,9 @@
-(function() {
+(function () {
   'use strict';
 
   angular
     .module('GrupoItem', [])
-    .config(['$routeProvider', function($routeProvider) {
+    .config(['$routeProvider', function ($routeProvider) {
       $routeProvider
         .when('/estoque/grupoItem', {
           templateUrl: '../static/partials/estoque/grupoItem.html',
@@ -29,28 +29,22 @@
 
     function get() {
       GrupoItemFactory.get()
-        .then(function(response) {
+        .then(function (response) {
           vm.grupos = response.data.result;
-        }, function(response) {
-          vm.status = response.message
         });
     }
 
     function add() {
       GrupoItemFactory.add(vm.form)
-        .then(function(response) {
+        .then(function (response) {
           get();
-        }, function(response) {
-          vm.status = response.message
         });
     }
 
     function alt(data) {
       GrupoItemFactory.alt(data)
-        .then(function(response) {
+        .then(function (response) {
           get();
-        }, function(response) {
-          vm.status = response.message
         });
     }
 
@@ -61,12 +55,10 @@
         actionButtonClass: 'btn btn-danger'
       };
       modalService.showModal({}, modalOptions)
-        .then(function(result) {
+        .then(function (result) {
           GrupoItemFactory.del(entry.id)
-            .then(function(response) {
+            .then(function (response) {
               get();
-            }, function(response) {
-              vm.status = response.message
             });
         });
     }
@@ -97,7 +89,7 @@
       }
 
       function failed(response) {
-        console.error('Failed: ' + JSON.stringify(response));
+        return response;
       }
     }
 
@@ -115,12 +107,11 @@
       }
 
       function failed(response) {
-        console.error('Failed: ' + JSON.stringify(response));
+        return response;
       }
     }
 
     function alt(data) {
-      console.log('UPDATING: ' + JSON.stringify(data));
       return $http({
           url: _url + '/grupoDeItem',
           data: data,
@@ -134,7 +125,7 @@
       }
 
       function failed(response) {
-        console.error('Failed: ' + JSON.stringify(response));
+        return response;
       }
     }
 
@@ -154,7 +145,7 @@
       }
 
       function failed(response) {
-        console.error('Failed: ' + JSON.stringify(response));
+        return response;
       }
     }
   }
