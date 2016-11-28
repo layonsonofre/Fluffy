@@ -66,6 +66,7 @@
 
     if (vm.form.pessoa != null && vm.form.pessoa.id != null) {
       get();
+      vm.alterando = true;
     }
 
     function get() {
@@ -348,15 +349,94 @@
     }
 
     function add() {
+      if (vm.alterando) {
+        alt();
+      } else {
+        if (validarPessoa()) {
+
+          // adicionando a pessoa
+          selectEstado();
+          PessoaFactory.add(vm.form.pessoa)
+            .then(function (response) {
+
+              if (response.data.success != true) {
+                ngToast.warning({ content: '<b>Falha ao adicionar o registro</b>: ' + response.data.mensagem });
+              } else if (response.data.result.id) {
+                vm.form.pessoa.id = response.data.result.id;
+
+                // adicionando telefones
+                angular.forEach(vm.form.telefones, function (value, key) {
+                  value.pessoa_id = vm.form.pessoa.id;
+
+                  TelefoneFactory.add(value)
+                    .then(function (response) {
+                      vm.status = 'Telefone cadastrado com sucesso';
+                    });
+
+                  if (value.whatsapp) {
+                    var temp = {};
+                    temp.perfil = value.codigo_pais + '' + value.codigo_area + '' + value.numero;
+                    temp.pessoa_id = value.pessoa_id;
+                    temp.rede_social_id = vm.whatsapp_id;
+                    PessoaTemRedeSocialFactory.add(temp)
+                      .then(function (response) {
+                        if (response.data.success === true) {
+                          ngToast.success({ content: 'Número de Whatsapp com sucesso' });
+                        } else {
+                          ngToast.danger({ content: 'Falha na inclusão do número do Whatsapp' });
+                        }
+                      });
+                  }
+                });
+
+                //adicionando redes sociais
+                angular.forEach(vm.form.redesSociais, function (value, key) {
+                  value.pessoa_id = vm.form.pessoa.id;
+                  value.rede_social_id = value.redeSocial;
+
+                  PessoaTemRedeSocialFactory.add(value)
+                    .then(function (response) {
+                      if (response.data.success === true) {
+                        ngToast.success({ content: 'Rede social adicionada com sucesso' });
+                      } else {
+                        ngToast.danger({ content: 'Falha na inclusão da rede social' });
+                      }
+                    });
+                });
+
+                //adicionando pessoa função
+                var temp = {};
+                temp.pessoa_id = vm.form.pessoa.id;
+                temp.funcao_id = vm.form.funcao;
+                temp.password = vm.form.pessoa.password;
+
+                PessoaTemFuncaoFactory.add(temp)
+                  .then(function (response) {
+                    vm.form.pessoa.pessoa_tem_funcao_id = response.data.result.id;
+                    // adicionando permissoes
+                    angular.forEach(vm.form.permissoesFuncionario, function (value, key) {
+                      value.pessoa_id = vm.form.pessoa.pessoa_tem_funcao_id;
+                      value.permissao_id = value.id;
+                      PessoaTemPermissaoFactory.add({ pessoa_id: value.pessoa_id, permissao_id: value.permissao_id }).then(function (response) {
+                      });
+                    });
+                  });
+              }
+            });
+        }
+      }
+    }
+
+    function alt() {
       if (validarPessoa()) {
 
         // adicionando a pessoa
         selectEstado();
-        PessoaFactory.add(vm.form.pessoa)
+        PessoaFactory.alt(vm.form.pessoa)
           .then(function (response) {
 
             if (response.data.success != true) {
-              ngToast.warning({ content: '<b>Falha ao adicionar o registro</b>: ' + response.data.mensagem });
+              ngToast.warning({ content: '<b>Falha ao alterar o registro</b>: ' + response.data.mensagem });
             } else if (response.data.result.id) {
               vm.form.pessoa.id = response.data.result.id;
 
@@ -364,9 +444,9 @@
               angular.forEach(vm.form.telefones, function (value, key) {
                 value.pessoa_id = vm.form.pessoa.id;
 
-                TelefoneFactory.add(value)
+                TelefoneFactory.alt(value)
                   .then(function (response) {
-                    vm.status = 'Telefone cadastrado com sucesso';
+                    vm.status = 'Telefone alterado com sucesso';
                   });
 
                 if (value.whatsapp) {
@@ -374,12 +454,12 @@
                   temp.perfil = value.codigo_pais + '' + value.codigo_area + '' + value.numero;
                   temp.pessoa_id = value.pessoa_id;
                   temp.rede_social_id = vm.whatsapp_id;
-                  PessoaTemRedeSocialFactory.add(temp)
+                  PessoaTemRedeSocialFactory.alt(temp)
                     .then(function (response) {
                       if (response.data.success === true) {
-                        ngToast.success({ content: 'Número de Whatsapp com sucesso' });
+                        ngToast.success({ content: 'Número de Whatsapp alterado com sucesso' });
                       } else {
-                        ngToast.danger({ content: 'Falha na inclusão do número do Whatsapp' });
+                        ngToast.danger({ content: 'Falha na alteração do número do Whatsapp' });
                       }
                     });
                 }
@@ -390,12 +470,12 @@
                 value.pessoa_id = vm.form.pessoa.id;
                 value.rede_social_id = value.redeSocial;
 
-                PessoaTemRedeSocialFactory.add(value)
+                PessoaTemRedeSocialFactory.alt(value)
                   .then(function (response) {
                     if (response.data.success === true) {
-                      ngToast.success({ content: 'Rede social adicionada com sucesso' });
+                      ngToast.success({ content: 'Rede social alterada com sucesso' });
                     } else {
-                      ngToast.danger({ content: 'Falha na inclusão da rede social' });
+                      ngToast.danger({ content: 'Falha na alteração da rede social' });
                     }
                   });
               });
@@ -406,24 +486,20 @@
               temp.funcao_id = vm.form.funcao;
               temp.password = vm.form.pessoa.password;
 
-              PessoaTemFuncaoFactory.add(temp)
+              PessoaTemFuncaoFactory.alt(temp)
                 .then(function (response) {
                   vm.form.pessoa.pessoa_tem_funcao_id = response.data.result.id;
                   // adicionando permissoes
                   angular.forEach(vm.form.permissoesFuncionario, function (value, key) {
                     value.pessoa_id = vm.form.pessoa.pessoa_tem_funcao_id;
                     value.permissao_id = value.id;
-                    PessoaTemPermissaoFactory.add({ pessoa_id: value.pessoa_id, permissao_id: value.permissao_id }).then(function (response) {
+                    PessoaTemPermissaoFactory.alt({ pessoa_id: value.pessoa_id, permissao_id: value.permissao_id }).then(function (response) {
                     });
                   });
                 });
             }
           });
       }
-    }
-
-    function alt() {
-      console.log('alt');
     }
 
     function excluir_pessoa(data) {

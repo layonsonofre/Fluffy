@@ -76,6 +76,10 @@
     vm.selectAnimal = selectAnimal;
     vm.novoServico = novoServico;
 
+    if (vm.form.pessoa) {
+      vm.alterando = true;
+    }
+
     get();
 
     function get() {
@@ -206,7 +210,6 @@
       vm.form.animal = entry;
       AnimalTemRestricaoFactory.get({ animal_id: entry.id }).then(function (response) {
         if (response.data.success === true) {
-          ngToast.success({ content: 'Registro alterado com sucesso' });
           if (!angular.isArray(response.data.result)) {
             vm.form.animal.restricoes = [];
             vm.form.animal.restricoes.push(response.data.result);
@@ -214,7 +217,7 @@
             vm.form.animal.restricoes = response.data.result;
           }
         } else {
-          ngToast.danger({ content: 'Falha na alteração do registro' });
+          ngToast.danger({ content: 'Falha na busca pelo registro' });
         }
       });
     }
@@ -298,7 +301,6 @@
           })
           .then(function (response) {
             if (response.data.success === true) {
-              ngToast.success({ content: 'Registro alterado com sucesso' });
               if (!angular.isArray(response.data.result)) {
                 vm.form.redesSociais = [];
                 vm.form.redesSociais.push(response.data.result);
@@ -306,7 +308,7 @@
                 vm.form.redesSociais = response.data.result;
               }
             } else {
-              ngToast.danger({ content: 'Falha na alteração do registro' });
+              ngToast.danger({ content: 'Falha na busca pelo registro' });
             }
             if (append) {
               vm.form.redesSociais.push({ id: null });
@@ -442,28 +444,125 @@
 
 
     function add() {
+      if (vm.alterando) {
+        alt();
+      } else {
+        if (validarPessoa()) {
+
+          // adicionando a pessoa
+          selectEstado();
+          PessoaFactory.add(vm.form.pessoa)
+            .then(function (response) {
+
+              if (response.data.success != true) {
+                ngToast.warning({ content: '<b>Falha ao adicionar o registro</b>: ' + response.data.mensagem });
+              } else if (response.data.result.id) {
+                vm.form.pessoa.id = response.data.result.id;
+
+                // adicionando telefones
+                angular.forEach(vm.form.telefones, function (value, key) {
+                  value.pessoa_id = vm.form.pessoa.id;
+
+                  TelefoneFactory.add(value)
+                    .then(function (response) {
+                      if (response.data.success === true) {
+                        ngToast.success({ content: 'Telefone cadastrado com sucesso' });
+                      } else {
+                        ngToast.danger({ content: 'Falha na inclusão do telefone' });
+                      }
+                    });
+
+                  if (value.whatsapp) {
+                    var temp = {};
+                    temp.perfil = value.codigo_pais + '' + value.codigo_area + '' + value.numero;
+                    temp.pessoa_id = value.pessoa_id;
+                    temp.rede_social_id = vm.whatsapp_id;
+                    PessoaTemRedeSocialFactory.add(temp)
+                      .then(function (response) {
+                        if (response.data.success === true) {
+                          ngToast.success({ content: 'Número de Whatsapp com sucesso' });
+                        } else {
+                          ngToast.danger({ content: 'Falha na inclusão do número do Whatsapp' });
+                        }
+                      });
+                  }
+                });
+
+                //adicionando redes sociais
+                console.log("redeSociais", vm.form.redesSociais);
+                angular.forEach(vm.form.redesSociais, function (value, key) {
+                  value.pessoa_id = vm.form.pessoa.id;
+                  value.rede_social_id = value.redeSocial;
+
+                  PessoaTemRedeSocialFactory.add(value)
+                    .then(function (response) {
+                      if (response.data.success === true) {
+                        ngToast.success({ content: 'Rede social adicionada com sucesso' });
+                      } else {
+                        ngToast.danger({ content: 'Falha na inclusão da rede social' });
+                      }
+                    });
+                });
+
+                //adicionando pessoa função
+                var nome_funcao = "";
+                var funcao_id = 0;
+                if (vm.form.pessoa.clienteEspecial) {
+                  nome_funcao = 'cliente-especial';
+                } else {
+                  nome_funcao = vm.form.pessoa.funcao;
+                }
+                FuncaoFactory.get({
+                    nome: nome_funcao
+                  })
+                  .then(function (response) {
+                    if (response.data.success === true) {
+                      funcao_id = response.data.result.id;
+
+                      //adicionando pessoa função
+                      var temp = {};
+                      temp.pessoa_id = vm.form.pessoa.id;
+                      temp.funcao_id = funcao_id;
+
+                      PessoaTemFuncaoFactory.add(temp)
+                        .then(function (response) {
+                          if (response.data.success === true) {
+                            vm.form.pessoa.pessoa_funcao_id = response.data.result.id;
+                            ngToast.success({ content: 'Função no vínculo da pessoa com a função' });
+                          } else {
+                            ngToast.danger({ content: 'Falha no vínculo da pessoa com a função' });
+                          }
+                        });
+                    }
+                  });
+              }
+            });
+        }
+      }
+    }
+
+    function alt() {
       if (validarPessoa()) {
 
         // adicionando a pessoa
         selectEstado();
-        PessoaFactory.add(vm.form.pessoa)
+        PessoaFactory.alt(vm.form.pessoa)
           .then(function (response) {
 
             if (response.data.success != true) {
-              ngToast.warning({ content: '<b>Falha ao adicionar o registro</b>: ' + response.data.mensagem });
+              ngToast.warning({ content: '<b>Falha ao alterar o registro</b>: ' + response.data.mensagem });
             } else if (response.data.result.id) {
-              vm.form.pessoa.id = response.data.result.id;
 
               // adicionando telefones
               angular.forEach(vm.form.telefones, function (value, key) {
                 value.pessoa_id = vm.form.pessoa.id;
 
-                TelefoneFactory.add(value)
+                TelefoneFactory.alt(value)
                   .then(function (response) {
                     if (response.data.success === true) {
-                      ngToast.success({ content: 'Telefone cadastrado com sucesso' });
+                      ngToast.success({ content: 'Telefone alterado com sucesso' });
                     } else {
-                      ngToast.danger({ content: 'Falha na inclusão do telefone' });
+                      ngToast.danger({ content: 'Falha na alteração do telefone' });
                     }
                   });
 
@@ -472,71 +571,33 @@
                   temp.perfil = value.codigo_pais + '' + value.codigo_area + '' + value.numero;
                   temp.pessoa_id = value.pessoa_id;
                   temp.rede_social_id = vm.whatsapp_id;
-                  PessoaTemRedeSocialFactory.add(temp)
+                  PessoaTemRedeSocialFactory.alt(temp)
                     .then(function (response) {
                       if (response.data.success === true) {
-                        ngToast.success({ content: 'Número de Whatsapp com sucesso' });
+                        ngToast.success({ content: 'Número de Whatsapp alterado com sucesso' });
                       } else {
-                        ngToast.danger({ content: 'Falha na inclusão do número do Whatsapp' });
+                        ngToast.danger({ content: 'Falha na alteração do número do Whatsapp' });
                       }
                     });
                 }
               });
 
-              //adicionando redes sociais
-              console.log("redeSociais", vm.form.redesSociais);
               angular.forEach(vm.form.redesSociais, function (value, key) {
                 value.pessoa_id = vm.form.pessoa.id;
                 value.rede_social_id = value.redeSocial;
 
-                PessoaTemRedeSocialFactory.add(value)
+                PessoaTemRedeSocialFactory.alt(value)
                   .then(function (response) {
                     if (response.data.success === true) {
-                      ngToast.success({ content: 'Rede social adicionada com sucesso' });
+                      ngToast.success({ content: 'Rede social alterada com sucesso' });
                     } else {
-                      ngToast.danger({ content: 'Falha na inclusão da rede social' });
+                      ngToast.danger({ content: 'Falha na alteração da rede social' });
                     }
                   });
               });
-
-              //adicionando pessoa função
-              var nome_funcao = "";
-              var funcao_id = 0;
-              if (vm.form.pessoa.clienteEspecial) {
-                nome_funcao = 'cliente-especial';
-              } else {
-                nome_funcao = vm.form.pessoa.funcao;
-              }
-              FuncaoFactory.get({
-                  nome: nome_funcao
-                })
-                .then(function (response) {
-                  if (response.data.success === true) {
-                    funcao_id = response.data.result.id;
-
-                    //adicionando pessoa função
-                    var temp = {};
-                    temp.pessoa_id = vm.form.pessoa.id;
-                    temp.funcao_id = funcao_id;
-
-                    PessoaTemFuncaoFactory.add(temp)
-                      .then(function (response) {
-                        if (response.data.success === true) {
-                          vm.form.pessoa.pessoa_funcao_id = response.data.result.id;
-                          ngToast.success({ content: 'Função no vínculo da pessoa com a função' });
-                        } else {
-                          ngToast.danger({ content: 'Falha no vínculo da pessoa com a função' });
-                        }
-                      });
-                  }
-                });
             }
           });
       }
-    }
-
-    function alt() {
-      alert('alt');
     }
 
     function excluir_pessoa(data) {

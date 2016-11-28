@@ -358,11 +358,11 @@
             <div class="row">
               <div class="col-xs-12">
                 <hr>
-                <a ng-click="vm.setFuncao('cliente'); vm.add()" class="btn btn-link" data-toggle="tooltip" data-placement="top" title="Armazena as informações inseridas acima">
+                <button ng-disabled="form.$invalid" type="submit" class="btn btn-link" data-toggle="tooltip" data-placement="top" title="Armazena as informações inseridas acima">
                   <span class="fa fa-check"></span>&nbsp;&nbsp;
                   <b>Confirmar</b>
-                </a>
-                <a ng-click="vm.setFuncao('cliente'); vm.gotoAddPet()" class="btn btn-link" data-toggle="tooltip" data-placement="top" title="Incluir Pet">
+                </button>
+                <a ng-disabled="form.$invalid" ng-click="vm.setFuncao('cliente'); vm.gotoAddPet()" class="btn btn-link" data-toggle="tooltip" data-placement="top" title="Incluir Pet">
                   <span class="fa fa-bug"></span>&nbsp;&nbsp;
                   <b>Confirmar e Adicionar Pet</b>
                 </a>

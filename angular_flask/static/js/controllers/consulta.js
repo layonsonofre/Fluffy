@@ -164,12 +164,12 @@
               });
             vm.consulta.data_hora = new Date(vm.consulta.data_hora);
             if (!angular.isArray(response.data.result.aplicacao)) {
-              vm.form.aplicacoes = [];
-              vm.form.aplicacoes.push(response.data.result.aplicacao);
+              vm.aplicacoes = [];
+              vm.aplicacoes.push(response.data.result.aplicacao);
             } else {
-              vm.form.aplicacoes = response.data.result.aplicacao;
+              vm.aplicacoes = response.data.result.aplicacao;
             }
-            angular.forEach(vm.form.aplicacoes, function (value, key) {
+            angular.forEach(vm.aplicacoes, function (value, key) {
               value.data_hora = new Date(value.data_hora);
             });
           });
@@ -238,10 +238,7 @@
   function ConsultaFactory($http, Fluffy) {
     var _url = Fluffy.urlBase;
     var ConsultaFactory = {
-      get: get,
-      add: add,
-      alt: alt,
-      del: del
+      get: get
     };
     return ConsultaFactory;
 
@@ -249,99 +246,6 @@
       data = data || null;
       return $http({
           url: _url + '/servicoAgendado',
-          params: data,
-          method: 'GET'
-        })
-        .then(success)
-        .catch(failed);
-
-      function success(response) {
-        return response;
-      }
-
-      function failed(response) {
-        return response;
-      }
-    }
-
-    function add(data) {
-      console.log('insert', data);
-      return $http({
-          url: _url + '/insertServicoAgendado',
-          data: data,
-          method: 'POST'
-        })
-        .then(success)
-        .catch(failed);
-
-      function success(response) {
-        return response;
-      }
-
-      function failed(response) {
-        return response;
-      }
-    }
-
-    function alt(data) {
-      return $http({
-          url: _url + '/servico',
-          data: data,
-          method: 'PUT'
-        })
-        .then(success)
-        .catch(failed);
-
-      function success(response) {
-        return response;
-      }
-
-      function failed(response) {
-        return response;
-      }
-    }
-
-    function del(id) {
-      return $http({
-          url: _url + '/servico',
-          data: {
-            id: id
-          },
-          method: 'DELETE'
-        })
-        .then(success)
-        .catch(failed);
-
-      function success(response) {
-        return response;
-      }
-
-      function failed(response) {
-        return response;
-      }
-    }
-
-    function getAgendados(data) {
-      return $http.get(
-          _url + '/servicoAgendado',
-          data
-        )
-        .then(success)
-        .catch(failed);
-
-      function success(response) {
-        return response;
-      }
-
-      function failed(response) {
-        return response;
-      }
-    }
-
-    function getContrato(data) {
-      data = data || null;
-      return $http({
-          url: _url + '/servicoContratado',
           params: data,
           method: 'GET'
         })
