@@ -63,14 +63,14 @@
 
     vm.selectEstado = selectEstado;
     vm.getWhatsappId = getWhatsappId;
-
+    get();
     if (vm.form.pessoa != null && vm.form.pessoa.id != null) {
       get();
       vm.alterando = true;
     }
 
     function get() {
-      PessoaFactory.get()
+      PessoaFactory.get({cliente: false})
         .then(function (response) {
           vm.pessoas = response.data.result;
         });
@@ -360,7 +360,7 @@
             .then(function (response) {
 
               if (response.data.success != true) {
-                ngToast.warning({ content: '<b>Falha ao adicionar o registro</b>: ' + response.data.mensagem });
+                ngToast.warning({ content: '<b>Falha ao adicionar o registro</b>: ' + response.data.message });
               } else if (response.data.result.id) {
                 vm.form.pessoa.id = response.data.result.id;
 
@@ -436,7 +436,7 @@
           .then(function (response) {
 
             if (response.data.success != true) {
-              ngToast.warning({ content: '<b>Falha ao alterar o registro</b>: ' + response.data.mensagem });
+              ngToast.warning({ content: '<b>Falha ao alterar o registro</b>: ' + response.data.message });
             } else if (response.data.result.id) {
               vm.form.pessoa.id = response.data.result.id;
 
