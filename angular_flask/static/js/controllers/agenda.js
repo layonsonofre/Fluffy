@@ -119,44 +119,43 @@
       var data = vm._hoje ? $filter('date')(new Date(), 'yyyy-MM-dd') : null;
       AgendaFactory.getAgendados({ data_inicio: data, data_fim: data })
         .then(function (response) {
-
           if (response.data.success != true) {
             ngToast.warning({ content: '<b>Falha na consulta pelos registros</b>: ' + response.data.message });
+          } else {
+            vm.agendados = response.data.result;
+
+            angular.forEach(vm.agendados, function (value, key) {
+              value.data_hora = new Date(value.data_hora);
+              var starts = new Date(value.data_hora);
+              var ends = new Date(starts.getTime() + _duration * 60000);
+              var executado = value.executado ? 'Executado' : 'Não executado';
+              if (value.servico_tem_porte.servico.nome === 'Consulta') {
+                vm.agendamentos.push({
+                  title: '<b>' + value.animal.nome + '</b>' + ' - ' + executado,
+                  startsAt: starts,
+                  endsAt: ends,
+                  actions: actionsConsulta,
+                  color: {
+                    primary: '#0974A2',
+                    secondary: '#4A9ABB'
+                  },
+                  info: value
+                });
+              } else {
+                vm.agendamentos.push({
+                  title: '<b>' + value.animal.nome + '</b>' + ' - ' + executado,
+                  startsAt: starts,
+                  endsAt: ends,
+                  actions: actions,
+                  color: {
+                    primary: '#FFC803',
+                    secondary: '#FFDD65'
+                  },
+                  info: value
+                });
+              }
+            });
           }
-
-          vm.agendados = response.data.result;
-
-          angular.forEach(vm.agendados, function (value, key) {
-            value.data_hora = new Date(value.data_hora);
-            var starts = new Date(value.data_hora);
-            var ends = new Date(starts.getTime() + _duration * 60000);
-            var executado = value.executado ? 'Executado' : 'Não executado';
-            if (value.servico_tem_porte.servico.nome === 'Consulta') {
-              vm.agendamentos.push({
-                title: '<b>' + value.animal.nome + '</b>' + ' - ' + executado,
-                startsAt: starts,
-                endsAt: ends,
-                actions: actionsConsulta,
-                color: {
-                  primary: '#0974A2',
-                  secondary: '#4A9ABB'
-                },
-                info: value
-              });
-            } else {
-              vm.agendamentos.push({
-                title: '<b>' + value.animal.nome + '</b>' + ' - ' + executado,
-                startsAt: starts,
-                endsAt: ends,
-                actions: actions,
-                color: {
-                  primary: '#FFC803',
-                  secondary: '#FFDD65'
-                },
-                info: value
-              });
-            }
-          });
 
         });
     };
@@ -214,7 +213,7 @@
       data = data || null;
       return $http({
           url: _url + '/servicoAgendado',
-          data: data,
+          params: data,
           method: 'GET'
         })
         .then(success)

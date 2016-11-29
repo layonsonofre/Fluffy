@@ -58,6 +58,7 @@
     }
     vm.disabled = disabled;
     vm.toggleMin = toggleMin;
+
     vm.openDate = function (aplicacao) {
       aplicacao.popup = true;
     }
@@ -157,21 +158,28 @@
           })
           .then(function (response) {
             vm.consulta = response.data.result;
+            console.log("response", response);
 
             AgendamentoFactory.getContrato({ id: vm.consulta.servico_contratado })
               .then(function (response) {
                 vm.pessoa_tem_funcao = response.data.result.pessoa_tem_funcao;
               });
             vm.consulta.data_hora = new Date(vm.consulta.data_hora);
-            if (!angular.isArray(response.data.result.aplicacao)) {
-              vm.aplicacoes = [];
-              vm.aplicacoes.push(response.data.result.aplicacao);
+            if (response.data.result.aplicacao) {
+              if (!angular.isArray(response.data.result.aplicacao)) {
+                vm.aplicacoes = [];
+                vm.aplicacoes.push(response.data.result.aplicacao);
+              } else {
+                vm.aplicacoes = response.data.result.aplicacao;
+              }
+              angular.forEach(vm.aplicacoes, function (value, key) {
+                if (value != null) {
+                  value.data_hora = value.data_hora ? new Date(value.data_hora) : null;
+                }
+              });
             } else {
-              vm.aplicacoes = response.data.result.aplicacao;
+              vm.aplicacoes = [{}];
             }
-            angular.forEach(vm.aplicacoes, function (value, key) {
-              value.data_hora = new Date(value.data_hora);
-            });
           });
       }
       if (append) {
