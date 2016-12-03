@@ -1,15 +1,16 @@
 (function() {
-  'use strict';
+   'use strict';
 
-  angular
-    .module('Erro', [])
-    .controller('ErroController', ErroController);
+   angular
+   .module('Erro', [])
+   .controller('ErroController', ErroController);
 
-  ErroController.$inject = ['$scope'];
+   ErroController.$inject = ['$rootScope'];
 
-  function ErroController($scope) {
-    var vm = this;
-
-    vm.hideMenus = true;
-  }
+   function ErroController($rootScope) {
+      var vm = this;
+      // vm.hideMenus = false;
+      $rootScope.hideMenu = false;
+      $rootScope.bodyBackground = '';
+   }
 })()

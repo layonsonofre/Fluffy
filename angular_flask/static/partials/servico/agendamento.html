@@ -17,18 +17,26 @@
         <div class="panel-body">
           <form ng-submit="vm.add()">
             <div class="row" ng-hide="vm.alterando">
-              <div class="col-xs-9">
+              <div class="col-xs-10">
                 <div class="form-group">
                   <label>Cliente *</label>
                   <input class="form-control" type="text" ng-model="vm.form.pessoa_tem_funcao.nome" ng-readonly="true" data-toggle="modal" data-target="#selecionarCliente" ng-disabled="vm.alterando">
                   <p class="help-block" ng-show="vm.helpActive">Selecione um cliente</p>
                 </div>
               </div>
-              <div class="col-xs-3">
+              <div class="col-xs-1">
                 <div class="form-group">
-                  <label>Selecionar Cliente</label>
+                  <label>Cliente</label>
                   <a class="form-control btn btn-link" data-toggle="modal" data-target="#selecionarCliente" data-toggle="tooltip" data-placement="top" title="Busque por um cliente para realizar o agendamento" ng-disabled="vm.alterando">
-                    <i class="fa fa-user"></i>&nbsp;&nbsp;<b>Buscar</b>
+                    <i class="fa fa-search"></i>&nbsp;&nbsp;<i class="fa fa-user"></i>
+                  </a>
+                </div>
+              </div>
+              <div class="col-xs-1">
+                <div class="form-group">
+                  <label><br></label>
+                  <a class="form-control btn btn-link" data-toggle="modal" data-target="#cadastrarCliente" data-toggle="tooltip" data-placement="top" title="Cadastre rapidamente um novo cliente antes de realizar o agendamento" ng-disabled="vm.alterando">
+                    <i class="fa fa-plus"></i>&nbsp;&nbsp;<i class="fa fa-user"></i>
                   </a>
                 </div>
               </div>
@@ -271,6 +279,328 @@
     </div>
   </div>
 
+  <!-- MODAL DE CADASTRO DO CLIENTE -->
+  <div id="cadastrarCliente" class="modal fade" role="dialog" aria-labelledby="cadastrar">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <form ng-submit="vm.setFuncao('cliente'); vm.add()" name="form" novalidate>
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title">Cadastrar cliente</h4>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-xs-7">
+                <div class="form-group">
+                  <label>Nome *</label>
+                  <input class="form-control" type="text" data-ng-model="vm.form.pessoa.nome" name="nome" required ng-maxlength="50">
+                  <p class="help-block error" ng-show="form.nome.$invalid && !form.nome.$pristine">Necessário inserir um nome válido</p>
+                  <p class="help-block error" ng-show="form.nome.$error.maxlength">O valor informado foi maior que o limite</p>
+                  <p class="help-block" ng-show="vm.helpActive">Insira o nome completo do cliente</p>
+                </div>
+              </div>
+              <div class="col-xs-5">
+                <div class="form-group">
+                  <label>Email *</label>
+                  <input class="form-control" type="text" data-ng-model="vm.form.pessoa.email" name="email" ng-maxlength="50">
+                  <p class="help-block error" ng-show="form.email.$invalid && !form.email.$pristine">Informe um email válido</p>
+                  <p class="help-block error" ng-show="form.email.$error.maxlength">O valor informado foi maior que o limite</p>
+                  <p class="help-block" ng-show="vm.helpActive">Insira o email do cliente no formato:
+                    <i>email@exemplo.com</i>
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xs-2">
+                <div class="form-group">
+                  <label>Tipo de Cliente *</label>
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" data-ng-model="vm.form.pessoa.clienteEspecial">&nbsp;&nbsp; Cliente Especial
+                    </label>
+                  </div>
+                  <p class="help-block" ng-show="vm.helpActive">Marque esta opção se o cliente tiver benefícios</p>
+                </div>
+              </div>
+              <div class="col-xs-3">
+                <div class="form-group">
+                  <label>CPF/CNPJ *</label>
+                  <input class="form-control" type="text" data-ng-model="vm.form.pessoa.registro" name="registro" ng-maxlength="20" ng-pattern="/^\d+$/">
+                  <p class="help-block error" ng-show="form.registro.$invalid && !form.registro.$pristine">Informe um registro válido</p>
+                  <p class="help-block error" ng-show="form.registro.$error.maxlength">O valor informado foi maior que o limite</p>
+                  <p class="help-block" ng-show="vm.helpActive">Insira o CPF ou CNPJ do cliente</p>
+                </div>
+              </div>
+              <div class="col-xs-3">
+                <div class="form-group">
+                  <label>RG *</label>
+                  <input class="form-control" type="text" data-ng-model="vm.form.pessoa.rg" name="rg" ng-pattern="/^\d+$/" ng-maxlength="20">
+                  <p class="help-block error" ng-show="form.rg.$invalid && !form.rg.$pristine">Necessário inserir um registro válido</p>
+                  <p class="help-block error" ng-show="form.rg.$error.maxlength">O valor informado foi maior que o limite</p>
+                  <p class="help-block" ng-show="vm.helpActive">Insira o número do RG</p>
+                </div>
+              </div>
+              <div class="col-xs-1">
+                <div class="form-group">
+                  <label>Exp. *</label>
+                  <input class="form-control" type="text" data-ng-model="vm.form.pessoa.orgao_expedidor" name="orgao_expedidor" ng-maxlength="6">
+                  <p class="help-block error" ng-show="form.orgao_expedidor.$invalid && !form.orgao_expedidor.$pristine">Necessário inserir um órgão expedidor válido</p>
+                  <p class="help-block error" ng-show="form.orgao_expedidor.$error.maxlength">O valor informado foi maior que o limite</p>
+                  <p class="help-block" ng-show="vm.helpActive">Insira o órgão expedidor</p>
+                </div>
+              </div>
+              <div class="col-xs-3">
+                <div class="form-group">
+                  <label>Insc. Estadual *</label>
+                  <input class="form-control" type="text" data-ng-model="vm.form.pessoa.inscricao_estadual" name="inscricao_estadual" ng-pattern="/^\d+$/">
+                  <p class="help-block error" ng-show="form.inscricao_estadual.$invalid && !form.inscricao_estadual.$pristine">Necessário inserir uma inscrição estadual válida</p>
+                  <p class="help-block error" ng-show="form.inscricao_estadual.$error.maxlength">O valor informado foi maior que o limite</p>
+                  <p class="help-block" ng-show="vm.helpActive">Insira o número da Inscrição Estadual</p>
+                </div>
+              </div>
+            </div>
+            <hr>
+            <!-- ENDERECO -->
+
+            <div class="row">
+              <div class="col-xs-2">
+                <div class="form-group">
+                  <label>CEP *</label>
+                  <input class="form-control" type="text" data-ng-model="vm.form.pessoa.cep" name="cep" ng-pattern="/^\d+$/" required ng-maxlength="8">
+                  <p class="help-block error" ng-show="form.cep.$invalid && !form.cep.$pristine">Necessário inserir um nome válido</p>
+                  <p class="help-block error" ng-show="form.cep.$error.maxlength">O valor informado foi maior que o limite</p>
+                  <p class="help-block" ng-show="vm.helpActive">CEP da localidade do cliente</p>
+                </div>
+              </div>
+              <div class="col-xs-1">
+                <div class="form-group">
+                  <label>Buscar</label>
+                  <a class="form-control btn btn-link" ng-click="vm.search_zip_code()" data-toggle="tooltip" data-placement="top" title="" data-title="Auto-completar endereço a partir do CEP">
+                    <span class="fa fa-search"></span>
+                  </a>
+                  <p class="help-block" ng-show="vm.helpActive"></p>
+                </div>
+              </div>
+              <div class="col-xs-5">
+                <div class="form-group">
+                  <label>Logradouro *</label>
+                  <input class="form-control" type="text" data-ng-model="vm.form.pessoa.logradouro" name="logradouro" required ng-maxlength="100">
+                  <p class="help-block error" ng-show="form.logradouro.$invalid && !form.logradouro.$pristine">Necessário inserir um logradouro válido</p>
+                  <p class="help-block error" ng-show="form.logradouro.$error.maxlength">O valor informado foi maior que o limite</p>
+                  <p class="help-block" ng-show="vm.helpActive">Nome da rua</p>
+                </div>
+              </div>
+              <div class="col-xs-1">
+                <div class="form-group">
+                  <label>Nº. *</label>
+                  <input class="form-control" type="text" data-ng-model="vm.form.pessoa.numero" ng-pattern="/^\d+$/" name="numero" required ng-maxlength="11">
+                  <p class="help-block error" ng-show="form.numero.$invalid && !form.numero.$pristine">Necessário inserir um número válido</p>
+                  <p class="help-block error" ng-show="form.numero.$error.maxlength">O valor informado foi maior que o limite</p>
+                  <p class="help-block" ng-show="vm.helpActive">No. da residência</p>
+                </div>
+              </div>
+              <div class="col-xs-3">
+                <div class="form-group">
+                  <label>Complemento</label>
+                  <input class="form-control" type="text" data-ng-model="vm.form.pessoa.complemento" name="complemento" ng-maxlength="50">
+                  <p class="help-block error" ng-show="form.complemento.$invalid && !form.complemento.$pristine">Necessário inserir um complemento válido</p>
+                  <p class="help-block error" ng-show="form.complemento.$error.maxlength">O valor informado foi maior que o limite</p>
+                  <p class="help-block" ng-show="vm.helpActive">Informações adicionais</p>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xs-3">
+                <div class="form-group">
+                  <label>Ponto de Referência</label>
+                  <input class="form-control" type="text" data-ng-model="vm.form.pessoa.ponto_de_referencia" name="pontoDeReferencia" ng-maxlength="50">
+                  <p class="help-block error" ng-show="form.pontoDeReferencia.$invalid && !form.pontoDeReferencia.$pristine">Necessário inserir um ponto de referência válido</p>
+                  <p class="help-block error" ng-show="form.pontoDeReferencia.$error.maxlength">O valor informado foi maior que o limite</p>
+                  <p class="help-block" ng-show="vm.helpActive">Insira uma localidade próxima conhecida</p>
+                </div>
+              </div>
+              <div class="col-xs-4">
+                <div class="form-group">
+                  <label>Cidade *</label>
+                  <input class="form-control" type="text" data-ng-model="vm.form.pessoa.cidade" name="cidade" required ng-maxlength="50">
+                  <p class="help-block error" ng-show="form.cidade.$invalid && !form.cidade.$pristine">Necessário inserir um cidade válido</p>
+                  <p class="help-block error" ng-show="form.cidade.$error.maxlength">O valor informado foi maior que o limite</p>
+                  <p class="help-block" ng-show="vm.helpActive">Insira a cidade do cliente</p>
+                </div>
+              </div>
+              <div class="col-xs-2">
+                <div class="form-group">
+                  <label>Bairro *</label>
+                  <input class="form-control" type="text" data-ng-model="vm.form.pessoa.bairro" name="bairro" required ng-maxlength="50">
+                  <p class="help-block error" ng-show="form.bairro.$invalid && !form.bairro.$pristine">Necessário inserir um bairro válido</p>
+                  <p class="help-block error" ng-show="form.bairro.$error.maxlength">O valor informado foi maior que o limite</p>
+                  <p class="help-block" ng-show="vm.helpActive">Insira a bairro do cliente</p>
+                </div>
+              </div>
+              <div class="col-xs-1">
+                <div class="form-group">
+                  <label>UF *</label>
+                  <input class="form-control" type="text" data-ng-model="vm.form.pessoa.uf" name="uf" required ng-maxlength="2">
+                  <p class="help-block error" ng-show="form.uf.$invalid && !form.uf.$pristine">Necessário inserir um estado válido</p>
+                  <p class="help-block error" ng-show="form.uf.$error.maxlength">O valor informado foi maior que o limite</p>
+                  <p class="help-block" ng-show="vm.helpActive">Uni. Federativa. Ex.:
+                    <i>PR</i>
+                  </p>
+                </div>
+              </div>
+              <div class="col-xs-2">
+                <div class="form-group">
+                  <label>País *</label>
+                  <input class="form-control" type="text" data-ng-model="vm.form.pessoa.pais" name="pais" required ng-maxlength="50">
+                  <p class="help-block error" ng-show="form.pais.$invalid && !form.pais.$pristine">Necessário inserir um pais válido</p>
+                  <p class="help-block error" ng-show="form.pais.$error.maxlength">O valor informado foi maior que o limite</p>
+                  <p class="help-block" ng-show="vm.helpActive">Ex.:
+                    <i>Brasil</i>
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- FIM ENDERECO -->
+            <hr>
+            <!-- CONTATO -->
+            <div class="row">
+              <!-- INICIO BLOCO TELEFONES -->
+              <div class="col-lg-6 col-xs-12">
+                <div class="row">
+                  <div class="col-xs-12">
+                    <div class="form-group">
+                      <label>Telefones</label>
+                      <a class="form-control btn btn-link" ng-click="vm.incluirTelefone()" data-toggle="tooltip" data-placement="top" title="Adicionar mais um telefone para contato">
+                        <span class="fa fa-plus"></span>&nbsp;<span class="fa fa-phone"></span>&nbsp;
+                        <b>Adicionar Telefone</b>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <fieldset data-ng-repeat="telefone in vm.form.telefones">
+                    <div class="col-xs-2">
+                      <div class="form-group">
+                        <label>Cód. País *</label>
+                        <input class="form-control" type="text" data-ng-model="telefone.codigo_pais">
+                        <p class="help-block" ng-show="vm.helpActive">Brasil:
+                          <i>+55</i>
+                        </p>
+                      </div>
+                    </div>
+                    <div class="col-xs-2">
+                      <div class="form-group">
+                        <label>Cód. Área*</label>
+                        <input class="form-control" type="text" data-ng-model="telefone.codigo_area">
+                        <p class="help-block" ng-show="vm.helpActive">Ponta Grossa:
+                          <i>42</i>
+                        </p>
+                      </div>
+                    </div>
+                    <div class="col-xs-4">
+                      <div class="form-group">
+                        <label>Telefone *</label>
+                        <input class="form-control" type="text" data-ng-model="telefone.numero">
+                        <p class="help-block" ng-show="vm.helpActive">Insira o número do telefone</p>
+                      </div>
+                    </div>
+                    <div class="col-xs-2">
+                      <div class="form-group">
+                        <label>Whatsapp</label>
+                        <div class="checkbox">
+                          <label>
+                            <input type="checkbox" data-ng-model="telefone.whatsapp">&nbsp;&nbsp; Sim
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-xs-2">
+                      <div class="form-group" ng-hide="$first">
+                        <label>Remover</label>
+                        <a class="form-control btn btn-link" ng-click="vm.removeTelefone(telefone)" data-toggle="tooltip" data-placement="top" title="" data-title="Auto-completar endereço a partir do CEP">
+                          <i class="fa fa-minus"></i>&nbsp;<i class="fa fa-phone"></i>
+                        </a>
+                      </div>
+                    </div>
+                  </fieldset>
+                </div>
+              </div>
+              <!-- FIM BLOCO TELEFONES -->
+
+              <!-- INICIO BLOCO REDES SOCIAIS -->
+              <div class="col-lg-6 col-xs-12">
+                <div class="row">
+                  <div class="col-xs-9">
+                    <div class="form-group">
+                      <label>Redes Sociais</label>
+                      <a class="form-control btn btn-link" ng-click="vm.incluirPessoaRedeSocial()" data-toggle="tooltip" data-placement="top" title="Informar um meio de contato">
+                        <span class="fa fa-plus"></span>&nbsp;<i class="fa fa-user"></i>&nbsp;&nbsp;<b>Adicionar Contato</b>
+                      </a>
+                    </div>
+                  </div>
+                  <div class="col-xs-3">
+                    <div class="form-group">
+                      <label>Nova Rede Social</label>
+                      <a class="form-control btn btn-link" data-toggle="modal" data-target="#novaRedeSocial" data-toggle="tooltip" data-placement="top" title="Cadastrar uma nova rede social">
+                        <span class="fa fa-plus"></span>&nbsp;<i class="fa fa-facebook"></i>&nbsp;&nbsp;<b>Nova</b>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <fieldset data-ng-repeat="social in vm.form.redesSociais">
+                    <div class="col-xs-3">
+                      <div class="form-group">
+                        <label>Rede Social *</label>
+                        <select class="form-control" ng-model="social.rede_social_id" ng-options="tipo.id as tipo.nome for tipo in vm.tiposRedesSociais track by tipo.id"></select>
+                      </div>
+                    </div>
+                    <div class="col-xs-7">
+                      <div class="form-group">
+                        <label>Perfil/Endereço *</label>
+                        <input class="form-control" type="text" data-ng-model="social.perfil">
+                        <p class="help-block" ng-show="vm.helpActive">Insira o perfil ou endereço para encontrar a pessoa na rede social</p>
+                      </div>
+                    </div>
+                    <div class="col-xs-2">
+                      <div class="form-group" ng-hide="$first">
+                        <label>Remover</label>
+                        <a class="form-control btn btn-link" ng-click="vm.removeRedeSocial(item)" data-toggle="tooltip" data-placement="top" title="Remover meio de contato">
+                          <i class="fa fa-minus"></i>&nbsp;<i class="fa fa-user"></i>
+                        </a>
+                        <p class="help-block" ng-show="vm.helpActive"></p>
+                      </div>
+                    </div>
+                  </fieldset>
+                </div>
+              </div>
+            </div>
+            <!-- FIM CONTATO -->
+
+            <div class="row">
+              <div class="col-xs-12">
+                <hr>
+                <button ng-disabled="form.$invalid" type="submit" class="btn btn-link" data-toggle="tooltip" data-placement="top" title="Armazena as informações inseridas acima">
+                  <span class="fa fa-check"></span>&nbsp;&nbsp;
+                  <b>Confirmar</b>
+                </button>
+                <a ng-disabled="form.$invalid" ng-click="vm.setFuncao('cliente'); vm.gotoAddPet()" class="btn btn-link" data-toggle="tooltip" data-placement="top" title="Incluir Pet">
+                  <span class="fa fa-bug"></span>&nbsp;&nbsp;
+                  <b>Confirmar e Adicionar Pet</b>
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
   <!-- MODAL DE DETALHES DO ANIMAL -->
   <div id="detalhesAnimal" class="modal fade" role="dialog" aria-labelledby="detalhes">
     <div class="modal-dialog modal-sm" role="document">
@@ -330,5 +660,7 @@
       </div>
     </div>
   </div>
+
+
 
 </div>

@@ -1,0 +1,287 @@
+<div>
+   <div class="row">
+      <div class="col-md-12">
+         <h1 class="page-head-line">Serviços</h1>
+         <h1 class="page-subhead-line">Veja os serviços contratados, agendados e atuais buscando por data, situação ou cliente</h1>
+         <a ng-click="vm.helpActive = !vm.helpActive" class="btn btn-link pull-right"><span class="fa fa-info"></span></a>
+         <toast></toast>
+      </div>
+   </div>
+
+   <div class="row">
+      <div class="col-xs-12">
+         <div class="panel panel-default">
+            <div class="panel-heading">
+               Serviços
+            </div>
+            <div class="panel-body">
+               <form ng-submit="vm.buscar()">
+                  <div class="row">
+                     <div class="col-xs-5">
+                        <div class="form-group">
+                           <label>Cliente *</label>
+                           <input class="form-control" type="text" ng-model="vm.form.pessoa_tem_funcao.nome" ng-readonly="true" data-toggle="modal" data-target="#selecionarCliente" ng-disabled="vm.alterando">
+                           <p class="help-block" ng-show="vm.helpActive">Selecione um cliente</p>
+                        </div>
+                     </div>
+                     <div class="col-xs-1">
+                        <div class="form-group">
+                           <label>Buscar</label>
+                           <a class="form-control btn btn-link" data-toggle="modal" data-target="#selecionarCliente" data-toggle="tooltip" data-placement="top" title="Busque por um cliente para realizar o agendamento" ng-disabled="vm.alterando">
+                              <i class="fa fa-search"></i>&nbsp;&nbsp;<i class="fa fa-user"></i>
+                           </a>
+                        </div>
+                     </div>
+                     <div class="col-xs-5">
+                        <div class="form-group">
+                           <label>Funcionário *</label>
+                           <input class="form-control" type="text" ng-model="vm.form.pessoa_tem_funcao.nome" ng-readonly="true" data-toggle="modal" data-target="#selecionarFuncionario" ng-disabled="vm.alterando">
+                           <p class="help-block" ng-show="vm.helpActive">Selecione um cliente</p>
+                        </div>
+                     </div>
+                     <div class="col-xs-1">
+                        <div class="form-group">
+                           <label>Buscar</label>
+                           <a class="form-control btn btn-link" data-toggle="modal" data-target="#selecionarCliente" data-toggle="tooltip" data-placement="top" title="Busque por um cliente para realizar o agendamento" ng-disabled="vm.alterando">
+                              <i class="fa fa-search"></i>&nbsp;&nbsp;<i class="fa fa-user"></i>
+                           </a>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="row">
+                     <div class="col-xs-6">
+                        <div class="form-group">
+                           <label>Início período *</label>
+                           <p class="input-group">
+                              <input type="text" class="form-control" uib-datepicker-popup="{{vm.format}}" ng-model="vm.form.data_inicio" is-open="vm.popupDataInicio" datepicker-options="dateOptions" altInputFormats="altInputFormats" close-text="Fechar">
+                              <span class="input-group-btn">
+                                 <a type="a" class="btn btn-default" ng-click="vm.openDataInicio()"><span class="fa fa-calendar"></span></a>
+                              </span>
+                           </p>
+                        </div>
+                     </div>
+                     <div class="col-xs-6">
+                        <div class="form-group">
+                           <label>Fim período *</label>
+                           <p class="input-group">
+                              <input type="text" class="form-control" uib-datepicker-popup="{{vm.format}}" ng-model="vm.form.data_fim" is-open="vm.popupDataFim" datepicker-options="dateOptions" altInputFormats="altInputFormats" close-text="Fechar">
+                              <span class="input-group-btn">
+                                 <a type="a" class="btn btn-default" ng-click="vm.openDataFim()"><span class="fa fa-calendar"></span></a>
+                              </span>
+                           </p>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="row">
+                     <div class="col-xs-2">
+                        <div class="form-group">
+                           <label><br></label>
+                           <div class="checkbox">
+                              <label><input type="checkbox" name="tratamento" data-ng-model="vm.anamnese.tratamento">&nbsp;&nbsp; Em aberto</label>
+                           </div>
+                           <p class="help-block" ng-show="vm.helpActive"></p>
+                        </div>
+                     </div>
+                     <div class="col-xs-2">
+                        <div class="form-group">
+                           <label><br></label>
+                           <div class="checkbox">
+                              <label><input type="checkbox" name="medicacao_continua" data-ng-model="vm.anamnese.medicacao_continua">&nbsp;&nbsp; Pago</label>
+                           </div>
+                           <p class="help-block" ng-show="vm.helpActive"></p>
+                        </div>
+                     </div>
+                     <div class="col-xs-2">
+                        <div class="form-group">
+                           <label><br></label>
+                           <div class="checkbox">
+                              <label><input type="checkbox" name="fezes_normais" data-ng-model="vm.anamnese.fezes_normais">&nbsp;&nbsp; Executado</label>
+                           </div>
+                           <p class="help-block" ng-show="vm.helpActive"></p>
+                        </div>
+                     </div>
+                     <div class="col-xs-2">
+                        <div class="form-group">
+                           <label><br></label>
+                           <div class="checkbox">
+                              <label><input type="checkbox" name="urina_normal" data-ng-model="vm.anamnese.urina_normal">&nbsp;&nbsp; Cancelado</label>
+                           </div>
+                           <p class="help-block" ng-show="vm.helpActive"></p>
+                        </div>
+                     </div>
+                     <!-- </div>
+                     <div class="row"> -->
+                     <div class="col-xs-4">
+                        <div class="form-group">
+                           <label><br></label>
+                           <a class="form-control btn btn-link" ng-click="vm.buscar()">
+                              <span class="fa fa-search"></span>&nbsp; Buscar
+                           </a>
+                           <p class="help-block" ng-show="vm.helpActive"></p>
+                        </div>
+                     </div>
+                  </div>
+               </form>
+
+               <!-- LISTA DE SERVIÇOS -->
+               <div class="row">
+                  <div class="col-xs-12">
+                     <div class="" style="min-height: 600px">
+                        <table class="table table-striped table-hover">
+                           <thead>
+                              <tr>
+                                 <th class="col-xs-2">Data</th>
+                                 <th class="col-xs-4">Cliente</th>
+                                 <th class="col-xs-4">Situação</th>
+                                 <th class="col-xs-2">Ações</th>
+                              </tr>
+                           </thead>
+                           <tbody>
+                              <tr ng-repeat-start="entry in vm.lista">
+                                 <td>{{entry.data}}</td>
+                                 <td>{{entry.cliente}}</td>
+                                 <td>{{entry.situacao}}</td>
+                                 <td>
+                                    <button class="btn btn-link" ng-if="entry.expanded" ng-click="entry.expanded = false" data-toggle="tooltip" data-placement="top" title="Menos detalhes"><span class="fa fa-minus-square"></span></button>
+                                    <button class="btn btn-link" ng-if="!entry.expanded" ng-click="entry.expanded = true" data-toggle="tooltip" data-placement="top" title="Mais detalhes"><span class="fa fa-plus-square"></span></button>
+                                 </td>
+                              </tr>
+
+                              <tr ng-if="entry.expanded" ng-repeat-end="">
+                                 <td colspan="12">
+                                    <table class="table table-striped table-hover">
+                                       <thead>
+                                          <tr>
+                                             <th class="col-xs-3">Servico</th>
+                                             <th class="col-xs-3">Animal</th>
+                                             <th class="col-xs-2">Situação</th>
+                                             <th class="col-xs-4">Ações</th>
+                                          </tr>
+                                       </thead>
+                                       <tbody>
+                                          <tr ng-repeat="data in entry.servicos">
+                                             <td>{{data.servico}}</td>
+                                             <td>{{data.animal}}</td>
+                                             <td>{{data.situacao}}</td>
+                                             <td>
+                                                <button class="btn btn-link" data-toggle="tooltip" data-placement="top" title="Menos detalhes"><span class="fa fa-minus-square"></span></button>
+                                                <button class="btn btn-link" data-toggle="tooltip" data-placement="top" title="Mais detalhes"><span class="fa fa-plus-square"></span></button>
+                                             </td>
+                                          </tr>
+                                       </tbody>
+                                    </table>
+                                 </td>
+                              </tr>
+                           </tbody>
+                        </table>
+                     </div>
+                  </div>
+               </div>
+               <div class="row">
+                  <div class="col-xs-12 text-center">
+                     <dir-pagination-controls pagination-id="lista"></dir-pagination-controls>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+
+   <!-- MODAL DE SELEÇÂO DO CLIENTE -->
+   <div id="selecionarCliente" class="modal fade" role="dialog" aria-labelledby="cliente">
+      <div class="modal-dialog modal-md" role="document">
+         <div class="modal-content">
+            <div class="modal-header">
+               <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+               <h4 class="modal-title">Selecionar cliente</h4>
+            </div>
+            <div class="modal-body">
+               <div class="row">
+                  <div class="col-xs-12">
+                     <div class="form-group">
+                        <label>Busque por um cliente</label>
+                        <input class="form-control" type="text" ng-model="vm.filtro">
+                        <p class="help-block" ng-show="vm.helpActive">Você pode pesquisar por qualquer dado do cliente</p>
+                     </div>
+                  </div>
+               </div>
+               <label>Cliente *</label>
+               <div class="table-wrapper">
+                  <table class="table table-striped table-hover">
+                     <thead>
+                        <tr>
+                           <th class="col-xs-1">#</th>
+                           <th class="col-xs-4">Nome</th>
+                           <th class="col-xs-4">Email</th>
+                           <th class="col-xs-3">Telefone</th>
+                        </tr>
+                     </thead>
+                     <tbody>
+                        <tr ng-repeat="entry in vm.clientes | filter:vm.filtro">
+                           <th>
+                              <input type="checkbox" ng-model="entry.checked" ng-change="vm.updateSelection(entry.id, vm.clientes); vm.selectCliente(entry)" data-dismiss="modal">
+                           </th>
+                           <td>{{entry.nome}}</td>
+                           <td>{{entry.email}}</td>
+                           <td>{{entry.telefone}}</td>
+                        </tr>
+                     </tbody>
+                  </table>
+               </div>
+            </div>
+            <div class="modal-footer">
+               <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.cancelCliente()">Fechar</button>
+            </div>
+         </div>
+      </div>
+   </div>
+
+   <!-- MODAL DE SELEÇÂO DO FUNCIONARIO -->
+   <div id="selecionarFuncionario" class="modal fade" role="dialog" aria-labelledby="cliente">
+      <div class="modal-dialog modal-md" role="document">
+         <div class="modal-content">
+            <div class="modal-header">
+               <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+               <h4 class="modal-title">Selecionar funcionário</h4>
+            </div>
+            <div class="modal-body">
+               <div class="row">
+                  <div class="col-xs-12">
+                     <div class="form-group">
+                        <label>Busque por um funcionário</label>
+                        <input class="form-control" type="text" ng-model="vm.filtro">
+                        <p class="help-block" ng-show="vm.helpActive">Você pode pesquisar por qualquer dado do funcionário</p>
+                     </div>
+                  </div>
+               </div>
+               <label>Funcionário *</label>
+               <div class="table-wrapper">
+                  <table class="table table-striped table-hover">
+                     <thead>
+                        <tr>
+                           <th class="col-xs-1">#</th>
+                           <th class="col-xs-4">Nome</th>
+                           <th class="col-xs-4">Email</th>
+                           <th class="col-xs-3">Telefone</th>
+                        </tr>
+                     </thead>
+                     <tbody>
+                        <tr ng-repeat="entry in vm.clientes | filter:vm.filtro">
+                           <th>
+                              <input type="checkbox" ng-model="entry.checked" ng-change="vm.updateSelection(entry.id, vm.clientes); vm.selectCliente(entry)" data-dismiss="modal">
+                           </th>
+                           <td>{{entry.nome}}</td>
+                           <td>{{entry.email}}</td>
+                           <td>{{entry.telefone}}</td>
+                        </tr>
+                     </tbody>
+                  </table>
+               </div>
+            </div>
+            <div class="modal-footer">
+               <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.cancelCliente()">Fechar</button>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>

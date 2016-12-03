@@ -1,38 +1,25 @@
 (function () {
-  'use strict';
+   'use strict';
 
-  angular
-    .module('Index', [])
-    .config(['$routeProvider', function ($routeProvider) {
+   angular
+   .module('Index', [])
+   .config(['$routeProvider', function ($routeProvider) {
       $routeProvider
-        .when('/overview', {
-          templateUrl: '../static/partials/overview.html',
-          controller: 'IndexController',
-          controllerAs: 'vm'
-        });
-    }])
-    .controller('IndexController', IndexController);
+      .when('/overview', {
+         templateUrl: '../static/partials/overview.html',
+         controller: 'IndexController',
+         controllerAs: 'vm'
+      });
+   }])
+   .controller('IndexController', IndexController);
 
-  IndexController.$inject = ['$rootScope', 'dataStorage'];
+   IndexController.$inject = ['$rootScope', 'dataStorage', '$location'];
 
-  function IndexController($rootScope, dataStorage) {
-    $rootScope.hideMenu = false;
-    $rootScope.bodyBackground = '';
-
-    $rootScope.permissoes = {};
-    angular.forEach(dataStorage.getPermissoes(), function (value, key) {
-      if (value.modulo === 'Cadastro') {
-        $rootScope.permissoes.cadastro = true;
+   function IndexController($rootScope, dataStorage, $location) {
+      if (dataStorage.getUser() == null) {
+         $location.path('/login');
       }
-      if (value.modulo === 'Venda') {
-        $rootScope.permissoes.venda = true;
-      }
-      if (value.modulo === 'Servico') {
-        $rootScope.permissoes.servico = true;
-      }
-      if (value.modulo === 'Consulta') {
-        $rootScope.permissoes.consulta = true;
-      }
-    });
-  }
+      $rootScope.hideMenu = false;
+      $rootScope.bodyBackground = '';
+   }
 })()

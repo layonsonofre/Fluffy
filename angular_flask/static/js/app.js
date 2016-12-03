@@ -9,7 +9,7 @@
       'Estoque', 'Venda', 'modalServiceModule', 'dataStorageService', 'PessoaTemPermissao',
       'Authentication', 'Login', 'Raca', 'Porte', 'Especie', 'Restricao', 'Configuracao',
       'Lote', 'Vacina', 'angularUtils.directives.dirPagination', 'Anamnese', 'AnimalTemRestricao',
-      'ServicoTemPorte', 'Funcionario', 'Aplicacao', 'ngToast', 'Transacao', 'VacinaTemLote'
+      'ServicoTemPorte', 'Funcionario', 'Aplicacao', 'ngToast', 'Transacao', 'VacinaTemLote', 'Erro'
     ])
     .config(['$routeProvider', '$locationProvider', '$httpProvider', 'calendarConfig', 'uibDatepickerPopupConfig', 'ngToastProvider',
       function($routeProvider, $locationProvider, $httpProvider, calendarConfig, uibDatepickerPopupConfig, ngToastProvider) {
@@ -29,7 +29,7 @@
             controller: 'ErroController',
             controllerAs: 'vm'
           })
-          .otherwise('/erro');
+          .otherwise('/login');
         uibDatepickerPopupConfig.startingDay = 1;
         uibDatepickerPopupConfig.showWeeks = true;
         uibDatepickerPopupConfig.currentText = "Hoje";
