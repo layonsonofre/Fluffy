@@ -24,7 +24,7 @@ def insertServicoAgendado() :
 			data = Util.postData("insTransacao", ["C", 0, None])
 			transacao_id = data[0]
 		except Exception as e:
-			message = e.__str__()
+			message = e.args[1]
 			table = "transacao"
 			json = str(request.json)
 			method = request.method
@@ -41,7 +41,7 @@ def insertServicoAgendado() :
 		servicosAgendados = json["servicos_agendados"]
 	except Exception as e:
 		data = Util.postData("delTransacao", [transacao_id])
-		message = e.__str__()
+		message = e.args[1]
 		table = "servico_contratado"
 		json = str(request.json)
 		method = request.method
@@ -80,7 +80,7 @@ def insertServicoAgendado() :
 			print data
 			servico_stored = servico_stored + 1
 		except Exception as e:
-			message = e.__str__()
+			message = e.args[1]
 			table = "servico_agendado"
 			json = str(servicoAgendado)
 			method = request.method
@@ -110,7 +110,7 @@ def insertPedido() :
 			data = Util.postData("insTransacao", ["C", 0, None])
 			transacao_id = data[0]
 		except Exception as e:
-			message = e.__str__()
+			message = e.args[1]
 			table = "transacao"
 			json = str(request.json)
 			method = request.method
@@ -131,7 +131,7 @@ def insertPedido() :
 		itensDeVenda = json["itens_de_venda"]
 	except Exception as e:
 		data = Util.postData("delTransacao", [transacao_id])
-		message = e.__str__()
+		message = e.args[1]
 		table = "pedido"
 		json = str(request.json)
 		method = request.method
@@ -151,7 +151,7 @@ def insertPedido() :
 			])
 			item_stored = item_stored + 1
 		except Exception as e:
-			message = e.__str__()
+			message = e.args[1]
 			table = "item_de_venda"
 			json = str(itemDeVenda)
 			method = request.method
@@ -178,7 +178,7 @@ def insertCliente():
 		print(data)
 		result = Util.postData("insPessoa", data)
 	except Exception as e:
-		message = e.__str__()
+		message = e.args[1]
 		table = "pessoa"
 		json = str(pessoa)
 		method = request.method
@@ -205,7 +205,7 @@ def insertCliente():
 		ptf.id = Util.postData("insPessoaTemFuncao", [data[0],data[4], None, None])[0]
 	except Exception as e:
 		result = Util.postData("delPessoa", [pessoa.id])
-		message = e.__str__()
+		message = e.args[1]
 		table = "pessoa_tem_funcao"
 		json = str(request.json)
 		method = request.method
@@ -240,7 +240,7 @@ def insertFuncionario():
 		data.pop(0)
 		result = Util.postData("insPessoa", data)
 	except Exception as e:
-		message = e.__str__()
+		message = e.args[1]
 		table = "pessoa"
 		json = str(pessoa)
 		method = request.method
@@ -263,7 +263,7 @@ def insertFuncionario():
 		ptf.id = Util.postData("insPessoaTemFuncao", [data[0],data[4], data[6], None])[0]
 	except Exception as e:
 		result = Util.postData("delPessoa", [pessoa.id])
-		message = e.__str__()
+		message = e.args[1]
 		table = "pessoa_tem_funcao"
 		json = str(request.json)
 		method = request.method

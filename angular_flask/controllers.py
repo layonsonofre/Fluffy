@@ -166,8 +166,9 @@ def login():
             id = Util.postData('insOAuth',[token, refresh_token])
 
             result = Util.postData('altPessoaTemFuncao', [ptf.id, ptf.pessoa[0], ptf.funcao[0], None, id[0]])
+
             print(result)
-            return jsonify(success=True, result={"token":token, "refresh_token":refresh_token}, message="")
+            return jsonify(success=True, result={"token":token, "refresh_token":refresh_token, "pessoa_tem_funcao":{"id": ptf.id, "pessoa_id": ptf.pessoa[0],"nome": ptf.pessoa[1]}}, message="")
     	else:
     		return jsonify(success=False, result={}, message="Usuario e/ou Senha incorretos")
     except Exception as e:

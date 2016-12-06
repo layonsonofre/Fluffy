@@ -121,3 +121,37 @@ def getHistorico() :
 											"servicos_pagos": transacao[4],
 											"historico": list
 										}, message="")
+@app.route('/api/historicoContratos', methods=['GET'])
+def getContratos() :
+
+	data_inicio = str(request.args.get("data_inicio")) if request.args.get("data_inicio") is not None else None
+	data_fim = str(request.args.get("data_fim")) if request.args.get("data_fim") is not None else None
+	
+	data = Util.getData("getServicoContratado", [None, data_inicio, data_fim])
+	
+	result = []
+
+	servicos_contratados = []
+	for info in data:
+		servicos_contratados.append(ServicoContratado(info))
+
+	for sc in servicos_contratados:
+		servicos_agendados = []
+		data = Util.getData("getServicoAgendado", [None, sc.id, None, None, None, None, None, None, None, None, None, None])
+		for info in data:
+			servicos_agendados.append(ServicoAgendado(info))
+
+		result.append({
+			"id":sc.id,
+			"pessoa_tem_funcao": {
+				"id":sc.pessoa_tem_funcao[0],
+				"pessoa_id":sc.pessoa_tem_funcao[1],
+				"nome":sc.pessoa_tem_funcao[2]
+			},
+			"data_hora":sc.data_hora,
+			"preco":sc.preco,
+			"transacao_id":sc.transacao,
+			"servicos_agendados": [sa.toJSON() for sa in servicos_agendados]
+		})
+
+	return jsonify(success=True,result=result, message="")
