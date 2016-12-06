@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 import os
 
 from flask import Flask, request, Response, jsonify
@@ -56,7 +59,7 @@ def get_modelo(modelo=None):
         data = Util.getData("get"+modelo[0].upper()+modelo[1:], args)
         print(data)
     except Exception as e:
-    	message = e.__str__()
+    	message = e.args[1]
     	table = modelo
     	json = request.json
     	method = request.method
@@ -126,7 +129,7 @@ def form_modelo(modelo = None):
         data = Util.postData(proc, args)
         return jsonify(success=True, result={"id":data[0]}, message="")
     except Exception as e:
-        message = e.__str__()
+        message = e.args[1]
         table = modelo
         json = str(request.json)
         method = request.method
@@ -168,7 +171,7 @@ def login():
     	else:
     		return jsonify(success=False, result={}, message="Usuario e/ou Senha incorretos")
     except Exception as e:
-    	return jsonify(success=False, result={}, message=e.__str__())
+    	return jsonify(success=False, result={}, message=e.args[1])
 
 # special file handlers and error handlers
 @app.route('/favicon.ico')

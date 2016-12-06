@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 from angular_flask.core import mysql
 from flask import Flask, request
@@ -13,7 +15,7 @@ class Util:
     	   data = cursor.fetchall()
            return data
         except:
-    	    raise
+    	    raise 
 
     @staticmethod
     def postData(proc, args):

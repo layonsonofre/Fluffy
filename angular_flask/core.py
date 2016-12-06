@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from angular_flask import app
 from flask.ext.mysql import MySQL
 

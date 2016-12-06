@@ -12,6 +12,7 @@ from grupoDeItem import GrupoDeItem
 from item import Item
 from itemDeVenda import ItemDeVenda
 from lembrete import Lembrete
+from log import Log
 from lote import Lote
 from oAuth import OAuth
 from pedido import Pedido
