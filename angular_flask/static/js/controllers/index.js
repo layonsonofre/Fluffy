@@ -13,11 +13,15 @@
    }])
    .controller('IndexController', IndexController);
 
-   IndexController.$inject = ['$rootScope', 'dataStorage', '$location'];
+   IndexController.$inject = ['$rootScope', 'dataStorage', '$location', '$http'];
 
-   function IndexController($rootScope, dataStorage, $location) {
+   function IndexController($rootScope, dataStorage, $location, $http) {
       if (dataStorage.getUser() == null) {
          $location.path('/login');
+      } else {
+         let _token = dataStorage.getUser().token;
+         $http.defaults.headers.common.Authorization = "Bearer " + _token;
+         dataStorage.getPermissoes();
       }
       $rootScope.hideMenu = false;
       $rootScope.bodyBackground = '';

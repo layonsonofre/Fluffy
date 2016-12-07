@@ -9,6 +9,11 @@
          templateUrl: '../static/partials/servico/agendamento.html',
          controller: 'AgendamentoController',
          controllerAs: 'vm'
+      })
+      .when('/servico/lista', {
+         templateUrl: '../static/partials/servico/lista.html',
+         controller: 'AgendamentoController',
+         controllerAs: 'vm'
       });
    }])
    .controller('AgendamentoController', AgendamentoController)
@@ -36,6 +41,16 @@ function AgendamentoController(AgendamentoFactory, calendarConfig, modalService,
    }
 
    vm.form = {};
+
+
+
+   // vm.lista = [
+   //    {data: "10/10/2016", cliente: "André Cadamuro Garcia", situacao: "Em aberto", servicos: [{servico: "Banho", animal: "Fluffy", situacao: "Executando"},{servico: "Banho", animal: "Fluffy", situacao: "Executando"},{servico: "Banho", animal: "Fluffy", situacao: "Executando"}]}
+   //    , {data: "10/10/2016", cliente: "André Cadamuro Garcia", situacao: "Em aberto", servicos: [{servico: "Banho", animal: "Fluffy", situacao: "Executando"},{servico: "Banho", animal: "Fluffy", situacao: "Executando"},{servico: "Banho", animal: "Fluffy", situacao: "Executando"}]}
+   //    , {data: "10/10/2016", cliente: "André Cadamuro Garcia", situacao: "Em aberto", servicos: [{servico: "Banho", animal: "Fluffy", situacao: "Executando"},{servico: "Banho", animal: "Fluffy", situacao: "Executando"},{servico: "Banho", animal: "Fluffy", situacao: "Executando"}]}
+   //    , {data: "10/10/2016", cliente: "André Cadamuro Garcia", situacao: "Em aberto", servicos: [{servico: "Banho", animal: "Fluffy", situacao: "Executando"},{servico: "Banho", animal: "Fluffy", situacao: "Executando"},{servico: "Banho", animal: "Fluffy", situacao: "Executando"}]}
+   // ];
+
    vm.alterando = false;
    vm.add = add;
    vm.del = del;
@@ -50,6 +65,8 @@ function AgendamentoController(AgendamentoFactory, calendarConfig, modalService,
    vm.incluirAgendamento = incluirAgendamento;
    vm.cancelAgendamento = cancelAgendamento;
    vm.getAgendamentos = getAgendamentos;
+
+   vm.getHistoricoContratos = getHistoricoContratos;
 
    vm.form.servicos_agendados = [];
    var contrato = dataStorage.getContrato();
@@ -146,7 +163,7 @@ function AgendamentoController(AgendamentoFactory, calendarConfig, modalService,
    }
 
    function add() {
-      vm.form.pessoa_tem_funcao_funcionario_id = 3;
+      vm.form.pessoa_tem_funcao_funcionario_id = dataStorage.getUser().pessoa_tem_funcao_id;
       angular.forEach(vm.form.servicos_agendados, function (value, key) {
          // value.data_hora = $filter('date')(new Date(value.data_hora), 'yyyy-MM-dd HH:mm:ss');
          value.data_hora = new Date(value.data_hora).toISOString().substring(0, 19).replace('T', ' ');
@@ -166,7 +183,7 @@ function AgendamentoController(AgendamentoFactory, calendarConfig, modalService,
    }
 
    function alt() {
-      vm.form.pessoa_tem_funcao_funcionario_id = 3;
+      vm.form.pessoa_tem_funcao_funcionario_id = dataStorage.getUser().pessoa_tem_funcao_id;
       angular.forEach(vm.form.servicos_agendados, function (value, key) {
          // value.data_hora = $filter('date')(new Date(value.data_hora), 'yyyy-MM-dd HH:mm:ss');
          value.data_hora = new Date(value.data_hora).toISOString().substring(0, 19).replace('T', ' ');
@@ -349,6 +366,41 @@ function AgendamentoController(AgendamentoFactory, calendarConfig, modalService,
          });
       }
    }
+
+
+   vm.openDataInicio = function () {
+      vm.popupDataInicio = true;
+   }
+   vm.openDataFim = function () {
+      vm.popupDataFim = true;
+   }
+
+   vm.formats = ['dd/MM/yyyy', 'dd-MMMM-yyyy', 'shortDate'];
+   vm.format = vm.formats[0];
+   vm.altInputFormats = ['d!/M!/yyyy'];
+
+   vm.popupDataInicio = false;
+   vm.popupDataFim = false;
+   vm.setDate = setDate;
+
+   function setDate(value, year, month, day) {
+      value = new Date(year, month, day);
+   }
+
+   function getHistoricoContratos() {
+      alert('alou');
+      AgendamentoFactory.getHistoricoContratos({
+         params: vm.form
+      })
+      .then(function (response) {
+         if (response.data.success === true) {
+            console.log(response.data.result);
+            vm.historicoContratos = response.data.result;
+         } else {
+            ngToast.danger({content: 'Falha ao buscar o histórico: ' + response.data.message});
+         }
+      });
+   }
 }
 
 AgendamentoFactory.$inject = ['$http', 'Fluffy'];
@@ -360,7 +412,8 @@ function AgendamentoFactory($http, Fluffy) {
       add: add,
       alt: alt,
       del: del,
-      getContrato: getContrato
+      getContrato: getContrato,
+      getHistoricoContratos: getHistoricoContratos
    };
    return AgendamentoFactory;
 
@@ -449,6 +502,22 @@ function AgendamentoFactory($http, Fluffy) {
          params: data,
          method: 'GET'
       })
+      .then(success)
+      .catch(failed);
+
+      function success(response) {
+         return response;
+      }
+
+      function failed(response) {
+         return response;
+      }
+   }
+
+   function getHistoricoContratos() {
+      return $http.get(
+         _url + '/historicoContratos'
+      )
       .then(success)
       .catch(failed);
 

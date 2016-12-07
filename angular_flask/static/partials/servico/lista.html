@@ -15,7 +15,7 @@
                Serviços
             </div>
             <div class="panel-body">
-               <form ng-submit="vm.buscar()">
+               <form ng-submit="vm.getHistoricoContratos()">
                   <div class="row">
                      <div class="col-xs-5">
                         <div class="form-group">
@@ -53,7 +53,7 @@
                         <div class="form-group">
                            <label>Início período *</label>
                            <p class="input-group">
-                              <input type="text" class="form-control" uib-datepicker-popup="{{vm.format}}" ng-model="vm.form.data_inicio" is-open="vm.popupDataInicio" datepicker-options="dateOptions" altInputFormats="altInputFormats" close-text="Fechar">
+                              <input type="text" class="form-control" ng-model="vm.form.data_inicio" uib-datepicker-popup="{{vm.format}}" ng-model="vm.form.data_inicio" is-open="vm.popupDataInicio" datepicker-options="dateOptions" altInputFormats="altInputFormats" close-text="Fechar">
                               <span class="input-group-btn">
                                  <a type="a" class="btn btn-default" ng-click="vm.openDataInicio()"><span class="fa fa-calendar"></span></a>
                               </span>
@@ -114,9 +114,9 @@
                      <div class="col-xs-4">
                         <div class="form-group">
                            <label><br></label>
-                           <a class="form-control btn btn-link" ng-click="vm.buscar()">
+                           <button type="submit" class="form-control btn btn-link">
                               <span class="fa fa-search"></span>&nbsp; Buscar
-                           </a>
+                           </button>
                            <p class="help-block" ng-show="vm.helpActive"></p>
                         </div>
                      </div>

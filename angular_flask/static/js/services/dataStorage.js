@@ -14,7 +14,7 @@
 
       dataStorage.addPessoa = addPessoa;
       dataStorage.getPessoa = getPessoa;
-      
+
       dataStorage.addAnimal = addAnimal;
       dataStorage.getAnimal = getAnimal;
 
@@ -114,26 +114,26 @@
       //permissoes
       function addPermissoes(entry) {
          $window.localStorage.currentPermissoes = JSON.stringify(entry);
-
-         $rootScope.permissoes = {};
-         angular.forEach(getPermissoes(), function (value, key) {
-            if (value.modulo === 'Cadastro') {
-               $rootScope.permissoes.cadastro = true;
-            }
-            if (value.modulo === 'Venda') {
-               $rootScope.permissoes.venda = true;
-            }
-            if (value.modulo === 'Servico') {
-               $rootScope.permissoes.servico = true;
-            }
-            if (value.modulo === 'Consulta') {
-               $rootScope.permissoes.consulta = true;
-            }
-         });
+         getPermissoes();
       }
 
       function getPermissoes() {
          if ($window.localStorage.currentPermissoes) {
+            $rootScope.permissoes = {};
+            angular.forEach(JSON.parse($window.localStorage.currentPermissoes), function (value, key) {
+               if (value.modulo === 'Cadastro') {
+                  $rootScope.permissoes.cadastro = true;
+               }
+               if (value.modulo === 'Venda') {
+                  $rootScope.permissoes.venda = true;
+               }
+               if (value.modulo === 'Servico') {
+                  $rootScope.permissoes.servico = true;
+               }
+               if (value.modulo === 'Consulta') {
+                  $rootScope.permissoes.consulta = true;
+               }
+            });
             return JSON.parse($window.localStorage.currentPermissoes);
          }
          return null;

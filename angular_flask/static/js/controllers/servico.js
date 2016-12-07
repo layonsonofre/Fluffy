@@ -9,11 +9,6 @@
          templateUrl: '../static/partials/servico/cadastro.html',
          controller: 'ServicoController',
          controllerAs: 'vm'
-      })
-      .when('/servico/lista', {
-         templateUrl: '../static/partials/servico/lista.html',
-         controller: 'ServicoController',
-         controllerAs: 'vm'
       });
    }])
    .controller('ServicoController', ServicoController)
@@ -33,13 +28,6 @@
          $location.path('/erro');
          ngToast.danger({content: 'Você não tem permissão para acessar esta funcionalidade'});
       }
-
-      vm.lista = [
-         {data: "10/10/2016", cliente: "André Cadamuro Garcia", situacao: "Em aberto", servicos: [{servico: "Banho", animal: "Fluffy", situacao: "Executando"},{servico: "Banho", animal: "Fluffy", situacao: "Executando"},{servico: "Banho", animal: "Fluffy", situacao: "Executando"}]}
-         , {data: "10/10/2016", cliente: "André Cadamuro Garcia", situacao: "Em aberto", servicos: [{servico: "Banho", animal: "Fluffy", situacao: "Executando"},{servico: "Banho", animal: "Fluffy", situacao: "Executando"},{servico: "Banho", animal: "Fluffy", situacao: "Executando"}]}
-         , {data: "10/10/2016", cliente: "André Cadamuro Garcia", situacao: "Em aberto", servicos: [{servico: "Banho", animal: "Fluffy", situacao: "Executando"},{servico: "Banho", animal: "Fluffy", situacao: "Executando"},{servico: "Banho", animal: "Fluffy", situacao: "Executando"}]}
-         , {data: "10/10/2016", cliente: "André Cadamuro Garcia", situacao: "Em aberto", servicos: [{servico: "Banho", animal: "Fluffy", situacao: "Executando"},{servico: "Banho", animal: "Fluffy", situacao: "Executando"},{servico: "Banho", animal: "Fluffy", situacao: "Executando"}]}
-      ];
 
       vm.form = {};
 

@@ -23,7 +23,7 @@
 
       vm.form = {};
       vm.form.visualizado = false;
-      vm.form.pessoa_id = 3;
+      vm.form.pessoa_id = dataStorage.getUser().pessoa_tem_funcao_id;
 
       vm.get = get;
       vm.add = add;

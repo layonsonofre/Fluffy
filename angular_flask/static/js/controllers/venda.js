@@ -140,7 +140,7 @@
       }
 
       vm.gotoConfirmacao = function () {
-         vm.pessoa_tem_funcao_funcionario_id = 3;
+         vm.pessoa_tem_funcao_funcionario_id = dataStorage.getUser().pessoa_tem_funcao_id;
          var send = {
             pessoa_tem_funcao_funcionario_id: vm.pessoa_tem_funcao_funcionario_id,
             pessoa_tem_funcao_cliente_id: vm.pessoa_tem_funcao_cliente_id,
