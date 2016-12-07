@@ -124,10 +124,19 @@ def getHistorico() :
 @app.route('/api/historicoContratos', methods=['GET'])
 def getContratos() :
 
-	data_inicio = str(request.args.get("data_inicio")) if request.args.get("data_inicio") is not None else None
-	data_fim = str(request.args.get("data_fim")) if request.args.get("data_fim") is not None else None
+	servico_id = str(request.args.get("servico_id")) if request.args.get("servico_id") is not None else None
+	servico_contratado_id = str(request.args.get("servico_contratado_id")) if request.args.get("servico_contratado_id") is not None else None
+	servico_agendado_id = str(request.args.get("servico_agendado_id")) if request.args.get("servico_agendado_id") is not None else None
+	animal_id = str(request.args.get("animal_id")) if request.args.get("animal_id") is not None else None
+	cliente_id = str(request.args.get("cliente_id")) if request.args.get("cliente_id") is not None else None
+	funcionario_contrato_id = str(request.args.get("funcionario_contrato_id")) if request.args.get("funcionario_contrato_id") is not None else None
+	funcionario_executa_id = str(request.args.get("funcionario_executa_id")) if request.args.get("funcionario_executa_id") is not None else None
+	data_inicio_contrato = str(request.args.get("data_inicio_contrato")) if request.args.get("data_inicio_contrato") is not None else None
+	data_fim_contrato = str(request.args.get("data_fim_contrato")) if request.args.get("data_fim_contrato") is not None else None
+	data_inicio_agendamento = str(request.args.get("data_inicio_agendamento")) if request.args.get("data_inicio_agendamento") is not None else None
+	data_fim_agendamento = str(request.args.get("data_fim_agendamento")) if request.args.get("data_fim_agendamento") is not None else None
 	
-	data = Util.getData("getServicoContratado", [None, data_inicio, data_fim])
+	data = Util.getData("getServicoContratado", [servico_contratado_id, data_inicio_contrato, data_fim_contrato, funcionario_contrato_id])
 	
 	result = []
 
@@ -135,23 +144,39 @@ def getContratos() :
 	for info in data:
 		servicos_contratados.append(ServicoContratado(info))
 
+	if cliente_id is not None and animal_id is None:
+		animal_id = Animal(Util.getData("getAnimal", [None, None, cliente_id, None, None, None])[0]).id
+
 	for sc in servicos_contratados:
 		servicos_agendados = []
-		data = Util.getData("getServicoAgendado", [None, sc.id, None, None, None, None, None, None, None, None, None, None])
+		data
+		data = Util.getData("getServicoAgendado", [servico_agendado_id, sc.id, data_inicio_agendamento, data_fim_agendamento, None, None, None, None, None, animal_id, servico_id, None, funcionario_executa_id])
 		for info in data:
 			servicos_agendados.append(ServicoAgendado(info))
 
-		result.append({
-			"id":sc.id,
-			"pessoa_tem_funcao": {
-				"id":sc.pessoa_tem_funcao[0],
-				"pessoa_id":sc.pessoa_tem_funcao[1],
-				"nome":sc.pessoa_tem_funcao[2]
-			},
-			"data_hora":sc.data_hora,
-			"preco":sc.preco,
-			"transacao_id":sc.transacao,
-			"servicos_agendados": [sa.toJSON() for sa in servicos_agendados]
-		})
+		if len(servicos_agendados) > 0:
+			data = Util.getData("getAnimal", [servicos_agendados[0].animal[0], None, None, None, None, None])
+			animal = Animal(data[0]) if data is not None else None
+		else:
+			animal = None
+
+		if len(servicos_agendados) > 0:
+			result.append({
+				"id":sc.id,
+				"pessoa_tem_funcao_funcionario": {
+					"id":sc.pessoa_tem_funcao[0],
+					"pessoa_id":sc.pessoa_tem_funcao[1],
+					"nome":sc.pessoa_tem_funcao[2]
+				},
+				"pessoa_tem_funcao_cliente": {
+					"id": (animal.pessoa_tem_funcao_cliente[0] if animal is not None else None),
+					"pessoa_id":(animal.pessoa_tem_funcao_cliente[1] if animal is not None else None),
+					"nome":(animal.pessoa_tem_funcao_cliente[2] if animal is not None else None)
+				},
+				"data_hora":sc.data_hora,
+				"preco":sc.preco,
+				"transacao_id":sc.transacao,
+				"servicos_agendados": [sa.toJSON() for sa in servicos_agendados]
+			})
 
 	return jsonify(success=True,result=result, message="")

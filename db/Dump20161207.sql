@@ -8831,7 +8831,6 @@ DELIMITER ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
 ALTER DATABASE `pet_shop` CHARACTER SET utf8 COLLATE utf8_general_ci ;
 /*!50003 DROP PROCEDURE IF EXISTS `getServicoAgendado` */;
-ALTER DATABASE `pet_shop` CHARACTER SET latin1 COLLATE latin1_swedish_ci ;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
@@ -8853,7 +8852,8 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `getServicoAgendado`(
     IN data_executado_fim DATETIME,
     IN animal_id INT,
     IN servico_id INT,
-    IN cancelado TINYINT
+    IN cancelado TINYINT,
+    IN funcionario_executa_id INT
 )
 BEGIN
 
@@ -8880,6 +8880,7 @@ BEGIN
         AND ((animal_id IS NULL) or(a.id = animal_id))
         AND ((servico_id IS NULL) or(s.id = servico_id))
         AND ((cancelado IS NULL) or(sa.cancelado = cancelado))
+        AND ((funcionario_executa_id IS NULL) or(sa.funcionario_executa_id = funcionario_executa_id))
         ;
 
 END ;;
@@ -8888,9 +8889,7 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
-ALTER DATABASE `pet_shop` CHARACTER SET utf8 COLLATE utf8_general_ci ;
 /*!50003 DROP PROCEDURE IF EXISTS `getServicoContratado` */;
-ALTER DATABASE `pet_shop` CHARACTER SET latin1 COLLATE latin1_swedish_ci ;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
@@ -8898,12 +8897,13 @@ ALTER DATABASE `pet_shop` CHARACTER SET latin1 COLLATE latin1_swedish_ci ;
 /*!50003 SET character_set_results = utf8 */ ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = '' */ ;
+/*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getServicoContratado`(
 		IN id int
 	,	IN data_hora_inicio DATETIME
     ,	IN data_hora_fim DATETIME
+    ,	IN funcionario_id INT
 	)
 BEGIN
 
@@ -8915,6 +8915,7 @@ BEGIN
           AND pf.pessoa_id = p.id
       AND ((id IS NULL) or (s.id = id))
       AND ((data_hora_inicio IS NULL AND data_hora_fim IS NULL) or (s.data_hora BETWEEN data_hora_inicio AND data_hora_fim))
+      AND ((funcionario_id IS NULL) or (s.pessoa_tem_funcao_id_funcionario = funcionario_id))
       ;
           
 END ;;
@@ -8923,7 +8924,6 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
-ALTER DATABASE `pet_shop` CHARACTER SET utf8 COLLATE utf8_general_ci ;
 /*!50003 DROP PROCEDURE IF EXISTS `getServicoTemPorte` */;
 ALTER DATABASE `pet_shop` CHARACTER SET latin1 COLLATE latin1_swedish_ci ;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -11217,4 +11217,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-12-07 20:52:40
+-- Dump completed on 2016-12-07 21:57:08
