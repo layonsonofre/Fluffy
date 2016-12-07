@@ -286,3 +286,60 @@ def insertFuncionario():
 		ptps.append(pessoa_tem_permissao)
 
 	return jsonify(pessoa=pessoa.toJSON(), ptf=ptf.toJSON(), telefones=[t.toJSON() for t in telefones], pessoa_tem_permissoes=[ptp.toJSON() for ptp in ptps])
+
+@app.route('/api/insertAdministrador', methods=['POST'])
+def insertAdministrador():
+
+	json = request.json
+	pessoa = json["pessoa"]
+
+	try:
+		data = Util.requestFormArgs("pessoa", pessoa)
+		data.pop(0)
+		result = Util.postData("insPessoa", data)
+	except Exception as e:
+		message = e.args[1]
+		table = "pessoa"
+		json = str(pessoa)
+		method = request.method
+		data = Util.postData("insLog", [message, json, table, method])
+		return jsonify(success=False, result={}, message=message, tabela=table, json = json, metodo=method)		
+	
+	data.insert(0,None)
+	data.insert(2,"")
+
+	pessoa = Pessoa(data)
+	pessoa.id = result[0]
+
+	funcao_id = 4
+	funcao_nome = "administrador"
+
+	try:
+		data = [pessoa.id, pessoa.nome, pessoa.email, pessoa.registro, funcao_id, funcao_nome, json["password"], None, None]
+		ptf = PessoaTemFuncao([None] + data)
+		ptf.id = Util.postData("insPessoaTemFuncao", [data[0],data[4], data[6], None])[0]
+	except Exception as e:
+		result = Util.postData("delPessoa", [pessoa.id])
+		message = " ".join(e.args)
+		table = "pessoa_tem_funcao"
+		json = str(request.json)
+		method = request.method
+		data = Util.postData("insLog", [message, json, table, method])
+		return jsonify(success=False, result={}, message=message, tabela=table, json = json, metodo=method)
+
+	telefones = []
+	for telefone in json["telefones"]:
+		data = [telefone["numero"], telefone["codigo_area"], telefone["codigo_pais"], pessoa.id]
+		tel = Telefone([None, data[2], data[1], data[0], data[3]])
+		tel.id = Util.postData("insTelefone", data)[0]
+		telefones.append(tel)
+
+	ptps = []
+	data = Util.getData("getPermissao", [None, None])
+	for info in data:
+		permissao = Permissao(info)
+		pessoa_tem_permissao = PessoaTemPermissao([None, ptf.id, pessoa.id, pessoa.nome, permissao.id, permissao.modulo])
+		pessoa_tem_permissao.id = Util.postData("insPessoaTemPermissao", [ptf.id, permissao.id])[0]
+		ptps.append(pessoa_tem_permissao)
+
+	return jsonify(pessoa=pessoa.toJSON(), ptf=ptf.toJSON(), telefones=[t.toJSON() for t in telefones], pessoa_tem_permissoes=[ptp.toJSON() for ptp in ptps])
