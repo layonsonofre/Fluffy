@@ -24,9 +24,9 @@
    .controller('VendaController', VendaController)
    .factory('VendaFactory', VendaFactory);
 
-   VendaController.$inject = ['VendaFactory', 'modalService', 'PessoaFactory', 'PessoaTemFuncaoFactory', '$window', '$filter', '$location', 'dataStorage', 'ProdutoFactory', 'TelefoneFactory'];
+   VendaController.$inject = ['VendaFactory', 'modalService', 'PessoaFactory', 'PessoaTemFuncaoFactory', '$window', '$filter', '$location', 'dataStorage', 'ProdutoFactory', 'TelefoneFactory', 'ngToast'];
 
-   function VendaController(VendaFactory, modalService, PessoaFactory, PessoaTemFuncaoFactory, $window, $filter, $location, dataStorage, ProdutoFactory, TelefoneFactory) {
+   function VendaController(VendaFactory, modalService, PessoaFactory, PessoaTemFuncaoFactory, $window, $filter, $location, dataStorage, ProdutoFactory, TelefoneFactory, ngToast) {
 
       var vm = this;
 
@@ -141,20 +141,26 @@
 
       vm.gotoConfirmacao = function () {
          vm.pessoa_tem_funcao_funcionario_id = dataStorage.getUser().pessoa_tem_funcao_id;
+         vm.pago = vm.pago ? 1 : 0;
          var send = {
             pessoa_tem_funcao_funcionario_id: vm.pessoa_tem_funcao_funcionario_id,
             pessoa_tem_funcao_cliente_id: vm.pessoa_tem_funcao_cliente_id,
             desconto: vm.desconto,
             pago: vm.pago,
+            valor: vm.cart_total,
             itens_de_venda: vm.cart
          };
          VendaFactory.add(send).then(function (response) {
-            console.log("\nADICIONADO", response);
-            dataStorage.addVenda({
-               cart_total: vm.cart_total,
-               cliente_nome: vm.cliente.nome
-            });
-            $location.path('/venda/confirmacao');
+            if (response.data.success === 'true') {
+               console.log("\nADICIONADO", response);
+               dataStorage.addVenda({
+                  cart_total: vm.cart_total,
+                  cliente_nome: vm.cliente.nome
+               });
+               $location.path('/venda/confirmacao');
+            } else {
+               ngToast.danger({content: 'Falha ao adicionar registro: ' + response.data.message});
+            }
          });
       }
 

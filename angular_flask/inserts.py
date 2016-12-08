@@ -47,7 +47,7 @@ def insertServicoAgendado() :
 		method = request.method
 		data = Util.postData("insLog", [message, json, table, method])
 		#return jsonify(success=False, result={}, codigo=code,message=error_message.decode('cp1251').encode('utf8'))
-		return jsonify(success=False, result={}, message=message, tabela=table, json = json, metodo=method)		
+		return jsonify(success=False, result={}, message=message, tabela=table, json = json, metodo=method)
 
 	servico_stored = 0
 	for servicoAgendado in servicosAgendados:
@@ -90,8 +90,8 @@ def insertServicoAgendado() :
 			data = Util.postData("delServicoContratado", [servico_contratado_id])
 			data = Util.postData("delTransacao", [transacao_id])
 			#return jsonify(success=False, result={}, codigo=code,message=error_message.decode('cp1251').encode('utf8'))
-			return jsonify(success=False, result={}, message=message, tabela=table, json = json, metodo=method)		
-	
+			return jsonify(success=False, result={}, message=message, tabela=table, json = json, metodo=method)
+
 	return jsonify(result="OK", success=True, message="Inserido Com Sucesso!")
 
 @app.route('/api/insertPedido', methods=['POST'])
@@ -102,6 +102,7 @@ def insertPedido() :
 	transacao_id = 0
 	valor = 0
 	desconto = 0
+	pago = 0;
 
 	if "transacao_id" in json:
 		transacao_id = json["transacao_id"]
@@ -116,7 +117,7 @@ def insertPedido() :
 			method = request.method
 			data = Util.postData("insLog", [message, json, table, method])
 			#return jsonify(success=False, result={}, codigo=code,message=error_message.decode('cp1251').encode('utf8'))
-			return jsonify(success=False, result={}, message=message, tabela=table, json = json, metodo=method)		
+			return jsonify(success=False, result={}, message=message, tabela=table, json = json, metodo=method)
 
 	if "valor" in json:
 		valor = json["valor"]
@@ -124,8 +125,11 @@ def insertPedido() :
 	if "desconto" in json:
 		desconto = json["desconto"]
 
+	if "pago" in json:
+		pago = json["pago"]
+
 	try:
-		data = Util.postData("insPedido", [valor, desconto, transacao_id, json["pessoa_tem_funcao_cliente_id"], json["pessoa_tem_funcao_funcionario_id"]])
+		data = Util.postData("insPedido", [pago, valor, desconto, transacao_id, json["pessoa_tem_funcao_cliente_id"], json["pessoa_tem_funcao_funcionario_id"]])
 		pedido_id = data[0]
 		print(pedido_id)
 		itensDeVenda = json["itens_de_venda"]
@@ -137,7 +141,7 @@ def insertPedido() :
 		method = request.method
 		data = Util.postData("insLog", [message, json, table, method])
 		#return jsonify(success=False, result={}, codigo=code,message=error_message.decode('cp1251').encode('utf8'))
-		return jsonify(success=False, result={}, message=message, tabela=table, json = json, metodo=method)		
+		return jsonify(success=False, result={}, message=message, tabela=table, json = json, metodo=method)
 
 	item_stored = 0
 	for itemDeVenda in itensDeVenda:
@@ -161,7 +165,7 @@ def insertPedido() :
 		data = Util.postData("delPedido", [pedido_id])
 		data = Util.postData("delTransacao", [transacao_id])
 		#return jsonify(success=False, result={}, codigo=code,message=error_message.decode('cp1251').encode('utf8'))
-		return jsonify(success=False, result={}, message=message, tabela=table, json = json, metodo=method)		
+		return jsonify(success=False, result={}, message=message, tabela=table, json = json, metodo=method)
 
 	return jsonify(result="OK", success=True, message="Inserido Com Sucesso!")
 
@@ -184,8 +188,8 @@ def insertCliente():
 		method = request.method
 		data = Util.postData("insLog", [message, json, table, method])
 		#return jsonify(success=False, result={}, codigo=code,message=error_message.decode('cp1251').encode('utf8'))
-		return jsonify(success=False, result={}, message=message, tabela=table, json = json, metodo=method)		
-	
+		return jsonify(success=False, result={}, message=message, tabela=table, json = json, metodo=method)
+
 	data.insert(0,None)
 	data.insert(2,"")
 
@@ -195,9 +199,9 @@ def insertCliente():
 	funcao_id = 1
 	funcao_nome = "cliente"
 
-	if "cliente-especial" in json and json["cliente-especial"] is True:
+	if "clienteEspecial" in json and json["clienteEspecial"] is True:
 		funcao_id = 2
-		funcao_nome = "cliente-especial"
+		funcao_nome = "clienteEspecial"
 
 	try:
 		data = [pessoa.id, pessoa.nome, pessoa.email, pessoa.registro, funcao_id, funcao_nome, None, None, None]
@@ -221,7 +225,7 @@ def insertCliente():
 		telefones.append(tel)
 
 	ptrs = []
-	for ptr in json["redes_sociais"]:
+	for ptr in json["redesSociais"]:
 		data = [ptr["perfil"], ptr["rede_social_id"], pessoa.id]
 		pessoa_tem_rede_social = PessoaTemRedeSocial([None, pessoa.id, pessoa.nome, data[0], data[1], ""])
 		pessoa_tem_rede_social.id = Util.postData("insPessoaTemRedeSocial", data)[0]
@@ -246,8 +250,8 @@ def insertFuncionario():
 		method = request.method
 		data = Util.postData("insLog", [message, json, table, method])
 		#return jsonify(success=False, result={}, codigo=code,message=error_message.decode('cp1251').encode('utf8'))
-		return jsonify(success=False, result={}, message=message, tabela=table, json = json, metodo=method)		
-	
+		return jsonify(success=False, result={}, message=message, tabela=table, json = json, metodo=method)
+
 	data.insert(0,None)
 	data.insert(2,"")
 
@@ -303,8 +307,8 @@ def insertAdministrador():
 		json = str(pessoa)
 		method = request.method
 		data = Util.postData("insLog", [message, json, table, method])
-		return jsonify(success=False, result={}, message=message, tabela=table, json = json, metodo=method)		
-	
+		return jsonify(success=False, result={}, message=message, tabela=table, json = json, metodo=method)
+
 	data.insert(0,None)
 	data.insert(2,"")
 

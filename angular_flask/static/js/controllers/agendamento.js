@@ -388,14 +388,33 @@ function AgendamentoController(AgendamentoFactory, calendarConfig, modalService,
    }
 
    function getHistoricoContratos() {
-      alert('alou');
       AgendamentoFactory.getHistoricoContratos({
          params: vm.form
       })
       .then(function (response) {
          if (response.data.success === true) {
             console.log(response.data.result);
-            vm.historicoContratos = response.data.result;
+            if (!angular.isArray(response.data.result)) {
+               vm.historicoContratos = [];
+               vm.historicoContratos.push(response.data.result);
+            } else {
+               vm.historicoContratos = response.data.result;
+            }
+
+            angular.forEach(vm.historicoContratos, function(value, key) {
+               value.data_hora = value.data_hora ? new Date(value.data_hora) : '';
+
+               if (value.servicos_agendados ) {
+                  if (!angular.isArray(value.servicos_agendados)) {
+                     value.servicos_agendados = [];
+                     value.servicos_agendados.push(value.servicos_agendados);
+                  }
+                  angular.forEach(value.servicos_agendados, function(value2, key2) {
+                     value2.data_hora = value2.data_hora ? new Date(value2.data_hora) : '';
+                     value2.data_hora_executado = value2.data_hora_executado ? new Date(value2.data_hora_executado) : '';
+                  });
+               }
+            });
          } else {
             ngToast.danger({content: 'Falha ao buscar o histórico: ' + response.data.message});
          }

@@ -264,21 +264,11 @@
                         </p>
                       </div>
                     </div>
-                    <div class="col-xs-4">
+                    <div class="col-xs-6">
                       <div class="form-group">
                         <label>Telefone *</label>
                         <input class="form-control" type="text" data-ng-model="telefone.numero">
                         <p class="help-block" ng-show="vm.helpActive">Insira o número do telefone</p>
-                      </div>
-                    </div>
-                    <div class="col-xs-2">
-                      <div class="form-group">
-                        <label>Whatsapp</label>
-                        <div class="checkbox">
-                          <label>
-                            <input type="checkbox" data-ng-model="telefone.whatsapp">&nbsp;&nbsp; Sim
-                          </label>
-                        </div>
                       </div>
                     </div>
                     <div class="col-xs-2">
@@ -293,72 +283,33 @@
                 </div>
               </div>
               <!-- FIM BLOCO TELEFONES -->
-
-              <!-- INICIO BLOCO REDES SOCIAIS -->
-              <div class="col-lg-6 col-xs-12">
-                <div class="row">
-                  <div class="col-xs-9">
-                    <div class="form-group">
-                      <label>Redes Sociais</label>
-                      <a class="form-control btn btn-link" ng-click="vm.incluirPessoaRedeSocial()" data-toggle="tooltip" data-placement="top" title="Informar um meio de contato">
-                        <span class="fa fa-plus"></span>&nbsp;<i class="fa fa-user"></i>&nbsp;&nbsp;<b>Adicionar Contato</b>
-                      </a>
-                    </div>
-                  </div>
-                  <div class="col-xs-3">
-                    <div class="form-group">
-                      <label>Nova Rede Social</label>
-                      <a class="form-control btn btn-link" data-toggle="modal" data-target="#novaRedeSocial" data-toggle="tooltip" data-placement="top" title="Cadastrar uma nova rede social">
-                        <span class="fa fa-plus"></span>&nbsp;<i class="fa fa-facebook"></i>&nbsp;&nbsp;<b>Nova</b>
-                      </a>
-                    </div>
-                  </div>
-                </div>
-                <div class="row">
-                  <fieldset data-ng-repeat="social in vm.form.redesSociais">
-                    <div class="col-xs-3">
-                      <div class="form-group">
-                        <label>Rede Social *</label>
-                        <select class="form-control" ng-model="social.redeSocial" ng-options="tipo.id as tipo.nome for tipo in vm.tiposRedesSociais track by tipo.id"></select>
-                      </div>
-                    </div>
-                    <div class="col-xs-7">
-                      <div class="form-group">
-                        <label>Perfil/Endereço *</label>
-                        <input class="form-control" type="text" data-ng-model="social.perfil">
-                        <p class="help-block" ng-show="vm.helpActive">Insira o perfil ou endereço para encontrar a pessoa na rede social</p>
-                      </div>
-                    </div>
-                    <div class="col-xs-2">
-                      <div class="form-group" ng-hide="$first">
-                        <label>Remover</label>
-                        <a class="form-control btn btn-link" ng-click="vm.removeRedeSocial(item)" data-toggle="tooltip" data-placement="top" title="Remover meio de contato">
-                          <i class="fa fa-minus"></i>
-                        </a>
-                        <p class="help-block" ng-show="vm.helpActive"></p>
-                      </div>
-                    </div>
-                  </fieldset>
-                </div>
-              </div>
-            </div>
+           </div>
 
             <hr>
             <!-- FUNCOES/PERMISSOES -->
             <div class="row">
               <div class="col-xs-6">
-                <div class="form-group">
-                  <label>Função *</label>
-                  <div class="radio" ng-repeat="f in vm.funcoes | orderBy:'nome'">
-                    <label><input type="radio" value="{{f.id}}" required ng-model="vm.form.funcao">&nbsp;&nbsp; {{f.nome|capitalize}}</label>
-                  </div>
+                 <div class="row">
+                    <div class="col-xs-12">
+                       <label>Função *</label>
+                      <div class="form-group">
+                           <label><input type="radio" value="funcionario" ng-required="true" ng-model="vm.form.funcao" checked="true">&nbsp;&nbsp; Funcionário</label>
+                      </div>
+                   </div>
                 </div>
+                  <div class="row">
+                     <div class="col-xs-12">
+                       <div class="form-group">
+                            <label><input type="radio" value="administrador" ng-required="true" ng-model="vm.form.funcao">&nbsp;&nbsp; Administrador</label>
+                       </div>
+                    </div>
+                 </div>
               </div>
               <div class="col-xs-6">
                 <div class="form-group">
                   <label>Permissões *</label>
                   <div class="checkbox" ng-repeat="p in vm.permissoes | orderBy:'modulo'">
-                    <label><input type="checkbox" ng-model="p.checked" required ng-change="vm.selecionarPermissao()">&nbsp;&nbsp; {{p.modulo|capitalize}}</label>
+                    <label><input type="checkbox" ng-model="p.checked" ng-required ng-change="vm.selecionarPermissao()">&nbsp;&nbsp; {{p.modulo|capitalize}}</label>
                   </div>
                 </div>
               </div>
