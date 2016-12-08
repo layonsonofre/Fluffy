@@ -135,6 +135,9 @@ def getContratos() :
 	data_fim_contrato = str(request.args.get("data_fim_contrato")) if request.args.get("data_fim_contrato") is not None else None
 	data_inicio_agendamento = str(request.args.get("data_inicio_agendamento")) if request.args.get("data_inicio_agendamento") is not None else None
 	data_fim_agendamento = str(request.args.get("data_fim_agendamento")) if request.args.get("data_fim_agendamento") is not None else None
+	cancelado = str(request.args.get("cancelado")) if request.args.get("cancelado") is not None else None
+	executado = str(request.args.get("executado")) if request.args.get("executado") is not None else None
+	pago = str(request.args.get("pago")) if request.args.get("pago") is not None else None
 	
 	data = Util.getData("getServicoContratado", [servico_contratado_id, data_inicio_contrato, data_fim_contrato, funcionario_contrato_id])
 	
@@ -150,7 +153,7 @@ def getContratos() :
 	for sc in servicos_contratados:
 		servicos_agendados = []
 		data
-		data = Util.getData("getServicoAgendado", [servico_agendado_id, sc.id, data_inicio_agendamento, data_fim_agendamento, None, None, None, None, None, animal_id, servico_id, None, funcionario_executa_id])
+		data = Util.getData("getServicoAgendado", [servico_agendado_id, sc.id, data_inicio_agendamento, data_fim_agendamento, None, executado, pago, None, None, animal_id, servico_id, cancelado, funcionario_executa_id])
 		for info in data:
 			servicos_agendados.append(ServicoAgendado(info))
 
