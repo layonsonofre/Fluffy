@@ -59,14 +59,15 @@ def get_modelo(modelo=None):
         data = Util.getData("get"+modelo[0].upper()+modelo[1:], args)
         print(data)
     except Exception as e:
-    	message = e.args[1]
+    	message = e.args
+        try: message = e.args[1]
+        except Exception as e: message = " ".join(message)
     	table = modelo
     	json = request.json
     	method = request.method
 
     	data = Util.postData("insLog", [message, json, table, method])
     	print(data)
-    	#return jsonify(success=False, result={}, codigo=code,message=error_message.decode('cp1251').encode('utf8'))
     	return jsonify(success=False, result={}, message=message, tabela=table, json = json, metodo=method)
 
     class_name = globals()[modelo[0].upper()+modelo[1:]]
@@ -129,18 +130,14 @@ def form_modelo(modelo = None):
         data = Util.postData(proc, args)
         return jsonify(success=True, result={"id":data[0]}, message="")
     except Exception as e:
-        message = e.args[1]
+        message = e.args
+        try: message = e.args[1]
+        except Exception as e: message = " ".join(message)
         table = modelo
         json = str(request.json)
         method = request.method
 
-        print(message)
-        print(table)
-        print(json)
-        print(method)
-
         data = Util.postData("insLog", [message, json, table, method])
-        #return jsonify(success=False, result={}, codigo=code,message=error_message.decode('cp1251').encode('utf8'))
         return jsonify(success=False, result={}, message=message, tabela=table, json = json, metodo=method)
 
 @app.route('/api/login', methods=['POST'])
@@ -157,12 +154,10 @@ def login():
     print([username, passwd, client_id])
     try:
     	data = Util.getData('getPessoaTemFuncao', [None, None, None, None, username, passwd, None, None])
-        # print data
     	if len(data) == 1 and client_id == CLIENT_ID:
             ptf = PessoaTemFuncao(data[0])
             token = str(uuid4())
             refresh_token = str(uuid4())
-            # print([token, refresh_token])
             id = Util.postData('insOAuth',[token, refresh_token])
 
             result = Util.postData('altPessoaTemFuncao', [ptf.id, ptf.pessoa[0], ptf.funcao[0], None, id[0]])
@@ -172,7 +167,10 @@ def login():
     	else:
     		return jsonify(success=False, result={}, message="Usuario e/ou Senha incorretos")
     except Exception as e:
-    	return jsonify(success=False, result={}, message=e.args[1])
+        message = ""
+        try: message = e.args[1]   
+        except Exception as e: message = " ".join(e.args)
+    	return jsonify(success=False, result={}, message=message)
 
 # special file handlers and error handlers
 @app.route('/favicon.ico')
@@ -182,4 +180,4 @@ def favicon():
 
 @app.errorhandler(404)
 def page_not_found(e):
-    return render_template('/404.html'), 404
+    return jsonify(success=False, result={}, message="Rota Inexistente!")
