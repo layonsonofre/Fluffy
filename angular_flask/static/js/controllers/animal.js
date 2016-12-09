@@ -33,7 +33,7 @@ function AnimalController(PessoaFactory, dataStorage, AnimalFactory, PorteFactor
          $location.path('/erro');
          ngToast.danger({content: 'Você não tem permissão para acessar esta funcionalidade'});
       }
-      
+
       vm.form = {};
       vm.add = add;
       vm.alt = alt;

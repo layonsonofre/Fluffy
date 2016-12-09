@@ -296,7 +296,7 @@ function PessoaController(PessoaFactory, $http, RedeSocialFactory, AgendaFactory
          vm.form.telefones.push({
             id: null,
             codigo_pais: '055',
-            codigo_area: '42'
+            codigo_area: '042'
          });
       }
    }
@@ -437,9 +437,9 @@ function PessoaController(PessoaFactory, $http, RedeSocialFactory, AgendaFactory
 
    function validarPessoa() {
       if (vm.form.pessoa.clienteEspecial) {
-         vm.form.pessoa.clienteEspecial = true;
+         vm.form.pessoa.clienteEspecial = 1;
       } else {
-         vm.form.pessoa.clienteEspecial = false;
+         vm.form.pessoa.clienteEspecial = 0;
       }
 
       getWhatsappId();
@@ -476,12 +476,14 @@ function PessoaController(PessoaFactory, $http, RedeSocialFactory, AgendaFactory
                }
             });
 
-            PessoaFactory.add(vm.form.pessoa)
+            PessoaFactory.add(vm.form)
             .then(function (response) {
-               console.log("cliente", response);
                if (response.data.success != true) {
                   ngToast.danger({ content: '<b>Falha ao adicionar o registro</b>: ' + response.data.message });
                } else {
+                  vm.form = {};
+                  vm.incluirTelefone();
+                  vm.incluirPessoaRedeSocial();
                   vm.form.pessoa.id = response.data.result.id;
                   ngToast.success({ content: 'Cliente cadastrado com sucesso' });
                }
@@ -612,7 +614,9 @@ function PessoaFactory($http, Fluffy) {
       get: get,
       add: add,
       del: del,
-      alt: alt
+      alt: alt,
+      addFuncionario: addFuncionario,
+      addAdmin: addAdmin
    };
    return PessoaFactory;
 
@@ -636,9 +640,48 @@ function PessoaFactory($http, Fluffy) {
    }
 
    function add(data) {
+      console.log(data);
       return $http({
          method: 'POST',
          url: _url + '/insertCliente',
+         data: data
+      })
+      .then(success)
+      .catch(failed);
+
+      function success(response) {
+         return response;
+      }
+
+      function failed(response) {
+         return response;
+      }
+   }
+
+   function addFuncionario(data) {
+      console.log(data);
+      return $http({
+         method: 'POST',
+         url: _url + '/insertFuncionario',
+         data: data
+      })
+      .then(success)
+      .catch(failed);
+
+      function success(response) {
+         return response;
+      }
+
+      function failed(response) {
+         return response;
+      }
+   }
+
+   function addAdmin(data) {
+      console.log(data);
+      return $http({
+         method: 'POST',
+         url: _url + '/insertAdministrador',
          data: data
       })
       .then(success)

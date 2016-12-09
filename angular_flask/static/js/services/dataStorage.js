@@ -33,6 +33,9 @@
       dataStorage.getPermissoes = getPermissoes;
       dataStorage.checkPermission = checkPermission;
 
+      dataStorage.addResumo = addResumo;
+      dataStorage.getResumo = getResumo;
+
       return dataStorage;
 
       function cleanUp() {
@@ -41,6 +44,7 @@
          $window.localStorage.currentAnimal = null;
          $window.localStorage.currentContrato = null;
          $window.localStorage.currentVenda = null;
+         $window.localStorage.currentResumo = null;
       }
 
       //pessoa
@@ -147,6 +151,19 @@
             }
          });
          return available;
+      }
+
+
+      //pessoa
+      function addResumo(entry) {
+         $window.localStorage.currentResumo = JSON.stringify(entry);
+      }
+
+      function getResumo() {
+         if ($window.localStorage.currentResumo) {
+            return JSON.parse($window.localStorage.currentResumo);
+         }
+         return null;
       }
 
    }

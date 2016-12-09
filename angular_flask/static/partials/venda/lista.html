@@ -91,7 +91,7 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr dir-paginate="entry in vm.vendas | filter:vm.filtroVenda | itemsPerPage: 10" pagination-id="vendas">
+                    <tr dir-paginate="entry in vm.vendas | filter:vm.filtroVenda | orderBy:'id':true | itemsPerPage: 10" pagination-id="vendas">
                       <td>{{entry.valor|currency:"R$ "}}</td>
                       <td>{{entry.desconto|currency:"R$ "}}</td>
                       <td>

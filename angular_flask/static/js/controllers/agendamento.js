@@ -14,6 +14,11 @@
          templateUrl: '../static/partials/servico/lista.html',
          controller: 'AgendamentoController',
          controllerAs: 'vm'
+      })
+      .when('/servico/resumo', {
+         templateUrl: '../static/partials/servico/resumo.html',
+         controller: 'AgendamentoController',
+         controllerAs: 'vm'
       });
    }])
    .controller('AgendamentoController', AgendamentoController)
@@ -21,11 +26,13 @@
 
    AgendamentoController.$inject = ['AgendamentoFactory', 'calendarConfig', 'modalService',
    '$filter', 'PessoaFactory', 'AnimalFactory', 'AnimalTemRestricaoFactory', 'PessoaTemFuncaoFactory',
+   'PessoaTemRedeSocialFactory', 'RedeSocialFactory', '$http',
    'ServicoTemPorteFactory', '$window', 'dataStorage', 'ServicoFactory', 'ngToast', '$location'
 ];
 
 function AgendamentoController(AgendamentoFactory, calendarConfig, modalService,
    $filter, PessoaFactory, AnimalFactory, AnimalTemRestricaoFactory, PessoaTemFuncaoFactory,
+   PessoaTemRedeSocialFactory, RedeSocialFactory, $http,
    ServicoTemPorteFactory, $window, dataStorage, ServicoFactory, ngToast, $location
 ) {
    var vm = this;
@@ -42,15 +49,6 @@ function AgendamentoController(AgendamentoFactory, calendarConfig, modalService,
 
    vm.form = {};
 
-
-
-   // vm.lista = [
-   //    {data: "10/10/2016", cliente: "André Cadamuro Garcia", situacao: "Em aberto", servicos: [{servico: "Banho", animal: "Fluffy", situacao: "Executando"},{servico: "Banho", animal: "Fluffy", situacao: "Executando"},{servico: "Banho", animal: "Fluffy", situacao: "Executando"}]}
-   //    , {data: "10/10/2016", cliente: "André Cadamuro Garcia", situacao: "Em aberto", servicos: [{servico: "Banho", animal: "Fluffy", situacao: "Executando"},{servico: "Banho", animal: "Fluffy", situacao: "Executando"},{servico: "Banho", animal: "Fluffy", situacao: "Executando"}]}
-   //    , {data: "10/10/2016", cliente: "André Cadamuro Garcia", situacao: "Em aberto", servicos: [{servico: "Banho", animal: "Fluffy", situacao: "Executando"},{servico: "Banho", animal: "Fluffy", situacao: "Executando"},{servico: "Banho", animal: "Fluffy", situacao: "Executando"}]}
-   //    , {data: "10/10/2016", cliente: "André Cadamuro Garcia", situacao: "Em aberto", servicos: [{servico: "Banho", animal: "Fluffy", situacao: "Executando"},{servico: "Banho", animal: "Fluffy", situacao: "Executando"},{servico: "Banho", animal: "Fluffy", situacao: "Executando"}]}
-   // ];
-
    vm.alterando = false;
    vm.add = add;
    vm.del = del;
@@ -62,13 +60,21 @@ function AgendamentoController(AgendamentoFactory, calendarConfig, modalService,
    vm.selectAnimal = selectAnimal;
    vm.calcularPreco = calcularPreco;
    vm.detalhes_animal = detalhes_animal;
-   vm.incluirAgendamento = incluirAgendamento;
+   vm.incluirServico = incluirServico;
    vm.cancelAgendamento = cancelAgendamento;
    vm.getAgendamentos = getAgendamentos;
+   vm.confirmar = confirmar;
+   vm.adicionarCliente = adicionarCliente;
+   vm.selectEstado = selectEstado;
+   vm.validarPessoa = validarPessoa;
+   vm.getWhatsappId = getWhatsappId;
 
    vm.getHistoricoContratos = getHistoricoContratos;
 
    vm.form.servicos_agendados = [];
+
+   vm.total = 0;
+
    var contrato = dataStorage.getContrato();
    dataStorage.addContrato(null);
    var agendamento = dataStorage.getAgendamento();
@@ -82,7 +88,20 @@ function AgendamentoController(AgendamentoFactory, calendarConfig, modalService,
    getServicos();
    getClientes();
    if (contrato === null) {
-      incluirAgendamento();
+      incluirServico();
+   }
+
+   if (dataStorage.getResumo() != null) {
+      vm.resumos = dataStorage.getResumo();
+      console.log(vm.resumos);
+      dataStorage.addResumo(null);
+      vm.total = 0;
+      angular.forEach(vm.resumos.servicos_agendados, function(value, key) {
+         value.data_hora = new Date(value.data_hora);
+         vm.total += value.preco;
+      });
+   } else {
+      vm.servicos_agendados = null;
    }
 
    // INIT TIME PICKER
@@ -164,18 +183,25 @@ function AgendamentoController(AgendamentoFactory, calendarConfig, modalService,
 
    function add() {
       vm.form.pessoa_tem_funcao_funcionario_id = dataStorage.getUser().pessoa_tem_funcao_id;
-      angular.forEach(vm.form.servicos_agendados, function (value, key) {
-         // value.data_hora = $filter('date')(new Date(value.data_hora), 'yyyy-MM-dd HH:mm:ss');
+      console.log(vm.form.servicos_agendados);
+      dataStorage.addResumo(vm.form);
+      $location.path("/servico/resumo");
+   }
+
+   function confirmar() {
+      angular.forEach(vm.resumos.servicos_agendados, function (value, key) {
          value.data_hora = new Date(value.data_hora).toISOString().substring(0, 19).replace('T', ' ');
          value.recorrente = value.recorrente ? 1 : 0;
          value.pago = value.pago ? 1 : 0;
          value.executado = value.executado ? 1 : 0;
+         value.servico_id = value.servico.id;
       });
-      AgendamentoFactory.add(vm.form)
+      AgendamentoFactory.add(vm.resumos)
       .then(function (response) {
          if (response.data.result != 'OK') {
             ngToast.danger({ content: '<b>Falha ao adicionar o registro</b>: ' + response.data.message });
          } else {
+            $location.path("/servico/agendamento");
             getAgendamentos(false);
             ngToast.success({ content: 'Registro adicionado com sucesso' });
          }
@@ -185,7 +211,6 @@ function AgendamentoController(AgendamentoFactory, calendarConfig, modalService,
    function alt() {
       vm.form.pessoa_tem_funcao_funcionario_id = dataStorage.getUser().pessoa_tem_funcao_id;
       angular.forEach(vm.form.servicos_agendados, function (value, key) {
-         // value.data_hora = $filter('date')(new Date(value.data_hora), 'yyyy-MM-dd HH:mm:ss');
          value.data_hora = new Date(value.data_hora).toISOString().substring(0, 19).replace('T', ' ');
          value.pessoa_tem_funcao_funcionario_id = vm.form.pessoa_tem_funcao_funcionario_id;
          value.animal_id = value.animal.id;
@@ -199,8 +224,8 @@ function AgendamentoController(AgendamentoFactory, calendarConfig, modalService,
                ngToast.danger({ content: '<b>Falha ao alterar o registro</b>: ' + response.data.message });
             } else {
                ngToast.success({ content: 'Registro alterado com sucesso' });
+               $location.path("/servico/agenda");
             }
-            getAgendamentos(false);
          });
       });
    }
@@ -282,7 +307,7 @@ function AgendamentoController(AgendamentoFactory, calendarConfig, modalService,
    function calcularPreco(agendamento) {
       ServicoTemPorteFactory.get({
          porte_id: vm.form.animal.porte.id,
-         servico_id: agendamento.servico_id
+         servico_id: agendamento.servico.id
       })
       .then(function (response) {
          if (response != null) {
@@ -301,7 +326,7 @@ function AgendamentoController(AgendamentoFactory, calendarConfig, modalService,
       });
    }
 
-   function incluirAgendamento() {
+   function incluirServico() {
       getAgendamentos(true);
    }
 
@@ -420,6 +445,175 @@ function AgendamentoController(AgendamentoFactory, calendarConfig, modalService,
          }
       });
    }
+
+
+   vm.search_zip_code = search_zip_code;
+
+
+   function search_zip_code() {
+      $http({
+         url: "http://cep.republicavirtual.com.br/web_cep.php?cep=" + vm.form.pessoa.cep + "&formato=json",
+         method: "GET",
+         headers: {
+            'Authorization': undefined
+         }
+      })
+      .then(function (response) {
+         vm.form.pessoa.pais = "Brasil";
+         vm.form.pessoa.uf = response.data["uf"];
+         vm.form.pessoa.cidade = response.data["cidade"];
+         vm.form.pessoa.bairro = response.data["bairro"];
+         vm.form.pessoa.logradouro = response.data["tipo_logradouro"] + " " + response.data["logradouro"];
+      });
+   }
+
+   function selectEstado() {
+      var uf = vm.form.pessoa.uf;
+      if (uf == 'AC') {
+         vm.form.pessoa.estado = 'Acre';
+      } else if (uf == 'AL') {
+         vm.form.pessoa.estado = 'Alagoas';
+      } else if (uf == 'AP') {
+         vm.form.pessoa.estado = 'Amapá';
+      } else if (uf == 'AM') {
+         vm.form.pessoa.estado = 'Amazonas';
+      } else if (uf == 'BA') {
+         vm.form.pessoa.estado = 'Bahia';
+      } else if (uf == 'CE') {
+         vm.form.pessoa.estado = 'Ceará';
+      } else if (uf == 'DF') {
+         vm.form.pessoa.estado = 'Distrito Federal';
+      } else if (uf == 'ES') {
+         vm.form.pessoa.estado = 'Espírito Santo';
+      } else if (uf == 'GO') {
+         vm.form.pessoa.estado = 'Goiás';
+      } else if (uf == 'MA') {
+         vm.form.pessoa.estado = 'Maranhão';
+      } else if (uf == 'MT') {
+         vm.form.pessoa.estado = 'Mato Grosso';
+      } else if (uf == 'MS') {
+         vm.form.pessoa.estado = 'Mato Grosso do Sul';
+      } else if (uf == 'MG') {
+         vm.form.pessoa.estado = 'Minas Gerais';
+      } else if (uf == 'PA') {
+         vm.form.pessoa.estado = 'Pará';
+      } else if (uf == 'PB') {
+         vm.form.pessoa.estado = 'Paraíba';
+      } else if (uf == 'PR') {
+         vm.form.pessoa.estado = 'Paraná';
+      } else if (uf == 'PE') {
+         vm.form.pessoa.estado = 'Pernambuco';
+      } else if (uf == 'PI') {
+         vm.form.pessoa.estado = 'Piauí';
+      } else if (uf == 'RJ') {
+         vm.form.pessoa.estado = 'Rio de Janeiro';
+      } else if (uf == 'RN') {
+         vm.form.pessoa.estado = 'Rio Grande do Norte';
+      } else if (uf == 'RS') {
+         vm.form.pessoa.estado = 'Rio Grande do Sul';
+      } else if (uf == 'RO') {
+         vm.form.pessoa.estado = 'Rondônia';
+      } else if (uf == 'RR') {
+         vm.form.pessoa.estado = 'Roraima';
+      } else if (uf == 'SC') {
+         vm.form.pessoa.estado = 'Santa Catarina';
+      } else if (uf == 'SP') {
+         vm.form.pessoa.estado = 'São Paulo';
+      } else if (uf == 'SE') {
+         vm.form.pessoa.estado = 'Sergipe';
+      } else if (uf == 'TO') {
+         vm.form.pessoa.estado = 'Tocantins';
+      }
+   }
+
+   function validarPessoa() {
+      if (vm.form.clienteEspecial) {
+         vm.form.clienteEspecial = 1;
+      } else {
+         vm.form.clienteEspecial = 0;
+      }
+
+      getWhatsappId();
+      return true;
+   }
+
+   vm.form.pessoa = {};
+
+   vm.form.pessoa.telefones = [];
+   vm.form.pessoa.telefones.push({
+      id: null,
+      codigo_pais: '055',
+      codigo_area: '042'
+   });
+
+   vm.form.pessoa.redesSociais = [];
+   vm.form.pessoa.redesSociais.push({ id: null });
+
+   function getWhatsappId() {
+      RedeSocialFactory.get({
+         nome: 'whatsapp'
+      })
+      .then(function (response) {
+         vm.whatsapp_id = response.data.result.id;
+      });
+   }
+
+   function adicionarCliente() {
+      console.log(vm.form.pessoa);
+      console.log(vm.form.animal);
+      if (validarPessoa()) {
+         selectEstado();
+         angular.forEach(vm.form.telefones, function (value, key) {
+            if (value.whatsapp) {
+               var temp = {};
+               temp.perfil = value.codigo_pais + '' + value.codigo_area + '' + value.numero;
+               temp.rede_social_id = vm.whatsapp_id;
+               vm.form.redesSociais.push({perfil: temp.perfil, rede_social_id: vm.whatsapp_id});
+            }
+         });
+
+         PessoaFactory.add(vm.form)
+         .then(function (response) {
+            if (response.data.success != true) {
+               ngToast.danger({ content: '<b>Falha ao adicionar o cliente</b>: ' + response.data.message });
+            } else {
+               ngToast.success({ content: 'Cliente cadastrado com sucesso' });
+
+               if (validarAnimal()) {
+                  // adicionando o animal
+                  AnimalFactory.add(vm.form.animal)
+                  .then(function (response) {
+                     if (response.data.success === true) {
+                        ngToast.success({content: 'Animal adicionado com sucesso'});
+                        if (response.data.result.id) {
+                           vm.form.animal.id = response.data.result.id;
+
+                           // adicionando restricoes
+                           var temp = {};
+                           temp.animal_id = vm.form.animal.id;
+                           angular.forEach(vm.form.animal.restricoes, function (value, key) {
+                              temp.restricao_id = value;
+
+                              AnimalTemRestricaoFactory.add(value)
+                              .then(function (response) {
+                                 ngToast.success({ content: 'Restrição cadastrado com sucesso' });
+                              });
+                           });
+                        }
+                     } else {
+                        ngToast.danger({ content: 'Falha ao adicionar animal: ' + response.data.message });
+                     }
+                  });
+               }
+            }
+         });
+      }
+   }
+
+   function validarAnimal() {
+      vm.form.animal.animal.data_nascimento = new Date(vm.form.animal.animal.data_nascimento).toISOString().substring(0, 19).replace('T', ' ');
+      return true;
+   }
 }
 
 AgendamentoFactory.$inject = ['$http', 'Fluffy'];
@@ -438,7 +632,6 @@ function AgendamentoFactory($http, Fluffy) {
 
    function get(data) {
       data = data || null;
-      console.log("data get agendado", data);
       return $http({
          url: _url + '/servicoAgendado',
          params: data,

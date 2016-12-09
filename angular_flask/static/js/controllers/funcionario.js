@@ -123,8 +123,6 @@ function FuncionarioController(PessoaFactory, $http, RedeSocialFactory, AgendaFa
    function set(entry) {
       vm.alterando = true;
       vm.form.pessoa = entry;
-
-      console.log('pessoa', vm.form.pessoa);
    }
 
    function detalhes_pessoa(entry) {
@@ -202,7 +200,7 @@ function FuncionarioController(PessoaFactory, $http, RedeSocialFactory, AgendaFa
          vm.form.telefones.push({
             id: null,
             codigo_pais: '055',
-            codigo_area: '42'
+            codigo_area: '042'
          });
       }
    }
@@ -342,6 +340,7 @@ function FuncionarioController(PessoaFactory, $http, RedeSocialFactory, AgendaFa
          ngToast.warning({content: 'Selecione uma função para este funcionário.'});
          return false;
       }
+      getWhatsappId();
       return true;
    }
 
@@ -369,23 +368,25 @@ function FuncionarioController(PessoaFactory, $http, RedeSocialFactory, AgendaFa
          if (validarPessoa()) {
             selectEstado();
             if (vm.form.funcao === 'funcionario') {
-               FuncionarioFactory.add(vm.form.pessoa)
+               PessoaFactory.addFuncionario(vm.form)
                .then(function (response) {
                   console.log("funcionario", response);
                   if (response.data.success != true) {
                      ngToast.danger({ content: '<b>Falha ao adicionar o registro</b>: ' + response.data.message });
                   } else {
+                     vm.form = {};
                      vm.form.pessoa.id = response.data.result.id;
                      ngToast.success({ content: 'Funcionário cadastrado com sucesso' });
                   }
                });
             } else if (vm.form.funcao === 'administrador') {
-               FuncionarioFactory.addAdmin(vm.form.pessoa)
+               PessoaFactory.addAdmin(vm.form)
                .then(function (response) {
                   console.log("admin", response);
                   if (response.data.success != true) {
                      ngToast.danger({ content: '<b>Falha ao adicionar o registro</b>: ' + response.data.message });
                   } else {
+                     vm.form = {};
                      vm.form.pessoa.id = response.data.result.id;
                      ngToast.success({ content: 'Administrador cadastrado com sucesso' });
                   }
@@ -458,7 +459,7 @@ function FuncionarioController(PessoaFactory, $http, RedeSocialFactory, AgendaFa
                .then(function (response) {
                   vm.form.pessoa.pessoa_tem_funcao_id = response.data.result.id;
                   // adicionando permissoes
-                  angular.forEach(vm.form.permissoesFuncionario, function (value, key) {
+                  angular.forEach(vm.form.permissoes, function (value, key) {
                      value.pessoa_id = vm.form.pessoa.pessoa_tem_funcao_id;
                      value.permissao_id = value.id;
                      PessoaTemPermissaoFactory.alt({ pessoa_id: value.pessoa_id, permissao_id: value.permissao_id }).then(function (response) {
@@ -500,123 +501,15 @@ function FuncionarioController(PessoaFactory, $http, RedeSocialFactory, AgendaFa
    function getPermissoes() {
       PermissaoFactory.get()
       .then(function (response) {
-         vm.permissoes = response.data.result;
+         vm.permissoesLista = response.data.result;
       });
    }
 
    vm.selecionarPermissao = function () {
-      vm.form.permissoesFuncionario = $filter('filter')(vm.permissoes, {
+      vm.form.permissoes = $filter('filter')(vm.permissoesLista, {
          checked: true
       });
    };
-}
-
-PessoaFactory.$inject = ['$http', 'Fluffy'];
-
-function PessoaFactory($http, Fluffy) {
-   var _url = Fluffy.urlBase;
-   var PessoaFactory = {
-      get: get,
-      add: add,
-      del: del,
-      alt: alt,
-      addAdmin: addAdmin
-   };
-   return PessoaFactory;
-
-   function get(data) {
-      data = data || null;
-      return $http({
-         url: _url + '/pessoa',
-         method: 'GET',
-         params: data
-      })
-      .then(success)
-      .catch(failed);
-
-      function success(response) {
-         return response;
-      }
-
-      function failed(error) {
-         return error;
-      }
-   }
-
-   function add(data) {
-      return $http({
-         method: 'POST',
-         url: _url + '/insertFuncionario',
-         data: data
-      })
-      .then(success)
-      .catch(failed);
-
-      function success(response) {
-         return response;
-      }
-
-      function failed(response) {
-         return response;
-      }
-   }
-
-   function addAdmin(data) {
-      return $http({
-         method: 'POST',
-         url: _url + '/insertAdministrador',
-         data: data
-      })
-      .then(success)
-      .catch(failed);
-
-      function success(response) {
-         return response;
-      }
-
-      function failed(response) {
-         return response;
-      }
-   }
-
-   function alt(data) {
-      return $http({
-         url: _url + '/pessoa',
-         data: data,
-         method: 'PUT'
-      })
-      .then(success)
-      .catch(failed);
-
-      function success(response) {
-         return response;
-      }
-
-      function failed(response) {
-         return response;
-      }
-   }
-
-   function del(id) {
-      return $http({
-         url: _url + '/pessoa',
-         data: {
-            id: id
-         },
-         method: 'DELETE'
-      })
-      .then(success)
-      .catch(failed);
-
-      function success(response) {
-         return response;
-      }
-
-      function failed(response) {
-         return response;
-      }
-   }
-
 }
 
 })()

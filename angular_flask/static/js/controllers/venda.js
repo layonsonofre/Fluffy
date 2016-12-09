@@ -159,7 +159,7 @@
                });
                $location.path('/venda/confirmacao');
             } else {
-               ngToast.danger({content: 'Falha ao adicionar registro: ' + response.data.message});
+               ngToast.danger({content: 'Falha ao adicionar realizar venda: ' + response.data.message});
             }
          });
       }
@@ -206,12 +206,22 @@
 
 
       function alt(entry) {
+         console.log(entry);
+         if (entry.pago || entry.pago === 'true') {
+            entry.pago = 1;
+         } else {
+            entry.pago = 0;
+         }
          var send = {
             pago: entry.pago,
             id: entry.id
          };
          VendaFactory.alt(send).then(function (response) {
-            console.log("\nAlterando", response);
+            if (response.data.sucess === 'true') {
+               ngToast.success({content: 'Venda ao alterada com sucesso'});
+            } else {
+               ngToast.warning({content: 'Falha ao alterar registro: ' + response.data.message})
+            }
          });
       }
 
@@ -257,7 +267,7 @@
 
       function alt(data) {
          return $http({
-            url: _url + '/vacina',
+            url: _url + '/pedido',
             data: data,
             method: 'PUT'
          })

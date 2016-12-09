@@ -1,0 +1,171 @@
+<div>
+   <div class="row">
+      <div class="col-md-12">
+         <h1 class="page-head-line">Resumo</h1>
+         <h1 class="page-subhead-line">Confira um resumo do serviço sendo cadastrado antes de confirmar</h1>
+         <a ng-click="vm.helpActive = !vm.helpActive" class="btn btn-link pull-right"><span class="fa fa-info"></span></a>
+         <toast></toast>
+      </div>
+   </div>
+
+   <div class="row">
+      <div class="col-xs-12">
+         <div class="panel panel-default">
+            <div class="panel-heading">
+               Serviços
+            </div>
+            <div class="panel-body">
+
+               <!-- LISTA DE SERVIÇOS -->
+               <div class="row">
+                  <div class="col-xs-12">
+                     <div class="table-wrapper">
+                        <table class="table table-striped table-hover">
+                           <thead>
+                              <tr>
+                                 <th class="col-xs-2">Servico</th>
+                                 <th class="col-xs-2">Animal</th>
+                                 <th class="col-xs-2">Valor</th>
+                                 <th class="col-xs-2">Data</th>
+                                 <th class="col-xs-1">Executado</th>
+                                 <th class="col-xs-1">Pago</th>
+                                 <th class="col-xs-1">Recorrente</th>
+                                 <th class="col-xs-1">Cancelado</th>
+                              </tr>
+                           </thead>
+                           <tbody>
+                              <tr ng-repeat="entry in vm.resumos.servicos_agendados | orderBy:'data_hora'">
+                                 <td>{{entry.servico.nome | capitalize}}</td>
+                                 <td>{{entry.animal.nome | capitalize}}</td>
+                                 <td>{{entry.preco | currency:'R$ '}}</td>
+                                 <td>{{entry.data_hora | date:'dd/MM/yyyy'}}</td>
+                                 <td><input type="checkbox" ng-model="entry.executado"></td>
+                                 <td><input type="checkbox" ng-model="entry.pago"></td>
+                                 <td><input type="checkbox" ng-model="entry.recorrente"></td>
+                                 <td><input type="checkbox" ng-model="entry.cancelado"></td>
+                              </tr>
+                           </tbody>
+                        </table>
+                     </div>
+                  </div>
+                  <div class="col-xs-12 text-right">
+                    <h5>Total: <strong>{{vm.total | currency:"R$ "}}</strong></h5>
+                  </div>
+               </div>
+               <!-- <div class="row">
+                  <div class="col-xs-12 text-center">
+                     <dir-pagination-controls pagination-id="historicoContratos"></dir-pagination-controls>
+                  </div>
+               </div> -->
+
+
+               <div class="row">
+                  <div class="col-xs-6">
+                     <button ng-click="vm.confirmar()" class="btn btn-link" data-toggle="tooltip" data-placement="top" title="Confirmar agendamento">
+                        <span class="fa fa-check"></span><b>&nbsp;&nbsp; Confirmar Agendamento</b>
+                     </button>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+
+   <!-- MODAL DE SELEÇÂO DO CLIENTE -->
+   <div id="selecionarCliente" class="modal fade" role="dialog" aria-labelledby="cliente">
+      <div class="modal-dialog modal-md" role="document">
+         <div class="modal-content">
+            <div class="modal-header">
+               <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+               <h4 class="modal-title">Selecionar cliente</h4>
+            </div>
+            <div class="modal-body">
+               <div class="row">
+                  <div class="col-xs-12">
+                     <div class="form-group">
+                        <label>Busque por um cliente</label>
+                        <input class="form-control" type="text" ng-model="vm.filtro">
+                        <p class="help-block" ng-show="vm.helpActive">Você pode pesquisar por qualquer dado do cliente</p>
+                     </div>
+                  </div>
+               </div>
+               <label>Cliente *</label>
+               <div class="table-wrapper">
+                  <table class="table table-striped table-hover">
+                     <thead>
+                        <tr>
+                           <th class="col-xs-1">#</th>
+                           <th class="col-xs-4">Nome</th>
+                           <th class="col-xs-4">Email</th>
+                           <th class="col-xs-3">Telefone</th>
+                        </tr>
+                     </thead>
+                     <tbody>
+                        <tr ng-repeat="entry in vm.clientes | filter:vm.filtro">
+                           <th>
+                              <input type="checkbox" ng-model="entry.checked" ng-change="vm.updateSelection(entry.id, vm.clientes); vm.selectCliente(entry)" data-dismiss="modal">
+                           </th>
+                           <td>{{entry.nome}}</td>
+                           <td>{{entry.email}}</td>
+                           <td>{{entry.telefone}}</td>
+                        </tr>
+                     </tbody>
+                  </table>
+               </div>
+            </div>
+            <div class="modal-footer">
+               <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.cancelCliente()">Fechar</button>
+            </div>
+         </div>
+      </div>
+   </div>
+
+   <!-- MODAL DE SELEÇÂO DO FUNCIONARIO -->
+   <div id="selecionarFuncionario" class="modal fade" role="dialog" aria-labelledby="cliente">
+      <div class="modal-dialog modal-md" role="document">
+         <div class="modal-content">
+            <div class="modal-header">
+               <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+               <h4 class="modal-title">Selecionar funcionário</h4>
+            </div>
+            <div class="modal-body">
+               <div class="row">
+                  <div class="col-xs-12">
+                     <div class="form-group">
+                        <label>Busque por um funcionário</label>
+                        <input class="form-control" type="text" ng-model="vm.filtro">
+                        <p class="help-block" ng-show="vm.helpActive">Você pode pesquisar por qualquer dado do funcionário</p>
+                     </div>
+                  </div>
+               </div>
+               <label>Funcionário *</label>
+               <div class="table-wrapper">
+                  <table class="table table-striped table-hover">
+                     <thead>
+                        <tr>
+                           <th class="col-xs-1">#</th>
+                           <th class="col-xs-4">Nome</th>
+                           <th class="col-xs-4">Email</th>
+                           <th class="col-xs-3">Telefone</th>
+                        </tr>
+                     </thead>
+                     <tbody>
+                        <tr ng-repeat="entry in vm.clientes | filter:vm.filtro">
+                           <th>
+                              <input type="checkbox" ng-model="entry.checked" ng-change="vm.updateSelection(entry.id, vm.clientes); vm.selectCliente(entry)" data-dismiss="modal">
+                           </th>
+                           <td>{{entry.nome}}</td>
+                           <td>{{entry.email}}</td>
+                           <td>{{entry.telefone}}</td>
+                        </tr>
+                     </tbody>
+                  </table>
+               </div>
+            </div>
+            <div class="modal-footer">
+               <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.cancelCliente()">Fechar</button>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>

@@ -301,6 +301,16 @@ p.error {
   display: block;
   clear: both;
 }
+
+.modal-dialog {
+   overflow-y: initial !important;
+   max-height: 85% !important;
+}
+.modal-body {
+   max-height: 400px !important;
+   overflow-y: auto !important;
+}
+
 @media (min-width: 544px) {
     .card-deck {
         display: table;
