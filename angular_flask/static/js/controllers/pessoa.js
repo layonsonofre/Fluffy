@@ -34,7 +34,6 @@ function PessoaController(PessoaFactory, $http, RedeSocialFactory, AgendaFactory
 ) {
    var vm = this;
 
-
    if (dataStorage.getUser() == null) {
       $location.path('/login');
       ngToast.danger({content: 'Necessário realizar o login antes de utilizar esta funcionalidade'});
@@ -163,6 +162,10 @@ function PessoaController(PessoaFactory, $http, RedeSocialFactory, AgendaFactory
                } else {
                   vm.animais = response.data.result;
                }
+
+               angular.forEach(vm.animais, function(value, key) {
+                  value.data_nascimento = value.data_nascimento ? new Date(value.data_nascimento) : '';
+               });
             } else {
                ngToast.danger({ content: 'Falha na busca pelos registros' });
             }
@@ -218,7 +221,8 @@ function PessoaController(PessoaFactory, $http, RedeSocialFactory, AgendaFactory
 
    function detalhes_animal(entry) {
       vm.form.animal = {};
-      vm.form.animal = entry;
+      vm.form.animal = angular.copy(entry);
+      vm.form.animal.data_nascimento = new Date(vm.form.animal.data_nascimento);
       AnimalTemRestricaoFactory.get({ animal_id: entry.id }).then(function (response) {
          if (response.data.success === true) {
             if (!angular.isArray(response.data.result)) {

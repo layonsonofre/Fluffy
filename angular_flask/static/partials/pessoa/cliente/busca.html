@@ -99,7 +99,7 @@
                     <span ng-show="entry.sexo === 'M'" class="fa fa-mars"></span>
                     <span ng-show="entry.sexo === 'F'" class="fa fa-venus"></span>
                   </td>
-                  <td>{{ entry.data_nascimento }}</td>
+                  <td>{{ entry.data_nascimento|date:'dd/MM/yyyy' }}</td>
                   <td>{{ entry.raca.nome}}</td>
                   <td>{{ entry.porte.nome}}</td>
                   <td>
@@ -281,7 +281,8 @@
               <div class="col-xs-8">
                 <div class="form-group">
                   <label>Nascimento</label>
-                  <input class="form-control" type="text" ng-model="vm.form.animal.data_nascimento" ng-readonly="true">
+                  <span class="form-control">{{vm.form.animal.data_nascimento|date:'dd/MM/yyyy'}}</span>
+                  <!-- <input class="form-control" type="text" ng-model="vm.form.animal.data_nascimento" ng-readonly="true"> -->
                 </div>
               </div>
               <div class="col-xs-6">

@@ -54,6 +54,7 @@ function AgendamentoController(AgendamentoFactory, calendarConfig, modalService,
    vm.del = del;
    vm.alt = alt;
    vm.getClientes = getClientes;
+   vm.getFuncionarios = getFuncionarios;
    vm.updateSelection = updateSelection;
    vm.selectCliente = selectCliente;
    vm.cancelCliente = cancelCliente;
@@ -87,6 +88,7 @@ function AgendamentoController(AgendamentoFactory, calendarConfig, modalService,
 
    getServicos();
    getClientes();
+   getFuncionarios();
    if (contrato === null) {
       incluirServico();
    }
@@ -262,6 +264,19 @@ function AgendamentoController(AgendamentoFactory, calendarConfig, modalService,
       });
    }
 
+   function getFuncionarios() {
+      PessoaFactory.get({
+         cliente: false
+      })
+      .then(function (response) {
+         if (response.data.success === true) {
+            vm.funcionarios = response.data.result;
+         } else {
+            ngToast.danger({ content: 'Falha ao buscar funcionários: ' + response.data.message});
+         }
+      });
+   }
+
    function selectCliente(entry) {
       vm.form.pessoa_tem_funcao = entry;
       vm.animais = {};
@@ -295,12 +310,16 @@ function AgendamentoController(AgendamentoFactory, calendarConfig, modalService,
       AnimalFactory.get({
          id: animal_id
       }).then(function (response) {
-         vm.form.animal = response.data.result;
-         AnimalTemRestricaoFactory.get({
-            animal_id: animal_id
-         }).then(function (response) {
-            vm.form.animal.restricoes = response.data.result;
-         });
+         if (response.data.sucess === 'true') {
+            vm.form.animal = response.data.result;
+            vm.form.animal.data_nascimento = vm.form.animal.data_nascimento ? new Date(vm.form.animal.data_nascimento) : '';
+
+            AnimalTemRestricaoFactory.get({
+               animal_id: animal_id
+            }).then(function (response) {
+               vm.form.animal.restricoes = response.data.result;
+            });
+         }
       });
    }
 
@@ -400,6 +419,32 @@ function AgendamentoController(AgendamentoFactory, calendarConfig, modalService,
       vm.popupDataFim = true;
    }
 
+
+   vm.selectClienteLista = selectClienteLista;
+   vm.cancelClienteLista = cancelClienteLista;
+   vm.selectFuncionarioLista = selectFuncionarioLista;
+   vm.cancelFuncionarioLista = cancelFuncionarioLista;
+
+   function selectClienteLista(entry) {
+      vm.form.pessoa_tem_funcao_cliente = entry;
+   }
+
+   function cancelClienteLista() {
+      vm.form.pessoa_tem_funcao_cliente = {};
+   }
+
+   function selectFuncionarioLista(entry) {
+      vm.form.pessoa_tem_funcao_funcionario = entry;
+   }
+
+   function cancelFuncionarioLista() {
+      vm.form.pessoa_tem_funcao_funcionario = {};
+   }
+
+   /**
+   Tentativa de cadastro de clientes até o fim do controller
+   */
+
    vm.formats = ['dd/MM/yyyy', 'dd-MMMM-yyyy', 'shortDate'];
    vm.format = vm.formats[0];
    vm.altInputFormats = ['d!/M!/yyyy'];
@@ -413,6 +458,7 @@ function AgendamentoController(AgendamentoFactory, calendarConfig, modalService,
    }
 
    function getHistoricoContratos() {
+      console.log(vm.form);
       AgendamentoFactory.getHistoricoContratos({
          params: vm.form
       })

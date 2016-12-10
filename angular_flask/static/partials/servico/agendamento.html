@@ -616,7 +616,7 @@
                   <div class="col-xs-12">
                      <div class="form-group">
                         <label>Nascimento</label>
-                        <input class="form-control" type="text" ng-model="vm.form.animal.data_nascimento" ng-readonly="true">
+                        <span>{{vm.form.animal.data_nascimento|date:'dd/MM/yyyy'}}</span>
                         <p class="help-block" ng-show="vm.helpActive">Data de Nascimento</p>
                      </div>
                   </div>
