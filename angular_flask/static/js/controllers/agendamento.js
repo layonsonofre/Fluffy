@@ -26,13 +26,13 @@
 
    AgendamentoController.$inject = ['AgendamentoFactory', 'calendarConfig', 'modalService',
    '$filter', 'PessoaFactory', 'AnimalFactory', 'AnimalTemRestricaoFactory', 'PessoaTemFuncaoFactory',
-   'PessoaTemRedeSocialFactory', 'RedeSocialFactory', '$http',
+   'PessoaTemRedeSocialFactory', 'RedeSocialFactory', '$http', 'PorteFactory', 'RacaFactory', 'EspecieFactory', 'RestricaoFactory',
    'ServicoTemPorteFactory', '$window', 'dataStorage', 'ServicoFactory', 'ngToast', '$location'
 ];
 
 function AgendamentoController(AgendamentoFactory, calendarConfig, modalService,
    $filter, PessoaFactory, AnimalFactory, AnimalTemRestricaoFactory, PessoaTemFuncaoFactory,
-   PessoaTemRedeSocialFactory, RedeSocialFactory, $http,
+   PessoaTemRedeSocialFactory, RedeSocialFactory, $http, PorteFactory, RacaFactory, EspecieFactory, RestricaoFactory,
    ServicoTemPorteFactory, $window, dataStorage, ServicoFactory, ngToast, $location
 ) {
    var vm = this;
@@ -66,11 +66,21 @@ function AgendamentoController(AgendamentoFactory, calendarConfig, modalService,
    vm.getAgendamentos = getAgendamentos;
    vm.confirmar = confirmar;
    vm.adicionarCliente = adicionarCliente;
+   vm.adicionarAnimal = adicionarAnimal;
    vm.selectEstado = selectEstado;
    vm.validarPessoa = validarPessoa;
    vm.getWhatsappId = getWhatsappId;
+   vm.getPortes = getPortes;
+   vm.getEspecies = getEspecies;
+   vm.getRestricoes = getRestricoes;
+   vm.getRacas = getRacas;
+   vm.gotoAgenda = gotoAgenda;
 
    vm.getHistoricoContratos = getHistoricoContratos;
+   getPortes();
+   getEspecies();
+   getRestricoes();
+   getRacas();
 
    vm.form.servicos_agendados = [];
 
@@ -200,14 +210,18 @@ function AgendamentoController(AgendamentoFactory, calendarConfig, modalService,
       });
       AgendamentoFactory.add(vm.resumos)
       .then(function (response) {
-         if (response.data.result != 'OK') {
+         if (response.data.success != true) {
             ngToast.danger({ content: '<b>Falha ao adicionar o registro</b>: ' + response.data.message });
          } else {
-            $location.path("/servico/agendamento");
-            getAgendamentos(false);
-            ngToast.success({ content: 'Registro adicionado com sucesso' });
+            $location.path("/servico/confirmacao");
+            // getAgendamentos(false);
+            // ngToast.success({ content: 'Registro adicionado com sucesso' });
          }
       });
+   }
+
+   function gotoAgenda() {
+      $location.path("/servico/agenda");
    }
 
    function alt() {
@@ -310,7 +324,7 @@ function AgendamentoController(AgendamentoFactory, calendarConfig, modalService,
       AnimalFactory.get({
          id: animal_id
       }).then(function (response) {
-         if (response.data.sucess === 'true') {
+         if (response.data.sucess === true) {
             vm.form.animal = response.data.result;
             vm.form.animal.data_nascimento = vm.form.animal.data_nascimento ? new Date(vm.form.animal.data_nascimento) : '';
 
@@ -458,11 +472,21 @@ function AgendamentoController(AgendamentoFactory, calendarConfig, modalService,
    }
 
    function getHistoricoContratos() {
-      console.log(vm.form);
-      AgendamentoFactory.getHistoricoContratos({
-         params: vm.form
-      })
-      .then(function (response) {
+      var data_inicio = vm.form.data_inicio ? new Date(vm.form.data_inicio).toISOString().substring(0, 19).replace('T', ' ') : null;
+      var data_fim = vm.form.data_fim ? new Date(vm.form.data_fim).toISOString().substring(0, 19).replace('T', ' ') : null;
+      var temp = {};
+      temp.cancelado = vm.form.cancelado ? 1 : 0;
+      temp.executado = vm.form.executado ? 1 : 0;
+      temp.pago = vm.form.pago ? 1 : 0;
+      temp.funcionario_contrato_id = vm.form.pessoa_tem_funcao_funcionario ? vm.form.pessoa_tem_funcao_funcionario.id : null;
+      temp.funcionario_executa_id = vm.form.pessoa_tem_funcao_funcionario ? vm.form.pessoa_tem_funcao_funcionario.id : null;
+      temp.cliente_id = vm.form.pessoa_tem_funcao_cliente ? vm.form.pessoa_tem_funcao_cliente.id : null;
+      temp.data_inicio_contrato = data_inicio;
+      temp.data_fim_contrato = data_fim;
+      temp.data_inicio_agendamento = data_inicio;
+      temp.data_fim_agendamento = data_fim;
+
+      AgendamentoFactory.getHistoricoContratos(temp).then(function (response) {
          if (response.data.success === true) {
             console.log(response.data.result);
             if (!angular.isArray(response.data.result)) {
@@ -606,7 +630,6 @@ function AgendamentoController(AgendamentoFactory, calendarConfig, modalService,
 
    function adicionarCliente() {
       console.log(vm.form.pessoa);
-      console.log(vm.form.animal);
       if (validarPessoa()) {
          selectEstado();
          angular.forEach(vm.form.telefones, function (value, key) {
@@ -624,40 +647,93 @@ function AgendamentoController(AgendamentoFactory, calendarConfig, modalService,
                ngToast.danger({ content: '<b>Falha ao adicionar o cliente</b>: ' + response.data.message });
             } else {
                ngToast.success({ content: 'Cliente cadastrado com sucesso' });
+            }
+         });
+      }
+   }
+   function adicionarAnimal() {
+      console.log(vm.form.animal);
+      if (validarAnimal()) {
+         AnimalFactory.add(vm.form.animal)
+         .then(function (response) {
+            if (response.data.success === true) {
+               ngToast.success({content: 'Animal adicionado com sucesso'});
+               if (response.data.result.id) {
+                  selectCliente(vm.form.pessoa_tem_funcao);
+                  vm.form.animal.id = response.data.result.id;
 
-               if (validarAnimal()) {
-                  // adicionando o animal
-                  AnimalFactory.add(vm.form.animal)
-                  .then(function (response) {
-                     if (response.data.success === true) {
-                        ngToast.success({content: 'Animal adicionado com sucesso'});
-                        if (response.data.result.id) {
-                           vm.form.animal.id = response.data.result.id;
+                  // adicionando restricoes
+                  var temp = {};
+                  temp.animal_id = vm.form.animal.id;
+                  angular.forEach(vm.form.animal.restricoes, function (value, key) {
+                     temp.restricao_id = value;
 
-                           // adicionando restricoes
-                           var temp = {};
-                           temp.animal_id = vm.form.animal.id;
-                           angular.forEach(vm.form.animal.restricoes, function (value, key) {
-                              temp.restricao_id = value;
-
-                              AnimalTemRestricaoFactory.add(value)
-                              .then(function (response) {
-                                 ngToast.success({ content: 'Restrição cadastrado com sucesso' });
-                              });
-                           });
-                        }
-                     } else {
-                        ngToast.danger({ content: 'Falha ao adicionar animal: ' + response.data.message });
-                     }
+                     AnimalTemRestricaoFactory.add(value)
+                     .then(function (response) {
+                        ngToast.success({ content: 'Restrição cadastrado com sucesso' });
+                     });
                   });
                }
+            } else {
+               ngToast.danger({ content: 'Falha ao adicionar animal: ' + response.data.message });
             }
          });
       }
    }
 
+   vm.openNascimento = function () {
+      vm.popupNascimento = true;
+   }
+
+   vm.popupNascimento = false;
+   vm.setDateNascimento = setDateNascimento;
+
+   function setDateNascimento(year, month, day) {
+      vm.form.animal.data_nascimento = new Date(year, month, day);
+   }
+
+   function getPortes() {
+      PorteFactory.get()
+      .then(function (response) {
+         vm.portes = response.data.result;
+      });
+   }
+
+   function getRacas() {
+      let filtro = '';
+      if (vm.form.animal) {
+         filtro = vm.form.animal.especie_id;
+         RacaFactory.get({
+            especie_id: filtro
+         })
+         .then(function (response) {
+            vm.racas = response.data.result;
+         });
+      }
+   }
+
+   function getEspecies() {
+      EspecieFactory.get()
+      .then(function (response) {
+         vm.especies = response.data.result;
+      });
+   }
+
+   function getRestricoes() {
+      RestricaoFactory.get()
+      .then(function (response) {
+         vm.restricoes = response.data.result;
+      });
+   }
+
    function validarAnimal() {
-      vm.form.animal.animal.data_nascimento = new Date(vm.form.animal.animal.data_nascimento).toISOString().substring(0, 19).replace('T', ' ');
+      if (!vm.form.pessoa_tem_funcao || vm.form.pessoa_tem_funcao == null) {
+         ngToast.danger({content: 'Escolha o cliente antes de cadastrar um animal.'});
+         return false;
+      }
+
+      vm.form.animal.pessoa_tem_funcao_cliente_id = vm.form.pessoa_tem_funcao.id;
+      vm.form.animal.data_nascimento = new Date(vm.form.animal.data_nascimento).toISOString().substring(0, 19).replace('T', ' ');
       return true;
    }
 }
@@ -772,10 +848,14 @@ function AgendamentoFactory($http, Fluffy) {
       }
    }
 
-   function getHistoricoContratos() {
-      return $http.get(
-         _url + '/historicoContratos'
-      )
+   function getHistoricoContratos(data) {
+      data = data || null;
+      console.log(data);
+      return $http({
+         url: _url + '/historicoContratos',
+         params: data,
+         method: 'GET'
+      })
       .then(success)
       .catch(failed);
 

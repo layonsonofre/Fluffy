@@ -39,7 +39,7 @@ def getPermissoes() :
 	if oauth.time_left < 0:
 		if oauth.time_left > - (3*60*60):
 			return jsonify(success=False, result={}, mensagem="Sua Sessao Expirou", code=401)
-		else :    
+		else :
 			return jsonify(success=False, result={}, mensagem="Sua Sessao Expirou", code=401)
 
 	print([None, None, None, None, None, None, oauth.id, None])
@@ -48,7 +48,7 @@ def getPermissoes() :
 	ptf = PessoaTemFuncao(data[0])
 
 	data = Util.getData("getPessoaTemPermissao", [None, ptf.id, None])
-	
+
 	permissoes = []
 	for info in data:
 		permissoes.append(PessoaTemPermissao(info))
@@ -108,7 +108,7 @@ def getHistorico() :
 				"descricao": info[12],
 				"valor": float(info[11])
 				} )
-	
+
 
 	return jsonify(success=True,result= {
 											"soma_credito": caixa[0],
@@ -138,9 +138,9 @@ def getContratos() :
 	cancelado = str(request.args.get("cancelado")) if request.args.get("cancelado") is not None else None
 	executado = str(request.args.get("executado")) if request.args.get("executado") is not None else None
 	pago = str(request.args.get("pago")) if request.args.get("pago") is not None else None
-	
+
 	data = Util.getData("getServicoContratado", [servico_contratado_id, data_inicio_contrato, data_fim_contrato, funcionario_contrato_id])
-	
+
 	result = []
 
 	servicos_contratados = []

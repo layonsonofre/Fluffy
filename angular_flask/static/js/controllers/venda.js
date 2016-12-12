@@ -151,7 +151,7 @@
             itens_de_venda: vm.cart
          };
          VendaFactory.add(send).then(function (response) {
-            if (response.data.success === 'true') {
+            if (response.data.success === true) {
                console.log("\nADICIONADO", response);
                dataStorage.addVenda({
                   cart_total: vm.cart_total,
@@ -207,7 +207,7 @@
 
       function alt(entry) {
          console.log(entry);
-         if (entry.pago || entry.pago === 'true') {
+         if (entry.pago || entry.pago === true) {
             entry.pago = 1;
          } else {
             entry.pago = 0;
@@ -217,7 +217,7 @@
             id: entry.id
          };
          VendaFactory.alt(send).then(function (response) {
-            if (response.data.sucess === 'true') {
+            if (response.data.sucess === true) {
                ngToast.success({content: 'Venda ao alterada com sucesso'});
             } else {
                ngToast.warning({content: 'Falha ao alterar registro: ' + response.data.message})

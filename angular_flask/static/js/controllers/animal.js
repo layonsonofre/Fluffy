@@ -125,7 +125,7 @@ function AnimalController(PessoaFactory, dataStorage, AnimalFactory, PorteFactor
                   }
                   vm.form.animal.pessoa_tem_funcao_cliente_id = response.data.result.id;
                } else {
-                  ngToast.danger({ content: 'Falha' });
+                  ngToast.danger({ content: 'Falha na consulta: ' + response.data.message });
                }
             });
          }
