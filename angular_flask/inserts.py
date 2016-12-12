@@ -14,6 +14,8 @@ from angular_flask.models import *
 def insertServicoAgendado() :
 	json = request.json
 
+	print(json)
+
 	try:
 
 		message = "Campos obrigatórios: "
@@ -107,15 +109,15 @@ def insertServicoAgendado() :
 				if "animal_id" not in servicoAgendado:
 					message = message + ( "Animal" if chave == 0 else ", Animal")
 					chave = 1
-				if "executado" not in servicoAgendado:
-					message = message + ( "Executado" if chave == 0 else ", Executado")
-					chave = 1
-				if "pago" not in servicoAgendado:
-					message = message + ( "Pago" if chave == 0 else ", Pago")
-					chave = 1
-				if "cancelado" not in servicoAgendado:
-					message = message + ( "Cancelado" if chave == 0 else ", Cancelado")
-					chave = 1
+				#if "executado" not in servicoAgendado:
+				#	message = message + ( "Executado" if chave == 0 else ", Executado")
+				#	chave = 1
+				#if "pago" not in servicoAgendado:
+				#	message = message + ( "Pago" if chave == 0 else ", Pago")
+				#	chave = 1
+				#if "cancelado" not in servicoAgendado:
+				#	message = message + ( "Cancelado" if chave == 0 else ", Cancelado")
+				#	chave = 1
 
 				if chave == 1:
 					raise Exception(message)
@@ -195,7 +197,7 @@ def insertServicoAgendado() :
 		if servico_stored == 0:
 			data = Util.postData("delServicoContratado", [servico_contratado_id])
 			data = Util.postData("delTransacao", [transacao_id])
-			return jsonify(result={}, success=False, message="Falha ao realizar operação!", servicos_agendados_erros={"servicos_agendados":[s.toJSON() for s in servico_erros], "messages":servico_erros_mensagens})
+			return jsonify(result={}, success=False, message="Falha ao realizar operação: " + ",".join(servico_erros_mensagens), servicos_agendados_erros={"servicos_agendados":[s.toJSON() for s in servico_erros], "messages":servico_erros_mensagens})
 
 		return jsonify(result={}, success=True, message="Serviços Agendados com Sucesso!", transacao=transacao.toJSON(), servico_contratado=sc.toJSON(), servicos_agendados=[s.toJSON() for s in servicos], servicos_agendados_erros={"servicos_agendados":[s.toJSON() for s in servico_erros], "messages":servico_erros_mensagens})
 	except Exception as e:
