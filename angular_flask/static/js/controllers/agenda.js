@@ -126,8 +126,12 @@
          vm.agedandados = null;
          vm.agendamentos = [];
          var _duration = 30;
-         var data = vm._hoje ? $filter('date')(new Date(), 'yyyy-MM-dd') : null;
-         AgendaFactory.getAgendados({ data_inicio: data, data_fim: data })
+         var data_inicio = vm._hoje ? $filter('date')(new Date(), 'yyyy-MM-dd') : null;
+         data_inicio = data_inicio ? data_inicio + ' 00:00:00' : null;
+         var data_fim = vm._hoje ? $filter('date')(new Date(), 'yyyy-MM-dd') : null;
+         data_fim = data_fim ? data_fim + ' 23:59:59' : null;
+         vm._hoje = false;
+         AgendaFactory.getAgendados({ data_inicio: data_inicio, data_fim: data_fim })
          .then(function (response) {
             if (response.data.success != true) {
                ngToast.danger({ content: '<b>Falha na consulta pelos registros</b>: ' + response.data.message });

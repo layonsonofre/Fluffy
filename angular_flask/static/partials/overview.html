@@ -125,7 +125,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr dir-paginate="entry in vm.agendados | itemsPerPage: 10" pagination-id="servicosAgendados">
+                <tr dir-paginate="entry in vm.agendados | itemsPerPage: 20" pagination-id="servicosAgendados">
                   <td>
                     <span>{{ entry.animal.nome }}</span>
                   </td>
@@ -153,41 +153,3 @@
     </div>
   </div>
 </div>
-<!-- <div class="row">
-  <div class="col-xs-12">
-    <div class="panel panel-info">
-      <div class="panel-heading">
-        Próximos retornos
-      </div>
-      <div class="panel-body">
-        <div class="row">
-          <div class="col-md-12">
-            <button class="btn btn-success pull-right" ng-click="adicionar = !adicionar">
-              <span class="fa fa-plus"></span>
-            </button>
-          </div>
-        </div>
-        <table class="table table-striped table-hover">
-          <thead>
-            <tr>
-              <th>Descrição</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr dir-paginate="entry in fields | itemsPerPage: 10" pagination-id="servicosRetorno">
-              <td>
-                <span>{{entry.nome}}</span>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-
-        <div class="row">
-          <div class="col-xs-12 text-center">
-            <dir-pagination-controls pagination-id="servicosRetorno"></dir-pagination-controls>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div> -->
