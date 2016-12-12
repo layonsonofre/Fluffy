@@ -183,3 +183,38 @@ def getContratos() :
 			})
 
 	return jsonify(success=True,result=result, message="")
+
+
+@app.route("/api/taxiDog", methods=["GET"])
+def getTaxiDog():
+
+	servico = Servico(Util.getData('getServico', [None, "TaxiDog"])[0])
+
+	animal_id = str(request.args.get("animal_id")) if request.args.get("animal_id") is not None else None
+	cliente_id = str(request.args.get("cliente_id")) if request.args.get("cliente_id") is not None else None
+	data_inicio_agendamento = str(request.args.get("data_inicio_agendamento")) if request.args.get("data_inicio_agendamento") is not None else None
+	data_fim_agendamento = str(request.args.get("data_fim_agendamento")) if request.args.get("data_fim_agendamento") is not None else None
+	executado = str(request.args.get("executado")) if request.args.get("executado") is not None else None
+	cancelado = str(request.args.get("cancelado")) if request.args.get("cancelado") is not None else None
+
+	servicos_agendados = [ServicoAgendado(info) for info in Util.getData('getServicoAgendado',[None, None, data_inicio_agendamento, data_fim_agendamento, None, executado, None, None, None, animal_id, servico.id, cancelado, None])]
+
+	servico_list = []
+	for sa in servicos_agendados:
+		animal = Animal(Util.getData('getAnimal', [sa.animal[0], None, None, None, None, None])[0])
+		pessoa = Pessoa(Util.getData('getPessoa', [animal.pessoa_tem_funcao_cliente[1], None, None, None, None, None, None, None, None, None, None, None, None, None, None, None])[0])
+		servico_list.append({
+			"servico_agendado_id":sa.id,
+			"data_hora": sa.data_hora,
+			"animal_id": animal.id,
+			"animal_nome": animal.nome,
+			"pessoa_id": pessoa.id,
+			"pessoa_nome": pessoa.nome,	
+			"local": pessoa.logradouro + "," + str(pessoa.numero),
+			"bairro": pessoa.bairro,
+			"animal": animal.toJSON(),
+			"pessoa": pessoa.toJSON(),
+			"servicoAgendado": sa.toJSON()
+			})
+
+	return jsonify(success=True, message = "", servico_list = servico_list)
