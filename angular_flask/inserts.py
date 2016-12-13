@@ -341,6 +341,15 @@ def insertCliente():
 	
 	try:
 
+		ptrs = []
+		ptrs_erro = []
+		ptrs_erro_message = []
+		telefones = []
+		tel_erro = []
+		tel_erro_message = []
+		pessoa = None
+		ptf = None
+
 		message = "Campos obrigatórios: "
 		chave = 0
 
@@ -395,40 +404,43 @@ def insertCliente():
 			data = Util.postData("insLog", [message, json, table, method])
 			raise Exception("Falha ao realizar operação: " + message)
 
-		telefones = []
-		tel_erro = []
-		tel_erro_message = []
-		for telefone in json["telefones"]:
-			try:
-				data = [telefone["numero"], telefone["codigo_area"], telefone["codigo_pais"], pessoa.id]
-				tel = Telefone([None, data[2], data[1], data[0], data[3]])
-				tel.id = Util.postData("insTelefone", data)[0]
-				telefones.append(tel)
-			except Exception as e:
-				message = e.args
-				try: message = e.args[1]
-				except Exception as e: message = " ".join(message)
-				tel_erro.append(tel)
-				tel_erro_message.append(message)
+		if "telefones" in json:
+			for telefone in json["telefones"]:
+				try:
+					data = [telefone["numero"], telefone["codigo_area"], telefone["codigo_pais"], pessoa.id]
+					tel = Telefone([None, data[2], data[1], data[0], data[3]])
+					tel.id = Util.postData("insTelefone", data)[0]
+					telefones.append(tel)
+				except Exception as e:
+					message = e.args
+					try: message = e.args[1]
+					except Exception as e: message = " ".join(message)
+					tel_erro.append(tel)
+					tel_erro_message.append(message)
 
-		ptrs = []
-		ptrs_erro = []
-		ptrs_erro_message = []
-		for ptr in json["redesSociais"]:
-			try:
-				data = [ptr["perfil"], ptr["rede_social_id"], pessoa.id]
-				pessoa_tem_rede_social = PessoaTemRedeSocial([None, pessoa.id, pessoa.nome, data[0], data[1], ""])
-				pessoa_tem_rede_social.id = Util.postData("insPessoaTemRedeSocial", data)[0]
-				ptrs.append(pessoa_tem_rede_social)
-			except Exception as e:
-				message = e.args
-				try: message = e.args[1]
-				except Exception as e: message = " ".join(message)
-				ptrs_erro.append(pessoa_tem_rede_social)
-				ptrs_erro_message.append(message)
+		if "redesSociais" in json:
+			for ptr in json["redesSociais"]:
+				try:
+					data = [ptr["perfil"], ptr["rede_social_id"], pessoa.id]
+					pessoa_tem_rede_social = PessoaTemRedeSocial([None, pessoa.id, pessoa.nome, data[0], data[1], ""])
+					pessoa_tem_rede_social.id = Util.postData("insPessoaTemRedeSocial", data)[0]
+					ptrs.append(pessoa_tem_rede_social)
+				except Exception as e:
+					message = e.args
+					try: message = e.args[1]
+					except Exception as e: message = " ".join(message)
+					ptrs_erro.append(pessoa_tem_rede_social)
+					ptrs_erro_message.append(message)
 
 		return jsonify(result={}, success=True, message="Cadastro de Cliente realizado com Sucesso!" ,pessoa=pessoa.toJSON(), ptf=ptf.toJSON(), telefones=[t.toJSON() for t in telefones], telefones_erros={"telefones":[t.toJSON() for t in tel_erro],"messages":tel_erro_message}, pessoa_tem_rede_sociais=[ptr.toJSON() for ptr in ptrs], pessoa_tem_rede_sociais_erros={"pessoa_tem_rede_sociais":[ptr.toJSON() for ptr in ptrs_erro], "messages": ptrs_erro_message})
 	except Exception as e:
+		
+		for telefone in telefones:
+			data = Util.postData("delTelefone", [telefone.id])
+		for ptr in ptrs:
+			data = Util.postData("delPessoaTemRedeSocial", [ptr.id])
+		data = Util.postData("delPessoaTemFuncao", [ptf.id]) if ptf is not None else None
+		data = Util.postData("delPessoa", [pessoa.id]) if hasattr(pessoa, 'id') else None
 		return jsonify(result={}, success=False, message=" ".join(e.args))
 
 
@@ -436,6 +448,15 @@ def insertCliente():
 def insertFuncionario():
 
 	json = request.json
+
+	telefones = []
+	tel_erro = []
+	tel_erro_message = []
+	ptps = []
+	ptps_erro = []
+	ptps_erro_message = []
+	pessoa = None
+	ptf = None
 
 	try:
 
@@ -498,25 +519,20 @@ def insertFuncionario():
 			data = Util.postData("insLog", [message, json, table, method])
 			raise Exception("Falha ao realizar operação: " + message)
 
-		telefones = []
-		tel_erro = []
-		tel_erro_message = []
-		for telefone in json["telefones"]:
-			try:
-				data = [telefone["numero"], telefone["codigo_area"], telefone["codigo_pais"], pessoa.id]
-				tel = Telefone([None, data[2], data[1], data[0], data[3]])
-				tel.id = Util.postData("insTelefone", data)[0]
-				telefones.append(tel)
-			except Exception as e:
-				message = e.args
-				try: message = e.args[1]
-				except Exception as e: message = " ".join(message)
-				tel_erro.append(tel)
-				tel_erro_message.append(message)
+		if "telefones" in json:
+			for telefone in json["telefones"]:
+				try:
+					data = [telefone["numero"], telefone["codigo_area"], telefone["codigo_pais"], pessoa.id]
+					tel = Telefone([None, data[2], data[1], data[0], data[3]])
+					tel.id = Util.postData("insTelefone", data)[0]
+					telefones.append(tel)
+				except Exception as e:
+					message = e.args
+					try: message = e.args[1]
+					except Exception as e: message = " ".join(message)
+					tel_erro.append(tel)
+					tel_erro_message.append(message)
 
-		ptps = []
-		ptps_erro = []
-		ptps_erro_message = []
 		for permissao in json["permissoes"]:
 			try:
 				data = [ptf.id,permissao["id"]]
@@ -538,6 +554,15 @@ def insertFuncionario():
 def insertAdministrador():
 
 	json = request.json
+
+	telefones = []
+	tel_erro = []
+	tel_erro_message = []
+	ptps = []
+	ptps_erro = []
+	ptps_erro_message = []
+	pessoa = None
+	ptf = None
 
 	try:
 
@@ -597,25 +622,21 @@ def insertAdministrador():
 			data = Util.postData("insLog", [message, json, table, method])
 			raise Exception("Falha ao realizar operação: " + message)
 
-		telefones = []
-		tel_erro = []
-		tel_erro_message = []
-		for telefone in json["telefones"]:
-			try:
-				data = [telefone["numero"], telefone["codigo_area"], telefone["codigo_pais"], pessoa.id]
-				tel = Telefone([None, data[2], data[1], data[0], data[3]])
-				tel.id = Util.postData("insTelefone", data)[0]
-				telefones.append(tel)
-			except Exception as e:
-				message = e.args
-				try: message = e.args[1]
-				except Exception as e: message = " ".join(message)
-				tel_erro.append(tel)
-				tel_erro_message.append(message)
 
-		ptps = []
-		ptps_erro = []
-		ptps_erro_message = []
+		if "telefones" in json:		
+			for telefone in json["telefones"]:
+				try:
+					data = [telefone["numero"], telefone["codigo_area"], telefone["codigo_pais"], pessoa.id]
+					tel = Telefone([None, data[2], data[1], data[0], data[3]])
+					tel.id = Util.postData("insTelefone", data)[0]
+					telefones.append(tel)
+				except Exception as e:
+					message = e.args
+					try: message = e.args[1]
+					except Exception as e: message = " ".join(message)
+					tel_erro.append(tel)
+					tel_erro_message.append(message)
+
 		data = Util.getData("getPermissao", [None, None])
 		for info in data:
 			try:
