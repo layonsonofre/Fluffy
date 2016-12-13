@@ -334,6 +334,7 @@
             <h4 class="modal-title">Detalhes da consulta</h4>
           </div>
           <div class="modal-body">
+             <h4>Consulta</h4>
             <div class="row">
               <div class="col-xs-3">
                 <div class="form-group">
@@ -362,67 +363,230 @@
                   <p class="help-block" ng-show="vm.helpActive">Consulta cancelada?</p>
                 </div>
               </div>
-              <!-- <div class="col-xs-12">
+              <div class="col-xs-12" ng-show="vm.form.consulta.observacao != null">
                 <div class="form-group">
-                  <label>Email</label>
-                  <input class="form-control" type="text" ng-model="vm.form.pessoa.email" ng-readonly="true">
+                  <label>Observações</label>
+                  <input class="form-control" type="text" ng-model="vm.form.consulta.observacao" ng-readonly="true">
                 </div>
               </div>
-              <div class="col-xs-12">
-                <div class="form-group">
-                  <label>Telefones</label>
-                  <input class="form-control" type="text" ng-model="vm.form.pessoa.telefone" ng-readonly="true">
-                </div>
-              </div>
-              <div class="col-xs-10">
-                <div class="form-group">
-                  <label>Endereço</label>
-                  <input class="form-control" type="text" ng-model="vm.form.pessoa.logradouro" ng-readonly="true">
-                </div>
-              </div>
-              <div class="col-xs-2">
-                <div class="form-group">
-                  <label>Nº.</label>
-                  <input class="form-control" type="text" ng-model="vm.form.pessoa.numero" ng-readonly="true">
-                </div>
-              </div>
-              <div class="col-xs-4">
-                <div class="form-group">
-                  <label>Compl.</label>
-                  <input class="form-control" type="text" ng-model="vm.form.pessoa.complemento" ng-readonly="true">
-                </div>
-              </div>
-              <div class="col-xs-4">
-                <div class="form-group">
-                  <label>Ref.</label>
-                  <input class="form-control" type="text" ng-model="vm.form.pessoa.ponto_de_referencia" ng-readonly="true">
-                </div>
-              </div>
-              <div class="col-xs-4">
-                <div class="form-group">
-                  <label>Cidade</label>
-                  <input class="form-control" type="text" ng-model="vm.form.pessoa.cidade" ng-readonly="true">
-                </div>
-              </div>
-              <div class="col-xs-6">
-                <div class="form-group">
-                  <label>CPF/CPNPJ</label>
-                  <input class="form-control" type="text" ng-model="vm.form.pessoa.registro" ng-readonly="true">
-                </div>
-              </div>
-              <div class="col-xs-6" ng-show="vm.form.pessoa.rg">
-                <div class="form-group">
-                  <label>RG</label>
-                  <input class="form-control" type="text" ng-model="vm.form.pessoa.rg" ng-readonly="true">
-                </div>
-              </div>
-              <div class="col-xs-6" ng-show="vm.form.pessoa.inscricao_estadual">
-                <div class="form-group">
-                  <label>Insc. Estadual</label>
-                  <input class="form-control" type="text" ng-model="vm.form.pessoa.inscricao_estadual" ng-readonly="true">
-                </div>
-              </div> -->
-            </div>
+           </div>
+           <hr>
+           <div class="row">
+             <div class="col-xs-12">
+               <h4>Anamnese</h4>
+             </div>
+           </div>
+           <div class="row">
+             <div class="col-xs-12">
+               <div class="form-group">
+                 <label>Queixa</label>
+                 <input class="form-control" type="text" name="queixa" ng-model="vm.anamnese.queixa" required ng-maxlength="100">
+                 <p class="help-block error" ng-show="form.queixa.$invalid && !form.queixa.$pristine">Informe uma queixa válida</p>
+                 <p class="help-block error" ng-show="form.queixa.$error.maxlength">O valor informado foi maior que o limite</p>
+                 <p class="help-block" ng-show="vm.helpActive">Queixa apresenta pelo responsável do pet</p>
+               </div>
+             </div>
+           </div>
+           <div class="row">
+             <div class="col-xs-12">
+               <div class="form-group">
+                 <label>Qual alimentação/ração come</label>
+                 <input class="form-control" type="text" name="alimentacao" ng-model="vm.anamnese.alimentacao" >
+                 <p class="help-block" ng-show="vm.helpActive">Hábitos de alimentação do animal</p>
+               </div>
+             </div>
+           </div>
+           <div class="row">
+             <div class="col-xs-3">
+               <div class="form-group">
+                 <label>Peso</label>
+                 <input class="form-control" type="text" name="peso" ng-model="vm.anamnese.peso" ng-maxlength="11" ng-pattern="/^\d+$/">
+                 <p class="help-block error" ng-show="form.peso.$invalid && !form.peso.$pristine">Informe um peso válido</p>
+                 <p class="help-block error" ng-show="form.peso.$error.maxlength">O valor informado foi maior que o limite</p>
+                 <p class="help-block" ng-show="vm.helpActive">Peso do animal (kilogramas)</p>
+               </div>
+             </div>
+             <div class="col-xs-3">
+               <div class="form-group">
+                 <label>Tamanho</label>
+                 <input class="form-control" type="text" name="tamanho" ng-model="vm.anamnese.tamanho" ng-maxlength="11" ng-pattern="/^\d+$/">
+                 <p class="help-block error" ng-show="form.tamanho.$invalid && !form.tamanho.$pristine">Informe um tamanho válido</p>
+                 <p class="help-block error" ng-show="form.tamanho.$error.maxlength">O valor informado foi maior que o limite</p>
+                 <p class="help-block" ng-show="vm.helpActive">Tamanho do animal (centímetros)</p>
+               </div>
+             </div>
+             <div class="col-xs-3">
+               <div class="form-group">
+                 <label>Temperatura</label>
+                 <input class="form-control" type="text" name="temperatura" ng-model="vm.anamnese.temperatura" ng-maxlength="5" ng-pattern="/^[0-9]{1,2}(\.[0-9]{1,2})?$/">
+                 <p class="help-block error" ng-show="form.temperatura.$invalid && !form.temperatura.$pristine">Informe um temperatura válido</p>
+                 <p class="help-block error" ng-show="form.temperatura.$error.maxlength">O valor informado foi maior que o limite</p>
+                 <p class="help-block" ng-show="vm.helpActive">Temperatura do corpo (° C)</p>
+               </div>
+             </div>
+             <div class="col-xs-3">
+               <div class="form-group">
+                 <label>Tempo de evolução</label>
+                 <input class="form-control" type="text" name="tempo_evolucao" ng-model="vm.anamnese.tempo_evolucao" ng-maxlength="5" ng-pattern="/^\d+$/">
+                 <p class="help-block error" ng-show="form.tempo_evolucao.$invalid && !form.tempo_evolucao.$pristine">Informe um tempo de evolução válido</p>
+                 <p class="help-block error" ng-show="form.tempo_evolucao.$error.maxlength">O valor informado foi maior que o limite</p>
+                 <p class="help-block" ng-show="vm.helpActive">Dias desde a observação da queixa</p>
+               </div>
+             </div>
+           </div>
+           <div class="row">
+             <div class="col-xs-3">
+               <div class="form-group">
+                 <label><br></label>
+                 <div class="checkbox">
+                   <label><input type="checkbox" name="tratamento" data-ng-model="vm.anamnese.tratamento">&nbsp;&nbsp; Sob tratamento</label>
+                 </div>
+                 <p class="help-block" ng-show="vm.helpActive">O animal está sob tratamento?</p>
+               </div>
+             </div>
+             <div class="col-xs-3">
+               <div class="form-group">
+                 <label><br></label>
+                 <div class="checkbox">
+                   <label><input type="checkbox" name="medicacao_continua" data-ng-model="vm.anamnese.medicacao_continua">&nbsp;&nbsp; Medicação contínua</label>
+                 </div>
+                 <p class="help-block" ng-show="vm.helpActive">O animal está sob medicação contínua?</p>
+               </div>
+             </div>
+             <div class="col-xs-3">
+               <div class="form-group">
+                 <label><br></label>
+                 <div class="checkbox">
+                   <label><input type="checkbox" name="fezes_normais" data-ng-model="vm.anamnese.fezes_normais">&nbsp;&nbsp; Fezes normais</label>
+                 </div>
+                 <p class="help-block" ng-show="vm.helpActive">As fezes estão normais?</p>
+               </div>
+             </div>
+             <div class="col-xs-3">
+               <div class="form-group">
+                 <label><br></label>
+                 <div class="checkbox">
+                   <label><input type="checkbox" name="urina_normal" data-ng-model="vm.anamnese.urina_normal">&nbsp;&nbsp; Urina normal</label>
+                 </div>
+                 <p class="help-block" ng-show="vm.helpActive">A urina está normal?</p>
+               </div>
+             </div>
+           </div>
+           <div class="row">
+             <div class="col-xs-3">
+               <div class="form-group">
+                 <label><br></label>
+                 <div class="checkbox">
+                   <label><input type="checkbox" name="convulsao" data-ng-model="vm.anamnese.convulsao">&nbsp;&nbsp; Convulsão</label>
+                 </div>
+                 <p class="help-block" ng-show="vm.helpActive">Já teve convulsão?</p>
+               </div>
+             </div>
+             <div class="col-xs-3">
+               <div class="form-group">
+                 <label><br></label>
+                 <div class="checkbox">
+                   <label><input type="checkbox" name="desmaio" data-ng-model="vm.anamnese.desmaio">&nbsp;&nbsp; Desmaio</label>
+                 </div>
+                 <p class="help-block" ng-show="vm.helpActive">Já desmaiou?</p>
+               </div>
+             </div>
+             <div class="col-xs-3">
+               <div class="form-group">
+                 <label><br></label>
+                 <div class="checkbox">
+                   <label><input type="checkbox" name="tosse" data-ng-model="vm.anamnese.tosse">&nbsp;&nbsp; Tosse</label>
+                 </div>
+                 <p class="help-block" ng-show="vm.helpActive">Tem tossido com frequência?</p>
+               </div>
+             </div>
+             <div class="col-xs-3">
+               <div class="form-group">
+                 <label><br></label>
+                 <div class="checkbox">
+                   <label><input type="checkbox" name="espirro" data-ng-model="vm.anamnese.espirro">&nbsp;&nbsp; Espirro</label>
+                 </div>
+                 <p class="help-block" ng-show="vm.helpActive">Tem espirrado com frequência?</p>
+               </div>
+             </div>
+           </div>
+           <div class="row">
+             <div class="col-xs-3">
+               <div class="form-group">
+                 <label><br></label>
+                 <div class="checkbox">
+                   <label><input type="checkbox" name="cansaco_facil" data-ng-model="vm.anamnese.cansaco_facil">&nbsp;&nbsp; Cansaço fácil</label>
+                 </div>
+                 <p class="help-block" ng-show="vm.helpActive">Apresenta sinais de cansaço rápidamente?</p>
+               </div>
+             </div>
+             <div class="col-xs-3">
+               <div class="form-group">
+                 <label><br></label>
+                 <div class="checkbox">
+                   <label><input type="checkbox" name="contato_animal" data-ng-model="vm.anamnese.contato_animais">&nbsp;&nbsp; Contato com outros animais</label>
+                 </div>
+                 <p class="help-block" ng-show="vm.helpActive">Este animal entra em contato com outros?</p>
+               </div>
+             </div>
+             <div class="col-xs-3">
+               <div class="form-group">
+                 <label><br></label>
+                 <div class="checkbox">
+                   <label><input type="checkbox" name="acesso_rua" data-ng-model="vm.anamnese.acesso_rua">&nbsp;&nbsp; Acesso à rua</label>
+                 </div>
+                 <p class="help-block" ng-show="vm.helpActive">O animal tem acesso/frequenta a rua sem a companhia do dono?</p>
+               </div>
+             </div>
+             <div class="col-xs-3">
+               <div class="form-group">
+                 <label><br></label>
+                 <div class="checkbox">
+                   <label><input type="checkbox" name="castrado" data-ng-model="vm.anamnese.castrado">&nbsp;&nbsp; Castrado</label>
+                 </div>
+                 <p class="help-block" ng-show="vm.helpActive">O animal é castrado?</p>
+               </div>
+             </div>
+           </div>
+
+           <div class="row">
+             <div class="col-xs-3">
+               <div class="form-group">
+                 <label><br></label>
+                 <div class="checkbox">
+                   <label><input type="checkbox" name="pulga" data-ng-model="vm.anamnese.pulga">&nbsp;&nbsp; Pulga</label>
+                 </div>
+                 <p class="help-block" ng-show="vm.helpActive">Animal tem pulga?</p>
+               </div>
+             </div>
+             <div class="col-xs-3">
+               <div class="form-group">
+                 <label><br></label>
+                 <div class="checkbox">
+                   <label><input type="checkbox" name="carrapato" data-ng-model="vm.anamnese.carrapato">&nbsp;&nbsp; Carrapato</label>
+                 </div>
+                 <p class="help-block" ng-show="vm.helpActive">Animal tem carrapato?</p>
+               </div>
+             </div>
+           </div>
+           <div class="row">
+             <div class="col-xs-12">
+               <div class="form-group">
+                 <label>Ambiente onde vive</label>
+                 <input class="form-control" type="text" name="ambiente_vive" ng-model="vm.anamnese.ambiente_vive">
+                 <p class="help-block" ng-show="vm.helpActive">Como é o ambiente no qual o animal fica</p>
+               </div>
+             </div>
+           </div>
+           <div class="row">
+             <div class="col-xs-12">
+               <div class="form-group">
+                 <label>Doenças anteriores</label>
+                 <input class="form-control" type="text" name="doencas_anteriores" ng-model="vm.anamnese.doencas_anteriores">
+                 <p class="help-block" ng-show="vm.helpActive">Breve informação sobre doenças anteriores</p>
+               </div>
+             </div>
+           </div>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">OK</button>
