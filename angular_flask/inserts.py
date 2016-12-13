@@ -4,6 +4,7 @@
 from flask import Flask, request, Response, jsonify
 
 from angular_flask import app
+import hashlib
 
 # routing for API endpoints, generated from the models designated as API_MODELS
 from util import *
@@ -479,8 +480,11 @@ def insertFuncionario():
 		funcao_id = 3
 		funcao_nome = "funcionario"
 
+		m = hashlib.md5()
+		m.update(json["password"])
+
 		try:
-			data = [pessoa.id, pessoa.nome, pessoa.email, pessoa.registro, funcao_id, funcao_nome, json["password"], None, None]
+			data = [pessoa.id, pessoa.nome, pessoa.email, pessoa.registro, funcao_id, funcao_nome, m.hexdigest(), None, None]
 			ptf = PessoaTemFuncao([None] + data)
 			ptf.id = Util.postData("insPessoaTemFuncao", [data[0],data[4], data[6], None])[0]
 		except Exception as e:
@@ -575,8 +579,11 @@ def insertAdministrador():
 		funcao_id = 4
 		funcao_nome = "administrador"
 
+		m = hashlib.md5()
+		m.update(json["password"])
+
 		try:
-			data = [pessoa.id, pessoa.nome, pessoa.email, pessoa.registro, funcao_id, funcao_nome, json["password"], None, None]
+			data = [pessoa.id, pessoa.nome, pessoa.email, pessoa.registro, funcao_id, funcao_nome, m.hexdigest(), None, None]
 			ptf = PessoaTemFuncao([None] + data)
 			ptf.id = Util.postData("insPessoaTemFuncao", [data[0],data[4], data[6], None])[0]
 		except Exception as e:

@@ -3,11 +3,17 @@
 
 import os
 
+import smtplib
+import hashlib
+
 from flask import Flask, request, Response, jsonify
 from flask import render_template, url_for, redirect, send_from_directory
 from flask import send_file, make_response, abort
 from flask_cors import cross_origin
 from uuid import uuid4
+
+from email.MIMEMultipart import MIMEMultipart
+from email.MIMEText import MIMEText
 
 from angular_flask import app
 
@@ -151,9 +157,13 @@ def login():
     passwd = json['senha'] if 'senha' in json else None
     client_id = json['client_id'] if 'client_id' in json else None
 
-    print([username, passwd, client_id])
+    m = hashlib.md5()
+    m.update(passwd)
+
+    print([username, m.hexdigest(), client_id])
     try:
-    	data = Util.getData('getPessoaTemFuncao', [None, None, None, None, username, passwd, None, None])
+
+    	data = Util.getData('getPessoaTemFuncao', [None, None, None, None, username, m.hexdigest(), None, None])
     	if len(data) == 1 and client_id == CLIENT_ID:
             ptf = PessoaTemFuncao(data[0])
             token = str(uuid4())
@@ -171,6 +181,55 @@ def login():
         try: message = e.args[1]   
         except Exception as e: message = " ".join(e.args)
     	return jsonify(success=False, result={}, message=message)
+
+@app.route('/api/email', methods=["POST"])
+def sendEmail():
+
+    try:
+        x = uuid4()
+        x = str(x)[:8]
+
+        m = hashlib.md5()
+        m.update(x)
+
+        ptf = PessoaTemFuncao(Util.getData('getPessoaTemFuncao', [None, None, None, None, request.json["email"], None, None, None])[0])
+
+        print(ptf)
+
+        if ptf.funcao[0] == 1 or ptf.funcao[0] == 2:
+            raise Exception("Falha em Renovação: Pessoa não é funcionário!")
+
+        Util.postData('altPessoaTemFuncao', [ptf.id,None,None,m.hexdigest(),None])
+
+        to = request.json["email"]
+
+        fromaddr = "fluffy.uepg.2016@gmail.com"
+        toaddr = to
+        msg = MIMEMultipart()
+        msg['From'] = fromaddr
+        msg['To'] = toaddr
+        msg['Subject'] = "Recuperacao de Senha"
+ 
+        body = "Caro usuario do Fluffy,\n\nUma nova senha foi requisitada em nosso sistema, segue seu novo Login:\n\nEmail: "
+        body = body + to + "\nNova senha: " + x
+        body = body + "\n\nLembre-se de alterar esta senha o mais rapido possivel."
+        body = body + "\n\nAtenciosamente,\n FLUFFY"
+        msg.attach(MIMEText(body, 'plain'))
+ 
+        server = smtplib.SMTP('smtp.gmail.com', 587, None, 30)
+        server.starttls()
+        server.login(fromaddr, "Charm&Fluffy@2016")
+        text = msg.as_string()
+        server.sendmail(fromaddr, toaddr, text)
+        server.quit()
+
+        return jsonify(status=True, message = "Renovação enviada com Sucesso!")
+    except Exception as e:
+        message = e.args
+        try: message = e.args[1]
+        except Exception as e: message = " ".join(message)
+        return jsonify(status=False, message = message)
+
 
 # special file handlers and error handlers
 @app.route('/favicon.ico')
