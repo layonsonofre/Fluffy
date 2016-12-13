@@ -23,14 +23,14 @@
    'PorteFactory', 'RacaFactory', 'EspecieFactory', 'RestricaoFactory', 'modalService',
    'dataStorage', '$location', 'calendarConfig', 'FuncaoFactory', 'PermissaoFactory',
    'PessoaTemFuncaoFactory', 'PessoaTemRedeSocialFactory', 'TelefoneFactory', 'AnimalFactory',
-   'AnimalTemRestricaoFactory', '$filter', 'ngToast'
+   'AnimalTemRestricaoFactory', '$filter', 'ngToast', 'ConsultaFactory', 'AnamneseFactory', 'AplicacaoFactory'
 ];
 
 function PessoaController(PessoaFactory, $http, RedeSocialFactory, AgendaFactory,
    PorteFactory, RacaFactory, EspecieFactory, RestricaoFactory, modalService,
    dataStorage, $location, calendarConfig, FuncaoFactory, PermissaoFactory,
    PessoaTemFuncaoFactory, PessoaTemRedeSocialFactory, TelefoneFactory, AnimalFactory,
-   AnimalTemRestricaoFactory, $filter, ngToast
+   AnimalTemRestricaoFactory, $filter, ngToast, ConsultaFactory, AnamneseFactory, AplicacaoFactory
 ) {
    var vm = this;
 
@@ -86,6 +86,9 @@ function PessoaController(PessoaFactory, $http, RedeSocialFactory, AgendaFactory
    vm.getHistorico = getHistorico;
    vm.selectAnimal = selectAnimal;
    vm.novoServico = novoServico;
+
+   vm.detalhes_consulta = detalhes_consulta;
+   vm.editar_consulta = editar_consulta;
 
    if (vm.form.pessoa) {
       vm.alterando = true;
@@ -184,6 +187,7 @@ function PessoaController(PessoaFactory, $http, RedeSocialFactory, AgendaFactory
       if (entry.checked) {
          AgendaFactory.getAgendados({ animal_id: entry.id })
          .then(function (response) {
+            console.log(response);
             if (response.data.success === true) {
                if (!angular.isArray(response.data.result)) {
                   vm.historico = [];
@@ -192,7 +196,8 @@ function PessoaController(PessoaFactory, $http, RedeSocialFactory, AgendaFactory
                   vm.historico = response.data.result;
                }
                angular.forEach(vm.historico, function(value, key) {
-                  value.data_hora = Date.parse(value.data_hora);
+                  value.data_hora = value.data_hora ? $filter('date')(new Date(value.data_hora), 'dd/MM/yyyy HH:mm') : null;
+                  value.data_hora_executado = value.data_hora_executado ? $filter('date')(new Date(value.data_hora_executado), 'dd/MM/yyyy HH:mm') : null;
                });
             } else {
                ngToast.danger({ content: 'Falha na busca pelos registros' });
@@ -244,6 +249,39 @@ function PessoaController(PessoaFactory, $http, RedeSocialFactory, AgendaFactory
       dataStorage.addPessoa(vm.form.pessoa);
       dataStorage.addAnimal(vm.form.animal);
       $location.path('/cliente/pet');
+   }
+
+
+
+   function detalhes_consulta(entry) {
+      console.log('entry', entry);
+      vm.form.consulta = {};
+      ConsultaFactory.get({ id: entry.id }).then(function (response) {
+         console.log('consulta', response);
+         vm.form.consulta = response.data.result;
+         AnamneseFactory.get({servico_agendado_id: entry.id}).then(function (response) {
+            console.log('anamnese', response);
+            vm.form.consulta.anamnese = response.data.result;
+            AplicacaoFactory.get({servico_agendado_id: entry.id}).then(function (response) {
+               console.log('aplicacao', response);
+               if (!angular.isArray(response.data.result)) {
+                  vm.form.consulta.aplicacoes = [];
+                  vm.form.consulta.aplicacoes.push(response.data.result);
+               } else {
+                  vm.form.consulta.aplicacoes = response.data.result;
+               }
+            })
+         });
+      });
+   }
+
+   function editar_consulta(entry) {
+      console.log(entry);
+      // vm.form.animal = {};
+      // vm.form.animal = entry;
+      // dataStorage.addPessoa(vm.form.pessoa);
+      // dataStorage.addAnimal(vm.form.animal);
+      // $location.path('/cliente/pet');
    }
 
    function novoServico() {

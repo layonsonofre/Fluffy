@@ -17,15 +17,17 @@
       };
       return AnamneseFactory;
 
-      function get() {
-         return $http.get(
-            _url + '/anamnese'
-         )
+      function get(data) {
+         data = data || null;
+         return $http({
+            url: _url + '/anamnese',
+            params: data,
+            method: 'GET'
+         })
          .then(success)
          .catch(failed);
 
          function success(response) {
-            console.log(response);
             return response;
          }
 

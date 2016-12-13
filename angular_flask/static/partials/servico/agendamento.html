@@ -341,7 +341,7 @@
                         <div class="form-group">
                            <label>CPF/CNPJ *</label>
                            <input class="form-control" type="text" data-ng-model="vm.form.pessoa.registro" name="registro" ng-maxlength="20" ng-pattern="/^\d+$/">
-                           <p class="help-block error" ng-show="formCliente.registro.$invalid && !formCliente.registro.$pristine">Informe um registro válido</p>
+                           <p class="help-block error" ng-show="form.registro.$invalid && !form.registro.$pristine || vm.form.pessoa.registro_erro">Informe um registro válido</p>
                            <p class="help-block error" ng-show="formCliente.registro.$error.maxlength">O valor informado foi maior que o limite</p>
                            <p class="help-block" ng-show="vm.helpActive">Insira o CPF ou CNPJ do cliente</p>
                         </div>
@@ -523,7 +523,7 @@
       </div>
    </div>
 
-   <!-- MODAL DE CADASTRO DO CLIENTE -->
+   <!-- MODAL DE CADASTRO DO ANIMAL -->
    <div id="cadastrarAnimal" class="modal fade" role="dialog" aria-labelledby="cadastrar">
       <div class="modal-dialog modal-lg" role="document">
          <div class="modal-content">

@@ -17,13 +17,13 @@
    ConsultaController.$inject = ['ConsultaFactory', 'calendarConfig', 'modalService',
    '$filter', 'PessoaFactory', 'AnimalFactory', 'AnimalTemRestricaoFactory', 'PessoaTemFuncaoFactory',
    'ServicoTemPorteFactory', '$window', 'dataStorage', 'ServicoFactory', 'VacinaFactory', 'AgendamentoFactory',
-   'AnamneseFactory', '$location'
+   'AnamneseFactory', '$location', 'AplicacaoFactory', 'ngToast'
 ];
 
 function ConsultaController(ConsultaFactory, calendarConfig, modalService,
    $filter, PessoaFactory, AnimalFactory, AnimalTemRestricaoFactory, PessoaTemFuncaoFactory,
    ServicoTemPorteFactory, $window, dataStorage, ServicoFactory, VacinaFactory, AgendamentoFactory,
-   AnamneseFactory, $location
+   AnamneseFactory, $location, AplicacaoFactory, ngToast
 ) {
    var vm = this;
 
@@ -44,7 +44,7 @@ function ConsultaController(ConsultaFactory, calendarConfig, modalService,
    vm.removeAplicacao = removeAplicacao;
    vm.getConsulta = getConsulta;
    vm.getVacinas = getVacinas;
-   vm.alt = alt;
+   vm.incluirAnamnese = incluirAnamnese;
 
    vm.consulta = {};
    var agendamento = dataStorage.getAgendamento();
@@ -164,13 +164,12 @@ function ConsultaController(ConsultaFactory, calendarConfig, modalService,
          })
          .then(function (response) {
             vm.consulta = response.data.result;
-            console.log("response", response);
 
             AgendamentoFactory.getContrato({ id: vm.consulta.servico_contratado })
             .then(function (response) {
                vm.pessoa_tem_funcao = response.data.result.pessoa_tem_funcao;
             });
-            vm.consulta.data_hora = new Date(vm.consulta.data_hora);
+            vm.consulta.data_hora = $filter('date')(new Date(vm.consulta.data_hora), 'dd/MM/yyyy HH:mm');
             if (response.data.result.aplicacao) {
                if (!angular.isArray(response.data.result.aplicacao)) {
                   vm.aplicacoes = [];
@@ -183,8 +182,6 @@ function ConsultaController(ConsultaFactory, calendarConfig, modalService,
                      value.data_hora = value.data_hora ? new Date(value.data_hora) : null;
                   }
                });
-            } else {
-               vm.aplicacoes = [{}];
             }
          });
       }
@@ -205,6 +202,7 @@ function ConsultaController(ConsultaFactory, calendarConfig, modalService,
          id: animal_id
       }).then(function (response) {
          vm.animal = response.data.result;
+         vm.animal.data_nascimento = $filter('date')(new Date(vm.animal.data_nascimento), 'dd/MM/yyyy');
          AnimalTemRestricaoFactory.get({
             animal_id: animal_id
          }).then(function (response) {
@@ -227,21 +225,24 @@ function ConsultaController(ConsultaFactory, calendarConfig, modalService,
       });
    }
 
-   function alt() {
+   function incluirAnamnese() {
+      vm.anamnese.servico_agendado_id = vm.servico_agendado_id;
       AnamneseFactory.add(vm.anamnese).then(function (response) {
+         console.log(response);
          if (response.data.success === true) {
+            ngToast.success({ content: 'Anamnese alterada com sucesso.' });
             angular.forEach(vm.aplicacoes, function (value, key) {
                value.servico_agendado_id = vm.servico_agendado_id;
                AplicacaoFactory.add(value).then(function (response) {
                   if (response.data.success === true) {
-                     ngToast.success({ content: 'Registro alterado com sucesso' });
+                     ngToast.success({ content: 'Vacina(s) aplicada(s) com sucesso.' });
                   } else {
-                     ngToast.danger({ content: 'Falha na alteração do registro' });
+                     ngToast.danger({ content: 'Falha na alteração da(s) vacina(s): ' + response.data.message});
                   }
                });
             });
          } else {
-            ngToast.danger({ content: 'Falha na alteração do registro' });
+            ngToast.danger({ content: 'Falha na alteração da consulta: ' + response.data.message});
          }
       });
    }

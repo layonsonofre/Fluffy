@@ -19,6 +19,11 @@
          templateUrl: '../static/partials/servico/resumo.html',
          controller: 'AgendamentoController',
          controllerAs: 'vm'
+      })
+      .when('/servico/taxi', {
+         templateUrl: '../static/partials/servico/taxi.html',
+         controller: 'AgendamentoController',
+         controllerAs: 'vm'
       });
    }])
    .controller('AgendamentoController', AgendamentoController)
@@ -75,8 +80,11 @@ function AgendamentoController(AgendamentoFactory, calendarConfig, modalService,
    vm.getRestricoes = getRestricoes;
    vm.getRacas = getRacas;
    vm.gotoAgenda = gotoAgenda;
+   vm.validarRegistro = validarRegistro;
 
    vm.getHistoricoContratos = getHistoricoContratos;
+   vm.getTaxiDog = getTaxiDog;
+
    getPortes();
    getEspecies();
    getRestricoes();
@@ -750,6 +758,116 @@ function AgendamentoController(AgendamentoFactory, calendarConfig, modalService,
       vm.form.animal.data_nascimento = new Date(vm.form.animal.data_nascimento).toISOString().substring(0, 19).replace('T', ' ');
       return true;
    }
+
+   function validarRegistro() {
+      if (!validarCNPJ() || !validarCPF()) {
+         vm.form.pessoa.registro_erro = true;
+      } else {
+         vm.form = {};
+      }
+   }
+
+   function validarCPF() {
+      var strCPF = vm.form.pessoa.registro.replace(/[.-]/g, "");
+      if (strCPF.length == 11) {
+         var Soma;
+         var Resto;
+         var i;
+         Soma = 0;
+         if (strCPF == "11111111111" || strCPF == "22222222222" || strCPF == "33333333333"
+         || strCPF == "44444444444" || strCPF == "55555555555" || strCPF == "66666666666"
+         || strCPF == "77777777777" || strCPF == "88888888888" || strCPF == "99999999999"
+         || strCPF == "00000000000") return false;
+
+         for (i = 1; i <= 9; i++) Soma = Soma + parseInt(strCPF.substring(i - 1, i)) * (11 - i);
+         Resto = (Soma * 10) % 11;
+
+         if ((Resto == 10) || (Resto == 11)) Resto = 0;
+         if (Resto != parseInt(strCPF.substring(9, 10))) return false;
+
+         Soma = 0;
+         for (i = 1; i <= 10; i++) Soma = Soma + parseInt(strCPF.substring(i - 1, i)) * (12 - i);
+         Resto = (Soma * 10) % 11;
+
+         if ((Resto == 10) || (Resto == 11)) Resto = 0;
+         if (Resto != parseInt(strCPF.substring(10, 11))) return false;
+         return true;
+      }
+   }
+
+   function validarCNPJ() {
+      var cnpj = vm.form.pessoa.registro;
+      cnpj = cnpj.replace(/[^\d]+/g,'');
+      if(cnpj == '')
+      return false;
+      if (cnpj.length != 14)
+      return false;
+
+      if (cnpj == "00000000000000" ||
+      cnpj == "11111111111111" ||
+      cnpj == "22222222222222" ||
+      cnpj == "33333333333333" ||
+      cnpj == "44444444444444" ||
+      cnpj == "55555555555555" ||
+      cnpj == "66666666666666" ||
+      cnpj == "77777777777777" ||
+      cnpj == "88888888888888" ||
+      cnpj == "99999999999999")
+      return false;
+
+      tamanho = cnpj.length - 2
+      numeros = cnpj.substring(0,tamanho);
+      digitos = cnpj.substring(tamanho);
+      soma = 0;
+      pos = tamanho - 7;
+      for (i = tamanho; i >= 1; i--) {
+         soma += numeros.charAt(tamanho - i) * pos--;
+         if (pos < 2)
+         pos = 9;
+      }
+      resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
+      if (resultado != digitos.charAt(0))
+      return false;
+
+      tamanho = tamanho + 1;
+      numeros = cnpj.substring(0,tamanho);
+      soma = 0;
+      pos = tamanho - 7;
+      for (i = tamanho; i >= 1; i--) {
+         soma += numeros.charAt(tamanho - i) * pos--;
+         if (pos < 2)
+         pos = 9;
+      }
+      resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
+      if (resultado != digitos.charAt(1))
+      return false;
+
+      return true;
+   }
+
+
+
+   function getTaxiDog() {
+      AgendamentoFactory.getTaxiDog(vm.form)
+      .then(function (response) {
+         console.log(response);
+         if (response.data.success === true) {
+            if (!angular.isArray(response.data.servico_list)) {
+               vm.taxiDog = [];
+               vm.taxiDog.push(response.data.servico_list);
+            } else {
+               vm.taxiDog = response.data.servico_list;
+            }
+
+            angular.forEach(vm.taxiDog, function(value, key) {
+               value.data_hora = value.data_hora ? new Date(value.data_hora) : null;
+            });
+            console.log('vm.taxiDog', vm.taxiDog);
+         } else {
+            ngToast.danger({ content: '<b>Falha ao buscar registros</b>: ' + response.data.message });
+         }
+      });
+   }
 }
 
 AgendamentoFactory.$inject = ['$http', 'Fluffy'];
@@ -762,7 +880,8 @@ function AgendamentoFactory($http, Fluffy) {
       alt: alt,
       del: del,
       getContrato: getContrato,
-      getHistoricoContratos: getHistoricoContratos
+      getHistoricoContratos: getHistoricoContratos,
+      getTaxiDog: getTaxiDog
    };
    return AgendamentoFactory;
 
@@ -867,6 +986,27 @@ function AgendamentoFactory($http, Fluffy) {
       console.log(data);
       return $http({
          url: _url + '/historicoContratos',
+         params: data,
+         method: 'GET'
+      })
+      .then(success)
+      .catch(failed);
+
+      function success(response) {
+         return response;
+      }
+
+      function failed(response) {
+         return response;
+      }
+   }
+
+
+
+   function getTaxiDog(data) {
+      data = data || null;
+      return $http({
+         url: _url + '/taxiDog',
          params: data,
          method: 'GET'
       })
