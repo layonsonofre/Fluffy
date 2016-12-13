@@ -103,7 +103,7 @@
                 <div class="form-group">
                   <label>CPF/CNPJ *</label>
                   <input class="form-control" type="text" data-ng-model="vm.form.pessoa.registro" ng-blur="vm.validarRegistro()" name="registro" ng-maxlength="20" ng-pattern="/^\d+$/">
-                  <p class="help-block error" ng-show="form.registro.$invalid && !form.registro.$pristine">Informe um registro válido</p>
+                  <p class="help-block error" ng-show="form.registro.$invalid && !form.registro.$pristine || vm.form.pessoa.registro_erro" ng-if="vm.form.pessoa.registro_erro ? form.registro.$invalid = true : form.registro.$invalid = false">Informe um registro válido</p>
                   <p class="help-block error" ng-show="form.registro.$error.maxlength">O valor informado foi maior que o limite</p>
                   <p class="help-block" ng-show="vm.helpActive">Insira o CPF ou CNPJ do cliente</p>
                 </div>

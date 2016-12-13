@@ -136,8 +136,12 @@
             if (response.data.success != true) {
                ngToast.danger({ content: '<b>Falha na consulta pelos registros</b>: ' + response.data.message });
             } else {
-               vm.agendados = response.data.result;
-
+               if (!angular.isArray(response.data.result)) {
+                  vm.agendados = [];
+                  vm.agendados.push(response.data.result);
+               } else {
+                  vm.agendados = response.data.result;
+               }
                angular.forEach(vm.agendados, function (value, key) {
                   value.data_hora = new Date(value.data_hora);
                   var starts = new Date(value.data_hora);

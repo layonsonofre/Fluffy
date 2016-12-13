@@ -24,7 +24,7 @@
          ngToast.danger({content: 'Necessário realizar o login antes de utilizar esta funcionalidade'});
       }
 
-      if (!dataStorage.checkPermission('Vacina')) {
+      if (!dataStorage.checkPermission('Consulta')) {
          $location.path('/erro');
          ngToast.danger({content: 'Você não tem permissão para acessar esta funcionalidade'});
       }

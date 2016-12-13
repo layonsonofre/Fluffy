@@ -612,7 +612,9 @@ function PessoaController(PessoaFactory, $http, RedeSocialFactory, AgendaFactory
 
    function validarRegistro() {
       if (!validarCNPJ() || !validarCPF()) {
-         ngToast.danger({content: 'O registro informado é inválido.'});
+         vm.form.pessoa.registro_erro = true;
+      } else {
+         vm.form = {};
       }
    }
 
@@ -729,7 +731,7 @@ function PessoaFactory($http, Fluffy) {
    }
 
    function add(data) {
-      console.log(data);
+      console.log(JSON.stringify(data));
       return $http({
          method: 'POST',
          url: _url + '/insertCliente',

@@ -69,7 +69,7 @@ function AgendamentoController(AgendamentoFactory, calendarConfig, modalService,
    vm.adicionarAnimal = adicionarAnimal;
    vm.selectEstado = selectEstado;
    vm.validarPessoa = validarPessoa;
-   vm.getWhatsappId = getWhatsappId;
+   // vm.getWhatsappId = getWhatsappId;
    vm.getPortes = getPortes;
    vm.getEspecies = getEspecies;
    vm.getRestricoes = getRestricoes;
@@ -105,12 +105,11 @@ function AgendamentoController(AgendamentoFactory, calendarConfig, modalService,
 
    if (dataStorage.getResumo() != null) {
       vm.resumos = dataStorage.getResumo();
-      console.log(vm.resumos);
       dataStorage.addResumo(null);
       vm.total = 0;
       angular.forEach(vm.resumos.servicos_agendados, function(value, key) {
          value.data_hora = new Date(value.data_hora);
-         vm.total += value.preco;
+         vm.total += Number(value.preco);
       });
    } else {
       vm.servicos_agendados = null;
@@ -345,8 +344,30 @@ function AgendamentoController(AgendamentoFactory, calendarConfig, modalService,
       .then(function (response) {
          if (response != null) {
             agendamento.preco = response.preco;
+            agendamento.max_preco = response.preco;
          } else {
             ngToast.danger({content: 'Falha ao calcular o valor do serviço'});
+         }
+      });
+   }
+
+   vm.validarPreco = function(agendamento) {
+      if (agendamento.preco > agendamento.max_preco) {
+         agendamento.$invalid = true;
+         agendamento.maior = true;
+         agendamento.preco = angular.copy(agendamento.max_preco);
+      } else {
+         agendamento.maior = false;
+      }
+   }
+
+   vm.validarAgendamento = function(agendamento) {
+      angular.forEach(vm.form.servicos_agendados, function(value, key) {
+         if (agendamento.id != value.id) {
+            if ((agendamento.animal_id === value.animal_id) && (new Date(agendamento.data_hora).getTime() === new Date(value.data_hora).getTime())) {
+               ngToast.danger({content: 'Este animal já está com o período atribuído.'});
+               agendamento.$invalid = true;
+            }
          }
       });
    }
@@ -603,46 +624,39 @@ function AgendamentoController(AgendamentoFactory, calendarConfig, modalService,
          vm.form.clienteEspecial = 0;
       }
 
-      getWhatsappId();
+      // getWhatsappId();
       return true;
    }
 
    vm.form.pessoa = {};
 
-   vm.form.pessoa.telefones = [];
-   vm.form.pessoa.telefones.push({
+   vm.form.telefones = [];
+   vm.form.telefones.push({
       id: null,
       codigo_pais: '055',
       codigo_area: '042'
    });
+   //
+   // vm.form.redesSociais = [];
+   // vm.form.redesSociais.push({ id: null });
 
-   vm.form.pessoa.redesSociais = [];
-   vm.form.pessoa.redesSociais.push({ id: null });
-
-   function getWhatsappId() {
-      RedeSocialFactory.get({
-         nome: 'whatsapp'
-      })
-      .then(function (response) {
-         vm.whatsapp_id = response.data.result.id;
-      });
-   }
+   // function getWhatsappId() {
+   //    RedeSocialFactory.get({
+   //       nome: 'whatsapp'
+   //    })
+   //    .then(function (response) {
+   //       vm.whatsapp_id = response.data.result.id;
+   //    });
+   // }
 
    function adicionarCliente() {
-      console.log(vm.form.pessoa);
+      console.log(JSON.stringify(vm.form.pessoa));
       if (validarPessoa()) {
          selectEstado();
-         angular.forEach(vm.form.telefones, function (value, key) {
-            if (value.whatsapp) {
-               var temp = {};
-               temp.perfil = value.codigo_pais + '' + value.codigo_area + '' + value.numero;
-               temp.rede_social_id = vm.whatsapp_id;
-               vm.form.redesSociais.push({perfil: temp.perfil, rede_social_id: vm.whatsapp_id});
-            }
-         });
 
          PessoaFactory.add(vm.form)
          .then(function (response) {
+            console.log(response);
             if (response.data.success != true) {
                ngToast.danger({ content: '<b>Falha ao adicionar o cliente</b>: ' + response.data.message });
             } else {

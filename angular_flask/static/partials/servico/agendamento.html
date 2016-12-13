@@ -15,12 +15,13 @@
                Agendamento
             </div>
             <div class="panel-body">
-               <form ng-submit="vm.add()" novalidate>
+               <form ng-submit="vm.add()" name="form" novalidate>
                   <div class="row" ng-hide="vm.alterando">
                      <div class="col-xs-10">
                         <div class="form-group">
                            <label>Cliente *</label>
-                           <input class="form-control" type="text" ng-model="vm.form.pessoa_tem_funcao.nome" ng-readonly="true" data-toggle="modal" data-target="#selecionarCliente" ng-disabled="vm.alterando">
+                           <input class="form-control" type="text" ng-model="vm.form.pessoa_tem_funcao.nome" ng-readonly="true" data-toggle="modal" data-target="#selecionarCliente" ng-disabled="vm.alterando" name="nome">
+                           <p class="help-block error" ng-show="form.nome.$invalid && !form.nome.$pristine">Necessário inserir sua senha</p>
                            <p class="help-block" ng-show="vm.helpActive">Selecione o cliente deste contrato</p>
                         </div>
                      </div>
@@ -77,7 +78,7 @@
                                     <label>Data *</label>
                                     <div class="form-group">
                                        <p class="input-group">
-                                          <input type="text" class="form-control" uib-datepicker-popup="{{vm.format}}" ng-model="agendamento.data_hora" is-open="agendamento.popup" datepicker-options="dateOptions" altInputFormats="altInputFormats" close-text="Fechar" name="data">
+                                          <input type="text" class="form-control" uib-datepicker-popup="{{vm.format}}" ng-model="agendamento.data_hora" is-open="agendamento.popup" datepicker-options="dateOptions" altInputFormats="altInputFormats" close-text="Fechar" name="data" ng-blur="vm.validarAgendamento(agendamento)">
                                           <span class="input-group-btn">
                                              <a type="button" class="btn btn-default" ng-click="vm.openDate(agendamento)"><span class="fa fa-calendar"></span></a>
                                           </span>
@@ -101,14 +102,14 @@
                                        <div class="col-xs-5">
                                           <label>Serviço *</label>
                                           <div class="form-group">
-                                             <select class="form-control" ng-model="agendamento.servico" ng-options="servico as servico.nome for servico in vm.servicos track by servico.id" ng-change="vm.selectServico(agendamento, servico)" ng-hide="vm.alterando"></select>
+                                             <select class="form-control" ng-model="agendamento.servico" ng-options="servico as servico.nome for servico in vm.servicos track by servico.id" ng-change="vm.selectServico(agendamento, servico)" ng-hide="vm.alterando" ng-blur="vm.validarAgendamento(agendamento)"></select>
                                              <input type="text" ng-model="agendamento.servico_tem_porte.servico.nome" class="form-control" ng-readonly="true" ng-show="vm.alterando">
                                           </div>
                                        </div>
                                        <div class="col-xs-5">
                                           <label>Animal *</label>
                                           <div class="form-group">
-                                             <select class="form-control" ng-model="agendamento.animal" ng-options="animal as animal.nome for animal in vm.animais track by animal.id" ng-change="vm.selectAnimal(agendamento, agendamento.animal)" ng-hide="vm.alterando"></select>
+                                             <select class="form-control" ng-model="agendamento.animal" ng-options="animal as animal.nome for animal in vm.animais track by animal.id" ng-change="vm.selectAnimal(agendamento, agendamento.animal)" ng-hide="vm.alterando" ng-blur="vm.validarAgendamento(agendamento)"></select>
                                              <input type="text" ng-model="agendamento.animal.nome" class="form-control" ng-readonly="true" ng-show="vm.alterando">
                                           </div>
                                        </div>
@@ -140,7 +141,10 @@
                                              <label class="control-label" for="input">Preço *</label>
                                              <div class="input-group">
                                                 <a class="btn btn-link input-group-addon" data-toggle="tooltip" data-placement="top" title="Calcular valor do serviço" ng-click="vm.calcularPreco(agendamento)"><span class="fa fa-usd"></span></a>
-                                                <input type="text" ng-model="agendamento.preco" class="form-control" id="input">
+                                                <input type="text" ng-model="agendamento.preco" class="form-control" id="input" ng-max="agendamento.max_preco" name="preco" ng-maxlength="11" ng-pattern="/^[0-9]{1,7}(\.[0-9]+)?$/" ng-blur="vm.validarPreco(agendamento)" ng-required="true">
+                                                <p class="help-block error" ng-show="form.preco.$invalid && !form.preco.$pristine">Necessário inserir um preço válido</p>
+                                                <p class="help-block error" ng-show="agendamento.maior">Não é permitido inserir um valor maior que o calculado</p>
+                                                <p class="help-block error" ng-show="form.preco.$error.maxlength">O valor informado foi maior que o limite</p>
                                                 <p class="help-block" ng-show="vm.helpActive">Clique no botão para calcular o valor do serviço ou informe-o manualmente</p>
                                              </div>
                                           </div>
@@ -222,15 +226,15 @@
 
                   <div class="row">
                      <div class="col-xs-6">
-                        <button type="submit" ng-hide="vm.alterando" class="btn btn-link" data-toggle="tooltip" data-placement="top" title="Confirmar agendamento">
+                        <button type="submit" ng-disabled="form.$invalid" ng-hide="vm.alterando" class="btn btn-link" data-toggle="tooltip" data-placement="top" title="Confirmar agendamento">
                            <span class="fa fa-check"></span><b>&nbsp;&nbsp; Ir Para Resumo</b>
                         </button>
-                        <a ng-show="vm.alterando" class="btn btn-link" data-ng-click="vm.alt()" data-toggle="tooltip" data-placement="top" title="Alterar informações">
+                        <a ng-show="vm.alterando" ng-disabled="form.$invalid" class="btn btn-link" data-ng-click="vm.alt()" data-toggle="tooltip" data-placement="top" title="Alterar informações">
                            <span class="fa fa-check"></span><b>&nbsp;&nbsp; Atualizar informações</b>
                         </a>
                      </div>
                      <div class="col-xs-6">
-                        <a class="btn btn-link pull-right" data-ng-click="vm.incluirServico()" data-toggle="tooltip" data-placement="top" title="Adicionar Serviço"><span class="fa fa-plus"></span><b>&nbsp;&nbsp; Adicionar Serviço</b></a>
+                        <a class="btn btn-link pull-right" ng-hide="vm.alterando" data-ng-click="vm.incluirServico()" data-toggle="tooltip" data-placement="top" title="Adicionar Serviço"><span class="fa fa-plus"></span><b>&nbsp;&nbsp; Adicionar Serviço</b></a>
                      </div>
                   </div>
                </form>
@@ -298,7 +302,6 @@
                <h4 class="modal-title">Cadastrar cliente</h4>
             </div>
             <div class="modal-body">
-               <h4>Cliente</h4>
                <form novalidate name="formCliente">
                   <div class="row">
                      <div class="col-xs-7">
@@ -480,7 +483,7 @@
                      <!-- INICIO BLOCO TELEFONES -->
                      <div class="col-xs-12">
                         <div class="row">
-                           <fieldset data-ng-repeat="telefone in vm.form.pessoa.telefones">
+                           <fieldset data-ng-repeat="telefone in vm.form.telefones">
                               <div class="col-xs-3">
                                  <div class="form-group">
                                     <label>Cód. País *</label>
@@ -528,7 +531,7 @@
                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                <h4 class="modal-title">Cadastrar animal</h4>
             </div>
-            <div class="modal-body"><h4>Animal</h4>
+            <div class="modal-body">
                <form novalidade name="formAnimal">
                   <div class="row">
                      <div class="col-xs-6">
