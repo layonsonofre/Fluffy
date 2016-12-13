@@ -52,6 +52,8 @@ function ConsultaController(ConsultaFactory, calendarConfig, modalService,
       vm.alterando = true;
       vm.servico_agendado_id = agendamento;
       getConsulta();
+      dataStorage.setAgendamento(null);
+      dataStorage.setContrato(null);
    }
    getVacinas();
 
@@ -230,8 +232,8 @@ function ConsultaController(ConsultaFactory, calendarConfig, modalService,
       AnamneseFactory.add(vm.anamnese).then(function (response) {
          console.log(response);
          if (response.data.success === true) {
-            ngToast.success({ content: 'Anamnese alterada com sucesso.' });
             angular.forEach(vm.aplicacoes, function (value, key) {
+               value.data_hora = new Date(value.data_hora).toISOString().substring(0, 19).replace('T', ' ');
                value.servico_agendado_id = vm.servico_agendado_id;
                AplicacaoFactory.add(value).then(function (response) {
                   if (response.data.success === true) {
@@ -241,6 +243,16 @@ function ConsultaController(ConsultaFactory, calendarConfig, modalService,
                   }
                });
             });
+
+            ngToast.success({ content: 'Consulta alterada com sucesso.' });
+            AgendamentoFactory.alt({id: vm.servico_agendado_id, executado: 1}).then(function (response) {
+               if (response.data.success === true) {
+                  console.log('Servico executado: ', response.data);
+               } else {
+                  console.log('Servico NÂO executado: ', response.data);
+               }
+            });
+            $location.path('/servico/agenda');
          } else {
             ngToast.danger({ content: 'Falha na alteração da consulta: ' + response.data.message});
          }

@@ -270,6 +270,10 @@ function PessoaController(PessoaFactory, $http, RedeSocialFactory, AgendaFactory
                } else {
                   vm.form.consulta.aplicacoes = response.data.result;
                }
+
+               angular.forEach(vm.form.consulta.aplicacoes, function(value, key) {
+                  value.data_hora = value.data_hora ? $filter('date')(new Date(value.data_hora), 'dd/MM/yyyy HH:mm') : null;
+               });
             })
          });
       });
@@ -277,11 +281,9 @@ function PessoaController(PessoaFactory, $http, RedeSocialFactory, AgendaFactory
 
    function editar_consulta(entry) {
       console.log(entry);
-      // vm.form.animal = {};
-      // vm.form.animal = entry;
-      // dataStorage.addPessoa(vm.form.pessoa);
-      // dataStorage.addAnimal(vm.form.animal);
-      // $location.path('/cliente/pet');
+      dataStorage.addContrato(entry);
+      dataStorage.addAgendamento(entry.id);
+      $location.path('/servico/consulta');
    }
 
    function novoServico() {

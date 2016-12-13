@@ -669,6 +669,7 @@ function AgendamentoController(AgendamentoFactory, calendarConfig, modalService,
                ngToast.danger({ content: '<b>Falha ao adicionar o cliente</b>: ' + response.data.message });
             } else {
                ngToast.success({ content: 'Cliente cadastrado com sucesso' });
+               selectCliente(response.data.result.ptf);
             }
          });
       }
@@ -848,7 +849,16 @@ function AgendamentoController(AgendamentoFactory, calendarConfig, modalService,
 
 
    function getTaxiDog() {
-      AgendamentoFactory.getTaxiDog(vm.form)
+      var temp = {};
+      temp.animal_id = (vm.form.animal && vm.form.animal.id) ? vm.form.animal.id : null;
+      temp.cliente_id = (vm.form.pessoa_tem_funcao && vm.form.pessoa_tem_funcao.id) ? vm.form.pessoa_tem_funcao.id : null;
+      temp.data_inicio_agendamento = vm.form.data_inicio ? new Date(vm.form.data_inicio).toISOString().substring(0, 19).replace('T', ' ') : null;
+      temp.data_fim_agendamento = vm.form.data_fim ? new Date(vm.form.data_fim).toISOString().substring(0, 19).replace('T', ' ') : null;
+      temp.local = vm.form.local ? vm.form.local : null;
+      temp.bairro = vm.form.bairro ? vm.form.bairro : null;
+
+      // console.log(vm.form);
+      AgendamentoFactory.getTaxiDog(temp)
       .then(function (response) {
          console.log(response);
          if (response.data.success === true) {

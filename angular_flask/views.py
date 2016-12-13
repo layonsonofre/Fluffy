@@ -209,7 +209,7 @@ def getTaxiDog():
 			"animal_id": animal.id,
 			"animal_nome": animal.nome,
 			"pessoa_id": pessoa.id,
-			"pessoa_nome": pessoa.nome,	
+			"pessoa_nome": pessoa.nome,
 			"local": pessoa.logradouro + "," + str(pessoa.numero),
 			"bairro": pessoa.bairro,
 			"animal": animal.toJSON(),
